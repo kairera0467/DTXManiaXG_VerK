@@ -414,7 +414,7 @@ namespace DTXMania
 			{
 				BgFilename = CDTXMania.DTX.strフォルダ名 + BACKGROUND;
 			}
-			base.t背景テクスチャの生成( DefaultBgFilename, DefaultLaneFilename, bgrect, BgFilename );
+			base.t背景テクスチャの生成( DefaultBgFilename, bgrect, BgFilename );
 		}
 
 		protected override void t進行描画_チップ_ドラムス( CConfigIni configIni, ref CDTX dTX, ref CDTX.CChip pChip )

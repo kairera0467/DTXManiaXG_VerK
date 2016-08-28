@@ -653,8 +653,8 @@ namespace DTXMania
 
         private void tSkillModeを譜面に応じて切り替える( CDTX cdtx )
         {
-            if( CDTXMania.ConfigIni.bDrums有効 ? ( CDTXMania.stage選曲.r確定されたスコア.譜面情報.b完全にCLASSIC譜面である.Drums ) :
-                                                 ( CDTXMania.stage選曲.r確定されたスコア.譜面情報.b完全にCLASSIC譜面である.Guitar | CDTXMania.stage選曲.r確定されたスコア.譜面情報.b完全にCLASSIC譜面である.Bass ) &&
+            if( CDTXMania.ConfigIni.bDrums有効 ? ( cdtx.bCLASSIC譜面である.Drums ) :
+                                                 ( cdtx.bCLASSIC譜面である.Guitar | cdtx.bCLASSIC譜面である.Bass ) &&
               !cdtx.b強制的にXG譜面にする )
                 CDTXMania.ConfigIni.eSkillMode = ESkillType.DTXMania;
             else

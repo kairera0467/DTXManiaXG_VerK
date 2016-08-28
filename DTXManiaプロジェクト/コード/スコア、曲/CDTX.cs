@@ -3195,7 +3195,7 @@ namespace DTXMania
 						#endregion
                         #region[ CLASSIC譜面であるかの判別 ]
                         //ここで判別して、演奏画面等のコードを簡略化する。
-                        if( !this.bチップがある.LeftCymbal && !this.bチップがある.LP && !this.bチップがある.LBD && !this.bチップがある.FT && !this.bチップがある.Ride )
+                        if( this.bチップがある.LeftCymbal == false && this.bチップがある.LP == false && this.bチップがある.LBD == false && this.bチップがある.FT == false && this.bチップがある.Ride == false )
                         {
                             this.bCLASSIC譜面である.Drums = true;
                         }
@@ -5836,6 +5836,10 @@ namespace DTXMania
 
 			switch ( nチャンネル番号 )
 			{
+                case 0x17:
+                    this.bチップがある.FT = true;
+                    break;
+
 				case 0x18:
 					this.bチップがある.HHOpen = true;
 					break;
@@ -5847,6 +5851,14 @@ namespace DTXMania
 				case 0x1a:
 					this.bチップがある.LeftCymbal = true;
 					break;
+
+                case 0x1B:
+                    this.bチップがある.LP = true;
+                    break;
+
+                case 0x1C:
+                    this.bチップがある.LBD = true;
+                    break;
 
 				case 0x20:
 					this.bチップがある.OpenGuitar = true;

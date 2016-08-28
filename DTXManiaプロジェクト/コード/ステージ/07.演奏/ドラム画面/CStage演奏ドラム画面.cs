@@ -2762,25 +2762,14 @@ namespace DTXMania
 
 		protected override void t背景テクスチャの生成()
 		{
-			Rectangle bgrect;
-			if ( CDTXMania.ConfigIni.eドラムレーン表示位置 == Eドラムレーン表示位置.Left )
-			{
-				bgrect = new Rectangle( (int) ( 338 * Scale.X ), (int) ( 57 * Scale.Y ), (int) ( 278 * 2 ), (int) ( 355 * 2 ) );
-			}
-			else
-			{
-				bgrect = new Rectangle( 619 + 682, (int) ( 57 * Scale.Y ), (int) ( 278 * 2 ), (int) ( 355 * 2 ) );
-			}
-			string DefaultBgFilename = ( CDTXMania.ConfigIni.eドラムレーン表示位置 == Eドラムレーン表示位置.Left ) ?
-										@"Graphics\ScreenPlayDrums background.png" :
-										@"Graphics\ScreenPlayDrums-background-center.png";
-			string DefaultLaneFilename = "";
+            string strDefaultBgImagePath = @"Graphics\7_background.png";
+
 			string BgFilename = "";
 			if ( ( ( CDTXMania.DTX.BACKGROUND != null ) && ( CDTXMania.DTX.BACKGROUND.Length > 0 ) ) && !CDTXMania.ConfigIni.bストイックモード )
 			{
 				BgFilename = CDTXMania.DTX.strフォルダ名 + CDTXMania.DTX.BACKGROUND;
 			}
-			base.t背景テクスチャの生成( DefaultBgFilename, DefaultLaneFilename, bgrect, BgFilename );
+			base.t背景テクスチャの生成( strDefaultBgImagePath, new Rectangle( 0, 0, 1280, 720 ), BgFilename );
 		}
 
 		protected override void t進行描画_チップ_ドラムス( CConfigIni configIni, ref CDTX dTX, ref CDTX.CChip pChip )
