@@ -21,7 +21,6 @@ namespace DTXMania
                 this.pfSongTitleFont = new CPrivateFastFont( new FontFamily( CDTXMania.ConfigIni.str選曲リストフォント ), 20, FontStyle.Regular );
                 this.pfNameFont = new CPrivateFastFont( new FontFamily( "Arial" ), 24, FontStyle.Bold );
                 this.ftGroupFont = new Font( "ＤＦＧ平成ゴシック体W5", 16f, FontStyle.Regular, GraphicsUnit.Pixel );
-                this.ftDisplayFont = new Font( "ＤＦＧ平成ゴシック体W5", 20f, FontStyle.Regular, GraphicsUnit.Pixel );
                 this.ftLevelFont = new Font( "Impact", 26f, FontStyle.Regular );
                 this.ftDifficultyL = new Font( "Arial", 30f, FontStyle.Bold );
                 this.ftDifficultyS = new Font( "Arial", 20f, FontStyle.Bold );
@@ -485,7 +484,6 @@ namespace DTXMania
         private CPrivateFastFont pfNameFont;
         private Font ftDifficultyL;
         private Font ftDifficultyS;
-        private Font ftDisplayFont;
         private Font ftGroupFont;
         private Font ftLevelFont;
         private string[] strGroupName;

@@ -20,8 +20,7 @@ namespace DTXMania
             //if( true )
             //    return;
 
-            this.ftDisplayFont = new Font( "ＤＦＧ平成ゴシック体W5" , 22f, FontStyle.Regular, GraphicsUnit.Pixel );
-            this.ftGroupFont = new Font( "ＤＦＧ平成ゴシック体W5" , 16f, FontStyle.Regular, GraphicsUnit.Pixel );
+            this.ftGroupFont = new Font( CDTXMania.ConfigIni.str選曲リストフォント, 16f, FontStyle.Regular, GraphicsUnit.Pixel );
             this.ftLevelFont = new Font( "Impact", 26f, FontStyle.Regular );
             this.ftDifficultyL = new Font( "Arial", 30f, FontStyle.Bold );
             this.ftDifficultyS = new Font( "Arial", 20f, FontStyle.Bold );
@@ -94,7 +93,6 @@ namespace DTXMania
 
                 this.strPlayerName = string.IsNullOrEmpty( CDTXMania.ConfigIni.strCardName[0] ) ? "GUEST" : CDTXMania.ConfigIni.strCardName[0];
                 this.strGroupName = string.IsNullOrEmpty( CDTXMania.ConfigIni.strGroupName[0] ) ? "" : CDTXMania.ConfigIni.strGroupName[0];
-                this.nStrlengthbydot = (int)gNamePlate.MeasureString(this.strPanelString, this.ftDisplayFont).Width;
                 gNamePlate.Dispose();
 
                 this.bNamePlate = new Bitmap( 0x170, 0x103 );
@@ -329,10 +327,10 @@ namespace DTXMania
                 CDTXMania.t安全にDisposeする( ref this.iPart );
 
                 //ここで使用したフォント3つはここで開放。
-                this.ftLevelFont.Dispose();
-                this.ftDisplayFont.Dispose();
-                this.pfNameFont.Dispose();
-                this.pfSongTitleFont.Dispose();
+                CDTXMania.t安全にDisposeする( ref this.ftLevelFont );
+                CDTXMania.t安全にDisposeする( ref this.pfNameFont );
+                CDTXMania.t安全にDisposeする( ref this.pfSongTitleFont );
+
                 base.OnManagedリソースの作成();
             }
         }
@@ -348,12 +346,12 @@ namespace DTXMania
                 CDTXMania.t安全にDisposeする( ref this.iRisky );
                 CDTXMania.t安全にDisposeする( ref this.iDrumspeed );
 
-                this.ftDifficultyS.Dispose();
-                this.ftDifficultyL.Dispose();
-                this.ftDisplayFont.Dispose();
-                this.ftLevelFont.Dispose();
-                this.pfNameFont.Dispose();
-                pfSongTitleFont.Dispose();
+                CDTXMania.t安全にDisposeする( ref this.ftDifficultyS );
+                CDTXMania.t安全にDisposeする( ref this.ftDifficultyL );
+                CDTXMania.t安全にDisposeする( ref this.ftLevelFont );
+                CDTXMania.t安全にDisposeする( ref this.pfNameFont );
+                CDTXMania.t安全にDisposeする( ref this.pfSongTitleFont );
+
                 base.OnManagedリソースの解放();
             }
         }
@@ -523,7 +521,6 @@ namespace DTXMania
         private Bitmap bNamePlate;
         private Font ftDifficultyL;
         private Font ftDifficultyS;
-        private Font ftDisplayFont;
         private Font ftGroupFont;
         private Font ftLevelFont;
         private Image iAlbum;
@@ -532,9 +529,7 @@ namespace DTXMania
         private Image iNamePlate;
         private Image iDifficulty;
         private Image iPart;
-        private int nDifficulty;
         private int nCurrentDrumspeed;
-        private int nStrlengthbydot;
         private string strGroupName;
         private string strPanelString;
         private string strPlayerName;

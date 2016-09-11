@@ -399,7 +399,6 @@ namespace DTXMania
 		{
 			Rectangle bgrect = new Rectangle( 640 - ( 278 / 2 ), 0, 278, 355 );
 			string DefaultBgFilename = @"Graphics\7_background Guitar.png";
-			string DefaultLaneFilename = "";
 			string BgFilename = "";
 			string BACKGROUND = null;
 			if ( ( CDTXMania.DTX.BACKGROUND_GR != null ) && ( CDTXMania.DTX.BACKGROUND_GR.Length > 0 ) )

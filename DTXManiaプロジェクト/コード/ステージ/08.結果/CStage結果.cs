@@ -150,7 +150,7 @@ namespace DTXMania
 					}
 
 					// 新記録スコアチェック
-					if( this.st演奏記録[ i ].nスコア > ini.stセクション[ i * 2 ].nスコア )
+					if( ( this.st演奏記録[ i ].nスコア > ini.stセクション[ i * 2 ].nスコア ) && this.bオート[ i ] == false )
 					{
 						this.b新記録スコア[ i ] = true;
 						ini.stセクション[ i * 2 ] = this.st演奏記録[ i ];
