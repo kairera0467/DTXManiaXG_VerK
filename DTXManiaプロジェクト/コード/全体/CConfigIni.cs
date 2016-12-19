@@ -536,6 +536,7 @@ namespace DTXMania
         public EMovieClipMode eMovieClipMode;
         public ESkillType eSkillMode;
         public ERDPosition eRDPosition;
+        public EJust eJUST;
         public Eタイプ eHHOGraphics;
         public Eタイプ eJudgeAnimeType;
         public Eタイプ eLaneType;
@@ -1313,6 +1314,7 @@ namespace DTXMania
             this.b曲名表示をdefのものにする = true;
             this.eHHOGraphics = Eタイプ.A;
             this.eJudgeAnimeType = Eタイプ.B;
+            this.eJUST = EJust.OFF;
             this.eLaneType = Eタイプ.A;
             this.eLBDGraphics = Eタイプ.A;
             this.eMovieClipMode = EMovieClipMode.OFF;

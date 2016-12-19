@@ -304,6 +304,12 @@ namespace DTXMania
         RDRC,
         RCRD
     }
+    public enum EJust
+    {
+        OFF,
+        JUST,
+        GREAT,
+    }
     public enum Eタイプ
     {
         A,
