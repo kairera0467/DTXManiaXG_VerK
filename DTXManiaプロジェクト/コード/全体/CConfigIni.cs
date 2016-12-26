@@ -536,7 +536,7 @@ namespace DTXMania
         public EMovieClipMode eMovieClipMode;
         public ESkillType eSkillMode;
         public ERDPosition eRDPosition;
-        public EJust eJUST;
+        public STDGBVALUE<EJust> eJUST;
         public Eタイプ eHHOGraphics;
         public Eタイプ eJudgeAnimeType;
         public Eタイプ eLaneType;
@@ -1314,13 +1314,16 @@ namespace DTXMania
             this.b曲名表示をdefのものにする = true;
             this.eHHOGraphics = Eタイプ.A;
             this.eJudgeAnimeType = Eタイプ.B;
-            this.eJUST = EJust.OFF;
             this.eLaneType = Eタイプ.A;
             this.eLBDGraphics = Eタイプ.A;
             this.eMovieClipMode = EMovieClipMode.OFF;
             this.eNamePlateType = Eタイプ.A;
             this.eRDPosition = ERDPosition.RCRD;
             this.eSkillMode = ESkillType.DTXMania;
+            for( int i = 0; i < 3; i++ )
+            {
+                this.eJUST[ i ] = EJust.OFF;
+            }
 
             this.nExplosionFrames = 1;
             this.nExplosionInterval = 50;
@@ -2082,6 +2085,12 @@ namespace DTXMania
             sw.WriteLine( "; 判定数の表示(0:表示しない, 1:表示する)");
             sw.WriteLine("JudgeCountDisp={0}", this.bJudgeCountDisp ? 1 : 0);
             sw.WriteLine();
+            sw.WriteLine( "; JUST" );
+            sw.WriteLine( "DrumsJust={0}", this.eJUST.Drums );
+            sw.WriteLine( "GuitarJust={0}", this.eJUST.Guitar );
+            sw.WriteLine( "BassJust={0}", this.eJUST.Bass );
+            sw.WriteLine();
+
             #endregion
 			sw.WriteLine( ";-------------------" );
 			#endregion
@@ -3205,6 +3214,18 @@ namespace DTXMania
                                             else if( str3.Equals( "JudgeCountDisp" ) )
                                             {
                                                 this.bJudgeCountDisp = C変換.bONorOFF( str4[ 0 ] );
+                                            }
+                                            else if( str3.Equals( "DrumsJust" ) )
+                                            {
+                                                this.eJUST.Drums = (EJust) C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 2, (int)this.eJUST.Drums );
+                                            }
+                                            else if( str3.Equals( "GuitarJust" ) )
+                                            {
+                                                this.eJUST.Guitar = (EJust) C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 2, (int)this.eJUST.Guitar );
+                                            }
+                                            else if( str3.Equals( "BassJust" ) )
+                                            {
+                                                this.eJUST.Bass = (EJust) C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 2, (int)this.eJUST.Bass );
                                             }
 											continue;
 										}
