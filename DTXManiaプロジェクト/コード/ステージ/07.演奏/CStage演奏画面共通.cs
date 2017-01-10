@@ -1367,6 +1367,21 @@ namespace DTXMania
             int nInputAdjustTime = bPChipIsAutoPlay && bIsPerfectGhost ? 0 : this.nInputAdjustTimeMs[(int)pChip.e楽器パート];
             eJudgeResult = (bCorrectLane) ? this.e指定時刻からChipのJUDGEを返す(nHitTime, pChip, nInputAdjustTime) : E判定.Miss;
 
+            // 2017.01.10 kairera0467 #36776
+            for( int i = 0; i < 3; i++ )
+            {
+                if( CDTXMania.ConfigIni.eJUST[ i ] == EJust.JUST )
+                {
+                    if( !( eJudgeResult == E判定.Perfect || eJudgeResult == E判定.XPerfect ) )
+                        eJudgeResult = E判定.Miss;
+                }
+                else if( CDTXMania.ConfigIni.eJUST[ i ] == EJust.GREAT )
+                {
+                    if( !( eJudgeResult == E判定.Perfect || eJudgeResult == E判定.Great || eJudgeResult == E判定.XPerfect ) )
+                        eJudgeResult = E判定.Miss;
+                }
+            }
+
             if( pChip.e楽器パート != E楽器パート.UNKNOWN )
             {
                 int nChannel = -1;

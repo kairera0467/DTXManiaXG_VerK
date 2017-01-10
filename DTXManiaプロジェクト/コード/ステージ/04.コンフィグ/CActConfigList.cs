@@ -754,6 +754,13 @@ namespace DTXMania
 				"It becomes MISS to hit pad without chip." );
 			this.list項目リスト.Add( this.iDrumsTight );
 
+            this.iDrumsJust = new CItemList("JUST", CItemBase.Eパネル種別.通常, (int)CDTXMania.ConfigIni.eJUST.Drums,
+                "ON   :PERFECT以外の判定を全てミス扱いにします。\n" +
+                "GREAT:GOOD以下の判定を全てミス扱いにします。\n",
+                "",
+                new string[] { "OFF", "ON", "GREAT" });
+            this.list項目リスト.Add(this.iDrumsLaneDispType);
+
 			#region [ Position ]
             #region[ LaneType ]
             this.iDrumsLaneType = new CItemList("LaneType", CItemBase.Eパネル種別.通常, (int) CDTXMania.ConfigIni.eLaneType,
@@ -2866,7 +2873,8 @@ namespace DTXMania
 		private CItemToggle iBassB;							//
 		private CItemToggle iBassPick;						//
 		private CItemToggle iBassW;							//
-	
+
+        private CItemList iBassJust;
 		private CItemToggle iBassLeft;
 		private CItemToggle iBassLight;
 		private CItemList iBassPosition;
@@ -2894,6 +2902,7 @@ namespace DTXMania
 		private CItemToggle iDrumsHiHat;
         private CItemInteger iDrumsJudgeLinePos;
         private CItemInteger iDrumsJudgeLineOffset;
+        private CItemList iDrumsJust;
         private CItemList iDrumsLaneType;
 		private CItemToggle iDrumsLeftBassDrum;
 		private CItemToggle iDrumsLeftCymbal;
@@ -2922,6 +2931,7 @@ namespace DTXMania
 		private CItemToggle iGuitarPick;					//
 		private CItemToggle iGuitarW;						//
 
+        private CItemList iGuitarJust;
 		private CItemToggle iGuitarLeft;
 		private CItemToggle iGuitarLight;
 		private CItemList iGuitarPosition;
@@ -3105,6 +3115,7 @@ namespace DTXMania
             CDTXMania.ConfigIni.nLaneDispType.Bass = this.iBassLaneDispType.n現在選択されている項目番号;
             CDTXMania.ConfigIni.bJudgeLineDisp.Bass = this.iBassJudgeLineDisp.bON;
             CDTXMania.ConfigIni.bGraph.Bass = this.iBassGraph.bON;
+            CDTXMania.ConfigIni.eJUST.Bass = (EJust)this.iBassJust.n現在選択されている項目番号;
 		}
 		private void tConfigIniへ記録する_Drums()
 		{
@@ -3157,6 +3168,7 @@ namespace DTXMania
             CDTXMania.ConfigIni.nLaneDispType.Drums = this.iDrumsLaneDispType.n現在選択されている項目番号;
             CDTXMania.ConfigIni.bJudgeLineDisp.Drums = this.iDrumsJudgeLineDisp.bON;
             CDTXMania.ConfigIni.bLaneFlush.Drums = this.iDrumsLaneFlush.bON;
+            CDTXMania.ConfigIni.eJUST.Drums = (EJust)this.iDrumsJust.n現在選択されている項目番号;
 		}
 		private void tConfigIniへ記録する_Guitar()
 		{
@@ -3189,6 +3201,7 @@ namespace DTXMania
             CDTXMania.ConfigIni.nLaneDispType.Guitar = this.iGuitarLaneDispType.n現在選択されている項目番号;
             CDTXMania.ConfigIni.bJudgeLineDisp.Guitar = this.iGuitarJudgeLineDisp.bON;
             CDTXMania.ConfigIni.bGraph.Guitar = this.iGuitarGraph.bON;
+            CDTXMania.ConfigIni.eJUST.Guitar = (EJust)this.iGuitarJust.n現在選択されている項目番号;
 		}
 		//-----------------
 		#endregion
