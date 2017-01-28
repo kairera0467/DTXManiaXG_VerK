@@ -754,12 +754,12 @@ namespace DTXMania
 				"It becomes MISS to hit pad without chip." );
 			this.list項目リスト.Add( this.iDrumsTight );
 
-            this.iDrumsJust = new CItemList("JUST", CItemBase.Eパネル種別.通常, (int)CDTXMania.ConfigIni.eJUST.Drums,
+            this.iDrumsJust = new CItemList( "JUST", CItemBase.Eパネル種別.通常, (int)CDTXMania.ConfigIni.eJUST.Drums,
                 "ON   :PERFECT以外の判定を全てミス扱いにします。\n" +
                 "GREAT:GOOD以下の判定を全てミス扱いにします。\n",
                 "",
                 new string[] { "OFF", "ON", "GREAT" });
-            this.list項目リスト.Add(this.iDrumsLaneDispType);
+            this.list項目リスト.Add( this.iDrumsJust );
 
 			#region [ Position ]
             #region[ LaneType ]
@@ -1219,6 +1219,12 @@ namespace DTXMania
                 "なりません。",
 				"Even if you pick without any chips, it doesn't become BAD." );
 			this.list項目リスト.Add( this.iGuitarLight );
+            this.iGuitarJust = new CItemList( "JUST", CItemBase.Eパネル種別.通常, (int)CDTXMania.ConfigIni.eJUST.Guitar,
+                "ON   :PERFECT以外の判定を全てミス扱いにします。\n" +
+                "GREAT:GOOD以下の判定を全てミス扱いにします。\n",
+                "",
+                new string[] { "OFF", "ON", "GREAT" });
+            this.list項目リスト.Add( this.iGuitarJust );
 			this.iGuitarLeft = new CItemToggle( "Left", CDTXMania.ConfigIni.bLeft.Guitar,
 				"ギターの RGB の並びが左右反転します。\n" +
                 "（左利きモード）",
@@ -1462,6 +1468,12 @@ namespace DTXMania
                 "なりません。",
 				"Even if you pick without any chips, it doesn't become BAD." );
 			this.list項目リスト.Add( this.iBassLight );
+            this.iBassJust = new CItemList( "JUST", CItemBase.Eパネル種別.通常, (int)CDTXMania.ConfigIni.eJUST.Bass,
+                "ON   :PERFECT以外の判定を全てミス扱いにします。\n" +
+                "GREAT:GOOD以下の判定を全てミス扱いにします。\n",
+                "",
+                new string[] { "OFF", "ON", "GREAT" });
+            this.list項目リスト.Add( this.iBassJust );
 			this.iBassLeft = new CItemToggle( "Left", CDTXMania.ConfigIni.bLeft.Bass,
 				"ベースの RGB の並びが左右反転します。\n" +
                 "（左利きモード）",

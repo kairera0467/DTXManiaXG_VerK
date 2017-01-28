@@ -2086,9 +2086,9 @@ namespace DTXMania
             sw.WriteLine("JudgeCountDisp={0}", this.bJudgeCountDisp ? 1 : 0);
             sw.WriteLine();
             sw.WriteLine( "; JUST" );
-            sw.WriteLine( "DrumsJust={0}", this.eJUST.Drums );
-            sw.WriteLine( "GuitarJust={0}", this.eJUST.Guitar );
-            sw.WriteLine( "BassJust={0}", this.eJUST.Bass );
+            sw.WriteLine( "DrumsJust={0}", (int)this.eJUST.Drums );
+            sw.WriteLine( "GuitarJust={0}", (int)this.eJUST.Guitar );
+            sw.WriteLine( "BassJust={0}", (int)this.eJUST.Bass );
             sw.WriteLine();
 
             #endregion
