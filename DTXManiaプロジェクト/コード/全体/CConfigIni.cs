@@ -559,6 +559,7 @@ namespace DTXMania
         public STDGBVALUE<int> nShutterOutSide;
         public STDGBVALUE<string> strCardName;
         public STDGBVALUE<string> strGroupName;
+        public string ResultSongNameFont;
         #endregion
 
         public bool bConfigIniがないかDTXManiaのバージョンが異なる
@@ -1334,14 +1335,19 @@ namespace DTXMania
             this.nJudgeWidgh = 250;
             this.nJudgeHeight = 170;
             this.nNameColor = new STDGBVALUE<int>();
+            this.nShutterInSide = new STDGBVALUE<int>();
+            this.nShutterOutSide = new STDGBVALUE<int>();
             this.strCardName = new STDGBVALUE<string>();
             this.strGroupName = new STDGBVALUE<string>();
+            this.ResultSongNameFont = "MS PGothic";
 
             for( int i = 0; i < 3; i++ )
             {
                 this.bJudgeLineDisp[ i ] = true;
                 this.bLaneFlush[ i ] = true;
                 this.nLaneDispType[ i ] = 0;
+                this.nShutterInSide[ i ] = 0;
+                this.nShutterOutSide[ i ] = 0;
             }
             #endregion
 

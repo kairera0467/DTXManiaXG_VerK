@@ -940,8 +940,24 @@ namespace DTXMania
             }
         }
 
+        //2017.03.05 kairera0467 テストメソッド
+        public string[] strGetShutterList()
+        {
+            //変数の用意
+            string[] arNameList = new string[] { "BLACK" }; //csvファイルが存在しなかった時用
+            bool bFileFound = false;
+
+            //csvを読み込む
+
+            //
+
+
+            return new string[] { "" };
+        }
+
 		// その他
         public bool b曲決定後に背景画像を変更する;
+        public string strShutterImgPath; //シャッター画像の相対パス
 		#region [ private ]
 		//-----------------
 		private bool bDisposed済み;

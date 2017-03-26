@@ -45,6 +45,7 @@ namespace DTXMania
 			base.list子Activities.Add( this.actPanel = new CAct演奏パネル文字列() );
 			base.list子Activities.Add( this.actStageFailed = new CAct演奏ステージ失敗() );
 			base.list子Activities.Add( this.actPlayInfo = new CAct演奏演奏情報() );
+            base.list子Activities.Add( this.actShutter = new CAct演奏シャッター() );
 			base.list子Activities.Add( this.actFI = new CActFIFOBlack() );
 			base.list子Activities.Add( this.actFO = new CActFIFOBlack() );
 			base.list子Activities.Add( this.actFOClear = new CActFIFOWhite() );
@@ -225,6 +226,7 @@ namespace DTXMania
 				this.t進行描画_チップアニメ();
                 this.t進行描画_チップ_模様( E楽器パート.DRUMS );
 				bIsFinishedPlaying = this.t進行描画_チップ(E楽器パート.DRUMS);
+                this.actShutter.On進行描画();
 				this.t進行描画_演奏情報();
 				this.t進行描画_ドラムパッド();
                 this.actAVI.tウィンドウクリップを表示する();

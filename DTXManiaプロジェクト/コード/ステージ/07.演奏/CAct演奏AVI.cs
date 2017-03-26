@@ -384,7 +384,15 @@ namespace DTXMania
                             if( CDTXMania.ConfigIni.bDrums有効 )
                             {
                                 if( this.txArフィルインエフェクト[ this.ctStageEffect進行.n現在の値 ] != null )
+                                {
+                                    float fWidth = 1280.0f / this.txArフィルインエフェクト[ this.ctStageEffect進行.n現在の値 ].sz画像サイズ.Width;
+                                    float fHeight = 720.0f / this.txArフィルインエフェクト[ this.ctStageEffect進行.n現在の値 ].sz画像サイズ.Height;
+
+                                    Vector3 vcRatio = new Vector3( fWidth, fHeight, 1.0f );
+
+                                    this.txArフィルインエフェクト[ this.ctStageEffect進行.n現在の値 ].vc拡大縮小倍率 = vcRatio;
                                     this.txArフィルインエフェクト[ this.ctStageEffect進行.n現在の値 ].t2D描画( CDTXMania.app.Device, 0, 0 );
+                                }
                             }
                     }
                 }

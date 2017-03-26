@@ -668,6 +668,7 @@ namespace DTXMania
 		protected CAct演奏演奏情報 actPlayInfo;
 		protected CAct演奏RGB共通 actRGB;
 		public CAct演奏スコア共通 actScore;
+        protected CAct演奏シャッター actShutter;
 		protected CAct演奏ステージ失敗 actStageFailed;
 		protected CAct演奏ステータスパネル共通 actStatusPanels;
 		protected CAct演奏WailingBonus共通 actWailingBonus;
