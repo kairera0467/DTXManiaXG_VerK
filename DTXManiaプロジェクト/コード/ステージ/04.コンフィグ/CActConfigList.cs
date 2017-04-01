@@ -1001,6 +1001,20 @@ namespace DTXMania
                 "You can set it from 0 to 100." );
             this.list項目リスト.Add( this.iDrumsJudgeLineOffset );
 
+            this.iDrumsShutterInPos = new CItemInteger( "ShutterInPos", 0, 100, CDTXMania.ConfigIni.nShutterInSide.Drums,
+                "演奏時のノーツが現れる側のシャッターの\n" +
+                "位置を変更します。",
+                "To change the InsideShutter for the\n" +
+                "You can set it from 0 to 100." );
+            this.list項目リスト.Add( this.iDrumsShutterInPos );
+
+            this.iDrumsShutterOutPos = new CItemInteger( "ShutterOutPos", 0, 100, CDTXMania.ConfigIni.nShutterOutSide.Drums,
+                "演奏時のノーツが消える側のシャッターの\n" +
+                "位置を変更します。",
+                "To change the OutsideShutter for the\n" +
+                "You can set it from 0 to 100." );
+            this.list項目リスト.Add( this.iDrumsShutterOutPos );
+
 			// #23580 2011.1.3 yyagi
 			this.iDrumsInputAdjustTimeMs = new CItemInteger( "InputAdjust", -99, 99, CDTXMania.ConfigIni.nInputAdjustTimeMs.Drums,
 				"ドラムの入力タイミングの微調整を行います。\n" +
@@ -2925,6 +2939,8 @@ namespace DTXMania
 		private CItemBase iDrumsReturnToMenu;
 		private CItemToggle iDrumsReverse;
 		private CItemInteger iDrumsScrollSpeed;
+        private CItemInteger iDrumsShutterInPos;
+        private CItemInteger iDrumsShutterOutPos;
 		private CItemToggle iDrumsSnare;
 		//private CItemToggle iDrumsSudden;
 		private CItemToggle iDrumsTight;
@@ -3181,6 +3197,8 @@ namespace DTXMania
             CDTXMania.ConfigIni.bJudgeLineDisp.Drums = this.iDrumsJudgeLineDisp.bON;
             CDTXMania.ConfigIni.bLaneFlush.Drums = this.iDrumsLaneFlush.bON;
             CDTXMania.ConfigIni.eJUST.Drums = (EJust)this.iDrumsJust.n現在選択されている項目番号;
+            CDTXMania.ConfigIni.nShutterInSide.Drums = this.iDrumsShutterInPos.n現在の値;
+            CDTXMania.ConfigIni.nShutterOutSide.Drums = this.iDrumsShutterOutPos.n現在の値;
 		}
 		private void tConfigIniへ記録する_Guitar()
 		{

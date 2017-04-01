@@ -549,6 +549,7 @@ namespace DTXMania
 			bUseBoxDefSkin = true;
 			ReloadSkinPaths();
 			PrepareReloadSkin();
+            this.listShutterImage = new List<CShutterImage>();
 		}
 		private string InitializeSkinPathRoot()
 		{
@@ -940,24 +941,69 @@ namespace DTXMania
             }
         }
 
-        //2017.03.05 kairera0467 テストメソッド
-        public string[] strGetShutterList()
+        // 2017.03.05 kairera0467
+        // スキンを再読込する度に作り直す。
+        public void CreateShutterList()
         {
-            //変数の用意
-            string[] arNameList = new string[] { "BLACK" }; //csvファイルが存在しなかった時用
+            string strListCSV;
             bool bFileFound = false;
 
             //csvを読み込む
+            using( StreamReader reader = new StreamReader( CSkin.Path(@"Sound.csv"), Encoding.GetEncoding( "Shift_JIS")))
+            {
+                strListCSV = reader.ReadToEnd();
+            }
 
-            //
+            //設定していく。
+            string[] delimiter = { "\n" };
+            string[] strSingleLine = strListCSV.Split( delimiter, StringSplitOptions.RemoveEmptyEntries );
+            foreach( string s in strSingleLine )
+            {
+                if( s[ 0 ] != ';' ) //先頭文字が;の場合は無視
+                    continue;
+                s.Replace( '\r', ' ' );
 
+                //正常なら3個になる。
+                string[] strArray = s.Split( ',' );
 
-            return new string[] { "" };
+                if( strArray.Length != 3 )
+                    continue;
+
+                var shutter = new CShutterImage();
+                shutter.strName = strArray[ 0 ];
+                shutter.strFilePathD = strArray[ 1 ];
+                shutter.strFilePathGB = strArray[ 2 ];
+
+                this.listShutterImage.Add( shutter );
+            }
+        }
+
+        // 2017.03.30 kairera0467
+        public string[] arGetShutterName()
+        {
+            //変数の用意
+            string[] arNameList = new string[] { "BLACK" }; //csvファイルが存在しなかった時用
+
+            //原始的だが仕方がない
+            if( this.listShutterImage.Count != 0 )
+            {
+                string strList = "";
+                for( int i = 0; i < this.listShutterImage.Count; i++ )
+                {
+                    strList += this.listShutterImage[i].strName;
+                    
+                    if( i < this.listShutterImage.Count - 1 )
+                        strList += ",";
+                }
+                arNameList = strList.Split( ',' );
+            }
+
+            return arNameList;
         }
 
 		// その他
         public bool b曲決定後に背景画像を変更する;
-        public string strShutterImgPath; //シャッター画像の相対パス
+        public List<CShutterImage> listShutterImage;
 		#region [ private ]
 		//-----------------
 		private bool bDisposed済み;
@@ -965,4 +1011,20 @@ namespace DTXMania
 		#endregion
 
 	}
+
+    public class CShutterImage
+    {
+        public bool bFileFound;
+        public string strName;
+        public string strFilePathD;
+        public string strFilePathGB;
+
+        public CShutterImage()
+        {
+            bFileFound = false;
+            strName = "";
+            strFilePathD = "";
+            strFilePathGB = "";
+        }
+    }
 }

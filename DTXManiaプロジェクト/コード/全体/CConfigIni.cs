@@ -2029,16 +2029,16 @@ namespace DTXMania
             sw.WriteLine( "; XPerfect判定を有効にする(0:OFF, 1:ON)" );
             sw.WriteLine( "XPerfectJudgeMode={0}", this.bXPerfect判定を有効にする ? 1 : 0 );
             sw.WriteLine();
-            //sw.WriteLine("; シャッターINSIDE(0～100)");
-            //sw.WriteLine("DrumsShutterIn={0}", (int)this.nShutterInSide.Drums);
-            //sw.WriteLine("GuitarShutterIn={0}", (int)this.nShutterInSide.Guitar);
-            //sw.WriteLine("BassShutterIn={0}", (int)this.nShutterInSide.Bass);
-            //sw.WriteLine();
-            //sw.WriteLine("; シャッターOUTSIDE(0～100)");
-            //sw.WriteLine("DrumsShutterOut={0}", (int)this.nShutterOutSide.Drums);
-            //sw.WriteLine("GuitarShutterOut={0}", (int)this.nShutterOutSide.Guitar);
-            //sw.WriteLine("BassShutterOut={0}", (int)this.nShutterOutSide.Bass);
-            //sw.WriteLine();
+            sw.WriteLine( "; シャッターINSIDE(0～100)" );
+            sw.WriteLine( "DrumsShutterIn={0}", (int)this.nShutterInSide.Drums );
+            sw.WriteLine( "GuitarShutterIn={0}", (int)this.nShutterInSide.Guitar );
+            sw.WriteLine( "BassShutterIn={0}", (int)this.nShutterInSide.Bass );
+            sw.WriteLine();
+            sw.WriteLine( "; シャッターOUTSIDE(0～100)" );
+            sw.WriteLine( "DrumsShutterOut={0}", (int)this.nShutterOutSide.Drums );
+            sw.WriteLine( "GuitarShutterOut={0}", (int)this.nShutterOutSide.Guitar );
+            sw.WriteLine( "BassShutterOut={0}", (int)this.nShutterOutSide.Bass );
+            sw.WriteLine();
             //sw.WriteLine( "; ボーナス演出の表示(0:表示しない, 1:表示する)");
             //sw.WriteLine("DrumsStageEffect={0}", this.ボーナス演出を表示する ? 1 : 0);
             //sw.WriteLine();
@@ -2096,6 +2096,7 @@ namespace DTXMania
             sw.WriteLine( "GuitarJust={0}", (int)this.eJUST.Guitar );
             sw.WriteLine( "BassJust={0}", (int)this.eJUST.Bass );
             sw.WriteLine();
+
 
             #endregion
 			sw.WriteLine( ";-------------------" );
@@ -3159,6 +3160,30 @@ namespace DTXMania
 											{
 												this.bTight = C変換.bONorOFF( str4[ 0 ] );
 											}
+                                            else if( str3.Equals( "DrumsShutterIn" ) )
+                                            {
+                                                this.nShutterInSide.Drums = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 100, this.nShutterInSide.Drums );
+                                            }
+                                            else if( str3.Equals( "DrumsShutterOut" ) )
+                                            {
+                                                this.nShutterOutSide.Drums = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, -100, 100, this.nShutterOutSide.Drums );
+                                            }
+                                            else if( str3.Equals( "GuitarShutterIn" ) )
+                                            {
+                                                this.nShutterInSide.Guitar = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 100, this.nShutterInSide.Guitar );
+                                            }
+                                            else if( str3.Equals( "GuitarShutterOut" ) )
+                                            {
+                                                this.nShutterOutSide.Guitar = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, -100, 100, this.nShutterOutSide.Guitar );
+                                            }
+                                            else if( str3.Equals( "BassShutterIn" ) )
+                                            {
+                                                this.nShutterInSide.Bass = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 100, this.nShutterInSide.Bass );
+                                            }
+                                            else if( str3.Equals( "BassShutterOut" ) )
+                                            {
+                                                this.nShutterOutSide.Bass = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, -100, 100, this.nShutterOutSide.Guitar );
+                                            }
                                             else if( str3.Equals( "DrumsLaneType" ) )
                                             {
                                                 this.eLaneType = ( Eタイプ ) C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 3, (int)this.eLaneType );
