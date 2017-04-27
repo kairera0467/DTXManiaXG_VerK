@@ -559,7 +559,8 @@ namespace DTXMania
         public STDGBVALUE<int> nShutterOutSide;
         public STDGBVALUE<string> strCardName;
         public STDGBVALUE<string> strGroupName;
-        public string ResultSongNameFont;
+        public string strResultSongNameFont;
+        public STDGBVALUE<string> strShutterImageName;      // #36144 kairera0467 シャッター画像のパスではなくcsvに登録した名前を格納する。
         #endregion
 
         public bool bConfigIniがないかDTXManiaのバージョンが異なる
@@ -1339,7 +1340,7 @@ namespace DTXMania
             this.nShutterOutSide = new STDGBVALUE<int>();
             this.strCardName = new STDGBVALUE<string>();
             this.strGroupName = new STDGBVALUE<string>();
-            this.ResultSongNameFont = "MS PGothic";
+            this.strResultSongNameFont = "MS PGothic";
 
             for( int i = 0; i < 3; i++ )
             {
@@ -1348,6 +1349,7 @@ namespace DTXMania
                 this.nLaneDispType[ i ] = 0;
                 this.nShutterInSide[ i ] = 0;
                 this.nShutterOutSide[ i ] = 0;
+                this.strShutterImageName[ i ] = "";
             }
             #endregion
 
@@ -2096,7 +2098,10 @@ namespace DTXMania
             sw.WriteLine( "GuitarJust={0}", (int)this.eJUST.Guitar );
             sw.WriteLine( "BassJust={0}", (int)this.eJUST.Bass );
             sw.WriteLine();
-
+            sw.WriteLine( "; シャッター画像" );
+            sw.WriteLine( "ShutterImageDrums={0}", this.strShutterImageName.Drums );
+            sw.WriteLine( "ShutterImageGuitar={0}", this.strShutterImageName.Guitar );
+            sw.WriteLine( "ShutterImageBass={0}", this.strShutterImageName.Bass );
 
             #endregion
 			sw.WriteLine( ";-------------------" );
@@ -3257,6 +3262,18 @@ namespace DTXMania
                                             else if( str3.Equals( "BassJust" ) )
                                             {
                                                 this.eJUST.Bass = (EJust) C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 2, (int)this.eJUST.Bass );
+                                            }
+                                            else if( str3.Equals( "ShutterImageDrums" ) )
+                                            {
+                                                this.strShutterImageName.Drums = str4;
+                                            }
+                                            else if( str3.Equals( "ShutterImageGuitar" ) )
+                                            {
+                                                this.strShutterImageName.Guitar = str4;
+                                            }
+                                            else if( str3.Equals( "ShutterImageBass" ) )
+                                            {
+                                                this.strShutterImageName.Bass = str4;
                                             }
 											continue;
 										}

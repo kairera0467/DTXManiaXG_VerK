@@ -957,6 +957,12 @@ namespace DTXMania
 				"To show bursting effects at the fill-in zone." );
 			this.list項目リスト.Add( this.iSystemFillIn );
 
+            this.iDrumsShutterImage = new CItemList( "ShutterImage", CItemBase.Eパネル種別.通常, this.nCurrentShutterImage.Drums,
+                "シャッター画像の絵柄を選択できます。",
+                this.shutterNames
+              );
+            this.list項目リスト.Add( this.iDrumsShutterImage );
+
 			this.iSystemHitSound = new CItemToggle( "HitSound", CDTXMania.ConfigIni.bドラム打音を発声する,
 				"打撃音の再生：\n" +
 				"これをOFFにすると、パッドを叩いたときの音を\n" +
@@ -1239,6 +1245,13 @@ namespace DTXMania
                 "",
                 new string[] { "OFF", "ON", "GREAT" });
             this.list項目リスト.Add( this.iGuitarJust );
+
+            this.iGuitarShutterImage = new CItemList( "ShutterImage", CItemBase.Eパネル種別.通常, this.nCurrentShutterImage.Guitar,
+                "シャッター画像の絵柄を選択できます。",
+                this.shutterNames
+              );
+            this.list項目リスト.Add( this.iGuitarShutterImage );
+
 			this.iGuitarLeft = new CItemToggle( "Left", CDTXMania.ConfigIni.bLeft.Guitar,
 				"ギターの RGB の並びが左右反転します。\n" +
                 "（左利きモード）",
@@ -1488,6 +1501,13 @@ namespace DTXMania
                 "",
                 new string[] { "OFF", "ON", "GREAT" });
             this.list項目リスト.Add( this.iBassJust );
+
+            this.iBassShutterImage = new CItemList("ShutterImage", CItemBase.Eパネル種別.通常, this.nCurrentShutterImage.Bass,
+                "シャッター画像の絵柄を選択できます。",
+                this.shutterNames
+              );
+            this.list項目リスト.Add( this.iBassShutterImage );
+
 			this.iBassLeft = new CItemToggle( "Left", CDTXMania.ConfigIni.bLeft.Bass,
 				"ベースの RGB の並びが左右反転します。\n" +
                 "（左利きモード）",
@@ -2256,6 +2276,15 @@ namespace DTXMania
 			Array.Sort( skinSubFolders );
 			skinNames = CSkin.GetSkinName( skinSubFolders );
 			nSkinIndex = Array.BinarySearch( skinSubFolders, skinSubFolder_org );
+
+            CDTXMania.Skin.CreateShutterList();
+            shutterNames = CDTXMania.Skin.arGetShutterName();
+            for( int i = 0; i < 3; i++ ) {
+                nCurrentShutterImage[ i ] = Array.BinarySearch( shutterNames, CDTXMania.ConfigIni.strShutterImageName[ i ] );
+                if( nCurrentShutterImage[ i ] < 0 )
+                    nCurrentShutterImage[ i ] = 0;
+            }
+
 			if ( nSkinIndex < 0 )	// 念のため
 			{
 				nSkinIndex = 0;
@@ -2884,6 +2913,8 @@ namespace DTXMania
 		private string skinSubFolder_org;			//
 		private int nSkinSampleIndex;				//
 		private int nSkinIndex;						//
+        private string[] shutterNames;              // #36144 kairera0467
+        private STDGBVALUE<int> nCurrentShutterImage;
 
 		private CItemBase iDrumsGoToKeyAssign;
 		private CItemBase iGuitarGoToKeyAssign;
@@ -2913,6 +2944,7 @@ namespace DTXMania
         private CItemToggle iBassJudgeLineDisp;
         private CItemToggle iBassLaneFlush;
         private CItemToggle iBassGraph;
+        private CItemList iBassShutterImage;
 
 		private CItemList iCommonDark;
 		private CItemInteger iCommonPlaySpeed;
@@ -2950,6 +2982,7 @@ namespace DTXMania
         private CItemList iDrumsLaneDispType;
         private CItemToggle iDrumsJudgeLineDisp;
         private CItemToggle iDrumsLaneFlush;
+        private CItemList iDrumsShutterImage;
 
 		//private CItemToggle iGuitarAutoPlay;
 		private CItemThreeState iGuitarAutoPlayAll;			// #23886 2012.5.8 yyagi
@@ -2972,6 +3005,7 @@ namespace DTXMania
         private CItemToggle iGuitarJudgeLineDisp;
         private CItemToggle iGuitarLaneFlush;
         private CItemToggle iGuitarGraph;
+        private CItemList iGuitarShutterImage;
 
 		private CItemInteger iDrumsInputAdjustTimeMs;		// #23580 2011.1.3 yyagi
 		private CItemInteger iGuitarInputAdjustTimeMs;		//
@@ -3144,6 +3178,7 @@ namespace DTXMania
             CDTXMania.ConfigIni.bJudgeLineDisp.Bass = this.iBassJudgeLineDisp.bON;
             CDTXMania.ConfigIni.bGraph.Bass = this.iBassGraph.bON;
             CDTXMania.ConfigIni.eJUST.Bass = (EJust)this.iBassJust.n現在選択されている項目番号;
+            CDTXMania.ConfigIni.strShutterImageName.Bass = this.iBassShutterImage.list項目値[ this.iBassShutterImage.n現在選択されている項目番号 ];
 		}
 		private void tConfigIniへ記録する_Drums()
 		{
@@ -3199,6 +3234,7 @@ namespace DTXMania
             CDTXMania.ConfigIni.eJUST.Drums = (EJust)this.iDrumsJust.n現在選択されている項目番号;
             CDTXMania.ConfigIni.nShutterInSide.Drums = this.iDrumsShutterInPos.n現在の値;
             CDTXMania.ConfigIni.nShutterOutSide.Drums = this.iDrumsShutterOutPos.n現在の値;
+            CDTXMania.ConfigIni.strShutterImageName.Drums = this.iDrumsShutterImage.list項目値[ this.iDrumsShutterImage.n現在選択されている項目番号 ];
 		}
 		private void tConfigIniへ記録する_Guitar()
 		{
@@ -3232,6 +3268,7 @@ namespace DTXMania
             CDTXMania.ConfigIni.bJudgeLineDisp.Guitar = this.iGuitarJudgeLineDisp.bON;
             CDTXMania.ConfigIni.bGraph.Guitar = this.iGuitarGraph.bON;
             CDTXMania.ConfigIni.eJUST.Guitar = (EJust)this.iGuitarJust.n現在選択されている項目番号;
+            CDTXMania.ConfigIni.strShutterImageName.Guitar = this.iGuitarShutterImage.list項目値[ this.iGuitarShutterImage.n現在選択されている項目番号 ];
 		}
 		//-----------------
 		#endregion

@@ -4,6 +4,7 @@ using System.Text;
 using System.Drawing;
 using System.Diagnostics;
 using SlimDX;
+using SlimDX.Direct3D9;
 using FDK;
 
 namespace DTXMania
@@ -38,16 +39,43 @@ namespace DTXMania
 			{
                 //シャッターテクスチャの生成
                 //固定実装
-                string strPath = @"..\Common\\Shutter\\" + "default_d.png";
-                //if(  )
-                //{
-                    
-                //}
-                //else if( )
-                //{
-                //
-                //}
-                this.txShutter = CDTXMania.tテクスチャの生成( CSkin.Path( strPath ) );
+                string strPath = CDTXMania.strEXEのあるフォルダ + @"System\Common\Shutter\";
+                bool bBLACK = false; 
+                int i;
+                if( CDTXMania.Skin.listShutterImage.Count != 0 )
+                {
+                    //配列取得
+                    string[] shutterNames = CDTXMania.Skin.arGetShutterName();
+
+                    //リスト
+                    for( i = 0; i < 3; i++ )
+                    {
+                        int shutterIndex = Array.BinarySearch( shutterNames, CDTXMania.ConfigIni.strShutterImageName[ i ] );
+                        if( CDTXMania.ConfigIni.strShutterImageName[ i ] != "BLACK" )
+                        {
+                            if( i == 0 )
+                                this.txShutter[ i ] = CDTXMania.tテクスチャの生成( strPath + CDTXMania.Skin.listShutterImage[ shutterIndex ].strFilePathD );
+                            else
+                                this.txShutter[ i ] = CDTXMania.tテクスチャの生成( strPath + CDTXMania.Skin.listShutterImage[ shutterIndex ].strFilePathGB );
+                        }
+                        else
+                        {
+                            if( i == 0 )
+                                this.t黒シャッターの生成( E楽器パート.DRUMS );
+                            else if( i == 1 )
+                                this.t黒シャッターの生成( E楽器パート.GUITAR );
+                            else if( i == 2 )
+                                this.t黒シャッターの生成( E楽器パート.BASS );
+                        }
+                    }
+                }
+                else
+                {
+                    //画像リストが無い場合は全パート黒テクスチャ
+                    this.t黒シャッターの生成( E楽器パート.DRUMS );
+                    this.t黒シャッターの生成( E楽器パート.GUITAR );
+                    this.t黒シャッターの生成( E楽器パート.BASS );
+                }
 
 				base.OnManagedリソースの作成();
 			}
@@ -56,7 +84,11 @@ namespace DTXMania
 		{
 			if( !base.b活性化してない )
 			{
-                CDTXMania.tテクスチャの解放( ref this.txShutter );
+                for( int i = 0; i < 3; i++ )
+                {
+                    CDTXMania.t安全にDisposeする( ref this.txShutter );
+                }
+
 				base.OnManagedリソースの解放();
 			}
 		}
@@ -64,16 +96,16 @@ namespace DTXMania
 		{
 			if( !base.b活性化してない )
 			{
-                if( this.txShutter != null )
+                if( this.txShutter.Drums != null )
                 {
                     //Drum
                     if( CDTXMania.ConfigIni.bDrums有効 )
                     {
                         //IN側
-                        this.txShutter.t2D描画( CDTXMania.app.Device, 295, (int)( ( CDTXMania.ConfigIni.nShutterInSide.Drums / 100.0 ) * 720.0 ) - 720 );
+                        this.txShutter.Drums.t2D描画( CDTXMania.app.Device, 295, (int)( ( CDTXMania.ConfigIni.nShutterInSide.Drums / 100.0 ) * 720.0 ) - 720 );
 
                         //OUT側
-                        this.txShutter.t2D描画( CDTXMania.app.Device, 295, 720 - (int)( ( CDTXMania.ConfigIni.nShutterOutSide.Drums / 100.0 ) * 720.0 ) );
+                        this.txShutter.Drums.t2D描画( CDTXMania.app.Device, 295, 720 - (int)( ( CDTXMania.ConfigIni.nShutterOutSide.Drums / 100.0 ) * 720.0 ) );
                     }
                     else
                     {
@@ -89,12 +121,20 @@ namespace DTXMania
             return base.On進行描画();
 		}
 
+        public void t黒シャッターの生成( E楽器パート ePart )
+        {
+            if( ePart == E楽器パート.DRUMS ){
+                this.txShutter[ 0 ] = new CTexture( CDTXMania.app.Device, 558, 720, CDTXMania.app.GraphicsDeviceManager.CurrentSettings.BackBufferFormat, Pool.Managed );
+            } else {
+                this.txShutter[ ePart == E楽器パート.GUITAR ? 1 : 2 ] = new CTexture( CDTXMania.app.Device, 252, 720, CDTXMania.app.GraphicsDeviceManager.CurrentSettings.BackBufferFormat, Pool.Managed );
+            }
+        }
 
 		// その他
 
 		#region [ private ]
 		//-----------------
-        private CTexture txShutter;
+        private STDGBVALUE<CTexture> txShutter = new STDGBVALUE<CTexture>();
 		//-----------------
 		#endregion
 	}

@@ -2403,7 +2403,7 @@ namespace DTXMania
 						        295,
 						        configIni.bReverse.Drums ?
 							        159 + pChip.nバーからの距離dot.Drums : 561 - pChip.nバーからの距離dot.Drums,
-								new Rectangle( 0, 772, 559, 2 )
+								new Rectangle( 0, 772, 558, 2 )
 							);
 						}
 						break;

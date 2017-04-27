@@ -35,16 +35,7 @@ namespace DTXMania
 		{
 			if ( !base.b活性化してない )
 			{
-				string pathScrollBar = CSkin.Path( @"Graphics\5_scrollbar.png" );
-				string pathScrollPosition = CSkin.Path( @"Graphics\5_scrollbar.png" );
-				if ( File.Exists( pathScrollBar ) )
-				{
-					this.txScrollBar = CDTXMania.tテクスチャの生成( pathScrollBar, false );
-				}
-				if ( File.Exists( pathScrollPosition ) )
-				{
-					this.txScrollPosition = CDTXMania.tテクスチャの生成( pathScrollPosition, false );
-				}
+				this.txScrollBar = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_scrollbar.png" ) );
 				base.OnManagedリソースの作成();
 			}
 		}
@@ -53,7 +44,6 @@ namespace DTXMania
 			if ( !base.b活性化してない )
 			{
 				CDTXMania.t安全にDisposeする( ref this.txScrollBar );
-				CDTXMania.t安全にDisposeする( ref this.txScrollPosition );
 
 				base.OnManagedリソースの解放();
 			}
@@ -67,7 +57,7 @@ namespace DTXMania
 			}
 			#endregion
 			#region [ スクロール地点の描画 (計算はCActSelect曲リストで行う。スクロール位置と選曲項目の同期のため。)#27648 ]
-			if ( this.txScrollPosition != null )
+			if ( this.txScrollBar != null )
 			{
 				int py = CDTXMania.stage選曲.nスクロールバー相対y座標;
 				if( py <= 336 && py >= 0 )
@@ -80,15 +70,52 @@ namespace DTXMania
             {
                 this.n決定演出用X = ( CDTXMania.stage選曲.ct決定演出待機.n現在の値 <= 250 && CDTXMania.stage選曲.ct決定演出待機.n現在の値 >= 0 ? (int)( 429 * ( ( CDTXMania.stage選曲.ct決定演出待機.n現在の値 ) / 250.0 ) ) : 429 );
             }
+            this.tアイテム数の描画();
 			return 0;
 		}
 
+        /// <summary>
+        /// アイテム数と現在の位置を描画する。
+        /// (CActSelect曲リスト.csから移植)
+        /// </summary>
+        /// <param name="nCurrentPos"></param>
+        /// <param name="nItemCount"></param>
+        public void tアイテム数の描画()
+        {
+            string s = CDTXMania.stage選曲.act曲リスト.nCurrentPosition.ToString() + "/" + CDTXMania.stage選曲.act曲リスト.nNumOfItems.ToString();
+            int x = 1150;
+            int y = 200;
+
+            for (int p = s.Length - 1; p >= 0; p--)
+            {
+                tアイテム数の描画_１桁描画(x, y, s[p]);
+                x -= 16;
+            }
+        }
+        private void tアイテム数の描画_１桁描画(int x, int y, char s数値)
+        {
+            int dx, dy;
+            if( s数値 == '/' )
+            {
+                dx = 96;
+                dy = 0;
+            }
+            else
+            {
+                int n = (int)s数値 - (int)'0';
+                dx = (n % 6) * 16;
+                dy = (n / 6) * 16;
+            }
+            if( this.txScrollBar != null )
+            {
+                this.txScrollBar.t2D描画(CDTXMania.app.Device, x, y, new Rectangle( dx, dy + 32, 16, 16 ) );
+            }
+        }
 
 		// その他
 
 		#region [ private ]
 		//-----------------
-		private CTexture txScrollPosition;
 		private CTexture txScrollBar;
         private int n決定演出用X;
 		//-----------------

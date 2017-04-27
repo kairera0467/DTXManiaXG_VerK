@@ -641,12 +641,24 @@ namespace DTXMania
                     
                     {
                         //Debug
-							if( CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDX.DirectInput.Key.F5 ) )
-							{
-									Debug.WriteLine( "ギターとベースの入れ替え1" );
-									CDTXMania.Skin.sound変更音.t再生する();
-									CDTXMania.ConfigIni.bIsSwappedGuitarBass = !CDTXMania.ConfigIni.bIsSwappedGuitarBass;
-							}
+                        //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDX.DirectInput.Key.F5 ) )
+                        //{
+                        //        Debug.WriteLine( "ギターとベースの入れ替え1" );
+                        //        CDTXMania.Skin.sound変更音.t再生する();
+                        //        CDTXMania.ConfigIni.bIsSwappedGuitarBass = !CDTXMania.ConfigIni.bIsSwappedGuitarBass;
+                        //}
+                        //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDX.DirectInput.Key.F8 ) )
+                        //{
+                        //        Debug.WriteLine( "[Test]シャッター画像csvの読み込み" );
+                        //        CDTXMania.Skin.sound変更音.t再生する();
+                        //        CDTXMania.Skin.CreateShutterList();
+                        //}
+                        //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDX.DirectInput.Key.F9 ) )
+                        //{
+                        //        Debug.WriteLine( "[Test]シャッター画像のリスト生成＆呼び出し" );
+                        //        CDTXMania.Skin.sound変更音.t再生する();
+                        //        CDTXMania.Skin.arGetShutterName();
+                        //}
                     }
 					this.actSortSongs.t進行描画();
 					this.actQuickConfig.t進行描画();

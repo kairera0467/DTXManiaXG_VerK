@@ -658,17 +658,12 @@ namespace DTXMania
 				this.txEnumeratingSongs = null;
 			}
 			#endregion
-			#region [ 曲数表示 ]
-			this.txアイテム数数字 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_skill number on gauge etc.png" ), false );
-			#endregion
 			base.OnManagedリソースの作成();
 		}
 		public override void OnManagedリソースの解放()
 		{
 			if( this.b活性化してない )
 				return;
-
-			CDTXMania.t安全にDisposeする( ref this.txアイテム数数字 );
 
             for ( int i = 0; i < 15; i++ )
             {
@@ -1445,11 +1440,6 @@ namespace DTXMania
 				this.nスクロールバー相対y座標 = py + delta;
 			}
 			#endregion
-
-			#region [ アイテム数の描画 #27648 ]
-            if( CDTXMania.r現在のステージ.eフェーズID == CStage.Eフェーズ.共通_通常状態 )
-			    tアイテム数の描画();
-			#endregion
 			return 0;
 		}
 		
@@ -1658,8 +1648,8 @@ namespace DTXMania
 		private STバー tx曲名バー;
 		private STバー情報[] stバー情報 = new STバー情報[ 15 ];
 		private ST選曲バー tx選曲バー;
-		private int nCurrentPosition = 0;
-		private int nNumOfItems = 0;
+		public int nCurrentPosition = 0;
+		public int nNumOfItems = 0;
 
         //選択した後の演出用
         //難易度ラベル、レベル、オプション →ステータスパネルクラスへ
@@ -2163,37 +2153,6 @@ namespace DTXMania
             CDTXMania.t安全にDisposeする( ref graphics );
             return txTex;
         }
-		private void tアイテム数の描画()
-		{
-            string s = nCurrentPosition.ToString() + "/" + nNumOfItems.ToString();
-            int x = 1150;
-            int y = 200;
-
-            for (int p = s.Length - 1; p >= 0; p--)
-            {
-                tアイテム数の描画_１桁描画(x, y, s[p]);
-                x -= 16;
-            }
-		}
-		private void tアイテム数の描画_１桁描画( int x, int y, char s数値 )
-		{
-            int dx, dy;
-            if (s数値 == '/')
-            {
-                dx = 96;
-                dy = 0;
-            }
-            else
-            {
-                int n = (int)s数値 - (int)'0';
-                dx = (n % 6) * 16;
-                dy = (n / 6) * 16;
-            }
-            if (this.txアイテム数数字 != null)
-            {
-                this.txアイテム数数字.t2D描画(CDTXMania.app.Device, x, y, new Rectangle(dx, dy, 16, 16));
-            }
-		}
 
         //DOBON.NETから拝借。
         //http://dobon.net/vb/dotnet/graphics/drawnegativeimage.html

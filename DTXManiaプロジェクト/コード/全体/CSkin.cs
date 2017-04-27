@@ -541,6 +541,7 @@ namespace DTXMania
 			InitializeSkinPathRoot();
 			ReloadSkinPaths();
 			PrepareReloadSkin();
+            CreateShutterList(); //2017.04.13 kairera0467
 		}
 		public CSkin()
 		{
@@ -549,7 +550,7 @@ namespace DTXMania
 			bUseBoxDefSkin = true;
 			ReloadSkinPaths();
 			PrepareReloadSkin();
-            this.listShutterImage = new List<CShutterImage>();
+            CreateShutterList(); //2017.04.13 kairera0467
 		}
 		private string InitializeSkinPathRoot()
 		{
@@ -630,6 +631,7 @@ namespace DTXMania
 					}
 				}
 			}
+            CreateShutterList();
 		}
 
 
@@ -947,34 +949,44 @@ namespace DTXMania
         {
             string strListCSV;
             bool bFileFound = false;
+            this.listShutterImage = new List<CShutterImage>();
 
             //csvを読み込む
-            using( StreamReader reader = new StreamReader( CSkin.Path(@"Sound.csv"), Encoding.GetEncoding( "Shift_JIS")))
+            if( File.Exists( CSkin.Path( @"..\\Common\\Shutter\\list.csv" ) ) )
             {
+                StreamReader reader = new StreamReader( CSkin.Path( @"..\\Common\\Shutter\\list.csv" ) );
                 strListCSV = reader.ReadToEnd();
-            }
 
-            //設定していく。
-            string[] delimiter = { "\n" };
-            string[] strSingleLine = strListCSV.Split( delimiter, StringSplitOptions.RemoveEmptyEntries );
-            foreach( string s in strSingleLine )
-            {
-                if( s[ 0 ] != ';' ) //先頭文字が;の場合は無視
-                    continue;
-                s.Replace( '\r', ' ' );
+                //設定していく。
+                string[] delimiter = { "\n" };
+                string[] strSingleLine = strListCSV.Split( delimiter, StringSplitOptions.RemoveEmptyEntries );
+                foreach( string s in strSingleLine )
+                {
+                    if( s.IndexOf( ";" ) != -1 ) //先頭文字が;の場合は無視
+                        continue;
+                    string str = s.Replace( '\r', ' ' );
 
-                //正常なら3個になる。
-                string[] strArray = s.Split( ',' );
+                    //正常なら3個になる。
+                    if( str.IndexOf(' ') != -1 )
+                        str = str.Remove( str.IndexOf(' '), 1 );
+                    string[] strArray = str.Split( ',' );
 
-                if( strArray.Length != 3 )
-                    continue;
+                    if( strArray.Length != 3 )
+                        continue;
+                    if( strArray[ 0 ] == "BLACK" ) //「BLACK」はシステム側で追加する名前なので無視する
+                        continue;
 
-                var shutter = new CShutterImage();
-                shutter.strName = strArray[ 0 ];
-                shutter.strFilePathD = strArray[ 1 ];
-                shutter.strFilePathGB = strArray[ 2 ];
+                    var shutter = new CShutterImage();
+                    shutter.strName = strArray[ 0 ];
+                    shutter.strFilePathD = strArray[ 1 ];
+                    shutter.strFilePathGB = strArray[ 2 ];
 
-                this.listShutterImage.Add( shutter );
+                    this.listShutterImage.Add( shutter );
+                }
+                reader.Close();
+
+                //BLACK追加
+                this.listShutterImage.Add( new CShutterImage() { strName = "BLACK" } );
             }
         }
 

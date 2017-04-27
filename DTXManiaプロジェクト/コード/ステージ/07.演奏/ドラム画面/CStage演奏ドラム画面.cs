@@ -3770,10 +3770,10 @@ namespace DTXMania
 				{
 					this.txチップ.n透明度 = 255;
 					this.txチップ.t2D描画( CDTXMania.app.Device,
-						295,
+						294,
 						configIni.bReverse.Drums ?
 							159 + pChip.nバーからの距離dot.Drums : 561 - pChip.nバーからの距離dot.Drums,
-						 new Rectangle(0, 769, 0x22f, 2)
+						 new Rectangle( 0, 769, 558, 2 )
 					);
 				}
 			}
