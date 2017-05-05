@@ -374,26 +374,26 @@ namespace DTXMania
                 {
                     if( this.bStageEffect演出中 )
                     {
-                            int numf = this.ctStageEffect進行.n現在の値;
-                            this.ctStageEffect進行.t進行();
-                            if ( this.ctStageEffect進行.b終了値に達した )
+                        int numf = this.ctStageEffect進行.n現在の値;
+                        this.ctStageEffect進行.t進行();
+                        if ( this.ctStageEffect進行.b終了値に達した )
+                        {
+                            this.ctStageEffect進行.t停止();
+                            this.bStageEffect演出中 = false;
+                        }
+                        if( CDTXMania.ConfigIni.bDrums有効 )
+                        {
+                            if( this.txArフィルインエフェクト[ this.ctStageEffect進行.n現在の値 ] != null )
                             {
-                                this.ctStageEffect進行.t停止();
-                                this.bStageEffect演出中 = false;
-                            }
-                            if( CDTXMania.ConfigIni.bDrums有効 )
-                            {
-                                if( this.txArフィルインエフェクト[ this.ctStageEffect進行.n現在の値 ] != null )
-                                {
-                                    float fWidth = 1280.0f / this.txArフィルインエフェクト[ this.ctStageEffect進行.n現在の値 ].sz画像サイズ.Width;
-                                    float fHeight = 720.0f / this.txArフィルインエフェクト[ this.ctStageEffect進行.n現在の値 ].sz画像サイズ.Height;
+                                float fWidth = 1280.0f / this.txArフィルインエフェクト[ this.ctStageEffect進行.n現在の値 ].sz画像サイズ.Width;
+                                float fHeight = 720.0f / this.txArフィルインエフェクト[ this.ctStageEffect進行.n現在の値 ].sz画像サイズ.Height;
 
-                                    Vector3 vcRatio = new Vector3( fWidth, fHeight, 1.0f );
-
-                                    this.txArフィルインエフェクト[ this.ctStageEffect進行.n現在の値 ].vc拡大縮小倍率 = vcRatio;
-                                    this.txArフィルインエフェクト[ this.ctStageEffect進行.n現在の値 ].t2D描画( CDTXMania.app.Device, 0, 0 );
-                                }
+                                Vector3 vcRatio = new Vector3( fWidth, fHeight, 1.0f );
+                                this.txArフィルインエフェクト[ this.ctStageEffect進行.n現在の値 ].b加算合成 = true;
+                                this.txArフィルインエフェクト[ this.ctStageEffect進行.n現在の値 ].vc拡大縮小倍率 = vcRatio;
+                                this.txArフィルインエフェクト[ this.ctStageEffect進行.n現在の値 ].t2D描画( CDTXMania.app.Device, 0, 0 );
                             }
+                        }
                     }
                 }
 			}
