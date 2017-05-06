@@ -106,9 +106,13 @@ namespace DTXMania
                     {
                         //IN側
                         this.txShutter.Drums.t2D描画( CDTXMania.app.Device, 295, (int)( ( CDTXMania.ConfigIni.nShutterInSide.Drums / 100.0 ) * 720.0 ) - 720 );
+                        if( this.nShutterNumTime != 0 )
+                            CDTXMania.act文字コンソール.tPrint( 295, 0, C文字コンソール.Eフォント種別.白, CDTXMania.ConfigIni.nShutterInSide.Drums.ToString() );
 
                         //OUT側
                         this.txShutter.Drums.t2D描画( CDTXMania.app.Device, 295, 720 - (int)( ( CDTXMania.ConfigIni.nShutterOutSide.Drums / 100.0 ) * 720.0 ) );
+                        if( this.nShutterNumTime != 0 )
+                            CDTXMania.act文字コンソール.tPrint( 295, 550, C文字コンソール.Eフォント種別.白, CDTXMania.ConfigIni.nShutterOutSide.Drums.ToString() );
                     }
                     else
                     {
@@ -133,11 +137,12 @@ namespace DTXMania
             }
         }
 
-        CCounter ctShutter;
-        int nShutterCounter;
-        int nShutterCounter2;
-        int nShutterStartTime;
+        long nShutterCounter;
+        long nShutterCounter2;
+        long nShutterStartTime;
+        long nShutterNumTime;
         bool bSinglePush;
+        bool b離された;
 
         //今のところドラムのみ
         public void tShutterMove( IInputDevice bKeyboard )
@@ -239,11 +244,12 @@ namespace DTXMania
                     }
                 }
             }
-            else if( bKeyboard.bキーが離された( (int) SlimDX.DirectInput.Key.NumberPad2 ) )
+            if( bKeyboard.bキーが離された( (int) SlimDX.DirectInput.Key.NumberPad2 ) )
             {
                 if( nShutterStartTime > 0 )
                     nShutterStartTime = 0;
                 this.bSinglePush = false;
+                this.b離された = true;
             }
             #endregion
             #region[ ShutterOutSide Up ]
@@ -351,6 +357,20 @@ namespace DTXMania
             }
             #endregion
 
+            //ボタンが離されてからカウントを開始、カウントが一定までいったら表示を消す
+            if( b離された )
+            {
+                if( this.nShutterNumTime == 0 )
+                {
+                    this.nShutterNumTime = CSound管理.rc演奏用タイマ.nシステム時刻ms;
+                }
+                else if( CSound管理.rc演奏用タイマ.nシステム時刻ms - this.nShutterNumTime > 2000 )
+                {
+                    this.nShutterNumTime = 0;
+                    this.b離された = false;
+                }
+            }
+
             //デバッグ用
             //if( bKeyboard.bキーが押された( (int) SlimDX.DirectInput.Key.D0 ) )
             //{
@@ -418,6 +438,9 @@ namespace DTXMania
                         break;
                 }
             }
+
+            //動かしたら数値表示のカウントをリセットする
+            this.nShutterNumTime = 0;
         }
 
 		// その他

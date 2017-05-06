@@ -70,7 +70,11 @@ namespace DTXMania
             {
                 this.n決定演出用X = ( CDTXMania.stage選曲.ct決定演出待機.n現在の値 <= 250 && CDTXMania.stage選曲.ct決定演出待機.n現在の値 >= 0 ? (int)( 429 * ( ( CDTXMania.stage選曲.ct決定演出待機.n現在の値 ) / 250.0 ) ) : 429 );
             }
-            this.tアイテム数の描画();
+            else
+            {
+                this.tアイテム数の描画();
+            }
+
 			return 0;
 		}
 
