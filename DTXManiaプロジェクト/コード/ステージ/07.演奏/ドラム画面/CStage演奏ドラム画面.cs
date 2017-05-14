@@ -214,7 +214,6 @@ namespace DTXMania
 				this.t進行描画_ステータスパネル();
                 this.t進行描画_グラフ();   // #24074 2011.01.23 add ikanick
 				this.t進行描画_レーンフラッシュD();
-				this.t進行描画_判定ライン();
 				if ( this.e判定表示優先度 == E判定表示優先度.Chipより下 )
 				{
 					this.t進行描画_RGBボタン();
@@ -227,6 +226,7 @@ namespace DTXMania
                 this.t進行描画_チップ_模様( E楽器パート.DRUMS );
 				bIsFinishedPlaying = this.t進行描画_チップ(E楽器パート.DRUMS);
                 this.actShutter.On進行描画();
+                this.t進行描画_判定ライン();
 				this.t進行描画_演奏情報();
 				this.t進行描画_ドラムパッド();
                 this.actAVI.tウィンドウクリップを表示する();

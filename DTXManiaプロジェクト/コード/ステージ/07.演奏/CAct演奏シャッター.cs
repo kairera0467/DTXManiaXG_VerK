@@ -105,12 +105,13 @@ namespace DTXMania
                     if( CDTXMania.ConfigIni.bDrums有効 )
                     {
                         //IN側
-                        this.txShutter.Drums.t2D描画( CDTXMania.app.Device, 295, (int)( ( CDTXMania.ConfigIni.nShutterInSide.Drums / 100.0 ) * 720.0 ) - 720 );
+                        this.txShutter.Drums.t2D描画( CDTXMania.app.Device, 295, (int)Math.Round( ( CDTXMania.ConfigIni.nShutterInSide.Drums / 100.0 ) * 720.0 ) - 720 );
                         if( this.nShutterNumTime != 0 )
                             CDTXMania.act文字コンソール.tPrint( 295, 0, C文字コンソール.Eフォント種別.白, CDTXMania.ConfigIni.nShutterInSide.Drums.ToString() );
+                            
 
                         //OUT側
-                        this.txShutter.Drums.t2D描画( CDTXMania.app.Device, 295, 720 - (int)( ( CDTXMania.ConfigIni.nShutterOutSide.Drums / 100.0 ) * 720.0 ) );
+                        this.txShutter.Drums.t2D描画( CDTXMania.app.Device, 295, 720 - (int)Math.Round( ( CDTXMania.ConfigIni.nShutterOutSide.Drums / 100.0 ) * 720.0 ) );
                         if( this.nShutterNumTime != 0 )
                             CDTXMania.act文字コンソール.tPrint( 295, 550, C文字コンソール.Eフォント種別.白, CDTXMania.ConfigIni.nShutterOutSide.Drums.ToString() );
                     }
