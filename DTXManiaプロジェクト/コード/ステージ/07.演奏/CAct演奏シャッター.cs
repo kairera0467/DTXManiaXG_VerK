@@ -16,6 +16,7 @@ namespace DTXMania
 
 		public CAct演奏シャッター()
 		{
+            base.list子Activities.Add( this.actLVFont = new CActLVLNFont() );
 			base.b活性化してない = true;
 		}
 		
@@ -106,14 +107,15 @@ namespace DTXMania
                     {
                         //IN側
                         this.txShutter.Drums.t2D描画( CDTXMania.app.Device, 295, (int)Math.Round( ( CDTXMania.ConfigIni.nShutterInSide.Drums / 100.0 ) * 720.0 ) - 720 );
-                        if( this.nShutterNumTime != 0 )
-                            CDTXMania.act文字コンソール.tPrint( 295, 0, C文字コンソール.Eフォント種別.白, CDTXMania.ConfigIni.nShutterInSide.Drums.ToString() );
-                            
 
                         //OUT側
                         this.txShutter.Drums.t2D描画( CDTXMania.app.Device, 295, 720 - (int)Math.Round( ( CDTXMania.ConfigIni.nShutterOutSide.Drums / 100.0 ) * 720.0 ) );
-                        if( this.nShutterNumTime != 0 )
-                            CDTXMania.act文字コンソール.tPrint( 295, 550, C文字コンソール.Eフォント種別.白, CDTXMania.ConfigIni.nShutterOutSide.Drums.ToString() );
+
+                        if( this.nShutterNumTime != 0 ) //シャッター位置表示
+                        {
+                            this.actLVFont.t文字列描画( 592, (int)Math.Round( ( CDTXMania.ConfigIni.nShutterInSide.Drums / 100.0 ) * 720.0 ) - 24, CDTXMania.ConfigIni.nShutterInSide.Drums.ToString(), CActLVLNFont.EFontColor.White, CActLVLNFont.EFontAlign.Center );
+                            this.actLVFont.t文字列描画( 592, 720 - (int)Math.Round( ( CDTXMania.ConfigIni.nShutterOutSide.Drums / 100.0 ) * 720.0 ) + 6, CDTXMania.ConfigIni.nShutterOutSide.Drums.ToString(), CActLVLNFont.EFontColor.White, CActLVLNFont.EFontAlign.Center );
+                        }
                     }
                     else
                     {
@@ -193,11 +195,13 @@ namespace DTXMania
                     }
                 }
             }
-            else if( bKeyboard.bキーが離された( (int) SlimDX.DirectInput.Key.NumberPad8 ) )
+            //else if( bKeyboard.bキーが離された( (int) SlimDX.DirectInput.Key.NumberPad8 ) )
+            if( bKeyboard.bキーが押された( (int) SlimDX.DirectInput.Key.NumberPad8 ) )
             {
                 if( nShutterStartTime > 0 )
                     nShutterStartTime = 0;
                 this.bSinglePush = false;
+                this.b離された = true;
             }
             #endregion
             #region[ ShutterInSide Down ]
@@ -245,7 +249,8 @@ namespace DTXMania
                     }
                 }
             }
-            if( bKeyboard.bキーが離された( (int) SlimDX.DirectInput.Key.NumberPad2 ) )
+            //if( bKeyboard.bキーが離された( (int) SlimDX.DirectInput.Key.NumberPad2 ) )
+            if( bKeyboard.bキーが押された( (int) SlimDX.DirectInput.Key.NumberPad2 ) )
             {
                 if( nShutterStartTime > 0 )
                     nShutterStartTime = 0;
@@ -303,6 +308,7 @@ namespace DTXMania
                 if( nShutterStartTime > 0 )
                     nShutterStartTime = 0;
                 this.bSinglePush = false;
+                this.b離された = true;
             }
             #endregion
             #region[ ShutterOutSide Down ]
@@ -355,11 +361,13 @@ namespace DTXMania
                 if( nShutterStartTime > 0 )
                     nShutterStartTime = 0;
                 this.bSinglePush = false;
+                this.b離された = true;
             }
             #endregion
 
             //ボタンが離されてからカウントを開始、カウントが一定までいったら表示を消す
             if( b離された )
+            //if( this.nShutterNumTime > 0 )
             {
                 if( this.nShutterNumTime == 0 )
                 {
@@ -377,18 +385,18 @@ namespace DTXMania
             //{
             //    CDTXMania.ConfigIni.nShutterInSide.Drums = 100;
             //}
-            if ( bKeyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.NumberPad2 ) )
-            {
-                CDTXMania.act文字コンソール.tPrint( 0, 0, C文字コンソール.Eフォント種別.白, "NUM2" );
-            }
-            if ( bKeyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.NumberPad8 ) )
-            {
-                CDTXMania.act文字コンソール.tPrint( 0, 0, C文字コンソール.Eフォント種別.白, "NUM8" );
-            }
-            if ( bKeyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.RightShift ) )
-            {
-                CDTXMania.act文字コンソール.tPrint( 0, 16, C文字コンソール.Eフォント種別.白, "R SHIFT" );
-            }
+            //if ( bKeyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.NumberPad2 ) )
+            //{
+            //    CDTXMania.act文字コンソール.tPrint( 0, 0, C文字コンソール.Eフォント種別.白, "NUM2" );
+            //}
+            //if ( bKeyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.NumberPad8 ) )
+            //{
+            //    CDTXMania.act文字コンソール.tPrint( 0, 0, C文字コンソール.Eフォント種別.白, "NUM8" );
+            //}
+            //if ( bKeyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.RightShift ) )
+            //{
+            //    CDTXMania.act文字コンソール.tPrint( 0, 16, C文字コンソール.Eフォント種別.白, "R SHIFT" );
+            //}
         }
 
         /// <summary>
@@ -449,6 +457,7 @@ namespace DTXMania
 		#region [ private ]
 		//-----------------
         private STDGBVALUE<CTexture> txShutter = new STDGBVALUE<CTexture>();
+        private CActLVLNFont actLVFont; //2017.05.20 #34099 kairera0467 とりあえず版。後日専用の数字画像に変更する予定。
 		//-----------------
 		#endregion
 	}

@@ -44,11 +44,13 @@ namespace DTXMania
 		}
 		public void t文字列描画(int x, int y, string str, EFontColor efc, EFontAlign efa)
 		{
-			if (!base.b活性化してない && !string.IsNullOrEmpty(str))
+			//if (!base.b活性化してない && !string.IsNullOrEmpty(str))
+			if ( !string.IsNullOrEmpty(str))
 			{
 				if (this.tx数値 != null)
 				{
 					bool bRightAlign = (efa == EFontAlign.Right);
+                    bool bCenterAlign = (efa == EFontAlign.Center);
 
 					if (bRightAlign)							// 右詰なら文字列反転して右から描画
 					{
@@ -56,6 +58,12 @@ namespace DTXMania
 						Array.Reverse(chars);
 						str = new string(chars);
 					}
+                    else if( bCenterAlign )
+                    {
+                        //Centerの場合は左から。ただし開始時のX座標をマイナス方向にずらしておく。
+                        //(フォントの幅 * 文字数) / 2
+                        x -= (15 * str.Length) / 2;
+                    }
 
 					foreach (char ch in str)
 					{
@@ -116,7 +124,8 @@ namespace DTXMania
 		public enum EFontAlign
 		{
 			Left,
-			Right
+			Right,
+            Center //2017.05.20 kairera0467
 		}
 		private ST数字[,] st数字;
 		private CTexture tx数値;
