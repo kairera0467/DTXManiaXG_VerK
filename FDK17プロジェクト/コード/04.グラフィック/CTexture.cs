@@ -671,6 +671,68 @@ namespace FDK
 			device.DrawUserPrimitives( PrimitiveType.TriangleStrip, 2, this.cvPositionColoredVertexies );
 		}
 
+
+        public void t3D上下反転描画( Device device, Matrix mat )
+        {
+            this.t3D上下反転描画( device, mat, this.rc全画像 );
+        }
+
+        public void t3D上下反転描画( Device device, Matrix mat, Rectangle rc画像内の描画領域 )
+		{
+			if( this.texture == null )
+				return;
+
+			float x = ( (float) rc画像内の描画領域.Width ) / 2f;
+			float y = ( (float) rc画像内の描画領域.Height ) / 2f;
+			float z = 0.0f;
+			float f左U値 = ( (float) rc画像内の描画領域.Left ) / ( (float) this.szテクスチャサイズ.Width );
+			float f右U値 = ( (float) rc画像内の描画領域.Right ) / ( (float) this.szテクスチャサイズ.Width );
+			float f上V値 = ( (float) rc画像内の描画領域.Top ) / ( (float) this.szテクスチャサイズ.Height );
+			float f下V値 = ( (float) rc画像内の描画領域.Bottom ) / ( (float) this.szテクスチャサイズ.Height );
+			this.color4.Alpha = ( (float) this._透明度 ) / 255f;
+			int color = this.color4.ToArgb();
+			
+			if( this.cvPositionColoredVertexies == null )
+				this.cvPositionColoredVertexies = new PositionColoredTexturedVertex[ 4 ];
+
+			// #27122 2012.1.13 from: 以下、マネージドオブジェクト（＝ガベージ）の量産を抑えるため、new は使わず、メンバに値を１つずつ直接上書きする。
+
+			this.cvPositionColoredVertexies[ 0 ].Position.X = -x;
+			this.cvPositionColoredVertexies[ 0 ].Position.Y = y;
+			this.cvPositionColoredVertexies[ 0 ].Position.Z = z;
+			this.cvPositionColoredVertexies[ 0 ].Color = color;
+			this.cvPositionColoredVertexies[ 0 ].TextureCoordinates.X = f左U値;
+			this.cvPositionColoredVertexies[ 0 ].TextureCoordinates.Y = f下V値;
+
+			this.cvPositionColoredVertexies[ 1 ].Position.X = x;
+			this.cvPositionColoredVertexies[ 1 ].Position.Y = y;
+			this.cvPositionColoredVertexies[ 1 ].Position.Z = z;
+			this.cvPositionColoredVertexies[ 1 ].Color = color;
+			this.cvPositionColoredVertexies[ 1 ].TextureCoordinates.X = f右U値;
+			this.cvPositionColoredVertexies[ 1 ].TextureCoordinates.Y = f下V値;
+
+			this.cvPositionColoredVertexies[ 2 ].Position.X = -x;
+			this.cvPositionColoredVertexies[ 2 ].Position.Y = -y;
+			this.cvPositionColoredVertexies[ 2 ].Position.Z = z;
+			this.cvPositionColoredVertexies[ 2 ].Color = color;
+			this.cvPositionColoredVertexies[ 2 ].TextureCoordinates.X = f左U値;
+			this.cvPositionColoredVertexies[ 2 ].TextureCoordinates.Y = f上V値;
+
+			this.cvPositionColoredVertexies[ 3 ].Position.X = x;
+			this.cvPositionColoredVertexies[ 3 ].Position.Y = -y;
+			this.cvPositionColoredVertexies[ 3 ].Position.Z = z;
+			this.cvPositionColoredVertexies[ 3 ].Color = color;
+			this.cvPositionColoredVertexies[ 3 ].TextureCoordinates.X = f右U値;
+			this.cvPositionColoredVertexies[ 3 ].TextureCoordinates.Y = f上V値;
+
+			this.tレンダリングステートの設定( device );
+
+			device.SetTransform( TransformState.World, mat );
+			device.SetTexture( 0, this.texture );
+			device.VertexFormat = PositionColoredTexturedVertex.Format;
+			device.DrawUserPrimitives( PrimitiveType.TriangleStrip, 2, this.cvPositionColoredVertexies );
+		}
+
 		#region [ IDisposable 実装 ]
 		//-----------------
 		public void Dispose()

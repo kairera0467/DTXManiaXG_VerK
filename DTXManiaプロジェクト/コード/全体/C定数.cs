@@ -268,6 +268,13 @@ namespace DTXMania
 		//nouse_ff			= 0xFF,
 	}
 	#endregion
+    public enum ERelease
+    {
+        XG,
+        GITADORA,
+        GDReEvolve,
+        GDmatixx
+    }
     public enum EMovieClipMode
     {
         OFF = 0,
