@@ -1574,7 +1574,7 @@ for (int i = 0; i < 3; i++) {
 #if !GPUFlushAfterPresent
 			actFlushGPU.On進行描画();		// Flush GPU	// EndScene()～Present()間 (つまりVSync前) でFlush実行
 #endif
-			if ( Sound管理.GetCurrentSoundDeviceType() != "DirectSound" )
+			if ( Sound管理.GetCurrentSoundDeviceType() != ESoundDeviceType.DirectSound )
 			{
 				Sound管理.t再生中の処理をする();	// サウンドバッファの更新; 画面描画と同期させることで、スクロールをスムーズにする
 			}
@@ -2274,6 +2274,7 @@ for (int i = 0; i < 3; i++) {
 				);
 				//Sound管理 = FDK.CSound管理.Instance;
 				//Sound管理.t初期化( soundDeviceType, 0, 0, CDTXMania.ConfigIni.nASIODevice, base.Window.Handle );
+                
 
 				ShowWindowTitleWithSoundType();
 				FDK.CSound管理.bIsTimeStretch = CDTXMania.ConfigIni.bTimeStretch;
@@ -2429,11 +2430,11 @@ for (int i = 0; i < 3; i++) {
 		public void ShowWindowTitleWithSoundType()
 		{
 			string delay = "";
-			if ( Sound管理.GetCurrentSoundDeviceType() != "DirectSound" )
+			if ( Sound管理.GetCurrentSoundDeviceType() != ESoundDeviceType.DirectSound )
 			{
 				delay = "(" + Sound管理.GetSoundDelay() + "ms)";
 			}
-			base.Window.Text = strWindowTitle + " (" + Sound管理.GetCurrentSoundDeviceType() + delay + ")";
+			base.Window.Text = strWindowTitle + " (" + Sound管理.GetCurrentSoundDeviceType().ToString() + delay + ")";
 		}
 
 		private void t終了処理()

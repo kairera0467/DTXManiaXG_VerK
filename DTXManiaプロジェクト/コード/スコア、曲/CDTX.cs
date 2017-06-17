@@ -1928,33 +1928,6 @@ namespace DTXMania
 			}
 		}
 
-		/// <summary>
-		/// デバッグ用
-		/// </summary>
-		public void tWaveBGM再生位置表示()
-		{
-			foreach ( CWAV wc in this.listWAV.Values )
-			{
-				if ( wc.rSound[ 0 ] != null && wc.rSound[ 0 ].n総演奏時間ms >= 5000 )
-				{
-					for ( int i = 0; i < nPolyphonicSounds; i++ )
-					{
-						if ( ( wc.rSound[ i ] != null ) && ( wc.rSound[ i ].b再生中 ) )
-						{
-							long n位置byte;
-							double db位置ms;
-							wc.rSound[ i ].t再生位置を取得する( out n位置byte, out db位置ms );
-							Trace.TraceInformation( "再生位置: {0}, seek先={1}ms / {2}byte, 全音長={3}ms",
-							    Path.GetFileName( wc.rSound[ 0 ].strファイル名 ),
-							    db位置ms, n位置byte,
-							    wc.rSound[ 0 ].n総演奏時間ms
-							);
-						}
-					}
-				}
-			}
-		}
-
 		public void tWavの再生停止( int nWaveの内部番号 )
 		{
 			tWavの再生停止( nWaveの内部番号, false );
@@ -1993,7 +1966,7 @@ namespace DTXMania
 
 				string str = string.IsNullOrEmpty(this.PATH_WAV) ? this.strフォルダ名 : this.PATH_WAV;
 				str = str + cwav.strファイル名;
-				bool bIsDirectSound = ( CDTXMania.Sound管理.GetCurrentSoundDeviceType() == "DirectSound" );
+				bool bIsDirectSound = ( CDTXMania.Sound管理.GetCurrentSoundDeviceType() == ESoundDeviceType.DirectSound );
 				try
 				{
 					//try
@@ -2049,7 +2022,7 @@ namespace DTXMania
 
 					#region [ 同時発音数を、チャンネルによって変える ]
 					int nPoly = nPolyphonicSounds;
-					if ( CDTXMania.Sound管理.GetCurrentSoundDeviceType() != "DirectSound" )	// DShowでの再生の場合はミキシング負荷が高くないため、
+					if ( CDTXMania.Sound管理.GetCurrentSoundDeviceType() != ESoundDeviceType.DirectSound )	// DShowでの再生の場合はミキシング負荷が高くないため、
 					{																		// チップのライフタイム管理を行わない
 						if      ( cwav.bIsBassSound )   nPoly = (nPolyphonicSounds >= 2)? 2 : 1;
 						else if ( cwav.bIsGuitarSound ) nPoly = (nPolyphonicSounds >= 2)? 2 : 1;
@@ -2057,24 +2030,24 @@ namespace DTXMania
 						else if ( cwav.bIsBGMSound)     nPoly = 1;
 					}
 					if ( cwav.bIsBGMSound ) nPoly = 1;
-					#endregion
+                    #endregion
 
-					// 残りはClone等で登録する
-					//if ( bIsDirectSound )	// DShowでの再生の場合はCloneする
-					//{
-					//    for ( int i = 1; i < nPoly; i++ )
-					//    {
-					//        cwav.rSound[ i ] = (CSound) cwav.rSound[ 0 ].Clone();	// #24007 2011.9.5 yyagi add: to accelerate loading chip sounds
-					//        // CDTXMania.Sound管理.tサウンドを登録する( cwav.rSound[ j ] );
-					//    }
-					//    for ( int i = nPoly; i < nPolyphonicSounds; i++ )
-					//    {
-					//        cwav.rSound[ i ] = null;
-					//    }
-					//}
-					//else															// WASAPI/ASIO時は通常通り登録
-					{
-						for ( int i = 1; i < nPoly; i++ )
+                    // 残りはClone等で登録する
+                    if ( bIsDirectSound )	// DShowでの再生の場合はCloneする
+                    {
+                        for ( int i = 1; i < nPoly; i++ )
+                        {
+                            cwav.rSound[ i ] = (CSound) cwav.rSound[ 0 ].Clone();	// #24007 2011.9.5 yyagi add: to accelerate loading chip sounds
+                            // CDTXMania.Sound管理.tサウンドを登録する( cwav.rSound[ j ] );
+                        }
+                        for ( int i = nPoly; i < nPolyphonicSounds; i++ )
+                        {
+                            cwav.rSound[ i ] = null;
+                        }
+                    }
+                    else															// WASAPI/ASIO時は通常通り登録
+                    {
+                        for ( int i = 1; i < nPoly; i++ )
 						{
 							try
 							{
@@ -3294,7 +3267,7 @@ namespace DTXMania
 		/// </summary>
 		public void PlanToAddMixerChannel()
 		{
-			if ( CDTXMania.Sound管理.GetCurrentSoundDeviceType() == "DirectSound" )	// DShowでの再生の場合はミキシング負荷が高くないため、
+			if ( CDTXMania.Sound管理.GetCurrentSoundDeviceType() == ESoundDeviceType.DirectSound )	// DShowでの再生の場合はミキシング負荷が高くないため、
 			{																		// チップのライフタイム管理を行わない
 				return;
 			}

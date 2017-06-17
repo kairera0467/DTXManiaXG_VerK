@@ -48,50 +48,6 @@ namespace FDK
 			{
 				return _nMasterVolume;
 			}
-			//get
-			//{
-			//    if ( SoundDeviceType == ESoundDeviceType.ExclusiveWASAPI || SoundDeviceType == ESoundDeviceType.ASIO )
-			//    {
-			//        return Bass.BASS_GetConfig(BASSConfig.BASS_CONFIG_GVOL_STREAM ) / 100;
-			//    }
-			//    else
-			//    {
-			//        return 100;
-			//    }
-			//}
-			//set
-			//{
-			//    if ( SoundDeviceType == ESoundDeviceType.ExclusiveWASAPI )
-			//    {
-			//			// LINEARでなくWINDOWS(2)を使う必要があるが、exclusive時は使用不可、またデバイス側が対応してないと使用不可
-			//        bool b = BassWasapi.BASS_WASAPI_SetVolume( BASSWASAPIVolume.BASS_WASAPI_CURVE_LINEAR, value / 100.0f );
-			//        if ( !b )
-			//        {
-			//            BASSError be = Bass.BASS_ErrorGetCode();
-			//            Trace.TraceInformation( "WASAPI Master Volume Set Error: " + be.ToString() );
-			//        }
-			//    }
-			//}
-			//set
-			//{
-			//    if ( SoundDeviceType == ESoundDeviceType.ExclusiveWASAPI || SoundDeviceType == ESoundDeviceType.ASIO )
-			//    {
-			//        bool b = Bass.BASS_SetConfig(BASSConfig.BASS_CONFIG_GVOL_STREAM, value * 100 );
-			//        if ( !b )
-			//        {
-			//            BASSError be = Bass.BASS_ErrorGetCode();
-			//            Trace.TraceInformation( "Master Volume Set Error: " + be.ToString() );
-			//        }
-			//    }
-			//}
-			//set
-			//{
-			//    if ( SoundDeviceType == ESoundDeviceType.ExclusiveWASAPI || SoundDeviceType == ESoundDeviceType.ASIO )
-			//    {
-			//        var nodes = new BASS_MIXER_NODE[ 1 ] { new BASS_MIXER_NODE( 0, (float) value ) };
-			//        BassMix.BASS_Mixer_ChannelSetEnvelope( SoundDevice.hMixer, BASSMIXEnvelope.BASS_MIXER_ENV_VOL, nodes );
-			//    }
-			//}
 			set
 			{
 				SoundDevice.nMasterVolume = value;
@@ -431,20 +387,9 @@ namespace FDK
 			return f;
 		}
 
-		public string GetCurrentSoundDeviceType()
+		public ESoundDeviceType GetCurrentSoundDeviceType()
 		{
-			switch ( SoundDeviceType )
-			{
-				case ESoundDeviceType.ExclusiveWASAPI:
-				case ESoundDeviceType.SharedWASAPI:
-					return "WASAPI";
-				case ESoundDeviceType.ASIO:
-					return "ASIO";
-				case ESoundDeviceType.DirectSound:
-					return "DirectSound";
-				default:
-					return "Unknown";
-			}
+            return SoundDeviceType;
 		}
 
 		public void AddMixer( CSound cs, double db再生速度, bool _b演奏終了後も再生が続くチップである )
@@ -729,8 +674,7 @@ namespace FDK
 			CSound clone = (CSound) MemberwiseClone();	// これだけだとCY連打が途切れる＆タイトルに戻る際にNullRef例外発生
 			this.DirectSound.DuplicateSoundBuffer( this.Buffer, out clone.Buffer );
 
-			// CSound.listインスタンス.Add( this );			// インスタンスリストに登録。
-			// 本来これを加えるべきだが、Add後Removeできなくなっている。Clone()の仕方の問題であろう。
+			CSound.listインスタンス.Add( clone );			// インスタンスリストに登録。
 
 			return clone;
 		}
@@ -758,6 +702,7 @@ namespace FDK
 		{
 			this.e作成方法 = E作成方法.ファイルから;
 			this.strファイル名 = strファイル名;
+
 			if ( String.Compare( Path.GetExtension( strファイル名 ), ".xa", true ) == 0 ||
 				 String.Compare( Path.GetExtension( strファイル名 ), ".mp3", true ) == 0 ||
 				 String.Compare( Path.GetExtension( strファイル名 ), ".ogg", true ) == 0 )	// caselessで文字列比較
@@ -1197,29 +1142,25 @@ Debug.WriteLine("更に再生に失敗: " + Path.GetFileName(this.strファイ�
 		}
 		public void t再生位置を変更する( long n位置ms )
 		{
-			if( this.bBASSサウンドである )
+			if ( this.bBASSサウンドである )
 			{
 				bool b = true;
 				try
 				{
 					b = BassMix.BASS_Mixer_ChannelSetPosition( this.hBassStream, Bass.BASS_ChannelSeconds2Bytes( this.hBassStream, n位置ms * this.db周波数倍率 * this.db再生速度 / 1000.0 ), BASSMode.BASS_POS_BYTES );
 				}
-				catch( Exception e )
+				catch ( Exception e )
 				{
-					Trace.TraceInformation( Path.GetFileName( this.strファイル名 ) + ": Seek error: " + e.ToString() + ": " + n位置ms + "ms" );
+					Trace.TraceInformation( Path.GetFileName( this.strファイル名 ) + ": Seek error: " + e.ToString() );
 				}
 				finally
 				{
 					if ( !b )
 					{
 						BASSError be = Bass.BASS_ErrorGetCode();
-						Trace.TraceInformation( Path.GetFileName( this.strファイル名 ) + ": Seek error: " + be.ToString() + ": " + n位置ms + "MS" );
+						Trace.TraceInformation( Path.GetFileName( this.strファイル名 ) + ": Seek error: " + be.ToString() );
 					}
 				}
-				//if ( this.n総演奏時間ms > 5000 )
-				//{
-				//    Trace.TraceInformation( Path.GetFileName( this.strファイル名 ) + ": Seeked to " + n位置ms + "ms = " + Bass.BASS_ChannelSeconds2Bytes( this.hBassStream, n位置ms * this.db周波数倍率 * this.db再生速度 / 1000.0 ) );
-				//}
 			}
 			else if( this.bDirectSoundである )
 			{
@@ -1232,36 +1173,8 @@ Debug.WriteLine("更に再生に失敗: " + Path.GetFileName(this.strファイ�
 				{
 					Trace.TraceError( "{0}: Seek error: {1}", Path.GetFileName( this.strファイル名 ), n位置ms, e.Message );
 				}
-				//if ( this.n総演奏時間ms > 5000 )
-				//{
-				//    Trace.TraceInformation( Path.GetFileName( this.strファイル名 ) + ": Seeked to " + n位置ms + "ms = " + n位置sample );
-				//}
 			}
 		}
-		/// <summary>
-		/// デバッグ用
-		/// </summary>
-		/// <param name="n位置byte"></param>
-		/// <param name="db位置ms"></param>
-		public void t再生位置を取得する( out long n位置byte, out double db位置ms )
-		{
-			if ( this.bBASSサウンドである )
-			{
-				n位置byte = BassMix.BASS_Mixer_ChannelGetPosition( this.hBassStream );
-				db位置ms = Bass.BASS_ChannelBytes2Seconds( this.hBassStream, n位置byte );
-			}
-			else if ( this.bDirectSoundである )
-			{
-				n位置byte = this.Buffer.CurrentPlayPosition;
-				db位置ms = n位置byte / this.Buffer.Format.SamplesPerSecond / 0.001 / _db周波数倍率 / _db再生速度;
-			}
-			else
-			{
-				n位置byte = 0;
-				db位置ms = 0.0;
-			}
-		}
-
 
 		public static void tすべてのサウンドを初期状態に戻す()
 		{
@@ -1499,7 +1412,7 @@ Debug.WriteLine("更に再生に失敗: " + Path.GetFileName(this.strファイ�
 
 				default:
 					break;
-			}
+				}
 			#endregion
 
 			this.e作成方法 = E作成方法.ファイルから;
@@ -1533,7 +1446,6 @@ Debug.WriteLine("更に再生に失敗: " + Path.GetFileName(this.strファイ�
 	
 			tBASSサウンドを作成する_ストリーム生成後の共通処理( hMixer );
 		}
-
 		/// <summary>
 		/// Decode "RIFF chunked Vorbis" to "raw wave"
 		/// because BASE.DLL has two problems for RIFF chunked Vorbis;
@@ -1552,8 +1464,8 @@ Debug.WriteLine("更に再生に失敗: " + Path.GetFileName(this.strファイ�
 			{
 				using ( var ws = new WaveStream( strファイル名 ) )
 				{
-					if ( ws.Format.FormatTag == (WaveFormatTag) 0x6770 ||	// Ogg Vorbis Mode 2+
-						 ws.Format.FormatTag == (WaveFormatTag) 0x6771 )	// Ogg Vorbis Mode 3+
+					if ( ws.Format.FormatTag == ( WaveFormatTag ) 0x6770 ||	// Ogg Vorbis Mode 2+
+						 ws.Format.FormatTag == ( WaveFormatTag ) 0x6771 )	// Ogg Vorbis Mode 3+
 					{
 						Trace.TraceInformation( Path.GetFileName( strファイル名 ) + ": RIFF chunked Vorbis. Decode to raw Wave first, to avoid BASS.DLL troubles" );
 						try
@@ -1573,7 +1485,7 @@ Debug.WriteLine("更に再生に失敗: " + Path.GetFileName(this.strファイ�
 				// DirectShowのデコードに失敗したら、次はACMでのデコードを試すことになるため、ここではエラーログを出さない。
 				// Trace.TraceWarning( "Warning: " + Path.GetFileName( strファイル名 ) + " : デコードに失敗しました。" );
 			}
-			catch ( Exception )
+			catch ( Exception e )
 			{
 				Trace.TraceWarning( "Warning: " + Path.GetFileName( strファイル名 ) + " : 読み込みに失敗しました。" );
 			}
@@ -1581,7 +1493,6 @@ Debug.WriteLine("更に再生に失敗: " + Path.GetFileName(this.strファイ�
 
 			return bファイルにVorbisコンテナが含まれている;
 		}
-
 		private void tBASSサウンドを作成するXA( string strファイル名, int hMixer, BASSFlag flags )
 		{
 			int nPCMデータの先頭インデックス;
