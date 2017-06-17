@@ -623,10 +623,13 @@ namespace DTXMania
 		protected bool tキー入力()
 		{
 			IInputDevice keyboard = CDTXMania.Input管理.Keyboard;
-			if 	( keyboard.bキーが押された( (int) SlimDX.DirectInput.Key.Escape ) )		// escape (exit)
-			{
-				return true;
-			}
+            if( base.eフェーズID != Eフェーズ.共通_フェードアウト )
+            {
+			    if 	( keyboard.bキーが押された( (int) SlimDX.DirectInput.Key.Escape ) )		// escape (exit)
+			    {
+				    return true;    //2017.06.17 kairera0467 フェードアウト中はキー操作ができないよう変更。
+			    }
+            }
 			return false;
 		}
 
