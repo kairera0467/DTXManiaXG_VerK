@@ -80,6 +80,8 @@ namespace DTXMania
 
 		}
 
+        protected bool bShow;
+
 		// コンストラクタ
 
 		public CAct演奏判定文字列共通()
@@ -117,8 +119,17 @@ namespace DTXMania
 
 
 		// メソッド
+        public virtual void Start( int nLane, E判定 judge )
+        {
+            this.Start( nLane, judge, 0, true );
+        }
 
-		public virtual void Start( int nLane, E判定 judge, int lag )
+        public virtual void Start( int nLane, E判定 judge, int lag )
+        {
+            this.Start( nLane, judge, lag, true );
+        }
+
+		public virtual void Start( int nLane, E判定 judge, int lag, bool bShow )
 		{
 			if( ( nLane < 0 ) || ( nLane > 14 ) )
 			{
@@ -160,6 +171,8 @@ namespace DTXMania
 				this.st状態[ nLane ].n相対Y座標_棒 = 0;                
 
 				this.st状態[ nLane ].nLag = lag;
+
+                this.bShow = bShow;
 			}
 		}
 

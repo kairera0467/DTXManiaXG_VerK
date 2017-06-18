@@ -1361,6 +1361,8 @@ namespace DTXMania
                                 //if (CDTXMania.ConfigIni.nJudgeFrames > 1 && CDTXMania.stage演奏ドラム画面.tx判定画像anime != null)
                                 if( CDTXMania.ConfigIni.nJudgeFrames > 1 )
                                 {
+                                    if( !base.bShow ) x = 1280;
+
                                     if( base.st状態[j].judge == E判定.Perfect || base.st状態[ j ].judge == E判定.XPerfect )
                                     {
                                         base.tx判定文字列[ 0 ].t2D描画(CDTXMania.app.Device, x, y, new Rectangle(0, nRectY * base.st状態[j].nRect, nRectX, nRectY));

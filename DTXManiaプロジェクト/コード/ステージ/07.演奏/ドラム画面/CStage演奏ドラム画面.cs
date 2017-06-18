@@ -172,10 +172,12 @@ namespace DTXMania
                     this.actBPMBar.ctBPMバー = new CCounter( 1, 16, (int)( ( 60.0 / ( CDTXMania.stage演奏ドラム画面.actPlayInfo.dbBPM ) / 16.0 ) * 1000.0 ), CDTXMania.Timer);
                     this.ctコンボ動作タイマ = new CCounter( 1, 16, (int)( ( 60.0 / ( CDTXMania.stage演奏ドラム画面.actPlayInfo.dbBPM ) / 16.0 ) * 1000.0 ), CDTXMania.Timer );
 
-					// this.actChipFireD.Start( Eレーン.HH );	// #31554 2013.6.12 yyagi
-					// 初チップヒット時のもたつき回避。最初にactChipFireD.Start()するときにJITが掛かって？
-					// ものすごく待たされる(2回目以降と比べると2,3桁tick違う)。そこで最初の画面フェードインの間に
-					// 一発Start()を掛けてJITの結果を生成させておく。
+                    // this.actChipFireD.Start( Eレーン.HH );	// #31554 2013.6.12 yyagi
+                    // 初チップヒット時のもたつき回避。最初にactChipFireD.Start()するときにJITが掛かって？
+                    // ものすごく待たされる(2回目以降と比べると2,3桁tick違う)。そこで最初の画面フェードインの間に
+                    // 一発Start()を掛けてJITの結果を生成させておく。
+                    if( CDTXMania.ConfigIni.eJudgeAnimeType == Eタイプ.B ) // 2017.06.18 kairera0467 JudgeAnimeTypeB時の1打目に生じる負荷への対策
+                        this.actJudgeString.Start( 0, E判定.Auto, 0, false );
 
 					base.eフェーズID = CStage.Eフェーズ.共通_フェードイン;
 					this.actFI.tフェードイン開始();
