@@ -2240,9 +2240,9 @@ namespace DTXMania
 		}
         public void tドコドコ仕様変更(E楽器パート part, Eタイプ eDkdkType)
         {
-            if ((part == E楽器パート.DRUMS) && (eDkdkType != Eタイプ.A))
+            if( ( part == E楽器パート.DRUMS ) && ( eDkdkType != Eタイプ.A ) )
             {
-                if (eDkdkType == Eタイプ.B)
+                if( eDkdkType == Eタイプ.B )
                 {
                     int num = 0;
                     int index = 0;
@@ -2260,16 +2260,15 @@ namespace DTXMania
                     foreach (CChip chip in this.listChip)
                     {
                         bool flag2 = false;
-                        int num9 = chip.nチャンネル番号;
-                        if ((part == E楽器パート.DRUMS) && ((num9 == 0x13) || (num9 == 0x1c)))
+                        if( ( part == E楽器パート.DRUMS ) && ( ( chip.nチャンネル番号 == 0x13 ) || ( chip.nチャンネル番号 == 0x1c ) ) )
                         {
                             num++;
-                            if (((num6 == 0x13) && (chip.n発声位置 == num3)) || ((num6 == 0x1c) && (chip.n発声位置 == num4)))
+                            if( ( ( num6 == 0x13 ) && ( chip.n発声位置 == num3 ) ) || ( ( num6 == 0x1c ) && ( chip.n発声位置 == num4 ) ) )
                             {
                                 chip.nチャンネル番号 = (num7 == 0x13) ? 0x1c : 0x13;
                                 flag2 = true;
                             }
-                            else if (num9 == 0x1c)
+                            else if( chip.nチャンネル番号 == 0x1c )
                             {
                                 if ((num6 == 0x13) && ((chip.n発声位置 - num3) <= 0x60))
                                 {
@@ -2329,9 +2328,9 @@ namespace DTXMania
                                 }
                                 flag2 = false;
                             }
-                            num6 = num9;
+                            num6 = chip.nチャンネル番号;
                             num7 = chip.nチャンネル番号;
-                            if (num9 == 0x13)
+                            if( chip.nチャンネル番号 == 0x13 )
                             {
                                 num3 = chip.n発声位置;
                                 int num1 = chip.n発声時刻ms;
@@ -2347,13 +2346,12 @@ namespace DTXMania
                     index = 0;
                     foreach (CChip chip2 in this.listChip)
                     {
-                        int num10 = chip2.nチャンネル番号;
-                        if ((part == E楽器パート.DRUMS) && ((num10 == 0x13) || (num10 == 0x1c)))
+                        if( ( part == E楽器パート.DRUMS ) && ( ( chip2.nチャンネル番号 == 0x13 ) || ( chip2.nチャンネル番号 == 0x1c ) ) )
                         {
                             num++;
-                            if (num == numArray[index])
+                            if( num == numArray[ index ] )
                             {
-                                chip2.nチャンネル番号 = (num10 == 0x13) ? 0x1c : 0x13;
+                                chip2.nチャンネル番号 = ( chip2.nチャンネル番号 == 0x13 ) ? 0x1c : 0x13;
                                 index++;
                             }
                         }
@@ -2387,8 +2385,8 @@ namespace DTXMania
             {
                 if( !this.bチップがある.LP && !this.bチップがある.LBD )
                 {
-                    int num = 0;
-                    bool flag2 = false;
+                    int num = 0; //1つ前のチップの発声位置
+                    bool flag2 = false; //振り分け対象か
                     foreach( CDTX.CChip current in this.listChip )
                     {
                         if( part == E楽器パート.DRUMS && current.nチャンネル番号 == 0x13 )
@@ -2407,6 +2405,11 @@ namespace DTXMania
 
         public void tチャンネル番号からチップフラグを返す( int nチャンネル番号, ref bool bHasR, ref bool bHasG, ref bool bHasB, ref bool bHasY, ref bool bHasP )
         {
+            bHasR = false;
+            bHasG = false;
+            bHasB = false;
+            bHasY = false;
+            bHasP = false;
             switch( nチャンネル番号 )
             {
                 #region[ ギター3レーン ]
@@ -2466,17 +2469,143 @@ namespace DTXMania
                     bHasB = true;
                     break;
                 #endregion
-                case 0x00:
 
+                #region[ 5レーン ]
+                case 0x93:
+                case 0xC5:
+                    bHasY = true;
+                    break;
+                case 0x94:
+                case 0xC6:
+                    bHasB = true;
+                    bHasY = true;
+                    break;
+                case 0x95:
+                case 0xC8:
+                    bHasG = true;
+                    bHasY = true;
+                    break;
+                case 0x96:
+                case 0xC9:
+                    bHasG = true;
+                    bHasB = true;
+                    bHasY = true;
+                    break;
+                case 0x97:
+                case 0xCA:
+                    bHasR = true;
+                    bHasY = true;
+                    break;
+                case 0x98:
+                case 0xCB:
+                    bHasR = true;
+                    bHasB = true;
+                    bHasY = true;
+                    break;
+                case 0x99:
+                case 0xCC:
+                    bHasR = true;
+                    bHasG = true;
+                    bHasY = true;
+                    break;
+                case 0x9A:
+                case 0xCD:
+                    bHasR = true;
+                    bHasG = true;
+                    bHasB = true;
+                    bHasY = true;
+                    break;
+                case 0x9B:
+                case 0xCE:
+                    bHasP = true;
+                    break;
+                case 0x9C:
+                case 0xCF:
+                    bHasB = true;
+                    bHasP = true;
+                    break;
+                case 0x9D:
+                    bHasG = true;
+                    bHasP = true;
+                    break;
+                case 0x9E:
+                    bHasG = true;
+                    bHasB = true;
+                    bHasP = true;
+                    break;
+                case 0x9F:
+                    bHasR = true;
+                    bHasP = true;
                     break;
 
-
-
-
-
-
-
-
+                case 0xA9:
+                    bHasR = true;
+                    bHasB = true;
+                    bHasP = true;
+                    break;
+                case 0xAA:
+                    bHasR = true;
+                    bHasG = true;
+                    bHasP = true;
+                    break;
+                case 0xAB:
+                    bHasR = true;
+                    bHasG = true;
+                    bHasB = true;
+                    bHasP = true;
+                    break;
+                case 0xAC:
+                    bHasY = true;
+                    bHasP = true;
+                    break;
+                case 0xAD:
+                    bHasB = true;
+                    bHasY = true;
+                    bHasP = true;
+                    break;
+                case 0xAE:
+                    bHasG = true;
+                    bHasY = true;
+                    bHasP = true;
+                    break;
+                //2017.7.16 kairera0467 Wikiのチャンネル定義表上ではギターGBYPだが、BassWailing Soundと重複しているので一旦コメントアウトしておく。
+                //case 0xAF:
+                case 0xE4:
+                    bHasG = true;
+                    bHasB = true;
+                    bHasY = true;
+                    bHasP = true;
+                break;
+                
+                case 0xD0:
+                case 0xE5:
+                    bHasR = true;
+                    bHasY = true;
+                    bHasP = true;
+                    break;
+                case 0xD1:
+                case 0xE6:
+                    bHasR = true;
+                    bHasB = true;
+                    bHasY = true;
+                    bHasP = true;
+                    break;
+                case 0xD2:
+                case 0xE7:
+                    bHasR = true;
+                    bHasG = true;
+                    bHasY = true;
+                    bHasP = true;
+                    break;
+                case 0xD3:
+                case 0xE8:
+                    bHasR = true;
+                    bHasG = true;
+                    bHasB = true;
+                    bHasY = true;
+                    bHasP = true;
+                    break;
+                #endregion
             }
         }
 

@@ -1032,6 +1032,81 @@ namespace DTXMania
 				"To decrease input lag, set minus value." );
 			this.list項目リスト.Add( this.iDrumsInputAdjustTimeMs );
 
+            this.iDrumsAssignToLBD = new CItemToggle( "AssignToLBD", CDTXMania.ConfigIni.bAssignToLBD.Drums,
+                "旧仕様のドコドコチップをLBDレーンに\n"+
+                "適当に振り分けます。\n"+
+                "LP、LBDがある譜面では効きません。",
+                "To move some of BassDrum chips to\n"+
+                "LBD lane moderately.\n"+
+                "(for old-style 2-bass DTX scores\n"+
+                "without LP & LBD chips)");
+            this.list項目リスト.Add( this.iDrumsAssignToLBD );
+
+            this.iDrumsDkdkType = new CItemList( "DkdkType", CItemBase.Eパネル種別.通常, (int)CDTXMania.ConfigIni.eDkdkType.Drums,
+                "ツーバス譜面の仕様を変更する。\n"+
+                "OFF: デフォルト\n"+
+                "R L: 始動足変更\n"+
+                "R Only: dkdk1レーン化",
+                "To change the style of double-bass-\n"+
+                "concerned chips.\n"+
+                "L R: default\n"+
+                "R L: changes the beginning foot\n"+
+                "R Only: puts bass chips into single\n"+
+                "lane",
+                new string[] { "OFF", "R L", "R Only" } );
+            this.list項目リスト.Add( this.iDrumsDkdkType );
+            
+            this.iDrumsNumOfLanes = new CItemList( "NumOfLanes", CItemBase.Eパネル種別.通常, (int)CDTXMania.ConfigIni.eNumOfLanes.Drums,
+                "10レーン譜面の仕様を変更する。\n"+
+                "A: デフォルト10レーン\n"+
+                "B: XG仕様9レーン\n"+
+                "C: CLASSIC仕様6レーン",
+
+                "To change the number of lanes.\n"+
+                "10: default 10 lanes\n"+
+                "9: XG style 9 lanes\n"+
+                "6: classic style 6 lanes", 
+                new string[]{ "10", "9", "6" } );
+            this.list項目リスト.Add( this.iDrumsNumOfLanes );
+            
+            this.iDrumsRandomPad = new CItemList( "RandomPad", CItemBase.Eパネル種別.通常, (int)CDTXMania.ConfigIni.eRandom.Drums,
+                "ドラムのパッドチップがランダムに\n"+
+                "降ってきます。\n"+
+                "Mirror: ミラーをかけます\n"+
+                "Part: レーン単位で交換\n"+
+                "Super: 小節単位で交換\n"+
+                "Hyper: 四分の一小節単位で交換\n"+
+                "Master: 死ぬがよい\n"+
+                "Another: チップを丁度良くバラける",
+                "Drums chips (pads) come randomly.\n"+
+                "Mirror: \n"+
+                "Part: swapping lanes randomly\n"+
+                "Super: swapping for each measure\n"+
+                "Hyper: swapping for each 1/4 measure\n"+
+                "Master: game over...\n"+
+                "Another: moderately swapping each\n"+
+                "chip randomly",
+                new string[] { "OFF", "Mirror", "Part", "Super", "Hyper", "Master", "Another" } );
+            this.list項目リスト.Add( this.iDrumsRandomPad );
+
+            this.iDrumsRandomPedal = new CItemList( "RandomPedal", CItemBase.Eパネル種別.通常, (int)CDTXMania.ConfigIni.eRandomPedal.Drums,
+                "ドラムの足チップがランダムに\n降ってきます。\n"+
+                "Mirror: ミラーをかけます\n"+
+                "Part: レーン単位で交換\n"+
+                "Super: 小節単位で交換\n"+
+                "Hyper: 四分の一小節単位で交換\n"+
+                "Master: 死ぬがよい\n"+
+                "Another: チップを丁度良くバラける",
+                "Drums chips (pedals) come randomly.\n"+
+                "Part: swapping lanes randomly\n"+
+                "Super: swapping for each measure\n"+
+                "Hyper: swapping for each 1/4 measure\n"+
+                "Master: game over...\n"+
+                "Another: moderately swapping each\n"+
+                "chip randomly",
+                new string[] { "OFF", "Mirror", "Part", "Super", "Hyper", "Master", "Another" });
+            this.list項目リスト.Add( this.iDrumsRandomPedal );
+
 			// #24074 2011.01.23 add ikanick
 			this.iDrumsGraph = new CItemToggle( "Graph", CDTXMania.ConfigIni.bGraph.Drums,
 				"最高スキルと比較できるグラフを表示します。\n" +
@@ -2984,8 +3059,14 @@ namespace DTXMania
         private CItemToggle iDrumsLaneFlush;
         private CItemList iDrumsShutterImage;
 
-		//private CItemToggle iGuitarAutoPlay;
-		private CItemThreeState iGuitarAutoPlayAll;			// #23886 2012.5.8 yyagi
+        private CItemToggle iDrumsAssignToLBD;
+        private CItemList iDrumsRandomPad;
+        private CItemList iDrumsRandomPedal;
+        private CItemList iDrumsNumOfLanes;
+        private CItemList iDrumsDkdkType;
+
+        //private CItemToggle iGuitarAutoPlay;
+        private CItemThreeState iGuitarAutoPlayAll;			// #23886 2012.5.8 yyagi
 		private CItemToggle iGuitarR;						//
 		private CItemToggle iGuitarG;						//
 		private CItemToggle iGuitarB;						//
@@ -3235,6 +3316,10 @@ namespace DTXMania
             CDTXMania.ConfigIni.nShutterInSide.Drums = this.iDrumsShutterInPos.n現在の値;
             CDTXMania.ConfigIni.nShutterOutSide.Drums = this.iDrumsShutterOutPos.n現在の値;
             CDTXMania.ConfigIni.strShutterImageName.Drums = this.iDrumsShutterImage.list項目値[ this.iDrumsShutterImage.n現在選択されている項目番号 ];
+            CDTXMania.ConfigIni.bAssignToLBD.Drums = this.iDrumsAssignToLBD.bON;
+            CDTXMania.ConfigIni.eRandom.Drums = (Eランダムモード)this.iDrumsRandomPad.n現在選択されている項目番号;
+            CDTXMania.ConfigIni.eRandomPedal.Drums = (Eランダムモード)this.iDrumsRandomPedal.n現在選択されている項目番号;
+            CDTXMania.ConfigIni.eNumOfLanes.Drums = (Eタイプ)this.iDrumsNumOfLanes.n現在選択されている項目番号;
 		}
 		private void tConfigIniへ記録する_Guitar()
 		{
