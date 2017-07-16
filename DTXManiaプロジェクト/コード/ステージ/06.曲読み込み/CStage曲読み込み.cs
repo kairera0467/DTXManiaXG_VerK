@@ -516,8 +516,9 @@ namespace DTXMania
 							}
 							CDTXMania.DTX.tギターとベースのランダム化( E楽器パート.GUITAR, CDTXMania.ConfigIni.eRandom.Guitar );
 							CDTXMania.DTX.tギターとベースのランダム化( E楽器パート.BASS, CDTXMania.ConfigIni.eRandom.Bass );
-                            //CDTXMania.DTX.tドコドコ仕様変更( E楽器パート.DRUMS, Eタイプ.A );
-                            CDTXMania.DTX.t旧仕様のドコドコチップを振り分ける( E楽器パート.DRUMS, true );
+                            CDTXMania.DTX.tドコドコ仕様変更( E楽器パート.DRUMS, CDTXMania.ConfigIni.eDkdkType.Drums );
+                            CDTXMania.DTX.t旧仕様のドコドコチップを振り分ける( E楽器パート.DRUMS, CDTXMania.ConfigIni.bAssignToLBD.Drums );
+                            //CDTXMania.DTX
 
                             #region[ 譜面に応じてSkillMode変更 ]
                             if( CDTXMania.ConfigIni.bSkillModeを自動切替えする )

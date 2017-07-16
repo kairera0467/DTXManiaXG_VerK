@@ -3222,8 +3222,8 @@ namespace DTXMania
 			CDTXMania.ConfigIni.nMasterVolume = this.iSystemMasterVolume.n現在の値;							// #33700 2014.4.26 yyagi
 			CDTXMania.ConfigIni.e判定表示優先度 = (E判定表示優先度) this.iSystemJudgeDispPriority.n現在選択されている項目番号;
 
-            CDTXMania.ConfigIni.eSkillMode = ( ESkillType )this.iSystemSkillMode.n現在選択されている項目番号;
-            CDTXMania.ConfigIni.eNamePlateType = ( Eタイプ )this.iSystemNamePlateType.n現在選択されている項目番号;
+            CDTXMania.ConfigIni.eSkillMode = (ESkillType)this.iSystemSkillMode.n現在選択されている項目番号;
+            CDTXMania.ConfigIni.eNamePlateType = (Eタイプ)this.iSystemNamePlateType.n現在選択されている項目番号;
             CDTXMania.ConfigIni.bJudgeCountDisp = this.iSystemJudgeCountDisp.bON;
             CDTXMania.ConfigIni.nCommonBGMAdjustMs = this.iSystemBGMAdjust.n現在の値;                       // #36372 2016.06.19 kairera0467
 		}
