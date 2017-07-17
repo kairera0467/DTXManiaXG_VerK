@@ -417,21 +417,44 @@ namespace DTXMania
 		{
 			E判定 eJudgeResult = tチップのヒット処理( nHitTime, pChip, E楽器パート.DRUMS, bCorrectLane );
 			// #24074 2011.01.23 add ikanick
-            if( CDTXMania.ConfigIni.eSkillMode == ESkillType.DTXMania )
-			    this.actGraph.dbグラフ値現在_渡 = CScoreIni.t演奏型スキルを計算して返す( CDTXMania.DTX.n可視チップ数.Drums, this.nヒット数_Auto含まない.Drums.Perfect, this.nヒット数_Auto含まない.Drums.Great, this.nヒット数_Auto含まない.Drums.Good, this.nヒット数_Auto含まない.Drums.Poor, this.nヒット数_Auto含まない.Drums.Miss, E楽器パート.DRUMS,  bIsAutoPlay );
-            else
-			    this.actGraph.dbグラフ値現在_渡 = CScoreIni.tXG演奏型スキルを計算して返す( CDTXMania.DTX.n可視チップ数.Drums, this.nヒット数_Auto含まない.Drums.Perfect, this.nヒット数_Auto含まない.Drums.Great, this.nヒット数_Auto含まない.Drums.Good, this.nヒット数_Auto含まない.Drums.Poor, this.nヒット数_Auto含まない.Drums.Miss, this.actCombo.n現在のコンボ数.Drums最高値, E楽器パート.DRUMS,  bIsAutoPlay );
-			// #35411 2015.09.07 add chnmr0
-			if( CDTXMania.listTargetGhsotLag.Drums != null &&
-                CDTXMania.ConfigIni.eTargetGhost.Drums == ETargetGhostData.ONLINE &&
-				CDTXMania.DTX.n可視チップ数.Drums > 0 )
-			{
-				// Online Stats の計算式
-				this.actGraph.dbグラフ値現在_渡 = 100 *
-								(this.nヒット数_Auto含まない.Drums.Perfect * 17 +
-								 this.nヒット数_Auto含まない.Drums.Great * 7 +
-								 this.actCombo.n現在のコンボ数.Drums最高値 * 3) / (20.0 * CDTXMania.DTX.n可視チップ数.Drums);
-			}
+            if( CDTXMania.listTargetGhsotLag.Drums != null )
+            {
+                switch( CDTXMania.ConfigIni.eTargetGhost.Drums )
+                {
+                    case ETargetGhostData.ONLINE:
+			            // #35411 2015.09.07 add chnmr0
+			            if( CDTXMania.DTX.n可視チップ数.Drums > 0 )
+			            {
+				            // Online Stats の計算式
+				            this.actGraph.dbグラフ値現在_渡 = 100 *
+								            (this.nヒット数_Auto含まない.Drums.Perfect * 17 +
+								             this.nヒット数_Auto含まない.Drums.Great * 7 +
+								             this.actCombo.n現在のコンボ数.Drums最高値 * 3) / (20.0 * CDTXMania.DTX.n可視チップ数.Drums);
+			            }
+                        break;
+                    default:
+                        {
+                            if( CDTXMania.ConfigIni.bドラムが全部オートプレイである )
+                            {
+                                if( CDTXMania.ConfigIni.eSkillMode == ESkillType.DTXMania )
+			                        this.actGraph.dbグラフ値現在_渡 = CScoreIni.t演奏型スキルを計算して返す( CDTXMania.DTX.n可視チップ数.Drums, this.nヒット数_Auto含まない.Drums.Perfect, this.nヒット数_Auto含まない.Drums.Great, this.nヒット数_Auto含まない.Drums.Good, this.nヒット数_Auto含まない.Drums.Poor, this.nヒット数_Auto含まない.Drums.Miss, E楽器パート.DRUMS,  bIsAutoPlay );
+                                else
+			                        this.actGraph.dbグラフ値現在_渡 = CScoreIni.tXG演奏型スキルを計算して返す( CDTXMania.DTX.n可視チップ数.Drums, this.nヒット数_Auto含まない.Drums.Perfect, this.nヒット数_Auto含まない.Drums.Great, this.nヒット数_Auto含まない.Drums.Good, this.nヒット数_Auto含まない.Drums.Poor, this.nヒット数_Auto含まない.Drums.Miss, this.actCombo.n現在のコンボ数Ghost.Drums最高値, E楽器パート.DRUMS,  bIsAutoPlay );
+                               
+                            }
+                            else
+                            {
+                                if( CDTXMania.ConfigIni.eSkillMode == ESkillType.DTXMania )
+			                        this.actGraph.dbグラフ値現在_渡 = CScoreIni.t演奏型スキルを計算して返す( CDTXMania.DTX.n可視チップ数.Drums, this.nヒット数_Auto含む.Drums.Perfect, this.nヒット数_Auto含む.Drums.Great, this.nヒット数_Auto含む.Drums.Good, this.nヒット数_Auto含む.Drums.Poor, this.nヒット数_Auto含む.Drums.Miss, E楽器パート.DRUMS,  bIsAutoPlay );
+                                else
+			                        this.actGraph.dbグラフ値現在_渡 = CScoreIni.tXG演奏型スキルを計算して返す( CDTXMania.DTX.n可視チップ数.Drums, this.nヒット数_Auto含む.Drums.Perfect, this.nヒット数_Auto含む.Drums.Great, this.nヒット数_Auto含む.Drums.Good, this.nヒット数_Auto含む.Drums.Poor, this.nヒット数_Auto含む.Drums.Miss, this.actCombo.n現在のコンボ数.Drums最高値, E楽器パート.DRUMS,  bIsAutoPlay );
+                            }
+
+                        }
+                        break;
+                }
+            }
+
 
             this.actGraph.n現在のAutoを含まない判定数_渡[ 0 ] = this.nヒット数_Auto含まない.Drums.Perfect;
             this.actGraph.n現在のAutoを含まない判定数_渡[ 1 ] = this.nヒット数_Auto含まない.Drums.Great;
@@ -3095,7 +3118,7 @@ namespace DTXMania
                                 this.nヒット数_TargetGhost.Drums.Good,
                                 this.nヒット数_TargetGhost.Drums.Poor,
                                 this.nヒット数_TargetGhost.Drums.Miss,
-                                this.n最大コンボ数_TargetGhost.Drums,
+                                this.actCombo.n現在のコンボ数.Drums,
                                 E楽器パート.DRUMS, new STAUTOPLAY());
                         }
 

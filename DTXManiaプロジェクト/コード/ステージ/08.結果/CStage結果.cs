@@ -116,7 +116,7 @@ namespace DTXMania
                         if( CDTXMania.ConfigIni.eSkillMode == ESkillType.DTXMania )
 						    this.nランク値[ i ] = CScoreIni.tランク値を計算して返す( part );
                         else
-                            this.nランク値[ i ] = CScoreIni.tXGランク値を計算して返す( part );
+                            this.nランク値[ i ] = CScoreIni.tXGランク値を計算して返す( part, (E楽器パート)i );
 					}
 				}
 				this.n総合ランク値 = CScoreIni.t総合ランク値を計算して返す( this.st演奏記録.Drums, this.st演奏記録.Guitar, this.st演奏記録.Bass );

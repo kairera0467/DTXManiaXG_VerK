@@ -1395,12 +1395,13 @@ namespace DTXMania
 			}
 			return (int)ERANK.UNKNOWN;
 		}
-		internal static int tXGランク値を計算して返す( C演奏記録 part )
+		internal static int tXGランク値を計算して返す( C演奏記録 part, E楽器パート inst )
 		{
 			if( part.b演奏にMIDI入力を使用した || part.b演奏にキーボードを使用した || part.b演奏にジョイパッドを使用した || part.b演奏にマウスを使用した )	// 2010.9.11
 			{
 				int nTotal = part.nPerfect数 + part.nGreat数 + part.nGood数 + part.nPoor数 + part.nMiss数;
-				return tXGランク値を計算して返す( nTotal, part.nPerfect数, part.nGreat数, part.nGood数, part.nPoor数, part.nMiss数, part.n最大コンボ数 );
+                //return tXGランク値を計算して返す( nTotal, part.nPerfect数, part.nGreat数, part.nGood数, part.nPoor数, part.nMiss数, part.n最大コンボ数 );
+                return tXGSkillCal( nTotal, part.nPerfect数, part.nGreat数, part.nGood数, part.nPoor数, part.nMiss数, 0, part.n最大コンボ数, inst, part.bAutoPlay, 0 ).rank;
 			}
 			return (int)ERANK.UNKNOWN;
 		}
@@ -1442,6 +1443,59 @@ namespace DTXMania
 			}
 			return (int)ERANK.E;
 		}
+        internal static ( double dbGame, double dbMusic, int rank ) tXGSkillCal( int nTotal, int nPerfect, int nGreat, int nGood, int nPoor, int nMiss, int nBad, int nCombo, E楽器パート inst, STAUTOPLAY bAutoPlay, double dbLevel )
+        {
+            double retGame = 0.0;
+            double retMusic = 0.0;
+            int nRank = (int)ERANK.UNKNOWN;
+
+            #region[ 演奏スキル ]
+            //2017.07.17 kairera0467 BEMANIWiki 2ndに掲載されている最新の計算式に差し替え
+            double judgeRet = 0.0;
+            double comboRet = 0.0;
+
+            switch( inst )
+            {
+                case E楽器パート.DRUMS:
+                    judgeRet = ( nPerfect * 85.0 + nGreat * 35.0 ) / nTotal;
+                    break;
+                case E楽器パート.GUITAR:
+                case E楽器パート.BASS:
+                    judgeRet = ( nPerfect * 85.0 + nGreat * 25.0 ) / ( nTotal + nMiss );
+                    break;
+            }
+            comboRet = nCombo * 15.0 / nTotal;
+
+            retGame = judgeRet + comboRet;
+            retGame *= dbCalcReviseValForDrGtBsAutoLanes(inst, bAutoPlay);
+            #endregion
+            #region[ 曲別スキル ]
+            retMusic = (retGame / 100.0) * dbLevel * 20.0;
+            retMusic *= dbCalcReviseValForDrGtBsAutoLanes(inst, bAutoPlay);
+            if( CDTXMania.ConfigIni.bドラムが全部オートプレイである ) {
+                retMusic = 0;
+            }
+            #endregion
+            #region[ ランク ]
+            if ( retGame >= 95.0 ) {
+                nRank = (int)ERANK.SS;
+            } else if( retGame >= 0.80 ) {
+                nRank = (int)ERANK.S;
+            } else if( retGame >= 0.73 ) {
+                nRank = (int)ERANK.A;
+            } else if( retGame >= 0.63 ) {
+                nRank = (int)ERANK.B;
+            } else if( retGame >= 0.53 ) {
+                nRank = (int)ERANK.C;
+            } else if( retGame >= 0.45 ) {
+                nRank = (int)ERANK.D;
+            } else {
+                nRank = (int)ERANK.E;
+            }
+            #endregion
+
+            return ( retGame, retMusic, nRank );
+        }
         /// <summary>
         /// nDummy 適当な数値を入れてください。特に使いません。
         /// dRate 達成率を入れます。
@@ -1539,27 +1593,50 @@ namespace DTXMania
         }
         internal static double tXG演奏型スキルを計算して返す(int nTotal, int nPerfect, int nGreat, int nGood, int nPoor, int nMiss, int nCombo, E楽器パート inst, STAUTOPLAY bAutoPlay)
         {
+            return tXG演奏型スキルを計算して返す( nTotal, nPerfect, nGreat, nGood, nPoor, nMiss, 0, nCombo, inst, bAutoPlay );
+        }
+        internal static double tXG演奏型スキルを計算して返す(int nTotal, int nPerfect, int nGreat, int nGood, int nPoor, int nMiss, int nBad, int nCombo, E楽器パート inst, STAUTOPLAY bAutoPlay)
+        {
             if (nTotal == 0)
                 return 0.0;
+            //2017.07.17 kairera0467 BEMANIWiki 2ndに掲載されている最新の計算式に差し替え
 
             double nAuto = nTotal - ( nPerfect + nGreat + nGood + nPoor + nMiss );
-            double dbPERFECT率 = ( 100.0 * nPerfect / nTotal );
-            double dbGREAT率 = ( 100.0 * nGreat / nTotal );
-            double dbCOMBO率 = ( 100.0 * nCombo / ( nTotal ) );
+            double judgeRet = 0.0;
+            double comboRet = 0.0;
+            //(PERFECT数×85+GREAT数×25)/(総ノーツ数+空MISS数)
+            //DM判定値: (PERFECT数×85 + GREAT数×35)/ 総ノーツ数
+            //COMBO値: COMBO数×15(Matixxでは5の予定) / 総ノーツ数
 
-            if (nTotal == nAuto)
+            switch( inst )
             {
-                dbCOMBO率 = 0.0;
+                case E楽器パート.DRUMS:
+                    judgeRet = ( nPerfect * 85.0 + nGreat * 35.0 ) / nTotal;
+                    break;
+                case E楽器パート.GUITAR:
+                case E楽器パート.BASS:
+                    judgeRet = ( nPerfect * 85.0 + nGreat * 25.0 ) / ( nTotal + nMiss );
+                    break;
             }
 
-            double ret = dbPERFECT率 * 0.85 + dbGREAT率 * 0.35 + dbCOMBO率 * 0.15;
+            //double dbPERFECT率 = ( 100.0 * nPerfect / nTotal );
+            //double dbGREAT率 = ( 100.0 * nGreat / nTotal );
+            //double dbCOMBO率 = ( 100.0 * nCombo / ( nTotal ) );
 
-            //System.IO.StreamWriter sw = new System.IO.StreamWriter(@"debug.txt", true, System.Text.Encoding.GetEncoding("shift_jis"));
-            //sw.WriteLine("retの値は{0}です。", ret);
-            //sw.WriteLine("nTotalは{0}で、dbPERFECT率は{1}、dbGREAT率は{2}です。", nTotal, dbPERFECT率, dbGREAT率);
-            //sw.Close();
+            comboRet = nCombo * 15.0 / nTotal;
+            if (nTotal == nAuto)
+            {
+                comboRet = 0.0;
+                //dbCOMBO率 = 0.0;
+            }
 
+            //double ret = dbPERFECT率 * 0.85 + dbGREAT率 * 0.35 + dbCOMBO率 * 0.15;
+
+            //(判定値+COMBO値)×オプション補正
+            double ret = judgeRet + comboRet;
             ret *= dbCalcReviseValForDrGtBsAutoLanes(inst, bAutoPlay);
+            ret = Math.Floor( ret * 100.0 );
+            ret = ret / 100.0;
             return ret;
         }
 		internal static double tゲーム型スキルを計算して返す( int nLevel, int nTotal, int nPerfect, int nCombo, E楽器パート inst, STAUTOPLAY bAutoPlay )

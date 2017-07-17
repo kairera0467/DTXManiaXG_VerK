@@ -719,7 +719,7 @@ namespace DTXMania
                                                     {
 													    node.arスコア[ lv ].譜面情報.最大ランク[ i ] = 
 														    (scoreIni.stファイル.BestRank[i] != (int)CScoreIni.ERANK.UNKNOWN)?
-														    (int)scoreIni.stファイル.BestRank[i] : CScoreIni.tXGランク値を計算して返す( scoreIni.stセクション[ nSectionHiSkill ] );
+														    (int)scoreIni.stファイル.BestRank[i] : CScoreIni.tXGランク値を計算して返す( scoreIni.stセクション[ nSectionHiSkill ], (E楽器パート)i );
                                                     }
 												}
 												else
