@@ -1995,7 +1995,9 @@ namespace DTXMania
                 else if( CDTXMania.ConfigIni.eMovieClipMode == EMovieClipMode.Both )
                     CDTXMania.ConfigIni.eMovieClipMode = EMovieClipMode.OFF;
             }
-            this.actShutter.tShutterMove( keyboard );
+
+            if( CDTXMania.ConfigIni.bDrums有効 ) //2017.08.06 kairera0467 ギターは未実装
+                this.actShutter.tShutterMove( keyboard );
 		}
 
 		protected void t入力メソッド記憶( E楽器パート part )

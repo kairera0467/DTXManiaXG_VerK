@@ -1291,7 +1291,7 @@ namespace DTXMania
                             int num5 = 0;
                             int num6 = 0;
                             
-                            int nJudgePosY = CDTXMania.stage演奏ドラム画面.演奏判定ライン座標.n判定ラインY座標( E楽器パート.DRUMS, false, CDTXMania.ConfigIni.bReverse.Drums, false, true );
+                            int nJudgePosY = CDTXMania.stage演奏ギター画面.演奏判定ライン座標.n判定ラインY座標( E楽器パート.DRUMS, false, CDTXMania.ConfigIni.bReverse.Drums, false, true );
                             base.iP_A = nJudgePosY - 189;
                             base.iP_B = nJudgePosY + 23;
 

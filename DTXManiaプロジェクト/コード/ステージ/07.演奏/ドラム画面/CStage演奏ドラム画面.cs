@@ -455,6 +455,10 @@ namespace DTXMania
                 }
             }
 
+            if( eJudgeResult == E判定.XPerfect || eJudgeResult == E判定.Perfect || eJudgeResult == E判定.Great || eJudgeResult == E判定.Good || eJudgeResult == E判定.Auto )
+            {
+                this.actGauge.tGaugeAddAnime( E楽器パート.DRUMS );
+            }
 
             this.actGraph.n現在のAutoを含まない判定数_渡[ 0 ] = this.nヒット数_Auto含まない.Drums.Perfect;
             this.actGraph.n現在のAutoを含まない判定数_渡[ 1 ] = this.nヒット数_Auto含まない.Drums.Great;
