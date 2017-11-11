@@ -46,8 +46,16 @@ namespace DTXMania
 					this.sd読み込み音 = null;
 				}
 
-				string strDTXファイルパス = ( CDTXMania.bコンパクトモード ) ?
-					CDTXMania.strコンパクトモードファイル : CDTXMania.stage選曲.r確定されたスコア.ファイル情報.ファイルの絶対パス;
+                string strDTXファイルパス = ( CDTXMania.bコンパクトモード ) ? CDTXMania.strコンパクトモードファイル : "";
+
+                if( CDTXMania.bXGRelease )
+                {
+                    strDTXファイルパス = CDTXMania.stage選曲XG.r確定されたスコア.ファイル情報.ファイルの絶対パス;
+                }
+                else
+                {
+                    strDTXファイルパス = CDTXMania.stage選曲GITADORA.r確定されたスコア.ファイル情報.ファイルの絶対パス;
+                }
 				
 				CDTX cdtx = new CDTX( strDTXファイルパス, true );
 				this.str曲タイトル = cdtx.TITLE;
@@ -350,10 +358,20 @@ namespace DTXMania
 						timeBeginLoad = DateTime.Now;
 						TimeSpan span;
 						str = null;
-						if( !CDTXMania.bコンパクトモード )
-							str = CDTXMania.stage選曲.r確定されたスコア.ファイル情報.ファイルの絶対パス;
-						else
-							str = CDTXMania.strコンパクトモードファイル;
+                        if( CDTXMania.bXGRelease )
+                        {
+						    if( !CDTXMania.bコンパクトモード )
+							    str = CDTXMania.stage選曲XG.r確定されたスコア.ファイル情報.ファイルの絶対パス;
+						    else
+							    str = CDTXMania.strコンパクトモードファイル;
+                        }
+                        else
+                        {
+						    if( !CDTXMania.bコンパクトモード )
+							    str = CDTXMania.stage選曲GITADORA.r確定されたスコア.ファイル情報.ファイルの絶対パス;
+						    else
+							    str = CDTXMania.strコンパクトモードファイル;
+                        }
 
 						CScoreIni ini = new CScoreIni( str + ".score.ini" );
 						ini.t全演奏記録セクションの整合性をチェックし不整合があればリセットする();
@@ -475,10 +493,20 @@ namespace DTXMania
 						span = (TimeSpan) ( DateTime.Now - timeBeginLoad );
 						Trace.TraceInformation( "DTX読込所要時間:           {0}", span.ToString() );
 
-						if ( CDTXMania.bコンパクトモード )
-							CDTXMania.DTX.MIDIレベル = 1;
-						else
-							CDTXMania.DTX.MIDIレベル = ( CDTXMania.stage選曲.r確定された曲.eノード種別 == C曲リストノード.Eノード種別.SCORE_MIDI ) ? CDTXMania.stage選曲.n現在選択中の曲の難易度 : 0;
+                        if( CDTXMania.bXGRelease )
+                        {
+						    if ( CDTXMania.bコンパクトモード )
+							    CDTXMania.DTX.MIDIレベル = 1;
+						    else
+							    CDTXMania.DTX.MIDIレベル = ( CDTXMania.stage選曲XG.r確定された曲.eノード種別 == C曲リストノード.Eノード種別.SCORE_MIDI ) ? CDTXMania.stage選曲XG.n現在選択中の曲の難易度 : 0;
+                        }
+                        else
+                        {
+						    if ( CDTXMania.bコンパクトモード )
+							    CDTXMania.DTX.MIDIレベル = 1;
+						    else
+							    CDTXMania.DTX.MIDIレベル = ( CDTXMania.stage選曲GITADORA.r確定された曲.eノード種別 == C曲リストノード.Eノード種別.SCORE_MIDI ) ? CDTXMania.stage選曲GITADORA.n現在選択中の曲の難易度 : 0;
+                        }
 
 						base.eフェーズID = CStage.Eフェーズ.NOWLOADING_WAVファイルを読み込む;
 						timeBeginLoadWAV = DateTime.Now;
@@ -534,11 +562,21 @@ namespace DTXMania
                             }
                             #endregion
 
-                            if ( CDTXMania.ConfigIni.bギタレボモード )
-								CDTXMania.stage演奏ギター画面.On活性化();
-							else
-								CDTXMania.stage演奏ドラム画面.On活性化();
-
+                            if( CDTXMania.bXGRelease )
+                            {
+                                if ( CDTXMania.ConfigIni.bギタレボモード )
+								    CDTXMania.stage演奏ギター画面.On活性化();
+							    else
+								    CDTXMania.stage演奏ドラム画面.On活性化();
+                            }
+                            else
+                            {
+                                if ( CDTXMania.ConfigIni.bギタレボモード )
+								    CDTXMania.stage演奏ギター画面GITADORA.On活性化();
+							    else
+								    CDTXMania.stage演奏ドラム画面GITADORA.On活性化();
+                            }
+                            
 							span = (TimeSpan) ( DateTime.Now - timeBeginLoadWAV );
 							Trace.TraceInformation( "WAV/譜面後処理時間({0,4}):  {1}", ( CDTXMania.DTX.listBMP.Count + CDTXMania.DTX.listBMPTEX.Count + CDTXMania.DTX.listAVI.Count ), span.ToString() );
 

@@ -213,7 +213,7 @@ namespace DTXMania
 				//---------------------
 				if( !CDTXMania.bコンパクトモード )
 				{
-					Cスコア cスコア = CDTXMania.stage選曲.r確定されたスコア;
+					Cスコア cスコア = CDTXMania.bXGRelease ? CDTXMania.stage選曲XG.r確定されたスコア : CDTXMania.stage選曲GITADORA.r確定されたスコア;
 					bool[] b更新が必要か否か = new bool[ 3 ];
 					CScoreIni.t更新条件を取得する( out b更新が必要か否か[ 0 ], out b更新が必要か否か[ 1 ], out b更新が必要か否か[ 2 ] );
 					for( int m = 0; m < 3; m++ )

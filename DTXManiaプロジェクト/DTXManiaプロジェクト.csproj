@@ -43,7 +43,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>TRACE;_TEST_ENGLISH TEST_Direct3D9Ex_ WindowedFullscreen animetest</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;_TEST_ENGLISH TEST_Direct3D9Ex_ WindowedFullscreen animetest</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
@@ -127,20 +127,30 @@
     <Compile Include="コード\ステージ\02.タイトル\CActEnumSongs.cs" />
     <Compile Include="コード\ステージ\02.タイトル\CStageタイトル.cs" />
     <Compile Include="コード\ステージ\04.コンフィグ\CActConfigKeyAssign.cs" />
-    <Compile Include="コード\ステージ\04.コンフィグ\CActConfigList.cs" />
+    <Compile Include="コード\ステージ\04.コンフィグ\CActConfigListGD.cs" />
+    <Compile Include="コード\ステージ\04.コンフィグ\CActConfigList共通.cs" />
+    <Compile Include="コード\ステージ\04.コンフィグ\CActConfigListXG.cs" />
     <Compile Include="コード\ステージ\04.コンフィグ\CStageコンフィグ.cs" />
     <Compile Include="コード\ステージ\05.選曲\CActSelectArtistComment.cs" />
     <Compile Include="コード\ステージ\05.選曲\CActSelectInformation.cs" />
     <Compile Include="コード\ステージ\05.選曲\CActSelectPopupMenu.cs" />
-    <Compile Include="コード\ステージ\05.選曲\CActSelectPreimageパネル.cs" />
     <Compile Include="コード\ステージ\05.選曲\CActSelectPresound.cs" />
     <Compile Include="コード\ステージ\05.選曲\CActSelectQuickConfig.cs" />
-    <Compile Include="コード\ステージ\05.選曲\CActSelectShowCurrentPosition.cs" />
-    <Compile Include="コード\ステージ\05.選曲\CActSelectステータスパネル.cs" />
-    <Compile Include="コード\ステージ\05.選曲\CActSelect曲リスト.cs" />
+    <Compile Include="コード\ステージ\05.選曲\CActSelectShowCurrentPosition共通.cs" />
+    <Compile Include="コード\ステージ\05.選曲\GITADORA\CActSelectFO曲決定.cs" />
+    <Compile Include="コード\ステージ\05.選曲\GITADORA\CActSelectShowCurrentPositionGITADORA.cs" />
+    <Compile Include="コード\ステージ\05.選曲\GITADORA\CStage選曲GITADORA.cs" />
+    <Compile Include="コード\ステージ\05.選曲\XG\CActSelectShowCurrentPositionXG.cs" />
+    <Compile Include="コード\ステージ\05.選曲\XG\CActSelectステータスパネルXG.cs" />
+    <Compile Include="コード\ステージ\05.選曲\GITADORA\CActSelectステータスパネルGITADORA.cs" />
+    <Compile Include="コード\ステージ\05.選曲\CActSelectステータスパネル共通.cs" />
+    <Compile Include="コード\ステージ\05.選曲\XG\CActSelect曲リストXG.cs" />
+    <Compile Include="コード\ステージ\05.選曲\CActSelect曲リスト共通.cs" />
+    <Compile Include="コード\ステージ\05.選曲\GITADORA\CActSelect曲リストGITADORA.cs" />
     <Compile Include="コード\ステージ\05.選曲\CActSelect演奏履歴パネル.cs" />
     <Compile Include="コード\ステージ\05.選曲\CActSortSongs.cs" />
     <Compile Include="コード\ステージ\05.選曲\CStage選曲.cs" />
+    <Compile Include="コード\ステージ\05.選曲\XG\CStage選曲XG.cs" />
     <Compile Include="コード\ステージ\06.曲読み込み\CStage曲読み込み.cs" />
     <Compile Include="コード\ステージ\07.演奏\CAct演奏AVI.cs" />
     <Compile Include="コード\ステージ\07.演奏\CAct演奏BGA.cs" />
@@ -164,6 +174,31 @@
     <Compile Include="コード\ステージ\07.演奏\CStage演奏画面共通.cs" />
     <Compile Include="コード\ステージ\07.演奏\CWailingChip.cs" />
     <Compile Include="コード\ステージ\07.演奏\C演奏判定ライン座標共通.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ギター画面\CAct演奏GuitarBPMバーGD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ギター画面\CAct演奏GuitarDangerGD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ギター画面\CAct演奏GuitarRGB_GD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ギター画面\CAct演奏GuitarWailingBonus_GD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ギター画面\CAct演奏GuitarゲージGD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ギター画面\CAct演奏GuitarコンボGD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ギター画面\CAct演奏GuitarスコアGD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ギター画面\CAct演奏GuitarステータスパネルGD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ギター画面\CAct演奏GuitarチップファイアGD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ギター画面\CAct演奏GuitarレーンGD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ギター画面\CAct演奏GuitarレーンフラッシュGB_GD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ギター画面\CAct演奏Guitar判定文字列GD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ギター画面\CStage演奏ギター画面GD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ドラム画面\CAct演奏DrumsBPMバーGD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ドラム画面\CAct演奏DrumsDangerGD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ドラム画面\CAct演奏DrumsゲージGD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ドラム画面\CAct演奏DrumsコンボDGB_GD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ドラム画面\CAct演奏DrumsスコアGD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ドラム画面\CAct演奏DrumsステータスパネルGD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ドラム画面\CAct演奏DrumsチップファイアD_GD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ドラム画面\CAct演奏DrumsパッドGD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ドラム画面\CAct演奏DrumsレーンGD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ドラム画面\CAct演奏DrumsレーンフラッシュD_GD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ドラム画面\CAct演奏Drums判定文字列GD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ドラム画面\CStage演奏ドラム画面GD.cs" />
     <Compile Include="コード\ステージ\07.演奏\ギター画面\CAct演奏Guitarレーン.cs" />
     <Compile Include="コード\ステージ\07.演奏\ギター画面\CAct演奏GuitarBPMバー.cs" />
     <Compile Include="コード\ステージ\07.演奏\ギター画面\CAct演奏GuitarDanger.cs" />
@@ -220,6 +255,7 @@
     <Compile Include="コード\全体\CPreviewMagnifier.cs" />
     <Compile Include="コード\全体\CPrivateFastFont.cs" />
     <Compile Include="コード\全体\CPrivateFont.cs" />
+    <Compile Include="コード\全体\CResources.cs" />
     <Compile Include="コード\全体\CScale.cs" />
     <Compile Include="コード\全体\CSkin.cs" />
     <Compile Include="コード\全体\C定数.cs" />

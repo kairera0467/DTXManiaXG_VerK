@@ -232,23 +232,25 @@ namespace DTXMania
                     int DTXLevel = CDTXMania.DTX.LEVEL[i];
                     double DTXLevelDeci = (DTXLevel * 10 - CDTXMania.DTX.LEVEL[i]);
 
+                    Cスコア CScore = CDTXMania.bXGRelease ? CDTXMania.stage選曲XG.r確定されたスコア : CDTXMania.stage選曲GITADORA.r確定されたスコア;
+                    C曲リストノード CSongNode = CDTXMania.bXGRelease ? CDTXMania.stage選曲XG.r確定された曲 : CDTXMania.stage選曲GITADORA.r確定された曲;
                     int n表示Level = 0;
                     string n表示LevelDec = "0";
 
                     if( CDTXMania.ConfigIni.bCLASSIC譜面判別を有効にする && CDTXMania.DTX.bCLASSIC譜面である[ i ] )
                     {
-                        n表示Level = CDTXMania.stage選曲.r確定されたスコア.譜面情報.レベル[i];
+                        n表示Level = CScore.譜面情報.レベル[i];
                     }
                     else
                     {
-                        n表示Level = CDTXMania.stage選曲.r確定されたスコア.譜面情報.レベル[ i ] / 10;
-                        if( CDTXMania.stage選曲.r確定されたスコア.譜面情報.レベル[ i ].ToString().Length > 1 )
-                            n表示LevelDec = CDTXMania.stage選曲.r確定されたスコア.譜面情報.レベル[ i ].ToString().Substring( 1, 1 );
+                        n表示Level = CScore.譜面情報.レベル[ i ] / 10;
+                        if( CScore.譜面情報.レベル[ i ].ToString().Length > 1 )
+                            n表示LevelDec = CScore.譜面情報.レベル[ i ].ToString().Substring( 1, 1 );
                         else
-                            n表示LevelDec = CDTXMania.stage選曲.r確定されたスコア.譜面情報.レベル[ i ].ToString();
+                            n表示LevelDec = CScore.譜面情報.レベル[ i ].ToString();
 
-                        if (CDTXMania.stage選曲.r確定されたスコア.譜面情報.レベルDec[i] != 0)
-                            n表示LevelDec += CDTXMania.stage選曲.r確定されたスコア.譜面情報.レベルDec[i].ToString();
+                        if( CScore.譜面情報.レベルDec[ i ] != 0 )
+                            n表示LevelDec += CScore.譜面情報.レベルDec[i].ToString();
                         else
                             n表示LevelDec += "0";
                     }
@@ -286,7 +288,7 @@ namespace DTXMania
                         }
                         this.txWhite.t2D描画( CDTXMania.app.Device, this.n白X[ i ], this.n白Y[ i ], rectangle );
                     }
-                    this.t難易度パネルを描画する( CDTXMania.stage選曲.r確定された曲.ar難易度ラベル[ CDTXMania.stage選曲.n確定された曲の難易度 ], 941, 19 );
+                    this.t難易度パネルを描画する( CSongNode.ar難易度ラベル[ CDTXMania.stage選曲.n確定された曲の難易度 ], 941, 19 );
                     this.tレベル大文字表示( 1104, 22, n表示Level.ToString() );
                     this.tレベル小文字表示( 1126, 23, "." + n表示LevelDec );
                 }

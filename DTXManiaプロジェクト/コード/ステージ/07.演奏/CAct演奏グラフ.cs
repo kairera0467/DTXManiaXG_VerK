@@ -152,13 +152,14 @@ namespace DTXMania
                     }
 
 
-        	        if( CDTXMania.bXGRelease )
+        	        //if( CDTXMania.bXGRelease )
 		        	{
         			    this.nGraphBG_XPos.Drums = 966;
                         this.nGraphBG_XPos.Guitar = 356;
                         this.nGraphBG_XPos.Bass = 647;
                         this.nGraphBG_YPos = 50;
 	                }
+
 
 
 

@@ -11,7 +11,7 @@ using FDK;
 
 namespace DTXMania
 {
-    internal class CAct演奏Drumsステータスパネル : CAct演奏ステータスパネル共通
+    internal class CAct演奏DrumsステータスパネルGD : CAct演奏ステータスパネル共通
     {
         //2016.02.21 kairera0467 Imageの解放方法を変更。これでファイルが無かった時の例外処理の書き方が楽になるはず。
 
@@ -70,7 +70,7 @@ namespace DTXMania
                 gNamePlate.PageUnit = GraphicsUnit.Pixel;
 
                 if ( string.IsNullOrEmpty( CDTXMania.DTX.TITLE ) || ( !CDTXMania.bコンパクトモード && CDTXMania.ConfigIni.b曲名表示をdefのものにする ) )
-                    this.strPanelString = CDTXMania.bXGRelease ? CDTXMania.stage選曲XG.r現在選択中の曲.strタイトル : CDTXMania.stage選曲GITADORA.r現在選択中の曲.strタイトル;
+                    this.strPanelString = CDTXMania.stage選曲.r現在選択中の曲.strタイトル;
                 else
                     this.strPanelString = CDTXMania.DTX.TITLE;
 

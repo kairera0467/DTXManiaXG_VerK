@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Text;
 using System.Drawing;
 using System.Threading;
@@ -9,7 +10,7 @@ using FDK;
 
 namespace DTXMania
 {
-	internal class CActConfigList : CActivity
+	internal class CActConfigList共通 : CActivity
 	{
 		// プロパティ
 
@@ -1645,7 +1646,7 @@ namespace DTXMania
 		/// 4: Semi-Invisible
 		/// 5: Full-Invisible
 		/// </returns>
-		private int getDefaultSudHidValue( E楽器パート eInst )
+		protected int getDefaultSudHidValue( E楽器パート eInst )
 		{
 			int defvar;
 			int nInst = (int) eInst;
@@ -2033,7 +2034,7 @@ namespace DTXMania
 			}
 		}
 
-		private void tGenerateSkinSample()
+		protected void tGenerateSkinSample()
 		{
 			nSkinIndex = ( ( CItemList ) this.list項目リスト[ this.n現在の選択項目 ] ).n現在選択されている項目番号;
 			if ( nSkinSampleIndex != nSkinIndex )
@@ -2367,9 +2368,9 @@ namespace DTXMania
 			nSkinSampleIndex = -1;
 			#endregion
 
-			this.prvFont = new CPrivateFastFont( CSkin.Path( @"Graphics\fonts\mplus-1p-heavy.ttf" ), 20 );	// t項目リストの設定 の前に必要
+            // 2017.10.11 kairera0467 子クラスで初期化
+//          this.prvFont = new CPrivateFastFont( CSkin.Path( @"Graphics\fonts\mplus-1p-heavy.ttf" ), 20 );	// t項目リストの設定 の前に必要
 //			this.listMenu = new List<stMenuItemRight>();
-
 
 			this.t項目リストの設定_Bass();		// #27795 2012.3.11 yyagi; System設定の中でDrumsの設定を参照しているため、
 			this.t項目リストの設定_Guitar();	// 活性化の時点でDrumsの設定も入れ込んでおかないと、System設定中に例外発生することがある。
@@ -2392,6 +2393,11 @@ namespace DTXMania
 		{
 			if( this.b活性化してない )
 				return;
+			if( this.ftフォント != null )													// 以下OPTIONと共通
+			{
+				this.ftフォント.Dispose();
+				this.ftフォント = null;
+			}
 
 			this.tConfigIniへ記録する();
 			this.list項目リスト.Clear();
@@ -2456,6 +2462,15 @@ namespace DTXMania
 			this.txその他項目行パネル = CDTXMania.tテクスチャの生成Af( CSkin.Path( @"Graphics\4_itembox other.png" ), false );
 			this.tx三角矢印 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\4_triangle arrow.png" ), false );
 			this.txSkinSample1 = null;		// スキン選択時に動的に設定するため、ここでは初期化しない
+
+			if( CDTXMania.stageコンフィグ.bメニューにフォーカス中 )
+			{
+				this.t説明文パネルに現在選択されているメニューの説明を描画する( CDTXMania.stageコンフィグ.n現在のメニュー番号 );
+			}
+			else
+			{
+				this.t説明文パネルに現在選択されている項目の説明を描画する();
+			}
 			base.OnManagedリソースの作成();
 		}
 		public override void OnManagedリソースの解放()
@@ -2502,13 +2517,13 @@ namespace DTXMania
 		{
 			throw new InvalidOperationException( "t進行描画(bool)のほうを使用してください。" );
 		}
-		public int t進行描画( bool b項目リスト側にフォーカスがある )
+		public virtual int t進行描画( bool b項目リスト側にフォーカスがある )
 		{
 			if( this.b活性化してない )
 				return 0;
 
 			// 進行
-
+            /*
 			#region [ 初めての進行描画 ]
 			//-----------------
 			if( base.b初めての進行描画 )
@@ -2830,6 +2845,7 @@ namespace DTXMania
 			}
 			//-----------------
 			#endregion
+            */
 			return 0;
 		}
 	
@@ -2852,9 +2868,9 @@ namespace DTXMania
 
 		}
 
-		private bool b項目リスト側にフォーカスがある;
-		private bool b要素値にフォーカス中;
-		private CCounter ct三角矢印アニメ;
+		protected bool b項目リスト側にフォーカスがある;
+		protected bool b要素値にフォーカス中;
+		protected CCounter ct三角矢印アニメ;
 		private Eメニュー種別 eメニュー種別;
 		#region [ キーコンフィグ ]
 		private CItemBase iKeyAssignSystemCapture;			// #24609
@@ -2961,18 +2977,20 @@ namespace DTXMania
         private CItemToggle iSystemJudgeCountDisp;
         #endregion
 
-        private List<CItemBase> list項目リスト;
-		private long nスクロール用タイマ値;
-		private int n現在のスクロールカウンタ;
-		private int n目標のスクロールカウンタ;
-		private Point[] ptパネルの基本座標 = new Point[] { new Point( 0x12d, 3 ), new Point( 0x12d, 0x35 ), new Point( 0x12d, 0x67 ), new Point( 0x12d, 0x99 ), new Point( 0x114, 0xcb ), new Point( 0x12d, 0xfd ), new Point( 0x12d, 0x12f ), new Point( 0x12d, 0x161 ), new Point( 0x12d, 0x193 ), new Point( 0x12d, 0x1c5 ) };
-		private CTextureAf txその他項目行パネル;
-		private CTexture tx三角矢印;
-		private CTextureAf tx通常項目行パネル;
+        protected List<CItemBase> list項目リスト;
+		protected long nスクロール用タイマ値;
+		protected int n現在のスクロールカウンタ;
+		protected int n目標のスクロールカウンタ;
+		protected CTextureAf txその他項目行パネル;
+		protected CTexture tx三角矢印;
+		protected CTextureAf tx通常項目行パネル;
+        protected CTexture tx説明文;
+        protected CTexture tx説明文パネル;
+        protected Font ftフォント;
 
-		private CPrivateFastFont prvFont;
+        protected CPrivateFastFont prvFont;
 		//private List<string> list項目リスト_str最終描画名;
-		private struct stMenuItemRight
+		protected struct stMenuItemRight
 		{
 			//	public string strMenuItem;
 			public CTexture txMenuItemRight;
@@ -2980,9 +2998,9 @@ namespace DTXMania
 			public string strParam;
 			public CTexture txParam;
 		}
-		private stMenuItemRight[] listMenu;
+		protected stMenuItemRight[] listMenu;
 
-		private CTexture txSkinSample1;				// #28195 2012.5.2 yyagi
+		protected CTexture txSkinSample1;				// #28195 2012.5.2 yyagi
 		private string[] skinSubFolders;			//
 		private string[] skinNames;					//
 		private string skinSubFolder_org;			//
@@ -3013,7 +3031,7 @@ namespace DTXMania
 		private CItemList iBassRandom;
 		private CItemBase iBassReturnToMenu;
 		private CItemToggle iBassReverse;
-		private CItemInteger iBassScrollSpeed;
+		protected CItemInteger iBassScrollSpeed;
         private CItemList iBassDark;
         private CItemList iBassLaneDispType;
         private CItemToggle iBassJudgeLineDisp;
@@ -3022,7 +3040,7 @@ namespace DTXMania
         private CItemList iBassShutterImage;
 
 		private CItemList iCommonDark;
-		private CItemInteger iCommonPlaySpeed;
+		protected CItemInteger iCommonPlaySpeed;
 //		private CItemBase iCommonReturnToMenu;
 
 		private CItemThreeState iDrumsAutoPlayAll;
@@ -3045,7 +3063,7 @@ namespace DTXMania
 		private CItemList iDrumsPosition;
 		private CItemBase iDrumsReturnToMenu;
 		private CItemToggle iDrumsReverse;
-		private CItemInteger iDrumsScrollSpeed;
+		protected CItemInteger iDrumsScrollSpeed;
         private CItemInteger iDrumsShutterInPos;
         private CItemInteger iDrumsShutterOutPos;
 		private CItemToggle iDrumsSnare;
@@ -3080,7 +3098,7 @@ namespace DTXMania
 		private CItemList iGuitarRandom;
 		private CItemBase iGuitarReturnToMenu;
 		private CItemToggle iGuitarReverse;
-		private CItemInteger iGuitarScrollSpeed;
+		protected CItemInteger iGuitarScrollSpeed;
         private CItemList iGuitarDark;
         private CItemList iGuitarLaneDispType;
         private CItemToggle iGuitarJudgeLineDisp;
@@ -3091,7 +3109,7 @@ namespace DTXMania
 		private CItemInteger iDrumsInputAdjustTimeMs;		// #23580 2011.1.3 yyagi
 		private CItemInteger iGuitarInputAdjustTimeMs;		//
 		private CItemInteger iBassInputAdjustTimeMs;		//
-		private CItemList iSystemSkinSubfolder;				// #28195 2012.5.2 yyagi
+		protected CItemList iSystemSkinSubfolder;				// #28195 2012.5.2 yyagi
 		private CItemToggle iSystemUseBoxDefSkin;			// #28195 2012.5.6 yyagi
 		private CItemList iDrumsSudHid;						// #32072 2013.9.20 yyagi
 		private CItemList iGuitarSudHid;					// #32072 2013.9.20 yyagi
@@ -3099,7 +3117,7 @@ namespace DTXMania
 		private CItemBase iSystemReloadDTX;					// #32081 2013.10.21 yyagi
 		private CItemInteger iSystemMasterVolume;			// #33700 2014.4.26 yyagi
 
-		private int t前の項目( int nItem )
+		protected int t前の項目( int nItem )
 		{
 			if( --nItem < 0 )
 			{
@@ -3107,7 +3125,7 @@ namespace DTXMania
 			}
 			return nItem;
 		}
-		private int t次の項目( int nItem )
+		protected int t次の項目( int nItem )
 		{
 			if( ++nItem >= this.list項目リスト.Count )
 			{
@@ -3355,6 +3373,10 @@ namespace DTXMania
             CDTXMania.ConfigIni.eJUST.Guitar = (EJust)this.iGuitarJust.n現在選択されている項目番号;
             CDTXMania.ConfigIni.strShutterImageName.Guitar = this.iGuitarShutterImage.list項目値[ this.iGuitarShutterImage.n現在選択されている項目番号 ];
 		}
+		public virtual void t説明文パネルに現在選択されているメニューの説明を描画する( int n現在のメニュー番号 ){
+        }
+        public virtual void t説明文パネルに現在選択されている項目の説明を描画する() {
+        }
 		//-----------------
 		#endregion
 	}

@@ -140,6 +140,7 @@ namespace DTXMania
         public CCounter ctコンボ;
         public CCounter ctコンボアニメ;
         public CCounter ctコンボアニメ_2P;
+        public CCounter ctコンボ動作タイマ;
         public int nY1の位座標差分値 = 0;
         public int nY1の位座標差分値_2P = 0;
 
@@ -314,11 +315,11 @@ namespace DTXMania
             {
                 y += this.nジャンプ差分値[nJump];
             }
-            if ( (int)(CDTXMania.stage演奏ドラム画面.ctコンボ動作タイマ.n現在の値 / 4) != 0 )
+            if ( (int)(this.ctコンボ動作タイマ.n現在の値 / 4) != 0 )
             {
                 y動作差分 = 2;
             }
-            else if ( (int)(CDTXMania.stage演奏ドラム画面.ctコンボ動作タイマ.n現在の値 / 16) != 1 )
+            else if ( (int)(this.ctコンボ動作タイマ.n現在の値 / 16) != 1 )
             {
                 y動作差分 = 8;
             }

@@ -9,11 +9,11 @@ using FDK;
 
 namespace DTXMania
 {
-	internal class CActSelectShowCurrentPosition : CActivity
+	internal class CActSelectShowCurrentPositionXG : CActSelectShowCurrentPosition共通
 	{
 		// メソッド
 
-		public CActSelectShowCurrentPosition()
+		public CActSelectShowCurrentPositionXG()
 		{
 			base.b活性化してない = true;
 		}
@@ -53,22 +53,22 @@ namespace DTXMania
 			#region [ スクロールバーの描画 #27648 ]
 			if ( this.txScrollBar != null )
 			{
-				this.txScrollBar.t2D描画( CDTXMania.app.Device, ( 1280 - ( ( 429.0f / 100.0f ) * CDTXMania.stage選曲.ct登場時アニメ用共通.n現在の値 ) ) + this.n決定演出用X, 164, new Rectangle( 0, 0, 352, 26 ) ); //移動後のxは851
+				this.txScrollBar.t2D描画( CDTXMania.app.Device, ( 1280 - ( ( 429.0f / 100.0f ) * CDTXMania.stage選曲XG.ct登場時アニメ用共通.n現在の値 ) ) + this.n決定演出用X, 164, new Rectangle( 0, 0, 352, 26 ) ); //移動後のxは851
 			}
 			#endregion
 			#region [ スクロール地点の描画 (計算はCActSelect曲リストで行う。スクロール位置と選曲項目の同期のため。)#27648 ]
 			if ( this.txScrollBar != null )
 			{
-				int py = CDTXMania.stage選曲.nスクロールバー相対y座標;
+				int py = CDTXMania.stage選曲XG.nスクロールバー相対y座標;
 				if( py <= 336 && py >= 0 )
 				{
-					this.txScrollBar.t2D描画( CDTXMania.app.Device, ( 1280 - 4 - ( ( 424.0f / 100.0f ) * CDTXMania.stage選曲.ct登場時アニメ用共通.n現在の値 ) ) + py + this.n決定演出用X, 164, new Rectangle( 352, 0, 26, 26 ) );//856
+					this.txScrollBar.t2D描画( CDTXMania.app.Device, ( 1280 - 4 - ( ( 424.0f / 100.0f ) * CDTXMania.stage選曲XG.ct登場時アニメ用共通.n現在の値 ) ) + py + this.n決定演出用X, 164, new Rectangle( 352, 0, 26, 26 ) );//856
 				}
 			}
 			#endregion
             if( CDTXMania.r現在のステージ.eフェーズID == CStage.Eフェーズ.選曲_決定演出 || CDTXMania.r現在のステージ.eフェーズID == CStage.Eフェーズ.選曲_NowLoading画面へのフェードアウト )
             {
-                this.n決定演出用X = ( CDTXMania.stage選曲.ct決定演出待機.n現在の値 <= 250 && CDTXMania.stage選曲.ct決定演出待機.n現在の値 >= 0 ? (int)( 429 * ( ( CDTXMania.stage選曲.ct決定演出待機.n現在の値 ) / 250.0 ) ) : 429 );
+                this.n決定演出用X = ( CDTXMania.stage選曲XG.ct決定演出待機.n現在の値 <= 250 && CDTXMania.stage選曲XG.ct決定演出待機.n現在の値 >= 0 ? (int)( 429 * ( ( CDTXMania.stage選曲XG.ct決定演出待機.n現在の値 ) / 250.0 ) ) : 429 );
             }
             else
             {
@@ -86,7 +86,7 @@ namespace DTXMania
         /// <param name="nItemCount"></param>
         public void tアイテム数の描画()
         {
-            string s = CDTXMania.stage選曲.act曲リスト.nCurrentPosition.ToString() + "/" + CDTXMania.stage選曲.act曲リスト.nNumOfItems.ToString();
+            string s = CDTXMania.stage選曲XG.act曲リスト.nCurrentPosition.ToString() + "/" + CDTXMania.stage選曲XG.act曲リスト.nNumOfItems.ToString();
             int x = 1150;
             int y = 200;
 

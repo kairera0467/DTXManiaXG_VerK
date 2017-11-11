@@ -30,7 +30,7 @@ namespace DTXMania
 
 
 		// メソッド
-		public void tActivatePopupMenu( E楽器パート einst, ref CActSelect曲リスト ca )
+		public void tActivatePopupMenu( E楽器パート einst, ref CActSelect曲リスト共通 ca )
 		{
 		    this.act曲リスト = ca;
 			base.tActivatePopupMenu( einst );
@@ -140,7 +140,7 @@ namespace DTXMania
 		#region [ private ]
 		//-----------------
 
-		private CActSelect曲リスト act曲リスト;
+		private CActSelect曲リスト共通 act曲リスト;
 
 		private enum EOrder : int
 		{

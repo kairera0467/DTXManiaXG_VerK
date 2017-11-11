@@ -26,7 +26,10 @@ namespace DTXMania
 		}
 		public void t選択曲が変更された()
 		{
-			Cスコア cスコア = CDTXMania.stage選曲.r現在選択中のスコア;
+			Cスコア cスコア;
+            if( CDTXMania.bXGRelease ) cスコア = CDTXMania.stage選曲XG.r現在選択中のスコア;
+            else cスコア = CDTXMania.stage選曲GITADORA.r現在選択中のスコア;
+
 			if( ( cスコア != null ) && ( ( !( cスコア.ファイル情報.フォルダの絶対パス + cスコア.譜面情報.Presound ).Equals( this.str現在のファイル名 ) || ( this.sound == null ) ) || !this.sound.b再生中 ) )
 			{
 				this.tサウンド停止();
@@ -116,7 +119,10 @@ namespace DTXMania
 		}
 		private void tプレビューサウンドの作成()
 		{
-			Cスコア cスコア = CDTXMania.stage選曲.r現在選択中のスコア;
+			Cスコア cスコア;
+            if( CDTXMania.bXGRelease ) cスコア = CDTXMania.stage選曲XG.r現在選択中のスコア;
+            else cスコア = CDTXMania.stage選曲GITADORA.r現在選択中のスコア;
+
 			if( ( cスコア != null ) && !string.IsNullOrEmpty( cスコア.譜面情報.Presound ) )
 			{
 				string strPreviewFilename = cスコア.ファイル情報.フォルダの絶対パス + cスコア.譜面情報.Presound;
@@ -148,7 +154,7 @@ namespace DTXMania
 				if( !this.ct再生待ちウェイト.b終了値に達してない )
 				{
 					this.ct再生待ちウェイト.t停止();
-					if( !CDTXMania.stage選曲.bスクロール中 )
+					if( CDTXMania.bXGRelease ? !CDTXMania.stage選曲XG.bスクロール中 : !CDTXMania.stage選曲GITADORA.bスクロール中 )
 					{
 						this.tプレビューサウンドの作成();
 					}
