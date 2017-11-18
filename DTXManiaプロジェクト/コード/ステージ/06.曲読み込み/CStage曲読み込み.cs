@@ -22,6 +22,10 @@ namespace DTXMania
 			base.b活性化してない = true;
 			base.list子Activities.Add( this.actFI = new CActFIFOBlack() );	// #27787 2012.3.10 yyagi 曲読み込み画面のフェードインの省略
 			base.list子Activities.Add( this.actFO = new CActFIFOBlack() );
+
+            if( !CDTXMania.bXGRelease ) {
+                this.actLoadMain = new CAct曲読み込みメイン画面GD();
+            }
 		}
 
 
@@ -268,12 +272,7 @@ namespace DTXMania
 			if( !base.b活性化してない )
 			{
 				this.tx背景 = CDTXMania.tテクスチャの生成( this.strSTAGEFILE, false );
-
-				if ( !this.b音符を表示する && this.tx背景 != null )
-				{
-					this.tx背景.vc拡大縮小倍率 = new Vector3( Scale.X, Scale.Y, 1f );	// とりあえずFullHD化
-				}
-				base.OnManagedリソースの作成();
+                base.OnManagedリソースの作成();
 			}
 		}
 		public override void OnManagedリソースの解放()
@@ -281,6 +280,12 @@ namespace DTXMania
 			if( !base.b活性化してない )
 			{
 				CDTXMania.tテクスチャの解放( ref this.tx背景 );
+
+                if( !CDTXMania.bXGRelease )
+                {
+                    this.actLoadMain.OnManagedリソースの解放();
+                }
+
 				base.OnManagedリソースの解放();
 			}
 		}
@@ -344,10 +349,19 @@ namespace DTXMania
 			//-----------------------------
 			#endregion
 
+            if( !CDTXMania.bXGRelease ) {
+                if( !CDTXMania.bコンパクトモード ) { 
+                    this.actLoadMain.t指定されたパスからジャケット画像を生成する( CDTXMania.stage選曲GITADORA.r確定されたスコア.ファイル情報.フォルダの絶対パス + CDTXMania.stage選曲GITADORA.r確定されたスコア.譜面情報.Preimage );
+                    this.actLoadMain.t難易度パネルの描画( 0 );
+                }
+
+                this.actLoadMain.On進行描画();
+            }
+
 			switch( base.eフェーズID )
 			{
 				case CStage.Eフェーズ.共通_フェードイン:
-//					if( this.actFI.On進行描画() != 0 )					// #27787 2012.3.10 yyagi 曲読み込み画面のフェードインの省略
+					//if( this.actFI.On進行描画() != 0 )					// #27787 2012.3.10 yyagi 曲読み込み画面のフェードインの省略
 																		// 必ず一度「CStaeg.Eフェーズ.共通_フェードイン」フェーズを経由させること。
 																		// さもないと、曲読み込みが完了するまで、曲読み込み画面が描画されない。
 						base.eフェーズID = CStage.Eフェーズ.NOWLOADING_DTXファイルを読み込む;
@@ -384,7 +398,7 @@ namespace DTXMania
 						Trace.TraceInformation( "TITLE: {0}", CDTXMania.DTX.TITLE );
 						Trace.TraceInformation( "FILE: {0}",  CDTXMania.DTX.strファイル名の絶対パス );
 						Trace.TraceInformation( "---------------------------" );
-
+                        
                         if( !CDTXMania.bコンパクトモード )
                         {
                             if( CDTXMania.ConfigIni.bSkillModeを自動切替えする && CDTXMania.ConfigIni.bDrums有効 )
@@ -652,7 +666,7 @@ namespace DTXMania
 					}
 					return (int) E曲読込画面の戻り値.読込完了;
 			}
-			return (int) E曲読込画面の戻り値.継続;
+    		return (int) E曲読込画面の戻り値.継続;
 		}
 
 		/// <summary>
@@ -703,10 +717,11 @@ namespace DTXMania
                 CDTXMania.ConfigIni.eSkillMode = ESkillType.XG;
         }
 
-		// その他
+        // その他
 
-		#region [ private ]
-		//-----------------
+        #region [ private ]
+        //-----------------
+        private CAct曲読み込みメイン画面GD actLoadMain;
 		private CActFIFOBlack actFI;
 		private CActFIFOBlack actFO;
 		private bool b音符を表示する;

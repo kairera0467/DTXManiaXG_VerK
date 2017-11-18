@@ -10,23 +10,16 @@ using FDK;
 
 namespace DTXMania
 {
-	internal class CActResultImage : CActivity
+	internal class CActResultImageXG : CActResultImage共通
 	{
 		// コンストラクタ
 
-		public CActResultImage()
+		public CActResultImageXG()
 		{
 			base.b活性化してない = true;
 		}
 
-
-		// メソッド
-
-		public void tアニメを完了させる()
-		{
-			this.ct登場用.n現在の値 = this.ct登場用.n終了値;
-		}
-
+        
 		// CActivity 実装
 
 		public override void On活性化()

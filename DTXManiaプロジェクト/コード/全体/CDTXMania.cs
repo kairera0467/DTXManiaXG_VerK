@@ -26,8 +26,8 @@ namespace DTXMania
 		public static readonly string D3DXDLL = "d3dx9_43.dll";		// June 2010
         //public static readonly string D3DXDLL = "d3dx9_42.dll";	// February 2010
         //public static readonly string D3DXDLL = "d3dx9_41.dll";	// March 2009
-        //public static readonly bool bXGRelease = true; //システム内部にGITADORA風表示とで大きく異る箇所があるので、わかりやすくなるようにフラグを作成。
-        public static readonly bool bXGRelease = false;
+        public static readonly bool bXGRelease = true; //システム内部にGITADORA風表示とで大きく異る箇所があるので、わかりやすくなるようにフラグを作成。
+        //public static readonly bool bXGRelease = false;
 
 		public static CDTXMania app
 		{
@@ -1303,11 +1303,11 @@ for (int i = 0; i < 3; i++) {
                                     {
 									    if ( !ConfigIni.bギタレボモード )
 									    {
-										    CDTXMania.stage演奏ドラム画面.t演奏位置の変更( CDTXMania.DTXVmode.nStartBar );
+										    CDTXMania.stage演奏ドラム画面GITADORA.t演奏位置の変更( CDTXMania.DTXVmode.nStartBar );
 									    }
 									    else
 									    {
-										    CDTXMania.stage演奏ギター画面.t演奏位置の変更( CDTXMania.DTXVmode.nStartBar );
+										    CDTXMania.stage演奏ギター画面GITADORA.t演奏位置の変更( CDTXMania.DTXVmode.nStartBar );
 									    }
                                     }
 								}
@@ -1488,14 +1488,23 @@ for (int i = 0; i < 3; i++) {
 								//-----------------------------
 								CScoreIni.C演奏記録 c演奏記録_Drums, c演奏記録_Guitar, c演奏記録_Bass;
 								CDTX.CChip[] chipArray = new CDTX.CChip[ 11 ];
-								if( ConfigIni.bギタレボモード )
-								{
-									stage演奏ギター画面.t演奏結果を格納する( out c演奏記録_Drums, out c演奏記録_Guitar, out c演奏記録_Bass );
-								}
-								else
-								{
-									stage演奏ドラム画面.t演奏結果を格納する( out c演奏記録_Drums, out c演奏記録_Guitar, out c演奏記録_Bass, out chipArray );
-								}
+                                if( CDTXMania.bXGRelease )
+                                {
+								    if( ConfigIni.bギタレボモード ) {
+									    stage演奏ギター画面.t演奏結果を格納する( out c演奏記録_Drums, out c演奏記録_Guitar, out c演奏記録_Bass );
+								    } else {
+									    stage演奏ドラム画面.t演奏結果を格納する( out c演奏記録_Drums, out c演奏記録_Guitar, out c演奏記録_Bass, out chipArray );
+								    }
+                                }
+                                else
+                                {
+								    if( ConfigIni.bギタレボモード ) {
+									    stage演奏ギター画面GITADORA.t演奏結果を格納する( out c演奏記録_Drums, out c演奏記録_Guitar, out c演奏記録_Bass );
+								    } else {
+									    stage演奏ドラム画面GITADORA.t演奏結果を格納する( out c演奏記録_Drums, out c演奏記録_Guitar, out c演奏記録_Bass, out chipArray );
+								    }
+                                }
+
 
 								if ( CDTXMania.ConfigIni.bIsSwappedGuitarBass )		// #24063 2011.1.24 yyagi Gt/Bsを入れ替えていたなら、演奏結果も入れ替える
 								{

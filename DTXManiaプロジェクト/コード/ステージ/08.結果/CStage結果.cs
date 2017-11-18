@@ -44,7 +44,7 @@ namespace DTXMania
 			base.eステージID = CStage.Eステージ.結果;
 			base.eフェーズID = CStage.Eフェーズ.共通_通常状態;
 			base.b活性化してない = true;
-			base.list子Activities.Add( this.actResultImage = new CActResultImage() );
+			base.list子Activities.Add( this.actResultImage = new CActResultImage共通() );
 			base.list子Activities.Add( this.actParameterPanel = new CActResultParameterPanel() );
 			base.list子Activities.Add( this.actRank = new CActResultRank() );
 			base.list子Activities.Add( this.actSongBar = new CActResultSongBar() );
@@ -675,7 +675,7 @@ namespace DTXMania
 		private CAct演奏AVI actAVI;
 		private CActResultParameterPanel actParameterPanel;
 		private CActResultRank actRank;
-		private CActResultImage actResultImage;
+		private CActResultImage共通 actResultImage;
 		private CActResultSongBar actSongBar;
 		private bool bアニメが完了;
 		private bool bIsCheckedWhetherResultScreenShouldSaveOrNot;				// #24509 2011.3.14 yyagi

@@ -112,15 +112,19 @@ namespace DTXMania
 				}
                 if( CDTXMania.r現在のステージ.eフェーズID == CStage.Eフェーズ.選曲_決定演出 || CDTXMania.r現在のステージ.eフェーズID == CStage.Eフェーズ.選曲_NowLoading画面へのフェードアウト )
                 {
-                    this.n本体Y = 558 + ( CDTXMania.stage選曲.ct決定演出待機.n現在の値 <= 250 && CDTXMania.stage選曲.ct決定演出待機.n現在の値 >= 0 ? (int)( 70 * ( ( CDTXMania.stage選曲.ct決定演出待機.n現在の値 ) / 250.0 ) ) : 0 );
-                    this.txパネル本体.n透明度 = (int)( 255 - ( 255 * ( ( CDTXMania.stage選曲.ct決定演出待機.n現在の値 ) / 250.0 ) ) );
-                    this.tx文字列パネル.n透明度 = (int)( 255 - ( 255 * ( ( CDTXMania.stage選曲.ct決定演出待機.n現在の値 ) / 250.0 ) ) );
-                    if( CDTXMania.stage選曲.ct決定演出待機.n現在の値 > 250 )
+                    if( CDTXMania.bXGRelease )
                     {
-                        this.n本体Y = 558 + 70;
-                        this.txパネル本体.n透明度 = 0;
-                        this.tx文字列パネル.n透明度 = 0;
+                        this.n本体Y = 558 + ( CDTXMania.stage選曲XG.ct決定演出待機.n現在の値 <= 250 && CDTXMania.stage選曲XG.ct決定演出待機.n現在の値 >= 0 ? (int)( 70 * ( ( CDTXMania.stage選曲XG.ct決定演出待機.n現在の値 ) / 250.0 ) ) : 0 );
+                        this.txパネル本体.n透明度 = (int)( 255 - ( 255 * ( ( CDTXMania.stage選曲XG.ct決定演出待機.n現在の値 ) / 250.0 ) ) );
+                        this.tx文字列パネル.n透明度 = (int)( 255 - ( 255 * ( ( CDTXMania.stage選曲XG.ct決定演出待機.n現在の値 ) / 250.0 ) ) );
+                        if( CDTXMania.stage選曲XG.ct決定演出待機.n現在の値 > 250 )
+                        {
+                            this.n本体Y = 558 + 70;
+                            this.txパネル本体.n透明度 = 0;
+                            this.tx文字列パネル.n透明度 = 0;
+                        }
                     }
+
                 }
 				if( this.txパネル本体 != null )
 				{

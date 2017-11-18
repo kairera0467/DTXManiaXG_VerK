@@ -451,7 +451,8 @@ namespace DTXMania
                                 }
                                 if( db曲別スキル != 0 )
                                 {
-                                    this.txゲージ用数字他.t2D描画( CDTXMania.app.Device, n曲別スキル位置[ j ], this.n本体Y[ j ] + 51, new Rectangle( 0, 32, 64, 38 ) );
+                                    if( this.txゲージ用数字他 != null )
+                                        this.txゲージ用数字他.t2D描画( CDTXMania.app.Device, n曲別スキル位置[ j ], this.n本体Y[ j ] + 51, new Rectangle( 0, 32, 64, 38 ) );
                                     this.t達成率表示( n曲別スキル位置[ j ] + 11, this.n本体Y[ j ] + 69, string.Format( "{0,6:##0.00}", db曲別スキル ) );
                                 }
                             }
@@ -592,13 +593,13 @@ namespace DTXMania
 
                         if( CDTXMania.r現在のステージ.eフェーズID == CStage.Eフェーズ.選曲_決定演出 || CDTXMania.r現在のステージ.eフェーズID == CStage.Eフェーズ.選曲_NowLoading画面へのフェードアウト )
                         {
-                            this.n本体Y[ 0 ] = 43 - ( CDTXMania.stage選曲.ct決定演出待機.n現在の値 <= 250 && CDTXMania.stage選曲.ct決定演出待機.n現在の値 >= 0 ? (int)( 70 * ( ( CDTXMania.stage選曲.ct決定演出待機.n現在の値 ) / 250.0 ) ) : 0 );
-                            this.n本体Y[ 1 ] = 43 - ( CDTXMania.stage選曲.ct決定演出待機.n現在の値 <= 250 && CDTXMania.stage選曲.ct決定演出待機.n現在の値 >= 0 ? (int)( 70 * ( ( CDTXMania.stage選曲.ct決定演出待機.n現在の値 ) / 250.0 ) ) : 0 );
-                            this.n本体Y[ 2 ] = 546 + ( CDTXMania.stage選曲.ct決定演出待機.n現在の値 <= 250 && CDTXMania.stage選曲.ct決定演出待機.n現在の値 >= 0 ? (int)( 70 * ( ( CDTXMania.stage選曲.ct決定演出待機.n現在の値 ) / 250.0 ) ) : 0 );
-                            this.txパネル本体.n透明度 = (int)( 255 - ( 255 * ( ( CDTXMania.stage選曲.ct決定演出待機.n現在の値 ) / 250.0 ) ) );
-                            this.txゲージ用数字他.n透明度 = (int)( 255 - ( 255 * ( ( CDTXMania.stage選曲.ct決定演出待機.n現在の値 ) / 250.0 ) ) );
-                            this.tx難易度パネル.n透明度 = (int)( 255 - ( 255 * ( ( CDTXMania.stage選曲.ct決定演出待機.n現在の値 ) / 250.0 ) ) );
-                            this.tx難易度数字XG.n透明度 = (int)( 255 - ( 255 * ( ( CDTXMania.stage選曲.ct決定演出待機.n現在の値 ) / 250.0 ) ) );
+                            this.n本体Y[ 0 ] = 43 - ( CDTXMania.stage選曲XG.ct決定演出待機.n現在の値 <= 250 && CDTXMania.stage選曲XG.ct決定演出待機.n現在の値 >= 0 ? (int)( 70 * ( ( CDTXMania.stage選曲XG.ct決定演出待機.n現在の値 ) / 250.0 ) ) : 0 );
+                            this.n本体Y[ 1 ] = 43 - ( CDTXMania.stage選曲XG.ct決定演出待機.n現在の値 <= 250 && CDTXMania.stage選曲XG.ct決定演出待機.n現在の値 >= 0 ? (int)( 70 * ( ( CDTXMania.stage選曲XG.ct決定演出待機.n現在の値 ) / 250.0 ) ) : 0 );
+                            this.n本体Y[ 2 ] = 546 + ( CDTXMania.stage選曲XG.ct決定演出待機.n現在の値 <= 250 && CDTXMania.stage選曲XG.ct決定演出待機.n現在の値 >= 0 ? (int)( 70 * ( ( CDTXMania.stage選曲XG.ct決定演出待機.n現在の値 ) / 250.0 ) ) : 0 );
+                            this.txパネル本体.n透明度 = (int)( 255 - ( 255 * ( ( CDTXMania.stage選曲XG.ct決定演出待機.n現在の値 ) / 250.0 ) ) );
+                            this.txゲージ用数字他.n透明度 = (int)( 255 - ( 255 * ( ( CDTXMania.stage選曲XG.ct決定演出待機.n現在の値 ) / 250.0 ) ) );
+                            this.tx難易度パネル.n透明度 = (int)( 255 - ( 255 * ( ( CDTXMania.stage選曲XG.ct決定演出待機.n現在の値 ) / 250.0 ) ) );
+                            this.tx難易度数字XG.n透明度 = (int)( 255 - ( 255 * ( ( CDTXMania.stage選曲XG.ct決定演出待機.n現在の値 ) / 250.0 ) ) );
                             if( CDTXMania.stage選曲XG.ct決定演出待機.n現在の値 > 250 )
                             {
                                 this.txパネル本体.n透明度 = 0;
@@ -607,13 +608,13 @@ namespace DTXMania
                             }
                             if( this.tx決定後_難易度パネル1P == null )
                                 this.t決定アニメ_難易度パネルを生成する();
-                            if( this.tx決定後_難易度パネル1P != null && ( CDTXMania.ConfigIni.bGuitar有効 && CDTXMania.stage選曲.r確定されたスコア.譜面情報.b譜面がある.Guitar ) )
+                            if( this.tx決定後_難易度パネル1P != null && ( CDTXMania.ConfigIni.bGuitar有効 && CDTXMania.stage選曲XG.r確定されたスコア.譜面情報.b譜面がある.Guitar ) )
                             {
                                 //挙動が謎のためY軸回転は保留。
 
-                                if( CDTXMania.stage選曲.ct決定演出待機.n現在の値 < 400 )
+                                if( CDTXMania.stage選曲XG.ct決定演出待機.n現在の値 < 400 )
                                 {
-                                    int nX = (int)( CDTXMania.stage選曲.ct決定演出待機.n現在の値 < 200 ? 100 * ( CDTXMania.stage選曲.ct決定演出待機.n現在の値 / 200.0 ) : 100 - 100 * ( ( CDTXMania.stage選曲.ct決定演出待機.n現在の値 - 200.0 ) / 200.0 ) );
+                                    int nX = (int)( CDTXMania.stage選曲XG.ct決定演出待機.n現在の値 < 200 ? 100 * ( CDTXMania.stage選曲XG.ct決定演出待機.n現在の値 / 200.0 ) : 100 - 100 * ( ( CDTXMania.stage選曲XG.ct決定演出待機.n現在の値 - 200.0 ) / 200.0 ) );
                                     this.tx決定後_難易度パネル1P.t2D描画( CDTXMania.app.Device, 254 - nX, 162 );
                                     //CDTXMania.act文字コンソール.tPrint( 0, 64, C文字コンソール.Eフォント種別.白, nX.ToString() );
                                 }
@@ -626,9 +627,9 @@ namespace DTXMania
                             {
                                 //挙動が謎のためY軸回転は保留。
 
-                                if( CDTXMania.stage選曲.ct決定演出待機.n現在の値 < 400 )
+                                if( CDTXMania.stage選曲XG.ct決定演出待機.n現在の値 < 400 )
                                 {
-                                    int nX = (int)( CDTXMania.stage選曲.ct決定演出待機.n現在の値 < 200 ? 100 * ( CDTXMania.stage選曲.ct決定演出待機.n現在の値 / 200.0 ) : 100 - 100 * ( ( CDTXMania.stage選曲.ct決定演出待機.n現在の値 - 200.0 ) / 200.0 ) );
+                                    int nX = (int)( CDTXMania.stage選曲XG.ct決定演出待機.n現在の値 < 200 ? 100 * ( CDTXMania.stage選曲XG.ct決定演出待機.n現在の値 / 200.0 ) : 100 - 100 * ( ( CDTXMania.stage選曲XG.ct決定演出待機.n現在の値 - 200.0 ) / 200.0 ) );
                                     this.tx決定後_難易度パネル1P.t2D描画( CDTXMania.app.Device, 254 - nX, 162 );
                                     //CDTXMania.act文字コンソール.tPrint( 0, 64, C文字コンソール.Eフォント種別.白, nX.ToString() );
                                 }

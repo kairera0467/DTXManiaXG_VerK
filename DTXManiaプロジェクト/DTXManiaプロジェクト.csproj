@@ -151,6 +151,7 @@
     <Compile Include="コード\ステージ\05.選曲\CActSortSongs.cs" />
     <Compile Include="コード\ステージ\05.選曲\CStage選曲.cs" />
     <Compile Include="コード\ステージ\05.選曲\XG\CStage選曲XG.cs" />
+    <Compile Include="コード\ステージ\06.曲読み込み\CAct曲読み込みメイン画面GD.cs" />
     <Compile Include="コード\ステージ\06.曲読み込み\CStage曲読み込み.cs" />
     <Compile Include="コード\ステージ\07.演奏\CAct演奏AVI.cs" />
     <Compile Include="コード\ステージ\07.演奏\CAct演奏BGA.cs" />
@@ -230,11 +231,13 @@
     <Compile Include="コード\ステージ\07.演奏\ドラム画面\CAct演奏DrumsレーンフラッシュGB.cs" />
     <Compile Include="コード\ステージ\07.演奏\ドラム画面\CAct演奏Drums判定文字列.cs" />
     <Compile Include="コード\ステージ\07.演奏\ドラム画面\CStage演奏ドラム画面.cs" />
-    <Compile Include="コード\ステージ\08.結果\CActResultImage.cs" />
+    <Compile Include="コード\ステージ\08.結果\CActResultImage共通.cs" />
     <Compile Include="コード\ステージ\08.結果\CActResultParameterPanel.cs" />
     <Compile Include="コード\ステージ\08.結果\CActResultRank.cs" />
     <Compile Include="コード\ステージ\08.結果\CActResultSongBar.cs" />
     <Compile Include="コード\ステージ\08.結果\CStage結果.cs" />
+    <Compile Include="コード\ステージ\08.結果\GITADORA\CActResultImageGD.cs" />
+    <Compile Include="コード\ステージ\08.結果\XG\CActResultImageXG.cs" />
     <Compile Include="コード\ステージ\09.終了\CStage終了.cs" />
     <Compile Include="コード\ステージ\10.ChangeSkin\CStageChangeSkin.cs" />
     <Compile Include="コード\ステージ\CActDFPFont.cs" />

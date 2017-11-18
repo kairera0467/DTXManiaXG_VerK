@@ -934,11 +934,11 @@ namespace DTXMania
                 for( int i = 0; i < 15; i++ )
                 {
                     if( this.txTumbnail[ i ] != null )
-                        this.txTumbnail[ i ].n透明度 = (int)( 255 - ( 255 * ( ( CDTXMania.stage選曲.ct決定演出待機.n現在の値 ) / 250.0 ) ) );
+                        this.txTumbnail[ i ].n透明度 = (int)( 255 - ( 255 * ( ( CDTXMania.stage選曲XG.ct決定演出待機.n現在の値 ) / 250.0 ) ) );
                     if( this.stバー情報[ i ].txパネル != null )
-                        this.stバー情報[ i ].txパネル.n透明度 = (int)( 255 - ( 255 * ( ( CDTXMania.stage選曲.ct決定演出待機.n現在の値 ) / 250.0 ) ) );
+                        this.stバー情報[ i ].txパネル.n透明度 = (int)( 255 - ( 255 * ( ( CDTXMania.stage選曲XG.ct決定演出待機.n現在の値 ) / 250.0 ) ) );
                 }
-                this.txパネル帯.n透明度 = (int)( 255 - ( 255 * ( ( CDTXMania.stage選曲.ct決定演出待機.n現在の値 ) / 250.0 ) ) );
+                this.txパネル帯.n透明度 = (int)( 255 - ( 255 * ( ( CDTXMania.stage選曲XG.ct決定演出待機.n現在の値 ) / 250.0 ) ) );
                 #endregion
                 #region[ 決定時のパネル表示 ]
                 if( this.txベース曲パネル == null )
@@ -946,7 +946,7 @@ namespace DTXMania
                 if( this.txベース曲パネル != null )
                 {
                     //拡大終了まで80ms
-                    int nNowTime = CDTXMania.stage選曲.ct決定演出待機.n現在の値 - 100;
+                    int nNowTime = CDTXMania.stage選曲XG.ct決定演出待機.n現在の値 - 100;
 
                     float fScale = nNowTime > -1 ? ( nNowTime < 100 ? 0.778f + ( 0.222f * ( nNowTime / 100.0f ) ) : 1.0f ) : 0.778f;
                     int nMusicPanelX = (int)( 648 - ( ( 290.0f / 2.0f ) * fScale ) );
