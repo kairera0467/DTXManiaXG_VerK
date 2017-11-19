@@ -486,7 +486,8 @@ namespace DTXMania
 		/// </summary>
 		public void t選択曲が変更された( bool bForce )	// #27648
 		{
-			C曲リストノード song = CDTXMania.stage選曲.r現在選択中の曲;
+            C曲リストノード song = this.r現在選択中の曲;
+            
 			if ( song == null )
 				return;
 			if ( song == song_last && bForce == false )
@@ -542,8 +543,8 @@ namespace DTXMania
 				regular,
 				GraphicsUnit.Pixel
 			);
-            FontStyle fStyle = CDTXMania.ConfigIni.b選曲リストフォントを太字にする ? FontStyle.Bold : FontStyle.Regular;
-            this.prvPanelFont = new CPrivateFastFont( new FontFamily( CDTXMania.ConfigIni.str選曲リストフォント ), 18, fStyle );
+            //FontStyle fStyle = CDTXMania.ConfigIni.b選曲リストフォントを太字にする ? FontStyle.Bold : FontStyle.Regular;
+            //this.prvPanelFont = new CPrivateFastFont( new FontFamily( CDTXMania.ConfigIni.str選曲リストフォント ), 18, fStyle );
 
 			// 現在選択中の曲がない（＝はじめての活性化）なら、現在選択中の曲をルートの先頭ノードに設定する。
 
@@ -576,38 +577,6 @@ namespace DTXMania
 			if( this.b活性化してない )
 				return;
             
-            this.tx選曲パネル = null;
-            if( CDTXMania.ConfigIni.bDrums有効 )
-                this.tx選曲パネル = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_image_panel.png" ) );
-            else
-                this.tx選曲パネル = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_image_panel_guitar.png" ) );
-
-            this.txパネル = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_music panel.png") );
-            this.txパネル帯 = CDTXMania.tテクスチャの生成Af( CSkin.Path( @"Graphics\5_Backbar.png" ) );
-            this.txクリアランプ = CDTXMania.tテクスチャの生成( CSkin.Path(@"Graphics\5_Clearlamp.png") );
-            #region[ テクスチャの復元 ]
-            int nKeys = this.dicThumbnail.Count;
-            string[] keys = new string[ nKeys ];
-            this.dicThumbnail.Keys.CopyTo( keys, 0 );
-            foreach (var key in keys)
-                this.dicThumbnail[ key ] = this.tパスを指定してサムネイル画像を生成して返す( 0, key, this.stバー情報[ 0 ].eバー種別  );;
-
-            //ここは最初に表示される画像の復元に必要。
-            for( int i = 0; i < 15; i++ )
-            {
-                this.tパネルの生成( i, this.stバー情報[ i ].strタイトル文字列, this.stバー情報[ i ].strアーティスト名, this.stバー情報[ i ].col文字色 );
-                if( this.stバー情報[ i ].strPreimageのパス != null )
-                {
-                    if( !this.dicThumbnail.ContainsKey( this.stバー情報[ i ].strPreimageのパス ) )
-                    {
-                        this.tパスを指定してサムネイル画像を生成する( i, this.stバー情報[ i ].strPreimageのパス, this.stバー情報[ i ].eバー種別  );
-                        this.dicThumbnail.Add( this.stバー情報[ i ].strPreimageのパス, this.txTumbnail[ i ] );
-                    }
-                    this.txTumbnail[ i ] = this.dicThumbnail[ this.stバー情報[ i ].strPreimageのパス ];
-                }
-            }
-            #endregion
-
 			int c = ( CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ja" ) ? 0 : 1;
 			#region [ Songs not found画像 ]
 			try
@@ -666,34 +635,10 @@ namespace DTXMania
 		{
 			if( this.b活性化してない )
 				return;
-
-            for ( int i = 0; i < 15; i++ )
-            {
-                CDTXMania.t安全にDisposeする( ref this.stバー情報[ i ].txタイトル名 );
-                CDTXMania.t安全にDisposeする( ref this.stバー情報[ i ].txアーティスト名 );
-                CDTXMania.t安全にDisposeする( ref this.stバー情報[ i ].txパネル );
-            }
-            #region[ ジャケット画像の解放 ]
-            int nKeys = this.dicThumbnail.Count;
-            string[] keys = new string[ nKeys ];
-            this.dicThumbnail.Keys.CopyTo( keys, 0 );
-            foreach( var key in keys )
-            {
-                C共通.tDisposeする( this.dicThumbnail[ key ] );
-                this.dicThumbnail[ key ] = null;
-            }
-            #endregion
-
-            CDTXMania.t安全にDisposeする( ref this.tx選択されている曲の曲名 );
-            CDTXMania.t安全にDisposeする( ref this.tx選択されている曲のアーティスト名 );
-            CDTXMania.t安全にDisposeする( ref this.tx選択されている曲のジャケット画像 );
-
+            
 			CDTXMania.t安全にDisposeする( ref this.txEnumeratingSongs );
 			CDTXMania.t安全にDisposeする( ref this.txSongNotFound );
             CDTXMania.t安全にDisposeする( ref this.tx選曲パネル );
-            CDTXMania.t安全にDisposeする( ref this.txパネル );
-            CDTXMania.t安全にDisposeする( ref this.txクリアランプ );
-            CDTXMania.t安全にDisposeする( ref this.txパネル帯 );
             CDTXMania.t安全にDisposeする( ref this.txベース曲パネル );
             CDTXMania.t安全にDisposeする( ref this.prvPanelFont );
 
@@ -701,25 +646,6 @@ namespace DTXMania
 		}
 		public override int On進行描画()
 		{
-            #region [ スクロール地点の計算(描画はCActSelectShowCurrentPositionにて行う) #27648 ]
-            int py;
-			double d = 0;
-			if ( nNumOfItems > 1 )
-			{
-				d = ( 336 - 8 ) / (double) ( nNumOfItems - 1 );
-				py = (int) ( d * ( nCurrentPosition - 1 ) );
-			}
-			else
-			{
-				d = 0;
-				py = 0;
-			}
-			int delta = (int) ( d * this.n現在のスクロールカウンタ / 100 );
-			if ( py + delta <= 336 - 8 )
-			{
-				this.nスクロールバー相対y座標 = py + delta;
-			}
-			#endregion
 			return 0;
 		}
 		
@@ -884,26 +810,6 @@ namespace DTXMania
         /// <para>正直この方法は好ましくないような気がする。</para>
 		/// </summary>
 		protected Dictionary<string, CTexture> dicThumbnail = new Dictionary<string, CTexture>();
-        protected ST中心点[] stマトリックス座標 = new ST中心点[] {
-			#region [ 実は円弧配置になってない。射影行列間違ってるよスターレインボウ見せる気かよ… ]
-			//-----------------        
-            new ST中心点() { x = -940.0000f, y = 4f, z = 320f, rotY = 0.4150f },
-			new ST中心点() { x = -740.0000f, y = 4f, z = 230f, rotY = 0.4150f },
-            new ST中心点() { x = -550.0000f, y = 4f, z = 150f, rotY = 0.4150f },
-			new ST中心点() { x = -370.0000f, y = 4f, z = 70f, rotY = 0.4150f },
-			new ST中心点() { x = -194.0000f,     y = 4f, z = -6f, rotY = 0.4150f },
-			new ST中心点() { x = 6.00002622683f, y = 2f, z = 0f, rotY = 0f }, 
-			new ST中心点() { x = 204.0000f, y = 4f, z = 0f, rotY = -0.4150f },
-            new ST中心点() { x = 362.0000f, y = 4f, z = 70f, rotY = -0.4150f },
-            new ST中心点() { x = 528.0000f, y = 4f, z = 146f, rotY = -0.4150f },
-            new ST中心点() { x = 686.0000f, y = 4f, z = 212f, rotY = -0.4150f },
-            new ST中心点() { x = 848.0000f, y = 4f, z = 282f, rotY = -0.4150f },
-            new ST中心点() { x = 1200.0000f, y = 4f, z = 450f, rotY = -0.4150f },
-            new ST中心点() { x = 1500.0000f, y = 4f, z = -289.5575f, rotY = -0.9279888f },
-            new ST中心点() { x = 1500.0000f, y = 4f, z = -289.5575f, rotY = -0.9279888f },
-			//-----------------
-			#endregion
-		};
 
 		public bool b登場アニメ全部完了;
 		public Color color文字影 = Color.FromArgb( 0x40, 10, 10, 10 );
@@ -915,7 +821,7 @@ namespace DTXMania
 	    public int n現在の選択行;
 		public int n目標のスクロールカウンタ;
 		private CTexture txSongNotFound, txEnumeratingSongs;
-        private CTexture[] txTumbnail = new CTexture[ 15 ];
+        protected CTexture[] txTumbnail = new CTexture[ 15 ];
         private CTexture txクリアランプ;
         private CTexture tx選曲パネル;
         private CTexture tx選択されている曲の曲名;
@@ -924,7 +830,6 @@ namespace DTXMania
         private CTexture txパネル;
         private CTexture txパネル帯;
         private CPrivateFastFont prvPanelFont;
-		public STバー tx曲名バー;
 		public STバー情報[] stバー情報 = new STバー情報[ 15 ];
 		public ST選曲バー tx選曲バー;
 		public int nCurrentPosition = 0;
@@ -995,439 +900,6 @@ namespace DTXMania
         public virtual void tバーの初期化()
         {
 
-        }
-
-        private void tパスを指定してサムネイル画像を生成する( int nバー番号, string strDTXPath, Eバー種別 eType )
-        {
-            if( nバー番号 < 0 || nバー番号 > 15 )
-                return;
-
-            //if( true )
-            //    return;
-
-            if( !File.Exists( strDTXPath ) )
-            {
-                this.txTumbnail[ nバー番号 ] = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_preimage default.png" ) );
-            }
-            else
-            {
-                this.txTumbnail[ nバー番号 ] = CDTXMania.tテクスチャの生成( strDTXPath );
-            }
-        }
-        /// <summary>
-        /// 正直このメソッド消したい。
-        /// </summary>
-        /// <param name="nバー番号">バー番号</param>
-        /// <param name="strDTXPath">preimageのパス</param>
-        /// <param name="eType">バーの種類(未使用)</param>
-        /// <returns>サムネイル画像</returns>
-        private CTexture tパスを指定してサムネイル画像を生成して返す( int nバー番号, string strDTXPath, Eバー種別 eType )
-        {
-            //if( true )
-            //    return null;
-
-            if( nバー番号 < 0 || nバー番号 > 15 )
-                return this.txTumbnail[ nバー番号 ] = null; //2016.03.12 kairera0467 僅かながら高速化
-
-            if( !File.Exists( strDTXPath ) )
-            {
-                return this.txTumbnail[ nバー番号 ] = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_preimage default.png" ) );
-            }
-            else
-            {
-                return this.txTumbnail[ nバー番号 ] = CDTXMania.tテクスチャの生成( strDTXPath );
-            }
-        }
-        private CTexture t指定された文字テクスチャを生成する( string str文字 )
-        {
-            //2013.09.05.kairera0467 中央にしか使用することはないので、色は黒固定。
-            //現在は機能しない(面倒なので実装してない)が、そのうち使用する予定。
-            //PrivateFontの試験運転も兼ねて。
-            //CPrivateFastFont
-            CPrivateFastFont prvFont = new CPrivateFastFont( new FontFamily( CDTXMania.ConfigIni.str選曲リストフォント ), 14, FontStyle.Regular );
-            Bitmap bmp;
-            
-            bmp = prvFont.DrawPrivateFont( str文字, Color.Black, Color.Transparent );
-
-            CTexture tx文字テクスチャ = CDTXMania.tテクスチャの生成( bmp, false );
-
-            if( tx文字テクスチャ != null )
-                tx文字テクスチャ.vc拡大縮小倍率 = new Vector3( 0.75f, 1f, 1f );
-
-            int n最大幅 = 290;
-            if( tx文字テクスチャ.szテクスチャサイズ.Width > n最大幅 )
-            {
-                tx文字テクスチャ.vc拡大縮小倍率 = new Vector3( ( n最大幅 / ( tx文字テクスチャ.szテクスチャサイズ.Width / 0.75f ) ), 1f, 1f );
-            }
-
-            CDTXMania.t安全にDisposeする( ref bmp );
-            CDTXMania.t安全にDisposeする( ref prvFont );
-
-            return tx文字テクスチャ;
-        }
-        private void tパネルの生成( int nバー番号, string str曲名, string strアーティスト名, Color color )
-        {
-            //t3D描画の仕様上左詰や右詰が面倒になってしまうので、
-            //パネルにあらかじめ曲名とアーティスト名を埋め込んでおく。
-
-            //2016.02.21 kairera0467 ここの最適化が足りないかも。
-            
-            if( nバー番号 < 0 || nバー番号 > 15 )
-				return;
-
-            if( !File.Exists( CSkin.Path( @"Graphics\5_music panel.png" ) ) )
-            {
-                Trace.TraceError( "5_music panel.png が存在しないため、パネルの生成を中止しました。" );
-                return;
-            }
-
-            try
-            {
-                CDTXMania.t安全にDisposeする( ref this.stバー情報[ nバー番号 ].txパネル ); //2016.3.12 kairera0467 パネル生成時に既にあるパネルを解放するようにした。
-
-                Bitmap bSongPanel = new Bitmap( 223, 279 );
-                Graphics graphics = Graphics.FromImage( bSongPanel );
-
-                Image imgSongPanel;
-                Image imgSongJacket;
-                Image imgCustomSongNameTexture;
-                Image imgCuttomArtistNameTexture;
-                bool bFoundTitleTexture = false;
-                bool bFoundArtistTexture = false;
-
-                graphics.PageUnit = GraphicsUnit.Pixel;
-
-                imgSongPanel = Image.FromFile( CSkin.Path( @"Graphics\5_music panel.png" ) );
-                graphics.DrawImage( imgSongPanel, 0, 0, 223, 279 );
-
-                string strPassBefore = "";
-                string strPassAfter = "";
-                try
-                {
-                    strPassBefore = this.stバー情報[ nバー番号 ].strDTXフォルダのパス;
-                    strPassAfter = strPassBefore.Replace( this.stバー情報[ nバー番号 ].ar譜面情報.Preimage, "" );
-                }
-                catch
-                {
-                    //Replaceでエラーが出たらここで適切な処理ができるようにしたい。
-                    strPassBefore = "";
-                    strPassAfter = "";
-                }
-
-                #region[ 曲名とアーティスト名 ]
-                string strPath = ( strPassAfter + "TitleTexture.png" );
-                if( File.Exists( ( strPath ) ) )
-                {
-                    imgCustomSongNameTexture = Image.FromFile( strPath );
-                    graphics.DrawImage( imgCustomSongNameTexture, 4, -1, 223, 33 );
-                    CDTXMania.t安全にDisposeする( ref imgCustomSongNameTexture );
-                    bFoundTitleTexture = true;
-                }
-                if( File.Exists( ( strPassAfter + "ArtistTexture.png" ) ) )
-                {
-                    imgCuttomArtistNameTexture = Image.FromFile( strPassAfter + "ArtistTexture.png" );
-                    graphics.DrawImage(imgCuttomArtistNameTexture, 0, 252, 223, 26);
-                    CDTXMania.t安全にDisposeする( ref imgCuttomArtistNameTexture );
-                    bFoundArtistTexture = true;
-                }
-
-                if( bFoundTitleTexture == false || bFoundArtistTexture == false )
-                {
-                    //FontStyle fStyle = CDTXMania.ConfigIni.b選曲リストフォントを太字にする ? FontStyle.Bold : FontStyle.Regular;
-                    //CPrivateFastFont prvFont = new CPrivateFastFont( new FontFamily( CDTXMania.ConfigIni.str選曲リストフォント ), 18, fStyle );
-                    Bitmap bmpSongName = new Bitmap( 1, 1 );
-                    if( bFoundTitleTexture == false )
-                    {
-                        bmpSongName = this.prvPanelFont.DrawPrivateFont( str曲名, Color.White );
-                        if( ( bmpSongName.Size.Width / 1.25f ) > 240 )
-                        {
-                            graphics.DrawImage( bmpSongName, 4f, 2f, ( ( bmpSongName.Size.Width / 1.25f ) ), bmpSongName.Size.Height );
-                        }
-                        else
-                        {
-                            graphics.DrawImage( bmpSongName, 4f, 2f, ( bmpSongName.Size.Width / 1.25f ),bmpSongName.Size.Height );
-                        }
-                    }
-                    if( bFoundArtistTexture == false )
-                    {
-                        bmpSongName = this.prvPanelFont.DrawPrivateFont( strアーティスト名, Color.White );
-                        if( ( bmpSongName.Size.Width / 1.25f ) > 240 )
-                        {
-                            graphics.DrawImage( bmpSongName, 220f - ( ( bmpSongName.Size.Width / 1.25f ) ), 252f, ( ( bmpSongName.Size.Width / 1.25f ) ), bmpSongName.Size.Height );
-                        }
-                        else
-                        {
-                            graphics.DrawImage( bmpSongName, 220f - ( bmpSongName.Size.Width / 1.25f ), 252f, ( bmpSongName.Size.Width / 1.25f ), bmpSongName.Size.Height );
-                        }
-                    }
-                    CDTXMania.t安全にDisposeする( ref bmpSongName );
-                }
-                #endregion
-                #region[ ジャケット画像 ]
-                //2016.02.22 kairera0467 残念ながらバグがあるため封印。
-
-                //if( File.Exists( this.stバー情報[ nバー番号 ].strDTXフォルダのパス + this.stバー情報[ nバー番号 ].ar譜面情報.Preimage ) )
-                //{
-                //    imgSongJacket = Image.FromFile( this.stバー情報[ nバー番号 ].strDTXフォルダのパス + this.stバー情報[ nバー番号 ].ar譜面情報.Preimage );
-                //    graphics.DrawImage( imgSongJacket, 3, 35, 218, 218 );
-                    
-                //    CDTXMania.t安全にDisposeする( ref imgSongJacket );
-                //}
-                //else if( File.Exists( CSkin.Path( @"Graphics\5_preimage default.png" ) ) )
-                //{
-                //    imgSongJacket = Image.FromFile( CSkin.Path( @"Graphics\5_preimage default.png" ) );
-                //    graphics.DrawImage( imgSongJacket, 3, 35, 218, 218 );
-                    
-                //    CDTXMania.t安全にDisposeする( ref imgSongJacket );
-                //}
-                #endregion
-
-                CDTXMania.t安全にDisposeする( ref this.stバー情報[ nバー番号 ].txパネル );
-                this.stバー情報[ nバー番号 ].txパネル = new CTexture( CDTXMania.app.Device, bSongPanel, CDTXMania.TextureFormat, false );
-
-                CDTXMania.t安全にDisposeする( ref bSongPanel );
-                CDTXMania.t安全にDisposeする( ref imgSongPanel );
-                CDTXMania.t安全にDisposeする( ref graphics );
-            }
-            catch( CTextureCreateFailedException )
-			{
-				Trace.TraceError( "曲名テクスチャの作成に失敗しました。[{0}]", str曲名 );
-				this.stバー情報[ nバー番号 ].txパネル = null;
-			}
-            
-        }
-        private void t決定時パネルの生成()
-        {
-            try
-            {
-                Bitmap bSongPanel = new Bitmap( 290, 360 );
-                Graphics graphics = Graphics.FromImage( bSongPanel );
-
-                Image imgSongPanel;
-                Image imgSongJacket;
-                Image imgCustomSongNameTexture;
-                Image imgCuttomArtistNameTexture;
-                bool bFoundTitleTexture = false;
-                bool bFoundArtistTexture = false;
-
-                graphics.PageUnit = GraphicsUnit.Pixel;
-                //graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBilinear;
-
-                imgSongPanel = Image.FromFile( CSkin.Path( @"Graphics\6_base music panel.png" ) );
-                graphics.DrawImage( imgSongPanel, 0, 0, 290, 360 );
-
-                string strFolderPath = CDTXMania.stage選曲.r確定されたスコア.ファイル情報.フォルダの絶対パス;
-                string str曲名 = CDTXMania.stage選曲.r確定された曲.strタイトル;
-                string strアーティスト名 = CDTXMania.stage選曲.r確定されたスコア.譜面情報.アーティスト名;
-
-                #region[ 曲名とアーティスト名 ]
-                string strPath = ( strFolderPath + "TitleTexture.png" );
-                if( File.Exists( ( strPath ) ) )
-                {
-                    imgCustomSongNameTexture = Image.FromFile( strPath );
-                    graphics.DrawImage( imgCustomSongNameTexture, 0, 0, 290, 40 );
-                    CDTXMania.t安全にDisposeする( ref imgCustomSongNameTexture );
-                    bFoundTitleTexture = true;
-                }
-                if( File.Exists( ( strFolderPath + "ArtistTexture.png" ) ) )
-                {
-                    imgCuttomArtistNameTexture = Image.FromFile( strFolderPath + "ArtistTexture.png" );
-                    graphics.DrawImage( imgCuttomArtistNameTexture, 0, 327, 290, 34 );
-                    CDTXMania.t安全にDisposeする( ref imgCuttomArtistNameTexture );
-                    bFoundArtistTexture = true;
-                }
-
-                if( bFoundTitleTexture == false || bFoundArtistTexture == false )
-                {
-                    FontStyle fStyle = CDTXMania.ConfigIni.b選曲リストフォントを太字にする ? FontStyle.Bold : FontStyle.Regular;
-                    CPrivateFastFont prvFont = new CPrivateFastFont( new FontFamily( CDTXMania.ConfigIni.str選曲リストフォント ), 19, fStyle );
-                    Bitmap bmpSongName = new Bitmap( 1, 1 );
-                    if( bFoundTitleTexture == false )
-                    {
-                        bmpSongName = prvFont.DrawPrivateFont( str曲名, Color.White );
-                        //bmpSongName.Save( "test.png" );
-                        if( ( bmpSongName.Size.Width / 1.25f ) > 290 )
-                        {
-                            graphics.DrawImage( bmpSongName, 3f, 8f, ( ( bmpSongName.Size.Width / 1.25f ) * ( 285.0f / ( bmpSongName.Size.Width / 1.25f ) ) ), bmpSongName.Size.Height );
-                        }
-                        else
-                        {
-                            graphics.DrawImage( bmpSongName, 3f, 8f, ( bmpSongName.Size.Width / 1.25f ), bmpSongName.Size.Height );
-                        }
-                    }
-                    if( bFoundArtistTexture == false )
-                    {
-                        bmpSongName = prvFont.DrawPrivateFont( strアーティスト名, Color.White );
-                        if( ( bmpSongName.Size.Width / 1.25f ) > 290 )
-                        {
-                            graphics.DrawImage( bmpSongName, 290f - ( ( bmpSongName.Size.Width / 1.25f ) ), 328f, ( ( bmpSongName.Size.Width / 1.25f ) * ( 285.0f / ( bmpSongName.Size.Width / 1.25f ) ) ), bmpSongName.Size.Height );
-                        }
-                        else
-                        {
-                            graphics.DrawImage( bmpSongName, 290f - ( bmpSongName.Size.Width / 1.25f ), 328f, ( bmpSongName.Size.Width / 1.25f ), bmpSongName.Size.Height );
-                        }
-                    }
-                    CDTXMania.t安全にDisposeする( ref bmpSongName );
-                    //CDTXMania.t安全にDisposeする( ref prvFont );
-                }
-                #endregion
-                #region[ ジャケット画像 ]
-                if( File.Exists( strFolderPath + CDTXMania.stage選曲.r確定されたスコア.譜面情報.Preimage ) )
-                {
-                    imgSongJacket = Image.FromFile( strFolderPath + CDTXMania.stage選曲.r確定されたスコア.譜面情報.Preimage );
-                    graphics.DrawImage( imgSongJacket, 4, 45, 280, 280 );
-                    CDTXMania.t安全にDisposeする( ref imgSongJacket );
-                }
-                else if( File.Exists( CSkin.Path( @"Graphics\5_preimage default.png" ) ) )
-                {
-                    imgSongJacket = Image.FromFile( CSkin.Path( @"Graphics\5_preimage default.png" ) );
-                    graphics.DrawImage( imgSongJacket, 4, 45, 280, 280 );
-                    CDTXMania.t安全にDisposeする( ref imgSongJacket );
-                }
-                #endregion
-
-                this.txベース曲パネル = new CTexture( CDTXMania.app.Device, bSongPanel, CDTXMania.TextureFormat, false );
-
-                CDTXMania.t安全にDisposeする( ref bSongPanel );
-                CDTXMania.t安全にDisposeする( ref imgSongPanel );
-                CDTXMania.t安全にDisposeする( ref graphics );
-            }
-            catch( CTextureCreateFailedException )
-			{
-				Trace.TraceError( "曲名テクスチャの作成に失敗しました。" );
-				this.txベース曲パネル = null;
-			}
-            
-        }
-        
-        private CTexture tカスタム曲名の生成( int nバー番号 )
-        {
-            //t3D描画の仕様上左詰や右詰が面倒になってしまうので、
-            //パネルにあらかじめ曲名とアーティスト名を埋め込んでおく。
-
-            Bitmap bCustomSongNameTexture;
-            Image imgCustomSongNameTexture;
-
-            Graphics graphics = Graphics.FromImage( new Bitmap( 1, 1 ) );
-
-            graphics.PageUnit = GraphicsUnit.Pixel;
-            bCustomSongNameTexture = new Bitmap( 240, 40 );
-
-            graphics = Graphics.FromImage( bCustomSongNameTexture );
-            graphics.DrawImage( bCustomSongNameTexture, 0, 0, 180, 25 );
-
-
-            string strPassAfter = "";
-            try
-            {
-                strPassAfter = this.stバー情報[ nバー番号 ].strDTXフォルダのパス;
-            }
-            catch
-            {
-                strPassAfter = "";
-            }
-
-            string strPath = ( strPassAfter + "TitleTexture.png" );
-            if( File.Exists( ( strPath ) ) )
-            {
-                imgCustomSongNameTexture = Image.FromFile( strPath );
-                imgCustomSongNameTexture = this.CreateNegativeImage( imgCustomSongNameTexture );
-                graphics.DrawImage( imgCustomSongNameTexture, 6, 1, 180, 25 );
-                imgCustomSongNameTexture.Dispose();
-            }
-            
-			//CDTXMania.t安全にDisposeする( ref this.stバー情報[ nバー番号 ].txカスタム曲名テクスチャ );
-			//CDTXMania.t安全にDisposeする( ref this.stバー情報[ nバー番号 ].txカスタムアーティスト名テクスチャ );
-            CTexture txTex = new CTexture( CDTXMania.app.Device, bCustomSongNameTexture, CDTXMania.TextureFormat, false );
-
-            graphics.Dispose();
-            bCustomSongNameTexture.Dispose();
-
-            return txTex;
-        }
-        private CTexture tカスタムアーティスト名テクスチャの生成( int nバー番号 )
-        {
-            //t3D描画の仕様上左詰や右詰が面倒になってしまうので、
-            //パネルにあらかじめ曲名とアーティスト名を埋め込んでおく。
-
-            Bitmap bCustomArtistNameTexture;
-            Image imgCustomArtistNameTexture;
-
-            Graphics graphics = Graphics.FromImage( new Bitmap( 1, 1 ) );
-
-            graphics.PageUnit = GraphicsUnit.Pixel;
-            bCustomArtistNameTexture = new Bitmap( 210, 27 );
-
-            graphics = Graphics.FromImage( bCustomArtistNameTexture );
-            graphics.DrawImage( bCustomArtistNameTexture, 0, 0, 196, 27 );
-
-
-            string strPassAfter = "";
-            try
-            {
-                strPassAfter = this.stバー情報[ nバー番号 ].strDTXフォルダのパス;
-            }
-            catch
-            {
-                strPassAfter = "";
-            }
-
-            string strPath = (strPassAfter + "ArtistTexture.png");
-            if (File.Exists((strPath)))
-            {
-                imgCustomArtistNameTexture = Image.FromFile(strPath);
-                imgCustomArtistNameTexture = this.CreateNegativeImage( imgCustomArtistNameTexture );
-                graphics.DrawImage(imgCustomArtistNameTexture, 16, 2, 196, 27);
-            }
-
-			//CDTXMania.t安全にDisposeする( ref this.stバー情報[ nバー番号 ].txカスタム曲名テクスチャ );
-			//CDTXMania.t安全にDisposeする( ref this.stバー情報[ nバー番号 ].txカスタムアーティスト名テクスチャ );
-            this.stバー情報[nバー番号].nアーティスト名テクスチャの長さdot = 210;
-            CTexture txTex = new CTexture( CDTXMania.app.Device, bCustomArtistNameTexture, CDTXMania.TextureFormat, false );
-
-            CDTXMania.t安全にDisposeする( ref graphics );
-            return txTex;
-        }
-
-        //DOBON.NETから拝借。
-        //http://dobon.net/vb/dotnet/graphics/drawnegativeimage.html
-        /// <summary>
-        /// 指定された画像からネガティブイメージを作成する
-        /// </summary>
-        /// <param name="img">基の画像</param>
-        /// <returns>作成されたネガティブイメージ</returns>
-        public Image CreateNegativeImage( Image img )
-        {
-            //ネガティブイメージの描画先となるImageオブジェクトを作成
-            Bitmap negaImg = new Bitmap( img.Width, img.Height );
-            //negaImgのGraphicsオブジェクトを取得
-            Graphics g = Graphics.FromImage( negaImg );
-
-            //ColorMatrixオブジェクトの作成
-            System.Drawing.Imaging.ColorMatrix cm =
-                new System.Drawing.Imaging.ColorMatrix();
-            //ColorMatrixの行列の値を変更して、色が反転されるようにする
-            cm.Matrix00 = -1;
-            cm.Matrix11 = -1;
-            cm.Matrix22 = -1;
-            cm.Matrix33 = 1;
-            cm.Matrix40 = cm.Matrix41 = cm.Matrix42 = cm.Matrix44 = 1;
-
-            //ImageAttributesオブジェクトの作成
-            System.Drawing.Imaging.ImageAttributes ia =
-                new System.Drawing.Imaging.ImageAttributes();
-            //ColorMatrixを設定する
-            ia.SetColorMatrix(cm);
-
-            //ImageAttributesを使用して色が反転した画像を描画
-            g.DrawImage( img,
-                new Rectangle( 0, 0, img.Width, img.Height ),
-                0, 0, img.Width, img.Height, GraphicsUnit.Pixel, ia );
-
-            //リソースを解放する
-            g.Dispose();
-
-            return negaImg;
         }
 		//-----------------
 		#endregion

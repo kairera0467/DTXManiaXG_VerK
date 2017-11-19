@@ -190,7 +190,7 @@ namespace DTXMania
 					this.ct登場アニメ用[ i ] = new CCounter( -i * 10, 100, 3, CDTXMania.Timer );
 
 				this.nスクロールタイマ = CSound管理.rc演奏用タイマ.n現在時刻;
-				CDTXMania.stage選曲.t選択曲変更通知();
+				CDTXMania.stage選曲GITADORA.t選択曲変更通知();
 				
 				base.b初めての進行描画 = false;
 			}
@@ -798,6 +798,26 @@ namespace DTXMania
                 //this.tPuzzleFIFOTest();
             }
 
+            #region [ スクロール地点の計算(描画はCActSelectShowCurrentPositionにて行う) #27648 ]
+            int py;
+			double d = 0;
+			if ( nNumOfItems > 1 )
+			{
+				d = ( 336 - 8 ) / (double) ( nNumOfItems - 1 );
+				py = (int) ( d * ( nCurrentPosition - 1 ) );
+			}
+			else
+			{
+				d = 0;
+				py = 0;
+			}
+			int delta = (int) ( d * this.n現在のスクロールカウンタ / 100 );
+			if ( py + delta <= 336 - 8 )
+			{
+				this.nスクロールバー相対y座標 = py + delta;
+			}
+			#endregion
+
             return 0;
         }
 
@@ -816,7 +836,7 @@ namespace DTXMania
         private CTexture txバー選択中枠;
         public STバー tx曲名バー;
         public ST選曲バー tx選曲バー;
-        private CTexture[] txTumbnail = new CTexture[ 15 ];
+        //private CTexture[] txTumbnail = new CTexture[ 15 ];
         private CTexture[] txMusicName = new CTexture[ 15 ];
         //private readonly Point[] ptバーの基本座標 = new Point[] {
         //    new Point(0x2c4, 5), new Point(0x272, 56),

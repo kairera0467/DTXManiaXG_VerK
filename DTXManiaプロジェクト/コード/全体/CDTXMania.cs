@@ -646,7 +646,12 @@ namespace DTXMania
 				{														// → songs.db等の書き込み時だと音切れするっぽい
 					actEnumSongs.On非活性化();
 					EnumSongs.SongListEnumCompletelyDone();
-					CDTXMania.stage選曲.bIsEnumeratingSongs = false;
+                    if( CDTXMania.bXGRelease ) {
+					    CDTXMania.stage選曲XG.bIsEnumeratingSongs = false;
+                    } else {
+					    CDTXMania.stage選曲GITADORA.bIsEnumeratingSongs = false;
+                    }
+
 				}
 				#region [ 曲検索スレッドの起動/終了 ]					// ここに"Enumerating Songs..."表示を集約
 				if ( !CDTXMania.bコンパクトモード )
@@ -668,7 +673,8 @@ namespace DTXMania
 								 !EnumSongs.IsSongListEnumStarted )
 							{
 								actEnumSongs.On活性化();
-								CDTXMania.stage選曲.bIsEnumeratingSongs = true;
+                                if( CDTXMania.bXGRelease ) CDTXMania.stage選曲XG.bIsEnumeratingSongs = true;
+								else CDTXMania.stage選曲GITADORA.bIsEnumeratingSongs = true;
 								EnumSongs.Init( CDTXMania.Songs管理.listSongsDB, CDTXMania.Songs管理.nSongsDBから取得できたスコア数 );	// songs.db情報と、取得した曲数を、新インスタンスにも与える
 								EnumSongs.StartEnumFromDisk();		// 曲検索スレッドの起動・開始
 								if ( CDTXMania.Songs管理.nSongsDBから取得できたスコア数 == 0 )	// もし初回起動なら、検索スレッドのプライオリティをLowestでなくNormalにする
@@ -710,10 +716,12 @@ namespace DTXMania
 							if ( EnumSongs.IsSongListEnumerated )
 							{
 								actEnumSongs.On非活性化();
-								CDTXMania.stage選曲.bIsEnumeratingSongs = false;
+                                if( CDTXMania.bXGRelease ) CDTXMania.stage選曲XG.bIsEnumeratingSongs = false;
+								else CDTXMania.stage選曲GITADORA.bIsEnumeratingSongs = false;
 
 								bool bRemakeSongTitleBar = ( r現在のステージ.eステージID == CStage.Eステージ.選曲 ) ? true : false;
-								CDTXMania.stage選曲.Refresh( EnumSongs.Songs管理, bRemakeSongTitleBar );
+                                if( CDTXMania.bXGRelease ) CDTXMania.stage選曲XG.Refresh( EnumSongs.Songs管理, bRemakeSongTitleBar );
+								else CDTXMania.stage選曲GITADORA.Refresh( EnumSongs.Songs管理, bRemakeSongTitleBar );
 								EnumSongs.SongListEnumCompletelyDone();
 							}
 							#endregion

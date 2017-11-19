@@ -140,7 +140,8 @@ namespace DTXMania
 					{
 						setDef = new CSetDef( c曲リストノード.pathSetDefの絶対パス );
 						nブロック番号inSetDef = c曲リストノード.SetDefのブロック番号;
-						n曲番号inブロック = CDTXMania.stage選曲.act曲リスト.n現在のアンカ難易度レベルに最も近い難易度レベルを返す( c曲リストノード );
+                        if( CDTXMania.bXGRelease ) n曲番号inブロック = CDTXMania.stage選曲XG.act曲リスト.n現在のアンカ難易度レベルに最も近い難易度レベルを返す( c曲リストノード );
+                        else n曲番号inブロック = CDTXMania.stage選曲GITADORA.act曲リスト.n現在のアンカ難易度レベルに最も近い難易度レベルを返す( c曲リストノード );
 					}
 
 					foreach( CDTXMania.STPlugin stPlugin in CDTXMania.app.listプラグイン )

@@ -19,35 +19,6 @@ namespace DTXMania
 
 		public CActSelect曲リストXG()
 		{
-			this.r現在選択中の曲 = null;
-			this.n現在のアンカ難易度レベル = 0;
-			base.b活性化してない = true;
-			this.bIsEnumeratingSongs = false;
-
-            this.stパネルマップ = null;
-            this.stパネルマップ = new STATUSPANEL[ 12 ];		// yyagi: 以下、手抜きの初期化でスマン
-            string[] labels = new string[ 12 ] {
-            "DTXMANIA",     //0
-            "DEBUT",        //1
-            "NOVICE",       //2
-            "REGULAR",      //3
-            "EXPERT",       //4
-            "MASTER",       //5
-            "BASIC",        //6
-            "ADVANCED",     //7
-            "EXTREME",      //8
-            "RAW",          //9
-            "RWS",          //10
-            "REAL"          //11
-            };
-            int[] status = new int[ 12 ] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
-
-            for( int i = 0; i < 12; i++ )
-            {
-                this.stパネルマップ[ i ] = default(STATUSPANEL);
-                this.stパネルマップ[ i ].status = status[i];
-                this.stパネルマップ[ i ].label = labels[i];
-            }
 		}
         
 		// CActivity 実装
@@ -57,40 +28,10 @@ namespace DTXMania
 			if( this.b活性化してる )
 				return;
 
-			this.e楽器パート = E楽器パート.DRUMS;
-			this.b登場アニメ全部完了 = false;
-			this.n目標のスクロールカウンタ = 0;
-			this.n現在のスクロールカウンタ = 0;
-			this.nスクロールタイマ = -1;
-
-			// フォント作成。
-			// 曲リスト文字は２倍（面積４倍）でテクスチャに描画してから縮小表示するので、フォントサイズは２倍とする。
-
-			FontStyle regular = FontStyle.Regular;
-			if( CDTXMania.ConfigIni.b選曲リストフォントを斜体にする ) regular |= FontStyle.Italic;
-			if( CDTXMania.ConfigIni.b選曲リストフォントを太字にする ) regular |= FontStyle.Bold;
-			this.ft曲リスト用フォント = new Font(
-				CDTXMania.ConfigIni.str選曲リストフォント,
-				(float) ( CDTXMania.ConfigIni.n選曲リストフォントのサイズdot * 2 * Scale.Y ),		// 後でScale.Yを掛けないように直すこと(Config.ini初期値変更)
-				regular,
-				GraphicsUnit.Pixel
-			);
             FontStyle fStyle = CDTXMania.ConfigIni.b選曲リストフォントを太字にする ? FontStyle.Bold : FontStyle.Regular;
             this.prvPanelFont = new CPrivateFastFont( new FontFamily( CDTXMania.ConfigIni.str選曲リストフォント ), 18, fStyle );
 
-			// 現在選択中の曲がない（＝はじめての活性化）なら、現在選択中の曲をルートの先頭ノードに設定する。
-
-			if( ( this.r現在選択中の曲 == null ) && ( CDTXMania.Songs管理.list曲ルート.Count > 0 ) )
-				this.r現在選択中の曲 = CDTXMania.Songs管理.list曲ルート[ 0 ];
-
-
-			// バー情報を初期化する。
-
-			this.tバーの初期化();
-
-			base.On活性化();
-
-			this.t選択曲が変更された(true);		// #27648 2012.3.31 yyagi 選曲画面に入った直後の 現在位置/全アイテム数 の表示を正しく行うため
+            base.On活性化();
 		}
 		public override void On非活性化()
 		{
@@ -246,7 +187,7 @@ namespace DTXMania
 					this.ct登場アニメ用[ i ] = new CCounter( -i * 10, 100, 3, CDTXMania.Timer );
 
 				this.nスクロールタイマ = CSound管理.rc演奏用タイマ.n現在時刻;
-				CDTXMania.stage選曲.t選択曲変更通知();
+				CDTXMania.stage選曲XG.t選択曲変更通知();
 				
 				base.b初めての進行描画 = false;
 			}
@@ -956,6 +897,26 @@ namespace DTXMania
                 }
                 #endregion
             }
+
+            #region [ スクロール地点の計算(描画はCActSelectShowCurrentPositionにて行う) #27648 ]
+            int py;
+			double d = 0;
+			if ( nNumOfItems > 1 )
+			{
+				d = ( 336 - 8 ) / (double) ( nNumOfItems - 1 );
+				py = (int) ( d * ( nCurrentPosition - 1 ) );
+			}
+			else
+			{
+				d = 0;
+				py = 0;
+			}
+			int delta = (int) ( d * this.n現在のスクロールカウンタ / 100 );
+			if ( py + delta <= 336 - 8 )
+			{
+				this.nスクロールバー相対y座標 = py + delta;
+			}
+			#endregion
             
 			return 0;
 		}
@@ -964,14 +925,7 @@ namespace DTXMania
 
 		#region [ private ]
 		//-----------------
-
-        /// <summary>
-		/// <para>SSTFファイル絶対パス(key)とサムネイル画像(value)との辞書。</para>
-		/// <para>アプリの起動から終了まで単純に増加を続け、要素が減ることはない。</para>
-        /// <para>正直この方法は好ましくないような気がする。</para>
-		/// </summary>
-		protected Dictionary<string, CTexture> dicThumbnail = new Dictionary<string, CTexture>();
-        protected ST中心点[] stマトリックス座標 = new ST中心点[] {
+        private ST中心点[] stマトリックス座標 = new ST中心点[] {
 			#region [ 実は円弧配置になってない。射影行列間違ってるよスターレインボウ見せる気かよ… ]
 			//-----------------        
             new ST中心点() { x = -940.0000f, y = 4f, z = 320f, rotY = 0.4150f },
@@ -993,7 +947,7 @@ namespace DTXMania
 		};
         
 		private CTexture txSongNotFound, txEnumeratingSongs;
-        private CTexture[] txTumbnail = new CTexture[ 15 ];
+        //private CTexture[] txTumbnail = new CTexture[ 15 ];
         private CTexture txクリアランプ;
         private CTexture tx選曲パネル;
         private CTexture tx選択されている曲の曲名;
@@ -1002,9 +956,9 @@ namespace DTXMania
         private CTexture txパネル;
         private CTexture txパネル帯;
         private CPrivateFastFont prvPanelFont;
-		protected STバー tx曲名バー;
-		protected STバー情報[] stバー情報 = new STバー情報[ 15 ];
-		protected ST選曲バー tx選曲バー;
+		//protected STバー tx曲名バー;
+		//protected STバー情報[] stバー情報 = new STバー情報[ 15 ];
+		//protected ST選曲バー tx選曲バー;
 
         //選択した後の演出用
         //難易度ラベル、レベル、オプション →ステータスパネルクラスへ
@@ -1014,7 +968,7 @@ namespace DTXMania
 		public override void tバーの初期化()
 		{
 			C曲リストノード song = this.r現在選択中の曲;
-			
+
 			if( song == null )
 				return;
 
@@ -1057,7 +1011,7 @@ namespace DTXMania
 				song = this.r次の曲( song );
 			}
 
-			this.n現在の選択行 = 7;
+            this.n現在の選択行 = 7;
 		}
         private void tパスを指定してサムネイル画像を生成する( int nバー番号, string strDTXPath, Eバー種別 eType )
         {
@@ -1151,7 +1105,7 @@ namespace DTXMania
                 Graphics graphics = Graphics.FromImage( bSongPanel );
 
                 Image imgSongPanel;
-                Image imgSongJacket;
+                //Image imgSongJacket;
                 Image imgCustomSongNameTexture;
                 Image imgCuttomArtistNameTexture;
                 bool bFoundTitleTexture = false;
@@ -1251,9 +1205,10 @@ namespace DTXMania
                 CDTXMania.t安全にDisposeする( ref imgSongPanel );
                 CDTXMania.t安全にDisposeする( ref graphics );
             }
-            catch( CTextureCreateFailedException )
+            catch( Exception ex )
 			{
-				Trace.TraceError( "曲名テクスチャの作成に失敗しました。[{0}]", str曲名 );
+                Trace.TraceError( ex.StackTrace );
+				//Trace.TraceError( "曲名テクスチャの作成に失敗しました。[{0}]", str曲名 );
 				this.stバー情報[ nバー番号 ].txパネル = null;
 			}
             

@@ -19,6 +19,9 @@ namespace DTXMania
 		public void t選択曲が変更された()
 		{
 			Cスコア cスコア = CDTXMania.stage選曲.r現在選択中のスコア;
+            if( CDTXMania.bXGRelease ) cスコア = CDTXMania.stage選曲XG.r現在選択中のスコア;
+            else cスコア = CDTXMania.stage選曲GITADORA.r現在選択中のスコア;
+
 			if( cスコア != null )
 			{
 				Bitmap image = new Bitmap( 1, 1 );
