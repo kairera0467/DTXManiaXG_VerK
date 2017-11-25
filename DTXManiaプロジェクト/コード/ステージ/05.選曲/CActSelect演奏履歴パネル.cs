@@ -18,8 +18,12 @@ namespace DTXMania
 		}
 		public void t選択曲が変更された()
 		{
-			Cスコア cスコア = CDTXMania.stage選曲.r現在選択中のスコア;
-			if( ( cスコア != null ) && !CDTXMania.stage選曲.bスクロール中 )
+			Cスコア cスコア;
+            bool bスクロール中 = false;
+            if( CDTXMania.bXGRelease ) { cスコア = CDTXMania.stage選曲XG.r現在選択中のスコア; bスクロール中 = CDTXMania.stage選曲XG.bスクロール中; }
+            else { cスコア = CDTXMania.stage選曲GITADORA.r現在選択中のスコア; bスクロール中 = CDTXMania.stage選曲GITADORA.bスクロール中; }
+
+			if( ( cスコア != null ) && !bスクロール中 )
 			{
 				try
 				{

@@ -288,7 +288,10 @@ namespace DTXMania
                         }
                         this.txWhite.t2D描画( CDTXMania.app.Device, this.n白X[ i ], this.n白Y[ i ], rectangle );
                     }
-                    this.t難易度パネルを描画する( CSongNode.ar難易度ラベル[ CDTXMania.stage選曲.n確定された曲の難易度 ], 941, 19 );
+                    if( CDTXMania.bXGRelease )
+                        this.t難易度パネルを描画する( CSongNode.ar難易度ラベル[ CDTXMania.stage選曲XG.n確定された曲の難易度 ], 941, 19 );
+                    else
+                        this.t難易度パネルを描画する( CSongNode.ar難易度ラベル[ CDTXMania.stage選曲GITADORA.n確定された曲の難易度 ], 941, 19 );
                     this.tレベル大文字表示( 1104, 22, n表示Level.ToString() );
                     this.tレベル小文字表示( 1126, 23, "." + n表示LevelDec );
                 }

@@ -40,6 +40,8 @@ namespace DTXMania
                     this.iDifficultyNumber = CDTXMania.tテクスチャをImageで読み込む( CSkin.Path( @"Graphics\7_Difficulty_number_XG2.png" ) );
                 }
 
+                this.txSongNamePlate = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_Drums Songpanel.png" ) );
+
                 #region[ ネームプレート本体 ]
                 this.iNamePlate = CDTXMania.tテクスチャをImageで読み込む( CSkin.Path( @"Graphics\7_nameplate.png" ) );
                 if( CDTXMania.ConfigIni.eNamePlateType == Eタイプ.A )
@@ -70,7 +72,7 @@ namespace DTXMania
                 gNamePlate.PageUnit = GraphicsUnit.Pixel;
 
                 if ( string.IsNullOrEmpty( CDTXMania.DTX.TITLE ) || ( !CDTXMania.bコンパクトモード && CDTXMania.ConfigIni.b曲名表示をdefのものにする ) )
-                    this.strPanelString = CDTXMania.stage選曲.r現在選択中の曲.strタイトル;
+                    this.strPanelString = CDTXMania.stage選曲GITADORA.r現在選択中の曲.strタイトル;
                 else
                     this.strPanelString = CDTXMania.DTX.TITLE;
 
@@ -331,6 +333,7 @@ namespace DTXMania
                 //フォント 5個
                 CDTXMania.tテクスチャの解放( ref this.txNamePlate );
                 CDTXMania.tテクスチャの解放( ref this.txScore );
+                CDTXMania.tテクスチャの解放( ref this.txSongNamePlate );
                 CDTXMania.t安全にDisposeする( ref this.iRisky );
                 CDTXMania.t安全にDisposeする( ref this.iDrumspeed );
                 CDTXMania.t安全にDisposeする( ref this.pfNameFont );
@@ -364,7 +367,12 @@ namespace DTXMania
                 //if ( CDTXMania.ConfigIni.bShowMusicInfo )
                 if( this.txNamePlate != null )
                 {
-                    this.txNamePlate.t3D描画( CDTXMania.app.Device, identity );
+                    //this.txNamePlate.t3D描画( CDTXMania.app.Device, identity );
+                }
+
+                if( this.txSongNamePlate != null )
+                {
+                    this.txSongNamePlate.t2D描画( CDTXMania.app.Device, 969, -2 );
                 }
 
 
@@ -435,7 +443,7 @@ namespace DTXMania
                                 matScoreXG *= SlimDX.Matrix.RotationY(-0.8f);
                                 //matScoreXG *= SlimDX.Matrix.RotationZ(-0.01f);
                             }
-                            this.txScore.t3D描画(CDTXMania.app.Device, matScoreXG, rectangle);
+                            //this.txScore.t3D描画(CDTXMania.app.Device, matScoreXG, rectangle);
                         }
                     }
                 }
@@ -485,7 +493,7 @@ namespace DTXMania
                                 matScoreXG *= SlimDX.Matrix.RotationY(-0.8f);
                                 //matScoreXG *= SlimDX.Matrix.RotationZ(-0.01f);
                             }
-                            this.txScore.t3D描画(CDTXMania.app.Device, matScoreXG, rectangle);
+                            //this.txScore.t3D描画(CDTXMania.app.Device, matScoreXG, rectangle);
                         }
                     }
                 }
@@ -520,6 +528,8 @@ namespace DTXMania
         private CPrivateFastFont pfSongTitleFont;
         private CPrivateFastFont pfPlayerNameFont;
         private CPrivateFastFont pfGroupNameFont;
+
+        private CTexture txSongNamePlate;
         //-----------------
         #endregion
     }

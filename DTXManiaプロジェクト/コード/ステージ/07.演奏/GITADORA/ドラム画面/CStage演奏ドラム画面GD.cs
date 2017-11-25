@@ -35,7 +35,7 @@ namespace DTXMania
 			base.list子Activities.Add( this.actLaneFlushD = new CAct演奏DrumsレーンフラッシュD() );
 			base.list子Activities.Add( this.actRGB = new CAct演奏DrumsRGB() );
 			base.list子Activities.Add( this.actScore = new CAct演奏Drumsスコア() );
-			base.list子Activities.Add( this.actStatusPanels = new CAct演奏Drumsステータスパネル() );
+			base.list子Activities.Add( this.actStatusPanels = new CAct演奏DrumsステータスパネルGD() );
 			base.list子Activities.Add( this.actWailingBonus = new CAct演奏DrumsWailingBonus() );
 			base.list子Activities.Add( this.act譜面スクロール速度 = new CAct演奏スクロール速度() );
 			base.list子Activities.Add( this.actAVI = new CAct演奏AVI() );
@@ -204,14 +204,12 @@ namespace DTXMania
 				//this.t進行描画_パネル文字列();
 				this.t進行描画_スコア();
 				this.t進行描画_BGA();
-                this.actBPMBar.On進行描画();
+                //this.actBPMBar.On進行描画();
                 this.t進行描画_DANGER();
-				this.t進行描画_ギターベースフレーム();
-                this.t進行描画_ギターベース判定ライン();
                 this.actLane.On進行描画();
                 //this.actAVI.tクリップをレーン上に表示する();
 				this.t進行描画_ステータスパネル();
-                this.t進行描画_グラフ();   // #24074 2011.01.23 add ikanick
+                //this.t進行描画_グラフ();   // #24074 2011.01.23 add ikanick
 				this.t進行描画_レーンフラッシュD();
 				if ( this.e判定表示優先度 == E判定表示優先度.Chipより下 )
 				{
@@ -227,12 +225,24 @@ namespace DTXMania
                 this.actShutter.On進行描画();
                 this.t進行描画_ドラムパッド();
                 this.txフレーム.t2D描画( CDTXMania.app.Device, 0, 0 );
+
+                //曲位置バー(仮)
+                //画像もろもろつけたらクラス作って移動させます。
+                {
+                    //
+                    double dbNowPos = ( ( ( ( double ) CDTXMania.Timer.n現在時刻 ) / 1000.0 ) );
+                    double dbEndPos = ( CDTXMania.DTX.listChip.Count > 0 ) ? CDTXMania.DTX.listChip[ CDTXMania.DTX.listChip.Count - 1 ].n発声時刻ms / 1000.0 : 0;
+                    double db現在の曲進行割合 = dbNowPos / dbEndPos;
+
+                    CDTXMania.act文字コンソール.tPrint( 860, db現在の曲進行割合 <= 1.0 ? 575 - (int)( 512 * db現在の曲進行割合 ) : 63, C文字コンソール.Eフォント種別.赤, "-----" );
+                }
+
                 this.t進行描画_判定ライン();
 				this.t進行描画_演奏情報();
 
                 this.actAVI.tウィンドウクリップを表示する();
                 //this.actAVI.tウィンドウクリップを3D表示する();
-                this.t進行描画_ゲージ();
+                //this.t進行描画_ゲージ();
 				if ( this.e判定表示優先度 == E判定表示優先度.Chipより上 )
 				{
 					this.t進行描画_RGBボタン();
@@ -289,6 +299,7 @@ namespace DTXMania
 		#region [ private ]
 		//-----------------
 		private CAct演奏DrumsチップファイアD_GD actChipFireD;
+        //private CAct演奏DrumsステータスパネルGD actStatusPanels;
 		private CAct演奏DrumsパッドGD actPad;
         private CAct演奏DrumsレーンGD actLane;
 		private bool bフィルイン中;

@@ -18,7 +18,7 @@ namespace DTXMania
 		}
 		public void t選択曲が変更された()
 		{
-			Cスコア cスコア = CDTXMania.stage選曲.r現在選択中のスコア;
+			Cスコア cスコア;
             if( CDTXMania.bXGRelease ) cスコア = CDTXMania.stage選曲XG.r現在選択中のスコア;
             else cスコア = CDTXMania.stage選曲GITADORA.r現在選択中のスコア;
 

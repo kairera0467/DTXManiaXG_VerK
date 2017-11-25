@@ -662,7 +662,7 @@ namespace DTXMania
 		protected CActFIFOBlack actFI;
 		protected CActFIFOBlack actFO;
 		protected CActFIFOWhite actFOClear;
-		protected CAct演奏ゲージ共通 actGauge;
+		public CAct演奏ゲージ共通 actGauge;
         public CAct演奏BPMバー共通 actBPMBar;
         protected CAct演奏グラフ actGraph;
 		protected CAct演奏判定文字列共通 actJudgeString;

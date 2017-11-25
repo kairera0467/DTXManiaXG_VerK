@@ -189,10 +189,37 @@ namespace DTXMania
                     #region[ ドラム ]
                     if( CDTXMania.ConfigIni.bDrums有効 )
                     {
-                        if( this.tx難易度パネル != null )
+                        if ( this.tx難易度パネル != null )
                         {
                             this.tx難易度パネル.t2D描画( CDTXMania.app.Device, 428, 352 );
                         }
+                        for( int i = 0; i < 5; i++ )
+                        {
+                            int[] n難易度整数 = new int[5];
+                            int[] n難易度小数 = new int[5];
+                            n難易度整数[ i ] = (int)this.n現在選択中の曲のレベル難易度毎DGB[ i ].Drums / 10;
+                            n難易度小数[ i ] = ( this.n現在選択中の曲のレベル難易度毎DGB[ i ].Drums - (n難易度整数[ i ] * 10 ) ) * 10;
+                            n難易度小数[ i ] += this.n現在選択中の曲のレベル小数点難易度毎DGB[ i ].Drums;
+
+                            //if( this.str難易度ラベル[ i ] != null && this.b現在選択中の曲に譜面がある[ i ][ j ])
+                            //{
+                            //    this.t大文字表示(73 + this.n本体X[ j ] + (i * 143), 19 + this.n本体Y[j] - y差分[i], string.Format("{0:0}", n難易度整数[i]));
+                            //    this.t小文字表示(102 + this.n本体X[ j ] + (i * 143), 37 + this.n本体Y[j] - y差分[i], string.Format("{0,2:00}", n難易度小数[i]));
+                            //    this.tx難易度数字XG.t2D描画(CDTXMania.app.Device, 94 + this.n本体X[j] + (i * 143), 51 + this.n本体Y[j] - y差分[i], new Rectangle(145, 54, 7, 8));
+                            //}
+                            //else if ((this.str難易度ラベル[i] != null && !this.b現在選択中の曲に譜面がある[i][j]) || CDTXMania.stage選曲XG.r現在選択中の曲.eノード種別 == C曲リストノード.Eノード種別.RANDOM)
+                            //{
+                            //    this.t大文字表示(73 + this.n本体X[j] + (i * 143), 19 + this.n本体Y[j] - y差分[i], ("-"));
+                            //    this.t小文字表示(102 + this.n本体X[j] + (i * 143), 37 + this.n本体Y[j] - y差分[i], ("--"));
+                            //    this.tx難易度数字XG.t2D描画(CDTXMania.app.Device, 94 + this.n本体X[j] + (i * 143), 51 + this.n本体Y[j] - y差分[i], new Rectangle(145, 54, 7, 8));
+                            //}
+
+                            if( this.str難易度ラベル[ i ] != null && this.b現在選択中の曲に譜面がある[ i ].Drums )
+                            {
+                                CDTXMania.act文字コンソール.tPrint( 570, 634 - ( 60 * i ), C文字コンソール.Eフォント種別.白, string.Format( "{0:0}", n難易度整数[i] ) + "." + string.Format("{0,2:00}", n難易度小数[i]) );
+                            }
+                        }
+
                         this.t難易度カーソル描画( 426, base.n現在選択中の曲の難易度 );
                     }
                     #endregion

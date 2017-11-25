@@ -215,8 +215,8 @@ namespace DTXMania
 				this.t進行描画_スコア();
 				this.t進行描画_BGA();
                 this.actDrumSet.On進行描画();
-                this.actBPMBar.On進行描画();
                 this.t進行描画_DANGER();
+                this.actBPMBar.On進行描画();
 				this.t進行描画_ギターベースフレーム();
 				this.t進行描画_レーンフラッシュGB();
                 this.t進行描画_ギターベース判定ライン();
