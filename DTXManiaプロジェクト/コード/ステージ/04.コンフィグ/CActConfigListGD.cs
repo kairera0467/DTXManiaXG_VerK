@@ -377,7 +377,7 @@ namespace DTXMania
             #endregion
 
             #region[ カーソル ]
-            if( this.b項目リスト側にフォーカスがある )
+            if( this.b項目リスト側にフォーカスがある && this.txカーソル != null )
             {
                 this.txカーソル.t2D描画( CDTXMania.app.Device, 413, 193 );
             }
