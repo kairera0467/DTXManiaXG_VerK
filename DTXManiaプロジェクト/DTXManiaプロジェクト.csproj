@@ -110,6 +110,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="コード\ステージ\CActFIFOPuzzle.cs" />
     <Compile Include="コード\アイテム\CItemBase.cs" />
     <Compile Include="コード\アイテム\CItemInteger.cs" />
     <Compile Include="コード\アイテム\CItemList.cs" />
@@ -161,6 +162,7 @@
     <Compile Include="コード\ステージ\07.演奏\CAct演奏RGB共通.cs" />
     <Compile Include="コード\ステージ\07.演奏\CAct演奏WailingBonus共通.cs" />
     <Compile Include="コード\ステージ\07.演奏\CAct演奏ゲージ共通.cs" />
+    <Compile Include="コード\ステージ\07.演奏\CAct演奏クリアバー共通.cs" />
     <Compile Include="コード\ステージ\07.演奏\CAct演奏スクロール速度.cs" />
     <Compile Include="コード\ステージ\07.演奏\CAct演奏スコア共通.cs" />
     <Compile Include="コード\ステージ\07.演奏\CAct演奏ステージ失敗.cs" />
@@ -188,6 +190,7 @@
     <Compile Include="コード\ステージ\07.演奏\GITADORA\ギター画面\CAct演奏GuitarレーンフラッシュGB_GD.cs" />
     <Compile Include="コード\ステージ\07.演奏\GITADORA\ギター画面\CAct演奏Guitar判定文字列GD.cs" />
     <Compile Include="コード\ステージ\07.演奏\GITADORA\ギター画面\CStage演奏ギター画面GD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ドラム画面\CAct演奏Drumsクリアバー.cs" />
     <Compile Include="コード\ステージ\07.演奏\GITADORA\ドラム画面\CAct演奏DrumsBPMバーGD.cs" />
     <Compile Include="コード\ステージ\07.演奏\GITADORA\ドラム画面\CAct演奏DrumsDangerGD.cs" />
     <Compile Include="コード\ステージ\07.演奏\GITADORA\ドラム画面\CAct演奏DrumsゲージGD.cs" />

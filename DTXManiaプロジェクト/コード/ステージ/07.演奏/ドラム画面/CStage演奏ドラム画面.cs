@@ -177,7 +177,7 @@ namespace DTXMania
 					this.ctチップ模様アニメ.Bass = new CCounter( 0, 0x17, 20, CDTXMania.Timer );
 					this.ctWailingチップ模様アニメ = new CCounter( 0, 4, 50, CDTXMania.Timer );
 
-                    this.actBPMBar.ctBPMバー = new CCounter( 1, 16, (int)( ( 60.0 / ( CDTXMania.stage演奏ドラム画面.actPlayInfo.dbBPM ) / 16.0 ) * 1000.0 ), CDTXMania.Timer);
+                    this.actBPMBar.ctBPMバー = new CCounter( 1, 16, (int)( ( 60.0 / ( CDTXMania.stage演奏ドラム画面.actPlayInfo.dbBPM ) / 16.0 ) * 1000.0 ), CDTXMania.Timer );
                     this.ctコンボ動作タイマ = new CCounter( 1, 16, (int)( ( 60.0 / ( CDTXMania.stage演奏ドラム画面.actPlayInfo.dbBPM ) / 16.0 ) * 1000.0 ), CDTXMania.Timer );
 
                     // this.actChipFireD.Start( Eレーン.HH );	// #31554 2013.6.12 yyagi
@@ -221,7 +221,6 @@ namespace DTXMania
 				this.t進行描画_レーンフラッシュGB();
                 this.t進行描画_ギターベース判定ライン();
                 this.actLane.On進行描画();
-                //this.actAVI.tクリップをレーン上に表示する();
 				this.t進行描画_ステータスパネル();
                 this.t進行描画_グラフ();   // #24074 2011.01.23 add ikanick
 				this.t進行描画_レーンフラッシュD();
@@ -241,7 +240,6 @@ namespace DTXMania
 				this.t進行描画_演奏情報();
 				this.t進行描画_ドラムパッド();
                 this.actAVI.tウィンドウクリップを表示する();
-                //this.actAVI.tウィンドウクリップを3D表示する();
                 this.t進行描画_ゲージ();
 				if ( this.e判定表示優先度 == E判定表示優先度.Chipより上 )
 				{

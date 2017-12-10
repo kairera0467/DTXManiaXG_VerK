@@ -386,7 +386,8 @@ namespace DTXMania
             #region[ 説明文パネル ]
             if( this.b項目リスト側にフォーカスがある && this.n目標のスクロールカウンタ == 0 )
             {
-                this.tx説明文パネル.t2D描画( CDTXMania.app.Device, 601, 252 );
+                if( this.tx説明文パネル != null )
+                    this.tx説明文パネル.t2D描画( CDTXMania.app.Device, 601, 252 );
                 if ( txSkinSample1 != null && this.n目標のスクロールカウンタ == 0 && this.list項目リスト[ this.n現在の選択項目 ] == this.iSystemSkinSubfolder )
 				{
 					txSkinSample1.t2D描画( CDTXMania.app.Device, 615 - 60, 442 - 106 );

@@ -806,6 +806,19 @@ namespace DTXMania
 			cスコア.譜面情報.曲種別 = (CDTX.E種別) br.ReadInt32();
 			cスコア.譜面情報.Bpm = br.ReadDouble();
 			cスコア.譜面情報.Duration = br.ReadInt32();
+            //作業部屋#50730
+            cスコア.譜面情報.n可視チップ数.LC = br.ReadInt32();
+            cスコア.譜面情報.n可視チップ数.HH = br.ReadInt32();
+            cスコア.譜面情報.n可視チップ数.HHO = br.ReadInt32();
+            cスコア.譜面情報.n可視チップ数.LP = br.ReadInt32();
+            cスコア.譜面情報.n可視チップ数.LBD = br.ReadInt32();
+            cスコア.譜面情報.n可視チップ数.SD = br.ReadInt32();
+            cスコア.譜面情報.n可視チップ数.HT = br.ReadInt32();
+            cスコア.譜面情報.n可視チップ数.BD = br.ReadInt32();
+            cスコア.譜面情報.n可視チップ数.LT = br.ReadInt32();
+            cスコア.譜面情報.n可視チップ数.FT = br.ReadInt32();
+            cスコア.譜面情報.n可視チップ数.CY = br.ReadInt32();
+            cスコア.譜面情報.n可視チップ数.RD = br.ReadInt32();
 
 //Debug.WriteLine( "songs.db: " + cスコア.ファイル情報.ファイルの絶対パス );
 			return cスコア;
@@ -869,6 +882,7 @@ namespace DTXMania
 									c曲リストノード.arスコア[ i ].譜面情報.曲種別 = cdtx.e種別;
 									c曲リストノード.arスコア[ i ].譜面情報.Bpm = cdtx.BPM;
 									c曲リストノード.arスコア[ i ].譜面情報.Duration = 0;	//  (cdtx.listChip == null)? 0 : cdtx.listChip[ cdtx.listChip.Count - 1 ].n発声時刻ms;
+                                    c曲リストノード.arスコア[ i ].譜面情報.n可視チップ数 = cdtx.n可視チップ数;
 									this.nファイルから反映できたスコア数++;
 									cdtx.On非活性化();
 //Debug.WriteLine( "★" + this.nファイルから反映できたスコア数 + " " + c曲リストノード.arスコア[ i ].譜面情報.タイトル );
@@ -1175,6 +1189,19 @@ namespace DTXMania
 					bw.Write( (int) node.arスコア[ i ].譜面情報.曲種別 );
 					bw.Write( node.arスコア[ i ].譜面情報.Bpm );
 					bw.Write( node.arスコア[ i ].譜面情報.Duration );
+                    //作業部屋#50730 ノーツグラフ用。後日GuitarBassも追加する。
+                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数.LC );
+                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数.HH );
+                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数.HHO );
+                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数.LP );
+                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数.LBD );
+                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数.SD );
+                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数.HT );
+                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数.BD );
+                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数.LT );
+                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数.FT );
+                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数.CY );
+                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数.RD );
 					this.nSongsDBへ出力できたスコア数++;
 				}
 			}
@@ -1739,7 +1766,7 @@ Debug.WriteLine( dBPM + ":" + c曲リストノード.strタイトル );
 
 		#region [ private ]
 		//-----------------
-        private const string SONGSDB_VERSION = "SongsDB3(ver.K)rev3";
+        private const string SONGSDB_VERSION = "SongsDB3(ver.K)rev4";
 		private List<string> listStrBoxDefSkinSubfolderFullName;
 
 		private int t比較0_共通( C曲リストノード n1, C曲リストノード n2 )

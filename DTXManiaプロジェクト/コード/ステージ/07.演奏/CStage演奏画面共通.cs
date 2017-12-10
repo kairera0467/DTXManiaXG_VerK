@@ -676,6 +676,7 @@ namespace DTXMania
 		protected CAct演奏ステージ失敗 actStageFailed;
 		protected CAct演奏ステータスパネル共通 actStatusPanels;
 		protected CAct演奏WailingBonus共通 actWailingBonus;
+        protected CAct演奏クリアバー共通 actClearBar;
 		protected CAct演奏スクロール速度 act譜面スクロール速度;
 		public    C演奏判定ライン座標共通 演奏判定ライン座標;
 		protected bool bPAUSE;
@@ -1456,6 +1457,7 @@ namespace DTXMania
 							{
 								this.nヒット数_Auto含まない.Drums.Miss++;
 							}
+                            this.actClearBar.t区間内ミス通知( pChip.e楽器パート );
 							break;
 						default:
 							this.nヒット数_Auto含む.Drums[ (int) eJudgeResult ]++;
@@ -1502,6 +1504,7 @@ namespace DTXMania
 							{
 								this.nヒット数_Auto含まない[ indexInst ].Miss++;
 							}
+                            this.actClearBar.t区間内ミス通知( pChip.e楽器パート );
 							break;
 						default:	// #24068 2011.1.10 ikanick changed
 							// #24167 2011.1.16 yyagi changed

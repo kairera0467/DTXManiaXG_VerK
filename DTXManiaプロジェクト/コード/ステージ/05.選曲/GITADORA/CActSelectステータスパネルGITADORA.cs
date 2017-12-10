@@ -221,6 +221,18 @@ namespace DTXMania
                         }
 
                         this.t難易度カーソル描画( 426, base.n現在選択中の曲の難易度 );
+
+                        //ノート数グラフ
+                        CDTXMania.act文字コンソール.tPrint( 380, 400, C文字コンソール.Eフォント種別.白, "LC:" + CDTXMania.stage選曲GITADORA.r現在選択中のスコア.譜面情報.n可視チップ数.LC.ToString() );
+                        CDTXMania.act文字コンソール.tPrint( 380, 400 + 16, C文字コンソール.Eフォント種別.白, "HH:" + ( CDTXMania.stage選曲GITADORA.r現在選択中のスコア.譜面情報.n可視チップ数.HH + CDTXMania.stage選曲GITADORA.r現在選択中のスコア.譜面情報.n可視チップ数.HHO ).ToString() );
+                        CDTXMania.act文字コンソール.tPrint( 380, 400 + 16 * 2, C文字コンソール.Eフォント種別.白, "LP:" + CDTXMania.stage選曲GITADORA.r現在選択中のスコア.譜面情報.n可視チップ数.LP.ToString() );
+                        CDTXMania.act文字コンソール.tPrint( 380, 400 + 16 * 3, C文字コンソール.Eフォント種別.白, "SD:" + CDTXMania.stage選曲GITADORA.r現在選択中のスコア.譜面情報.n可視チップ数.SD.ToString() );
+                        CDTXMania.act文字コンソール.tPrint( 380, 400 + 16 * 4, C文字コンソール.Eフォント種別.白, "HT:" + CDTXMania.stage選曲GITADORA.r現在選択中のスコア.譜面情報.n可視チップ数.HT.ToString() );
+                        CDTXMania.act文字コンソール.tPrint( 380, 400 + 16 * 5, C文字コンソール.Eフォント種別.白, "BD:" + CDTXMania.stage選曲GITADORA.r現在選択中のスコア.譜面情報.n可視チップ数.BD.ToString() );
+                        CDTXMania.act文字コンソール.tPrint( 380, 400 + 16 * 6, C文字コンソール.Eフォント種別.白, "LT:" + CDTXMania.stage選曲GITADORA.r現在選択中のスコア.譜面情報.n可視チップ数.LT.ToString() );
+                        CDTXMania.act文字コンソール.tPrint( 380, 400 + 16 * 7, C文字コンソール.Eフォント種別.白, "FT:" + CDTXMania.stage選曲GITADORA.r現在選択中のスコア.譜面情報.n可視チップ数.FT.ToString() );
+                        CDTXMania.act文字コンソール.tPrint( 380, 400 + 16 * 8, C文字コンソール.Eフォント種別.白, "CY:" + CDTXMania.stage選曲GITADORA.r現在選択中のスコア.譜面情報.n可視チップ数.CY.ToString() );
+                        CDTXMania.act文字コンソール.tPrint( 380, 400 + 16 * 9, C文字コンソール.Eフォント種別.白, "RD:" + CDTXMania.stage選曲GITADORA.r現在選択中のスコア.譜面情報.n可視チップ数.RD.ToString() );
                     }
                     #endregion
                 }

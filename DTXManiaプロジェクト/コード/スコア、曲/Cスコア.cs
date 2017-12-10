@@ -72,6 +72,7 @@ namespace DTXMania
 			public int Duration;
             public STDGBVALUE<bool> b完全にCLASSIC譜面である;
             public STDGBVALUE<bool> b譜面がある;
+            public CDTX.STLANEINT n可視チップ数;
 
 			[Serializable]
 			[StructLayout( LayoutKind.Sequential )]
@@ -334,6 +335,7 @@ namespace DTXMania
             this.譜面情報.b譜面がある.Drums = false;
             this.譜面情報.b譜面がある.Guitar = false;
             this.譜面情報.b譜面がある.Bass = false;
+            this.譜面情報.n可視チップ数 = new CDTX.STLANEINT();
 		}
 	}
 }

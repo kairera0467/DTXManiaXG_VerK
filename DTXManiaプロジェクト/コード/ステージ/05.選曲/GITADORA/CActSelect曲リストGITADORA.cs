@@ -100,6 +100,8 @@ namespace DTXMania
             this.txバー背景 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_Bar Background.png" ) );
             this.txバー選択中 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_Bar selected.png" ) );
             this.txバー選択中枠 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_Bar selected cursor.png" ) );
+            this.txバー_フォルダ = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar box.png" ) );
+
             this.txジャケットパネル背景 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_JacketPanel Background.png" ) );
             this.txジャケットパネル枠 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_Jacket sensor.png" ) );
 
@@ -164,6 +166,8 @@ namespace DTXMania
             CDTXMania.tテクスチャの解放( ref this.txバー背景 );
             CDTXMania.tテクスチャの解放( ref this.txバー選択中 );
             CDTXMania.tテクスチャの解放( ref this.txバー選択中枠 );
+            CDTXMania.tテクスチャの解放( ref this.txバー_フォルダ );
+
             CDTXMania.tテクスチャの解放( ref this.txジャケットパネル背景 );
             CDTXMania.tテクスチャの解放( ref this.txジャケットパネル枠 );
             CDTXMania.tテクスチャの解放( ref this.tx選択中のアーティスト名テクスチャ );
@@ -725,6 +729,10 @@ namespace DTXMania
                         //{
                         //    this.txバー選択中.t2D描画( CDTXMania.app.Device, 659, 312 );
                         //}
+                        if( ( this.stバー情報[ nパネル番号 ].eバー種別 == Eバー種別.Box || this.stバー情報[ nパネル番号 ].eバー種別 == Eバー種別.BackBox ) && this.txバー_フォルダ != null )
+                        {
+                            this.txバー_フォルダ.t2D描画( CDTXMania.app.Device, 660, y - 12 );
+                        }
 						//-----------------
 						#endregion
                         #region[ ジャケット画像とクリアマークを描画 ]
@@ -834,6 +842,7 @@ namespace DTXMania
         private CTexture tx選択中のアーティスト名テクスチャ;
         private CTexture txバー選択中;
         private CTexture txバー選択中枠;
+        private CTexture txバー_フォルダ;
         public STバー tx曲名バー;
         public ST選曲バー tx選曲バー;
         //private CTexture[] txTumbnail = new CTexture[ 15 ];

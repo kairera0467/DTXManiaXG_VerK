@@ -25,7 +25,7 @@ namespace DTXMania
             base.list子Activities.Add( this.actBPMBar = new CAct演奏DrumsBPMバーGD() );
 			base.list子Activities.Add( this.actPad = new CAct演奏DrumsパッドGD() );
 			base.list子Activities.Add( this.actCombo = new CAct演奏DrumsコンボDGB_GD() );
-			base.list子Activities.Add( this.actDANGER = new CAct演奏DrumsDanger() );
+			base.list子Activities.Add( this.actDANGER = new CAct演奏DrumsDangerGD() );
 			base.list子Activities.Add( this.actChipFireD = new CAct演奏DrumsチップファイアD_GD() );
             base.list子Activities.Add( this.actChipFireGB = new CAct演奏DrumsチップファイアGB());
             base.list子Activities.Add( this.actGauge = new CAct演奏Drumsゲージ() );
@@ -47,6 +47,7 @@ namespace DTXMania
 			base.list子Activities.Add( this.actFI = new CActFIFOBlack() );
 			base.list子Activities.Add( this.actFO = new CActFIFOBlack() );
 			base.list子Activities.Add( this.actFOClear = new CActFIFOWhite() );
+            base.list子Activities.Add( this.actClearBar = new CAct演奏DrumsクリアバーGD() );
 		}
 
 
@@ -230,12 +231,13 @@ namespace DTXMania
                 //画像もろもろつけたらクラス作って移動させます。
                 {
                     //
-                    double dbNowPos = ( ( ( ( double ) CDTXMania.Timer.n現在時刻 ) / 1000.0 ) );
-                    double dbEndPos = ( CDTXMania.DTX.listChip.Count > 0 ) ? CDTXMania.DTX.listChip[ CDTXMania.DTX.listChip.Count - 1 ].n発声時刻ms / 1000.0 : 0;
-                    double db現在の曲進行割合 = dbNowPos / dbEndPos;
+                    //double dbNowPos = ( ( ( ( double ) CDTXMania.Timer.n現在時刻 ) / 1000.0 ) );
+                    //double dbEndPos = ( CDTXMania.DTX.listChip.Count > 0 ) ? CDTXMania.DTX.listChip[ CDTXMania.DTX.listChip.Count - 1 ].n発声時刻ms / 1000.0 : 0;
+                    //double db現在の曲進行割合 = dbNowPos / dbEndPos;
 
-                    CDTXMania.act文字コンソール.tPrint( 860, db現在の曲進行割合 <= 1.0 ? 575 - (int)( 512 * db現在の曲進行割合 ) : 63, C文字コンソール.Eフォント種別.赤, "-----" );
+                    //CDTXMania.act文字コンソール.tPrint( 860, db現在の曲進行割合 <= 1.0 ? 575 - (int)( 512 * db現在の曲進行割合 ) : 63, C文字コンソール.Eフォント種別.赤, "-----" );
                 }
+                this.actClearBar.On進行描画();
 
                 this.t進行描画_判定ライン();
 				this.t進行描画_演奏情報();
