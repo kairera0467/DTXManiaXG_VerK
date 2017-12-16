@@ -300,7 +300,6 @@ namespace DTXMania
 			//-----------------------------
 			if( base.b初めての進行描画 )
 			{
-				Cスコア cスコア1 = CDTXMania.stage選曲.r確定されたスコア;
 				if( this.sd読み込み音 != null )
 				{
 					if( CDTXMania.Skin.sound曲読込開始音.b排他 && ( CSkin.Cシステムサウンド.r最後に再生した排他システムサウンド != null ) )
@@ -352,7 +351,8 @@ namespace DTXMania
             if( !CDTXMania.bXGRelease ) {
                 if( !CDTXMania.bコンパクトモード ) { 
                     this.actLoadMain.t指定されたパスからジャケット画像を生成する( CDTXMania.stage選曲GITADORA.r確定されたスコア.ファイル情報.フォルダの絶対パス + CDTXMania.stage選曲GITADORA.r確定されたスコア.譜面情報.Preimage );
-                    this.actLoadMain.t難易度パネルの描画( 0 );
+                    this.actLoadMain.t難易度パネルの描画( CDTXMania.stage選曲GITADORA.n確定された曲の難易度 );
+                    this.actLoadMain.t曲名アーティスト名テクスチャの生成( CDTXMania.stage選曲GITADORA.r確定された曲.strタイトル, CDTXMania.stage選曲GITADORA.r確定されたスコア.譜面情報.アーティスト名 );
                 }
 
                 this.actLoadMain.On進行描画();

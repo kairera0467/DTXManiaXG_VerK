@@ -35,6 +35,12 @@ namespace DTXMania
 		public void OnManagedリソースの解放()
 		{
             CDTXMania.tテクスチャの解放( ref this.txJacket );
+            CDTXMania.tテクスチャの解放( ref this.txTitle );
+            CDTXMania.tテクスチャの解放( ref this.txArtist );
+            CDTXMania.tテクスチャの解放( ref this.txDiffPanel );
+
+            CDTXMania.t安全にDisposeする( ref this.pfTitleName );
+            CDTXMania.t安全にDisposeする( ref this.pfArtistName );
 		}
 		public int On進行描画()
 		{
@@ -47,6 +53,21 @@ namespace DTXMania
             if( this.txDiffPanel != null )
             {
                 this.txDiffPanel.t2D描画( CDTXMania.app.Device, 520, 77 );
+            }
+            if( this.txTitle != null )
+            {
+                if (this.txTitle.sz画像サイズ.Width >= 625)
+                    this.txTitle.vc拡大縮小倍率.X = 625f / this.txTitle.sz画像サイズ.Width;
+
+                this.txTitle.t2D描画(CDTXMania.app.Device, 500, 275);
+            }
+
+            if( this.txArtist != null )
+            {
+                if( this.txArtist.sz画像サイズ.Width >= 625 )
+                    this.txArtist.vc拡大縮小倍率.X = 625f / this.txArtist.sz画像サイズ.Width;
+
+                this.txArtist.t2D描画(CDTXMania.app.Device, 500, 350);
             }
 			return 0;
 		}
@@ -68,8 +89,28 @@ namespace DTXMania
             Bitmap canvas = new Bitmap( 278, 188 ); //42
             Graphics g = Graphics.FromImage( canvas );
 
+            Color colorLabel = Color.White;
+            switch( level )
+            {
+                case 0:
+                    colorLabel = Color.FromArgb( 70, 140, 255 );
+                    break;
+                case 1:
+                    colorLabel = Color.FromArgb( 236, 161, 0 );
+                    break;
+                case 2:
+                    colorLabel = Color.FromArgb( 255, 107, 119 );
+                    break;
+                case 3:
+                    colorLabel = Color.FromArgb( 188, 104, 225 );
+                    break;
+                case 4:
+                    colorLabel = Color.FromArgb( 128, 128, 128 );
+                    break;
+            }
+
             SolidBrush sbBack = new SolidBrush( Color.FromArgb( 50, 50, 50 ) );
-            SolidBrush sbLabel = new SolidBrush( Color.FromArgb( 70, 140, 255 ) ); //NOVICE
+            SolidBrush sbLabel = new SolidBrush( colorLabel ); //NOVICE
 
             g.FillRectangle( sbBack, 0, 0, 278, 188 );
             g.FillRectangle( sbLabel, 0, 0, 278, 42 );
@@ -81,13 +122,58 @@ namespace DTXMania
             canvas.Dispose();
         }
 
+        public void t曲名アーティスト名テクスチャの生成( string str曲タイトル, string strアーティスト名 )
+        {
+            try
+            {
+                #region[ 曲名、アーティスト名テクスチャの生成 ]
+                if( ( str曲タイトル != null ) && ( str曲タイトル.Length > 0 ) )
+                {
+                    pfTitleName = new CPrivateFastFont( new FontFamily( CDTXMania.ConfigIni.str選曲リストフォント), 40, FontStyle.Regular );
+                    Bitmap bmpSongName = new Bitmap(1, 1);
+                    bmpSongName = pfTitleName.DrawPrivateFont( str曲タイトル, CPrivateFont.DrawMode.Edge, Color.Black, Color.White, Color.White, Color.White, true );
+                    this.txTitle = CDTXMania.tテクスチャの生成( bmpSongName, false );
+                    bmpSongName.Dispose();
+                }
+                else
+                {
+                    this.txTitle = null;
+                }
+
+                if( ( strアーティスト名 != null) && ( strアーティスト名.Length > 0 ) )
+                {
+                    pfArtistName = new CPrivateFastFont( new FontFamily( CDTXMania.ConfigIni.str選曲リストフォント ), 30, FontStyle.Regular );
+                    Bitmap bmpArtistName = new Bitmap( 1, 1 );
+                    bmpArtistName = pfArtistName.DrawPrivateFont( strアーティスト名, CPrivateFont.DrawMode.Edge, Color.Black, Color.White, Color.White, Color.White, true );
+                    this.txArtist = CDTXMania.tテクスチャの生成(bmpArtistName, false);
+                    bmpArtistName.Dispose();
+                }
+                else
+                {
+                    this.txArtist = null;
+                }
+                #endregion
+            }
+            catch( CTextureCreateFailedException )
+            {
+                Trace.TraceError( "テクスチャの生成に失敗しました。" );
+                this.txTitle = null;
+                this.txArtist = null;
+            }
+        }
+
         // その他
 
         #region [ private ]
         //-----------------
         private CTexture txJacket;
         private CTexture txDiffPanel;
-		//-----------------
-		#endregion
-	}
+        private CTexture txTitle;
+        private CTexture txArtist;
+
+        private CPrivateFastFont pfTitleName;
+        private CPrivateFastFont pfArtistName;
+        //-----------------
+        #endregion
+    }
 }
