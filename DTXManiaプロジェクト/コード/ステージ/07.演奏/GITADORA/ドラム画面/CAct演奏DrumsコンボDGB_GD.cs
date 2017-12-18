@@ -80,7 +80,7 @@ namespace DTXMania
 		}
 		protected override void tコンボ表示_ドラム( int nCombo値, int nジャンプインデックス )
 		{
-			base.tコンボ表示_ドラム( nCombo値, nジャンプインデックス );
+			base.tコンボ表示_ドラムGD( nCombo値, nジャンプインデックス );
 
             this.n火薬カウント = (nCombo値 / 100);
 

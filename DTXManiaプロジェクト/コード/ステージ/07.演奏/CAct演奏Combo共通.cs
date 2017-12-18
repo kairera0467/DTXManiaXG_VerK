@@ -156,9 +156,16 @@ namespace DTXMania
         public STDGBVALUE<bool>[] bn00コンボに到達した = new STDGBVALUE<bool>[256];
         public STDGBVALUE<int> nコンボカウント = new STDGBVALUE<int>();
 
-		// 内部クラス
+        private float fX;
+        private float fY;
+        private int rot;
+        private float fScaleX;
+        private float fScaleY;
+        private int offset;
 
-		protected class CSTATUS
+        // 内部クラス
+
+        protected class CSTATUS
 		{
 			public CSTAT Bass = new CSTAT();
 			public CSTAT Drums = new CSTAT();
@@ -441,6 +448,255 @@ namespace DTXMania
 			//-----------------
 			#endregion
 		}
+		protected virtual void tコンボ表示_ドラムGD( int nCombo値, int nジャンプインデックス )
+		{
+			#region [ 事前チェック。]
+			//-----------------
+			if( CDTXMania.ConfigIni.ドラムコンボ文字の表示位置 == Eドラムコンボ文字の表示位置.OFF )
+				return;		// 表示OFF。
+
+			if( nCombo値 == 0 )
+				return;		// コンボゼロは表示しない。
+			//-----------------
+			#endregion
+
+			int[] n位の数 = new int[ 10 ];	// 表示は10桁もあれば足りるだろう
+
+			#region [ nCombo値を桁数ごとに n位の数[] に格納する。（例：nCombo値=125 のとき n位の数 = { 5,2,1,0,0,0,0,0,0,0 } ） ]
+			//-----------------
+			int n = nCombo値;
+			int n桁数 = 0;
+			while( ( n > 0 ) && ( n桁数 < 10 ) )
+			{
+				n位の数[ n桁数 ] = n % 10;		// 1の位を格納
+				n = ( n - ( n % 10 ) ) / 10;	// 右へシフト（例: 12345 → 1234 ）
+				n桁数++;
+			}
+			//-----------------
+			#endregion
+            
+            int y動作差分 = 0;
+
+			#region [ n位の数[] を、"COMBO" → 1の位 → 10の位 … の順に、右から左へ向かって順番に表示する。]
+			//-----------------
+			const int n1桁ごとのジャンプの遅れ = 30;	// 1桁につき 50 インデックス遅れる
+
+			int nX中央位置px = 1130;
+
+            if( n桁数 >= 4 )
+            {
+                nX中央位置px = nX中央位置px - 40;
+            }
+            if( n桁数 == 2 && CDTXMania.ConfigIni.eNamePlateType == Eタイプ.A )
+            {
+                nX中央位置px = 1180;
+            }
+
+            int n数字とCOMBOを合わせた画像の全長px = ( ( nドラムコンボの幅 + nドラムコンボの文字間隔 ) * n桁数 );
+			int nY上辺位置px = 16;
+			int n数字の全長px = ( ( nドラムコンボの幅 + nドラムコンボの文字間隔 ) * n桁数 );
+			int x = ( nX中央位置px + ( n数字とCOMBOを合わせた画像の全長px / 2 ) );
+			int y = ( nY上辺位置px + nドラムコンボの高さ ) - nドラムコンボのCOMBO文字の高さ;
+            int y2 = (nY上辺位置px) - nドラムコンボのCOMBO文字の高さ;
+            int nJump = nジャンプインデックス - ( n桁数 );
+            Eタイプ eNamePlateType = CDTXMania.ConfigIni.eNamePlateType;
+
+            if ((nJump >= 0) && (nJump < 180))
+            {
+                y += this.nジャンプ差分値[nJump];
+            }
+            if ( (int)(this.ctコンボ動作タイマ.n現在の値 / 4) != 0 )
+            {
+                y動作差分 = 2;
+            }
+            else if ( (int)(this.ctコンボ動作タイマ.n現在の値 / 16) != 1 )
+            {
+                y動作差分 = 8;
+            }
+            if( this.nY1の位座標差分値 > 0 )
+            {
+                this.nY1の位座標差分値 = this.nY1の位座標差分値 - this.ctコンボアニメ.n現在の値;
+            }
+            else
+            {
+                this.nY1の位座標差分値 = 0;
+            }
+
+            #region[ COMBO文字の表示 ]
+            if( this.txCOMBOドラム != null )
+            {
+                this.nコンボカウント.Drums = this.n現在のコンボ数.Drums / 100;
+                #region [ "COMBO" の拡大率を設定。]
+                //-----------------
+                float f拡大率 = 1.0f;
+                if (nジャンプインデックス >= 0 && nジャンプインデックス < 180)
+                    f拡大率 = 1.0f - (((float)this.nジャンプ差分値[nジャンプインデックス]) / 180.0f);		// f拡大率 = 1.0 → 1.3333... → 1.0
+
+                if (eNamePlateType == Eタイプ.B)
+                {
+                    if ((this.n現在のコンボ数.Drums > (this.n現在のコンボ数.Drums / 100) + 100) && this.bn00コンボに到達した[nコンボカウント.Drums].Drums == false && (nジャンプインデックス >= 0 && nジャンプインデックス < 180))
+                    {
+                        f拡大率 = 1.22f - (((float)this.nジャンプ差分値[nジャンプインデックス]) / 180.0f);		// f拡大率 = 1.0 → 1.3333... → 1.0
+                    }
+
+                    if (this.txCOMBOドラム != null)
+                        this.txCOMBOドラム.vc拡大縮小倍率 = new Vector3( f拡大率, f拡大率, 1.0f );
+                }
+                //-----------------
+                #endregion
+                #region [ "COMBO" 文字を表示。]
+                //-----------------
+                int nコンボx = nX中央位置px - 8 - ((int)((nドラムコンボのCOMBO文字の幅 * f拡大率) / 1.3f));
+                int nコンボy = CDTXMania.ConfigIni.bReverse.Drums ? 442 : 132;
+
+                if ((this.n現在のコンボ数.Drums > (this.n現在のコンボ数.Drums / 100 * 100) && (this.n現在のコンボ数.Drums >= 100 ? this.bn00コンボに到達した[nコンボカウント.Drums].Drums == false : false) && eNamePlateType == Eタイプ.B))
+                {
+                    nコンボx += nX中央位置px - 8 - ((int)((nドラムコンボのCOMBO文字の幅 * f拡大率) / 1.3f));
+                    nコンボy += 30;
+                }
+
+                // 2017.12.17 とりあえず版
+                if ( this.txCOMBOドラム != null )
+                {
+                    SlimDX.Matrix matSkillPanel = SlimDX.Matrix.Identity;
+                    matSkillPanel *= SlimDX.Matrix.RotationY( C変換.DegreeToRadian( 18 ) );
+                    matSkillPanel *= SlimDX.Matrix.Scaling( 0.42f, 0.95f, 1 );
+                    matSkillPanel *= SlimDX.Matrix.Translation( 488, 114 - y動作差分, 0 );
+                    this.txCOMBOドラム.t3D描画( CDTXMania.app.Device, matSkillPanel, new Rectangle( 0, 320, 250, 60 ) );
+                }
+                //-----------------
+                #endregion
+
+            }
+            #endregion
+
+			// 2017.12.17 とりあえず版
+
+			for( int i = 0; i < n桁数; i++ )
+			{
+                if( n桁数 < 4 )
+                {
+                    if ((this.n現在のコンボ数.Drums > (this.n現在のコンボ数.Drums / 100 * 100) && (this.n現在のコンボ数.Drums >= 100 ? this.bn00コンボに到達した[nコンボカウント.Drums].Drums == false : false) && (nジャンプインデックス >= 0 && nジャンプインデックス < 180)))
+                    {
+                        x -= 120 + nドラムコンボの文字間隔 + 20;
+                    }
+                    else
+                    {
+                        x -= 120 + nドラムコンボの文字間隔;
+                        this.txCOMBOドラム.vc拡大縮小倍率 = new Vector3(1.0f, 1.0f, 1.0f);
+                    }
+                }
+
+                if( this.txCOMBOドラム != null )
+                {
+                    SlimDX.Matrix matSkillPanel = SlimDX.Matrix.Identity;
+                    matSkillPanel *= SlimDX.Matrix.RotationY( C変換.DegreeToRadian( 30 ) );
+                    matSkillPanel *= SlimDX.Matrix.Scaling( 0.25f - ( 0.05f * i ), 0.9f - ( 0.05f * i ), 1 );
+                    matSkillPanel *= SlimDX.Matrix.Translation( 539 - ( 65 * i ), 232 - ( 14 * i ) - y動作差分 + ( i == 0 ? this.nY1の位座標差分値 : 0 ), 0 );
+                    this.txCOMBOドラム.t3D描画( CDTXMania.app.Device, matSkillPanel, new Rectangle( ( n位の数[ i ] % 5 ) * 120, ( n位の数[ i ] / 5 ) * 160, 120, 160 ) );
+                }
+			}
+
+            if( this.txCOMBOドラム != null )
+            {/*
+                SlimDX.Matrix matSkillPanel = SlimDX.Matrix.Identity;
+                //matSkillPanel *= SlimDX.Matrix.RotationY( C変換.DegreeToRadian( rot ) );
+                matSkillPanel *= SlimDX.Matrix.Scaling( fScaleX, fScaleY, 1 );
+                matSkillPanel *= SlimDX.Matrix.Translation( fX, fY, 0 );
+                this.txCOMBOドラム.t3D描画( CDTXMania.app.Device, matSkillPanel, new Rectangle( 360, 160, 120, 160 ) );
+
+                SlimDX.Matrix matSkillPanel2 = SlimDX.Matrix.Identity;
+                //matSkillPanel2 *= SlimDX.Matrix.RotationY( C変換.DegreeToRadian( rot ) );
+                matSkillPanel2 *= SlimDX.Matrix.Scaling( fScaleX, fScaleY, 1 );
+                matSkillPanel2 *= SlimDX.Matrix.Translation( fX - offset, fY - 12, 0 );
+                this.txCOMBOドラム.t3D描画( CDTXMania.app.Device, matSkillPanel2, new Rectangle( 0, 0, 120, 160 ) );
+
+                SlimDX.Matrix matSkillPanel3 = SlimDX.Matrix.Identity;
+                //matSkillPanel3 *= SlimDX.Matrix.RotationY( C変換.DegreeToRadian( rot ) );
+                matSkillPanel3 *= SlimDX.Matrix.Scaling( fScaleX, fScaleY, 1 );
+                matSkillPanel3 *= SlimDX.Matrix.Translation( fX - offset * 2, fY - 12 * 2, 0 );
+                this.txCOMBOドラム.t3D描画( CDTXMania.app.Device, matSkillPanel3, new Rectangle( 120, 0, 120, 160 ) );
+             */
+            }
+
+
+			//-----------------
+			#endregion
+
+            /*
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.F1 ) )
+            {
+                fX--;
+            }
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.F2 ) )
+            {
+                fX++;
+            }
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.F3 ) )
+            {
+                fY--;
+            }
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.F4 ) )
+            {
+                fY++;
+            }
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.F6 ) )
+            {
+                rot--;
+            }
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.F7 ) )
+            {
+                rot++;
+            }
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.F8 ) )
+            {
+                fScaleX -= 0.01f;
+            }
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.F9 ) )
+            {
+                fScaleX += 0.01f;
+            }
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.F10 ) )
+            {
+                fScaleX -= 0.1f;
+            }
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.F11 ) )
+            {
+                fScaleX += 0.1f;
+            }
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.D1 ) )
+            {
+                fScaleY -= 0.01f;
+            }
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.D2 ) )
+            {
+                fScaleY += 0.01f;
+            }
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.D3 ) )
+            {
+                fScaleY -= 0.1f;
+            }
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.D4 ) )
+            {
+                fScaleY += 0.1f;
+            }
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.D5 ) )
+            {
+                offset--;
+            }
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.D6 ) )
+            {
+                offset++;
+            }
+
+            CDTXMania.act文字コンソール.tPrint( 0, 0, C文字コンソール.Eフォント種別.白, "RotY:" + rot.ToString() );
+            CDTXMania.act文字コンソール.tPrint( 0, 16, C文字コンソール.Eフォント種別.白, "PanelX:" + fX.ToString() );
+            CDTXMania.act文字コンソール.tPrint( 0, 32, C文字コンソール.Eフォント種別.白, "PanelY:" + fY.ToString() );
+            CDTXMania.act文字コンソール.tPrint( 0, 48, C文字コンソール.Eフォント種別.白, "ScaleX:" + fScaleX.ToString() );
+            CDTXMania.act文字コンソール.tPrint( 0, 64, C文字コンソール.Eフォント種別.白, "ScaleY:" + fScaleY.ToString() );
+            CDTXMania.act文字コンソール.tPrint( 0, 80, C文字コンソール.Eフォント種別.白, "OFFSET:" + offset.ToString() );
+            */
+		}
 		protected virtual void tコンボ表示_ギター( int nCombo値, int nジャンプインデックス )
 		{
 		}
@@ -596,8 +852,14 @@ namespace DTXMania
 			if( this.b活性化してない )
 				return;
 
-			this.txCOMBOドラム = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_combo drums.png" ) );
-			this.txCOMBOギター = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_combo guitar.png" ) );
+            if( CDTXMania.bXGRelease ) {
+			    this.txCOMBOドラム = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_combo drums.png" ) );
+			    this.txCOMBOギター = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_combo guitar.png" ) );
+            } else {
+			    this.txCOMBOドラム = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_Drums combo.png" ) );
+			    this.txCOMBOギター = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_combo guitar.png" ) );
+            }
+
 
 			base.OnManagedリソースの作成();
 		}

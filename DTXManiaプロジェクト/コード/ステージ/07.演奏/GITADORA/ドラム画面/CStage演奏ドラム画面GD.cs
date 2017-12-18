@@ -28,7 +28,7 @@ namespace DTXMania
 			base.list子Activities.Add( this.actDANGER = new CAct演奏DrumsDangerGD() );
 			base.list子Activities.Add( this.actChipFireD = new CAct演奏DrumsチップファイアD_GD() );
             base.list子Activities.Add( this.actChipFireGB = new CAct演奏DrumsチップファイアGB());
-            base.list子Activities.Add( this.actGauge = new CAct演奏Drumsゲージ() );
+            base.list子Activities.Add( this.actGauge = new CAct演奏DrumsゲージGD() );
             base.list子Activities.Add( this.actGraph = new CAct演奏グラフ() );
 			base.list子Activities.Add( this.actJudgeString = new CAct演奏Drums判定文字列GD() );
             base.list子Activities.Add( this.actLane = new CAct演奏DrumsレーンGD() );
@@ -209,7 +209,7 @@ namespace DTXMania
                 this.t進行描画_DANGER();
                 this.actLane.On進行描画();
                 //this.actAVI.tクリップをレーン上に表示する();
-				this.t進行描画_ステータスパネル();
+				//this.t進行描画_ステータスパネル();
                 //this.t進行描画_グラフ();   // #24074 2011.01.23 add ikanick
 				this.t進行描画_レーンフラッシュD();
 				if ( this.e判定表示優先度 == E判定表示優先度.Chipより下 )
@@ -226,25 +226,18 @@ namespace DTXMania
                 this.actShutter.On進行描画();
                 this.t進行描画_ドラムパッド();
                 this.txフレーム.t2D描画( CDTXMania.app.Device, 0, 0 );
+                this.t進行描画_ゲージ();
 
-                //曲位置バー(仮)
-                //画像もろもろつけたらクラス作って移動させます。
-                {
-                    //
-                    //double dbNowPos = ( ( ( ( double ) CDTXMania.Timer.n現在時刻 ) / 1000.0 ) );
-                    //double dbEndPos = ( CDTXMania.DTX.listChip.Count > 0 ) ? CDTXMania.DTX.listChip[ CDTXMania.DTX.listChip.Count - 1 ].n発声時刻ms / 1000.0 : 0;
-                    //double db現在の曲進行割合 = dbNowPos / dbEndPos;
+                this.t進行描画_ステータスパネル();
 
-                    //CDTXMania.act文字コンソール.tPrint( 860, db現在の曲進行割合 <= 1.0 ? 575 - (int)( 512 * db現在の曲進行割合 ) : 63, C文字コンソール.Eフォント種別.赤, "-----" );
-                }
                 this.actClearBar.On進行描画();
 
                 this.t進行描画_判定ライン();
 				this.t進行描画_演奏情報();
 
                 this.actAVI.tウィンドウクリップを表示する();
-                //this.actAVI.tウィンドウクリップを3D表示する();
-                //this.t進行描画_ゲージ();
+                this.actAVI.tウィンドウクリップを3D表示する();
+
 				if ( this.e判定表示優先度 == E判定表示優先度.Chipより上 )
 				{
 					this.t進行描画_RGBボタン();

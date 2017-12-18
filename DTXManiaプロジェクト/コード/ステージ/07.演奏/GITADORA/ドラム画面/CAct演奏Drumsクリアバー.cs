@@ -48,6 +48,7 @@ namespace DTXMania
             sbNG.Dispose();
             canvas.Dispose();
             #endregion
+            this.txSongBar_Cursor = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_Songbar Cursor.png" ) );
 
             base.OnManagedリソースの作成();
         }
@@ -56,6 +57,7 @@ namespace DTXMania
         {
             CDTXMania.tテクスチャの解放( ref this.txClearGauge_NG );
             CDTXMania.tテクスチャの解放( ref this.txClearGauge_OK );
+            CDTXMania.tテクスチャの解放( ref this.txSongBar_Cursor );
             base.OnManagedリソースの解放();
         }
 
@@ -94,7 +96,7 @@ namespace DTXMania
                     }
                 }
             }
-            CDTXMania.act文字コンソール.tPrint( 860, db現在の曲進行割合 <= 1.0 ? 575 - (int)( 512.0 * db現在の曲進行割合 ) : 63, C文字コンソール.Eフォント種別.赤, "-----" );
+            this.txSongBar_Cursor.t2D描画( CDTXMania.app.Device, 853, db現在の曲進行割合 <= 1.0 ? 570 - (int)( 512.0 * db現在の曲進行割合 ) : 58 );
             return 0;
         }
 
@@ -102,6 +104,7 @@ namespace DTXMania
         //-----------------
         private CTexture txClearGauge_OK;
         private CTexture txClearGauge_NG;
+        private CTexture txSongBar_Cursor;
         //-----------------
         #endregion
     }

@@ -48,8 +48,7 @@ namespace DTXMania
 			if( !base.b活性化してない )
 			{
                 base.txゲージ = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_Gauge.png" ) );
-
-                this.nゲージX = (int)( (float)( 592 - 504 ) / 2.0f );
+                
 				base.OnManagedリソースの作成();
 			}
 		}
@@ -66,63 +65,25 @@ namespace DTXMania
 		{
 			if ( !base.b活性化してない )
 			{
-                this.ctマスクFIFO.t進行Loop();
                 if( base.txゲージ != null )
                 {
-                    base.txゲージ.b加算合成 = false;
-                    base.txゲージ.vc拡大縮小倍率.X = 1.0f;
-                    base.txゲージ.n透明度 = 255;
-                    base.txゲージ.t2D描画( CDTXMania.app.Device, 258, ( CDTXMania.ConfigIni.bReverse.Drums ? 20 : 655 ), new Rectangle( 2, 2, base.txゲージ.sz画像サイズ.Width, 45 ) );
-
                     if( base.db現在のゲージ値.Drums == 1.0 )
                     {
                         base.txゲージ.vc拡大縮小倍率.X = 1.0f;
-                        base.txゲージ.t2D描画( CDTXMania.app.Device, 1 + this.nゲージX + 258, ( CDTXMania.ConfigIni.bReverse.Drums ? 30 : 665 ), new Rectangle( 2, 146, 504, 26 ) );
+                        base.txゲージ.t2D描画( CDTXMania.app.Device, 371, ( CDTXMania.ConfigIni.bReverse.Drums ? 648 : 648 ), new Rectangle( 0, 18, 420, 18 ) );
                     }
                     else if( base.db現在のゲージ値.Drums >= 0.0 )
                     {
                         base.txゲージ.vc拡大縮小倍率.X = (float)base.db現在のゲージ値.Drums;
-                        base.txゲージ.t2D描画( CDTXMania.app.Device, 1 + this.nゲージX + 258, ( CDTXMania.ConfigIni.bReverse.Drums ? 30 : 665 ), new Rectangle( 2, 146, 504, 26 ) );
-                    }
-
-                    base.txゲージ.vc拡大縮小倍率.X = 1.0f;
-                    base.txゲージ.t2D描画( CDTXMania.app.Device, 258, ( CDTXMania.ConfigIni.bReverse.Drums ? 20 : 655 ), new Rectangle( 2, 97, base.txゲージ.sz画像サイズ.Width, 45 ) );
-                
-
-                    if( base.IsDanger( E楽器パート.DRUMS ) && base.db現在のゲージ値.Drums >= 0.0 )
-                    {
-                        base.txゲージ.t2D描画( CDTXMania.app.Device, 259, ( CDTXMania.ConfigIni.bReverse.Drums ? 17 : 652 ), new Rectangle( 2, 260, 592, 52 ));
-                    }
-                    if( base.db現在のゲージ値.Drums == 1.0 )
-                    {
-                        base.txゲージ.n透明度 = ( this.ctマスクFIFO.n現在の値 <= 750 ? (int)( this.ctマスクFIFO.n現在の値 / 2.94 ) : 500 - (int)(( this.ctマスクFIFO.n現在の値) / 2.94 ) );
-                        base.txゲージ.t2D描画(CDTXMania.app.Device, 259, (CDTXMania.ConfigIni.bReverse.Drums ? 17 : 652), new Rectangle( 2, 206, 592, 52 ));
-                    }
-
-
-                    //「ゲージがMAXでなければアニメーション」なので、ここでゲージ量による分岐をしないこと。
- 				    for( int i = 0; i < 32; i++ )
-				    {
-                        if( this.stGaugeAddAnime[ i ].ePart == E楽器パート.DRUMS )
+                        if( base.IsDanger( E楽器パート.DRUMS ) && base.db現在のゲージ値.Drums >= 0.0 )
                         {
-					        if( this.stGaugeAddAnime[ i ].bUsing )
-					        {
-						        this.stGaugeAddAnime[ i ].ctAnimeCounter.t進行();
-						        if( this.stGaugeAddAnime[ i ].ctAnimeCounter.b終了値に達した )
-						        {
-							        this.stGaugeAddAnime[ i ].ctAnimeCounter.t停止();
-							        this.stGaugeAddAnime[ i ].bUsing = false;
-						        }
-                        
-                                this.txゲージ.b加算合成 = true;
-                                float n幅 = 504.0f * (float)base.db現在のゲージ値.Drums;
-                                if( (42 * this.stGaugeAddAnime[i].ctAnimeCounter.n現在の値) + 64 < n幅 )
-                                {
-                                    this.txゲージ.t2D描画( CDTXMania.app.Device, (1 + this.nゲージX + 258) + (42 * this.stGaugeAddAnime[i].ctAnimeCounter.n現在の値), 665, new Rectangle( 2, 410, 64, 26 ) );
-                                }
-					        }
+                            base.txゲージ.t2D描画( CDTXMania.app.Device, 371, ( CDTXMania.ConfigIni.bReverse.Drums ? 648 : 648 ), new Rectangle( 0, 36, 420, 18 ));
                         }
-				    }
+                        else
+                        {
+                            base.txゲージ.t2D描画( CDTXMania.app.Device, 371, ( CDTXMania.ConfigIni.bReverse.Drums ? 648 : 648 ), new Rectangle( 0, 0, 420, 18 ) );
+                        }
+                    }
                 }
                 //if( CDTXMania.Input管理.Keyboard.bキーが押された(  (int) SlimDX.DirectInput.Key.F8 ) )
                 //{
