@@ -1488,7 +1488,12 @@ namespace DTXMania
                     if( pChip.bボーナスチップ )
                     {
                         if( eJudgeResult == E判定.XPerfect || eJudgeResult == E判定.Great || eJudgeResult == E判定.Perfect || eJudgeResult == E判定.Auto )
-                            CDTXMania.stage演奏ドラム画面.tボーナスチップのヒット処理( CDTXMania.ConfigIni, CDTXMania.DTX, pChip );
+                        {
+                            if( CDTXMania.bXGRelease )
+                                CDTXMania.stage演奏ドラム画面.tボーナスチップのヒット処理( CDTXMania.ConfigIni, CDTXMania.DTX, pChip );
+                            else
+                                CDTXMania.stage演奏ドラム画面GITADORA.tボーナスチップのヒット処理( CDTXMania.ConfigIni, CDTXMania.DTX, pChip );
+                        }
                     }
 					break;
 
@@ -1615,9 +1620,10 @@ namespace DTXMania
                     n現在コンボ = this.actCombo.n現在のコンボ数.Drums >= 50 ? 50 : this.actCombo.n現在のコンボ数.Drums;
                     break;
                 case E楽器パート.GUITAR:
-                    n現在コンボ = this.actCombo.n現在のコンボ数.Drums >= 50 ? 50 : this.actCombo.n現在のコンボ数.Drums;
+                    n現在コンボ = this.actCombo.n現在のコンボ数.Guitar >= 50 ? 50 : this.actCombo.n現在のコンボ数.Guitar;
                     break;
                 case E楽器パート.BASS:
+                    n現在コンボ = this.actCombo.n現在のコンボ数.Bass >= 50 ? 50 : this.actCombo.n現在のコンボ数.Bass;
                     break;
             }
             #endregion
@@ -1630,7 +1636,7 @@ namespace DTXMania
                         nTotalNotes = CDTXMania.DTX.n可視チップ数.Drums;
                         int n基礎点 = (int)( ( 1000000 - 500 * nBonusNotes ) / ( 1275 + 50 * ( nTotalNotes - 50 ) ) );
                         //DM:(100万-500xボーナスノーツ数)/{1275+50×(総ノーツ数-50)}
-                        if( nTotalNotes == this.nヒット数_Auto含む.Drums.Perfect )
+                        if( ( nTotalNotes - 1 ) == this.nヒット数_Auto含む.Drums.Perfect )
                         {
                             //100万-500×ボーナスノーツ数-基礎点×{1275+50×(総ノーツ数-51)}
                             //エクセ時はコンボ補正無し。
