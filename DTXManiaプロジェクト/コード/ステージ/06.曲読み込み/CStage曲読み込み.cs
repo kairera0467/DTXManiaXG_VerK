@@ -283,7 +283,18 @@ namespace DTXMania
 		{
 			if( !base.b活性化してない )
 			{
-				this.tx背景 = CDTXMania.tテクスチャの生成( this.strSTAGEFILE, false );
+                if( CDTXMania.bXGRelease )
+                {
+				    this.tx背景 = CDTXMania.tテクスチャの生成( this.strSTAGEFILE, false );
+                }
+                else
+                {
+                    if( CDTXMania.ConfigIni.bDrums有効 ) {
+                        this.tx背景 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\6_background Drums.png" ) );
+                    } else {
+                        this.tx背景 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\6_background Guitar.png" ) );
+                    }
+                }
                 base.OnManagedリソースの作成();
 			}
 		}
@@ -366,12 +377,7 @@ namespace DTXMania
                     this.actLoadMain.t難易度パネルの描画( CDTXMania.stage選曲GITADORA.n確定された曲の難易度 );
                     this.actLoadMain.t曲名アーティスト名テクスチャの生成( CDTXMania.stage選曲GITADORA.r確定された曲.strタイトル, CDTXMania.stage選曲GITADORA.r確定されたスコア.譜面情報.アーティスト名 );
                 }
-                if( CDTXMania.ConfigIni.bDrums有効 ) {
-                    this.tx背景 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\6_background Drums.png" ) );
-                } else {
-                    this.tx背景 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\6_background Guitar.png" ) );
-                }
-
+                
                 this.actLoadMain.On進行描画();
             }
 
@@ -665,15 +671,32 @@ namespace DTXMania
 						if( nCurrentTime < this.nBGM再生開始時刻 )
 							this.nBGM再生開始時刻 = nCurrentTime;
 
-//						if ( ( nCurrentTime - this.nBGM再生開始時刻 ) > ( this.nBGMの総再生時間ms - 1000 ) )
-						if ( ( nCurrentTime - this.nBGM再生開始時刻 ) >= ( this.nBGMの総再生時間ms ) )	// #27787 2012.3.10 yyagi 1000ms == フェードイン分の時間
-						{
-							if ( !CDTXMania.DTXVmode.Enabled )
-							{
-								this.actFO.tフェードアウト開始();
-							}
-							base.eフェーズID = CStage.Eフェーズ.共通_フェードアウト;
-						}
+                        if( CDTXMania.bXGRelease )
+                        {
+//						    if ( ( nCurrentTime - this.nBGM再生開始時刻 ) > ( this.nBGMの総再生時間ms - 1000 ) )
+                            if ((nCurrentTime - this.nBGM再生開始時刻) >= (this.nBGMの総再生時間ms))    // #27787 2012.3.10 yyagi 1000ms == フェードイン分の時間
+                            {
+                                if (!CDTXMania.DTXVmode.Enabled)
+                                {
+                                    this.actFO.tフェードアウト開始();
+                                }
+                                base.eフェーズID = CStage.Eフェーズ.共通_フェードアウト;
+                            }
+                        }
+                        else
+                        {
+                            //2017.12.23 kairera0467 GITADORA風は最低でも
+//						    if ( ( nCurrentTime - this.nBGM再生開始時刻 ) > ( this.nBGMの総再生時間ms - 1000 ) )
+                            if( ( nCurrentTime - this.nBGM再生開始時刻 ) >= ( this.nBGMの総再生時間ms + 2000 ) )
+                            {
+                                if (!CDTXMania.DTXVmode.Enabled)
+                                {
+                                    this.actFO.tフェードアウト開始();
+                                }
+                                base.eフェーズID = CStage.Eフェーズ.共通_フェードアウト;
+                            }
+                        }
+
 						return (int) E曲読込画面の戻り値.継続;
 					}
 

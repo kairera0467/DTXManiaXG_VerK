@@ -158,6 +158,7 @@ namespace DTXMania
 
         private float fX;
         private float fY;
+        private float fZ;
         private int rot;
         private float fScaleX;
         private float fScaleY;
@@ -590,40 +591,56 @@ namespace DTXMania
                 if( this.txCOMBOドラム != null )
                 {
                     SlimDX.Matrix matSkillPanel = SlimDX.Matrix.Identity;
+                    
+                    matSkillPanel *= SlimDX.Matrix.Scaling( 0.5f, 0.9f, 1 );
                     matSkillPanel *= SlimDX.Matrix.RotationY( C変換.DegreeToRadian( 30 ) );
-                    matSkillPanel *= SlimDX.Matrix.Scaling( 0.25f - ( 0.05f * i ), 0.9f - ( 0.05f * i ), 1 );
-                    matSkillPanel *= SlimDX.Matrix.Translation( 539 - ( 65 * i ), 232 - ( 14 * i ) - y動作差分 + ( i == 0 ? this.nY1の位座標差分値 : 0 ), 0 );
+                    matSkillPanel *= SlimDX.Matrix.Translation( 537 - ( 6 * i ), 231 + ( 16 * i ) - y動作差分 + ( i == 0 ? this.nY1の位座標差分値 : 0 ), 0 + ( 80 * i ) );
+
                     this.txCOMBOドラム.t3D描画( CDTXMania.app.Device, matSkillPanel, new Rectangle( ( n位の数[ i ] % 5 ) * 120, ( n位の数[ i ] / 5 ) * 160, 120, 160 ) );
+
+
                 }
 			}
-
+/*
             if( this.txCOMBOドラム != null )
-            {/*
+            {
                 SlimDX.Matrix matSkillPanel = SlimDX.Matrix.Identity;
-                //matSkillPanel *= SlimDX.Matrix.RotationY( C変換.DegreeToRadian( rot ) );
                 matSkillPanel *= SlimDX.Matrix.Scaling( fScaleX, fScaleY, 1 );
+                matSkillPanel *= SlimDX.Matrix.RotationY( C変換.DegreeToRadian( rot ) );
                 matSkillPanel *= SlimDX.Matrix.Translation( fX, fY, 0 );
                 this.txCOMBOドラム.t3D描画( CDTXMania.app.Device, matSkillPanel, new Rectangle( 360, 160, 120, 160 ) );
 
                 SlimDX.Matrix matSkillPanel2 = SlimDX.Matrix.Identity;
-                //matSkillPanel2 *= SlimDX.Matrix.RotationY( C変換.DegreeToRadian( rot ) );
                 matSkillPanel2 *= SlimDX.Matrix.Scaling( fScaleX, fScaleY, 1 );
-                matSkillPanel2 *= SlimDX.Matrix.Translation( fX - offset, fY - 12, 0 );
+                matSkillPanel2 *= SlimDX.Matrix.RotationY( C変換.DegreeToRadian( rot ) );
+                matSkillPanel2 *= SlimDX.Matrix.Translation( fX - offset, fY, 0 );
                 this.txCOMBOドラム.t3D描画( CDTXMania.app.Device, matSkillPanel2, new Rectangle( 0, 0, 120, 160 ) );
 
                 SlimDX.Matrix matSkillPanel3 = SlimDX.Matrix.Identity;
                 //matSkillPanel3 *= SlimDX.Matrix.RotationY( C変換.DegreeToRadian( rot ) );
                 matSkillPanel3 *= SlimDX.Matrix.Scaling( fScaleX, fScaleY, 1 );
                 matSkillPanel3 *= SlimDX.Matrix.Translation( fX - offset * 2, fY - 12 * 2, 0 );
-                this.txCOMBOドラム.t3D描画( CDTXMania.app.Device, matSkillPanel3, new Rectangle( 120, 0, 120, 160 ) );
-             */
-            }
+                //this.txCOMBOドラム.t3D描画( CDTXMania.app.Device, matSkillPanel3, new Rectangle( 120, 0, 120, 160 ) );
 
+                SlimDX.Matrix matSkillPanel = SlimDX.Matrix.Identity;
+                matSkillPanel *= SlimDX.Matrix.RotationY( C変換.DegreeToRadian( 30 ) );
+                matSkillPanel *= SlimDX.Matrix.Scaling( 0.25f, 0.9f, 1 );
+                matSkillPanel *= SlimDX.Matrix.Translation( 539, 232, 0 );
+                //this.txCOMBOドラム.t3D描画( CDTXMania.app.Device, matSkillPanel, new Rectangle( 360, 160, 120, 160 ) );
+
+                SlimDX.Matrix matSkillPanel2 = SlimDX.Matrix.Identity;
+                matSkillPanel2 *= SlimDX.Matrix.RotationY( C変換.DegreeToRadian( 30 ) );
+                matSkillPanel2 *= SlimDX.Matrix.Scaling( 0.25f, 0.9f, 1 );
+                matSkillPanel2 *= SlimDX.Matrix.Translation( fX, fY, fZ );
+                //this.txCOMBOドラム.t3D描画( CDTXMania.app.Device, matSkillPanel2, new Rectangle( 0, 0, 120, 160 ) );
+                
+            }
+*/
 
 			//-----------------
 			#endregion
 
-            /*
+            
             if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.F1 ) )
             {
                 fX--;
@@ -688,16 +705,48 @@ namespace DTXMania
             {
                 offset++;
             }
-
-            CDTXMania.act文字コンソール.tPrint( 0, 0, C文字コンソール.Eフォント種別.白, "RotY:" + rot.ToString() );
-            CDTXMania.act文字コンソール.tPrint( 0, 16, C文字コンソール.Eフォント種別.白, "PanelX:" + fX.ToString() );
-            CDTXMania.act文字コンソール.tPrint( 0, 32, C文字コンソール.Eフォント種別.白, "PanelY:" + fY.ToString() );
-            CDTXMania.act文字コンソール.tPrint( 0, 48, C文字コンソール.Eフォント種別.白, "ScaleX:" + fScaleX.ToString() );
-            CDTXMania.act文字コンソール.tPrint( 0, 64, C文字コンソール.Eフォント種別.白, "ScaleY:" + fScaleY.ToString() );
-            CDTXMania.act文字コンソール.tPrint( 0, 80, C文字コンソール.Eフォント種別.白, "OFFSET:" + offset.ToString() );
-            */
-		}
-		protected virtual void tコンボ表示_ギター( int nCombo値, int nジャンプインデックス )
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.D7 ) )
+            {
+                fX -= 10;
+            }
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.D8 ) )
+            {
+                fX += 10;
+            }
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.D9 ) )
+            {
+                fY -= 10;
+            }
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.D0 ) )
+            {
+                fY += 10;
+            }
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.Q ) )
+            {
+                fZ -= 1;
+            }
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.W ) )
+            {
+                fZ += 1;
+            }
+            if ( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.E ) )
+            {
+                fZ -= 10;
+            }
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.R ) )
+            {
+                fZ += 10;
+            }
+            
+            //CDTXMania.act文字コンソール.tPrint( 0, 0, C文字コンソール.Eフォント種別.白, "RotY:" + rot.ToString() );
+            //CDTXMania.act文字コンソール.tPrint( 0, 16, C文字コンソール.Eフォント種別.白, "PanelX:" + fX.ToString() );
+            //CDTXMania.act文字コンソール.tPrint( 0, 32, C文字コンソール.Eフォント種別.白, "PanelY:" + fY.ToString() );
+            //CDTXMania.act文字コンソール.tPrint( 0, 48, C文字コンソール.Eフォント種別.白, "ScaleX:" + fScaleX.ToString() );
+            //CDTXMania.act文字コンソール.tPrint( 0, 64, C文字コンソール.Eフォント種別.白, "ScaleY:" + fScaleY.ToString() );
+            //CDTXMania.act文字コンソール.tPrint( 0, 80, C文字コンソール.Eフォント種別.白, "OFFSET:" + offset.ToString() );
+            //CDTXMania.act文字コンソール.tPrint( 0, 96, C文字コンソール.Eフォント種別.白, "PanelZ:" + fZ.ToString() );
+        }
+        protected virtual void tコンボ表示_ギター( int nCombo値, int nジャンプインデックス )
 		{
 		}
 		protected virtual void tコンボ表示_ベース( int nCombo値, int nジャンプインデックス )

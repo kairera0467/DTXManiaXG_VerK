@@ -131,6 +131,7 @@ namespace DTXMania
 				}
                 this.tレーンタイプからレーン位置を設定する( CDTXMania.ConfigIni.eLaneType, CDTXMania.ConfigIni.eRDPosition );
                 this.txフレーム = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_frame.png" ) );
+                this.txフレーム外側 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_frame2.png" ) );
 
 				base.OnManagedリソースの作成();
 			}
@@ -145,6 +146,7 @@ namespace DTXMania
 				CDTXMania.tテクスチャの解放( ref this.txチップ );
 				CDTXMania.tテクスチャの解放( ref this.txレーンフレームGB );
                 CDTXMania.tテクスチャの解放( ref this.txフレーム );
+                CDTXMania.tテクスチャの解放( ref this.txフレーム外側 );
 				//CDTXMania.tテクスチャの解放( ref this.txWailing枠 );
 				base.OnManagedリソースの解放();
 			}
@@ -225,7 +227,8 @@ namespace DTXMania
 				bIsFinishedPlaying = this.t進行描画_チップ(E楽器パート.DRUMS);
                 this.actShutter.On進行描画();
                 this.t進行描画_ドラムパッド();
-                this.txフレーム.t2D描画( CDTXMania.app.Device, 0, 0 );
+                if( this.txフレーム != null ) this.txフレーム.t2D描画( CDTXMania.app.Device, 0, 0 );
+                if( this.txフレーム外側 != null ) this.txフレーム外側.t2D描画( CDTXMania.app.Device, 0, 0 );
                 this.t進行描画_ゲージ();
 
                 this.t進行描画_ステータスパネル();
@@ -308,6 +311,7 @@ namespace DTXMania
 		private CTexture txヒットバーGB;
 		private CTexture txレーンフレームGB;
         private CTexture txフレーム;
+        private CTexture txフレーム外側;
 		//-----------------
 
         /// <summary>
