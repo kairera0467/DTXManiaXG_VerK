@@ -389,6 +389,7 @@ namespace DTXMania
 
         public void tウィンドウクリップを3D表示する()
         {
+            // 今のところmatixxのみ
             if( this.rAVI == null )
                 return;
 
@@ -403,26 +404,33 @@ namespace DTXMania
                             int[] nPanelPos = new int[] { 854, 142, 0, 0 };
                             float fClipRatio = ( (float)this.rAVI.avi.nフレーム幅 / (float)this.rAVI.avi.nフレーム高さ );
                             float fResizeRatio = 1.0f;
+                            float fResizeRatio2 = 1.0f;
                             if( CDTXMania.ConfigIni.bDrums有効 )
                             {
-                                if( CDTXMania.ConfigIni.bGraph.Drums )
-                                {
-                                    nClipPos = new int[] { 2, 402, 0, 0 };
-                                    nPanelPos = new int[] { 2, 402, 0, 0 };
-                                    nClipPos[ 0 ] += 7;
-                                    nClipPos[ 1 ] += 156;
-                                    if( fClipRatio >= 1.77f ) //16:9
-                                        fResizeRatio = 260.0f / this.rAVI.avi.nフレーム幅;
+                                //if( CDTXMania.ConfigIni.bGraph.Drums )
+                                //{
+                                //    nClipPos = new int[] { 2, 402, 0, 0 };
+                                //    nPanelPos = new int[] { 2, 402, 0, 0 };
+                                //    nClipPos[ 0 ] += 7;
+                                //    nClipPos[ 1 ] += 156;
+                                //    if( fClipRatio >= 1.77f ) //16:9
+                                //    {
+                                //        fResizeRatio = 260.0f / this.rAVI.avi.nフレーム幅;
+                                //        //fResizeRatio = 260.0f / this.rAVI.avi.nフレーム幅;
+                                //    }
 
-                                    nClipPos[ 0 ] += (int)( ( 260.0f - ( this.rAVI.avi.nフレーム幅 * fResizeRatio ) ) / 2.0f );
-                                    nClipPos[ 1 ] -= (int)( ( ( this.rAVI.avi.nフレーム高さ * fResizeRatio ) ) / 2.0f );
-                                }
-                                else
+                                //    nClipPos[ 0 ] += (int)( ( 260.0f - ( this.rAVI.avi.nフレーム幅 * fResizeRatio ) ) / 2.0f );
+                                //    nClipPos[ 1 ] -= (int)( ( ( this.rAVI.avi.nフレーム高さ * fResizeRatio ) ) / 2.0f );
+                                //}
+                                //else
                                 {
                                     nClipPos[ 0 ] += 5;
                                     nClipPos[ 1 ] += 30;
                                     if( fClipRatio >= 1.77f ) //16:9
-                                        fResizeRatio = 416.0f / this.rAVI.avi.nフレーム幅;
+                                    {
+                                        fResizeRatio = 277.0f / this.rAVI.avi.nフレーム幅;
+                                        fResizeRatio2 = 155.0f / this.rAVI.avi.nフレーム高さ;
+                                    }
                                 }
                             }
                             else
@@ -432,11 +440,10 @@ namespace DTXMania
 
                             Matrix mat = Matrix.Identity;
                             
-                            mat *= SlimDX.Matrix.Scaling( fResizeRatio, fResizeRatio + 0.1f, 1f);
-                            //mat *= SlimDX.Matrix.Translation( 1480, 20, 115 );
-                            mat *= SlimDX.Matrix.Translation( 340, 0, 0 );
-                            mat *= SlimDX.Matrix.RotationY( C変換.DegreeToRadian( 25 ) );
-                            
+                            mat *= SlimDX.Matrix.Scaling( fResizeRatio, fResizeRatio2 + 0.08f, 0);
+                            mat *= SlimDX.Matrix.RotationY( C変換.DegreeToRadian( 30 ) );
+                            mat *= SlimDX.Matrix.Translation( 450, -50, 0 );
+
                             //this.txクリップパネル.t2D描画( CDTXMania.app.Device, nPanelPos[ 0 ], nPanelPos[ 1 ] );
                             //this.tx描画用.vc拡大縮小倍率 = new Vector3( fResizeRatio, fResizeRatio, 1.0f );
                             //this.tx描画用.t2D描画( CDTXMania.app.Device, nClipPos[ 0 ], nClipPos[ 1 ] );

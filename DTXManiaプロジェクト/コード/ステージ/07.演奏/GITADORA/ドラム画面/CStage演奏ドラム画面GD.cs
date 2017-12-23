@@ -238,7 +238,7 @@ namespace DTXMania
                 this.t進行描画_判定ライン();
 				this.t進行描画_演奏情報();
 
-                this.actAVI.tウィンドウクリップを表示する();
+                //this.actAVI.tウィンドウクリップを表示する();
                 this.actAVI.tウィンドウクリップを3D表示する();
 
 				if ( this.e判定表示優先度 == E判定表示優先度.Chipより上 )
