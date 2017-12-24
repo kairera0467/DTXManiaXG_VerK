@@ -3289,6 +3289,7 @@ namespace DTXMania
 			CDTXMania.ConfigIni.bAutoPlay.LT = this.iDrumsLowTom.bON;
 			CDTXMania.ConfigIni.bAutoPlay.FT = this.iDrumsFloorTom.bON;
 			CDTXMania.ConfigIni.bAutoPlay.CY = this.iDrumsCymbalRide.bON;
+            CDTXMania.ConfigIni.bAutoPlay.RD = this.iDrumsCymbalRide.bON;
             CDTXMania.ConfigIni.bAutoPlay.LP = this.iDrumsLeftPedal.bON;
             CDTXMania.ConfigIni.bAutoPlay.LBD = this.iDrumsLeftBassDrum.bON;
 			CDTXMania.ConfigIni.n譜面スクロール速度.Drums = this.iDrumsScrollSpeed.n現在の値;

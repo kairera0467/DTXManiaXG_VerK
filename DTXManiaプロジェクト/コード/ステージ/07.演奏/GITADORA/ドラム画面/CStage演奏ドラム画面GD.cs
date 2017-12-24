@@ -234,12 +234,8 @@ namespace DTXMania
                 this.t進行描画_ステータスパネル();
 
                 this.actClearBar.On進行描画();
-
-                this.t進行描画_判定ライン();
-				this.t進行描画_演奏情報();
-
-                //this.actAVI.tウィンドウクリップを表示する();
                 this.actAVI.tウィンドウクリップを3D表示する();
+                this.t進行描画_判定ライン();
 
 				if ( this.e判定表示優先度 == E判定表示優先度.Chipより上 )
 				{
@@ -251,6 +247,7 @@ namespace DTXMania
 				this.t進行描画_Wailing枠();
 				this.t進行描画_チップファイアD();
 				this.t進行描画_チップファイアGB();
+				this.t進行描画_演奏情報();
 				this.t進行描画_STAGEFAILED();
 				bIsFinishedFadeout = this.t進行描画_フェードイン_アウト();
 				if( bIsFinishedPlaying && ( base.eフェーズID == CStage.Eフェーズ.共通_通常状態 ) )

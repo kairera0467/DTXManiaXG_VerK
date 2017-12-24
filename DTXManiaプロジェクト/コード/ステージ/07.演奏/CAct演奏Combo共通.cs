@@ -143,6 +143,7 @@ namespace DTXMania
         public CCounter ctコンボ動作タイマ;
         public int nY1の位座標差分値 = 0;
         public int nY1の位座標差分値_2P = 0;
+        public STDGBVALUE<bool[]> b桁の数値が変わった;
 
         [StructLayout(LayoutKind.Sequential)]
         public struct ST爆発
@@ -594,7 +595,8 @@ namespace DTXMania
                     
                     matSkillPanel *= SlimDX.Matrix.Scaling( 0.5f, 0.9f, 1 );
                     matSkillPanel *= SlimDX.Matrix.RotationY( C変換.DegreeToRadian( 30 ) );
-                    matSkillPanel *= SlimDX.Matrix.Translation( 537 - ( 6 * i ), 231 + ( 16 * i ) - y動作差分 + ( i == 0 ? this.nY1の位座標差分値 : 0 ), 0 + ( 80 * i ) );
+                    //matSkillPanel *= SlimDX.Matrix.Translation( 537 - ( 6 * i ), 231 + ( 16 * i ) - y動作差分 + ( i == 0 ? this.nY1の位座標差分値 : 0 ), 0 + ( 80 * i ) );
+                    matSkillPanel *= SlimDX.Matrix.Translation( 537 - ( 6 * i ), 231 + ( 16 * i ) - y動作差分 + ( this.b桁の数値が変わった.Drums[ i ] ? this.nY1の位座標差分値 : 0 ), 0 + ( 80 * i ) );
 
                     this.txCOMBOドラム.t3D描画( CDTXMania.app.Device, matSkillPanel, new Rectangle( ( n位の数[ i ] % 5 ) * 120, ( n位の数[ i ] / 5 ) * 160, 120, 160 ) );
 
@@ -640,7 +642,7 @@ namespace DTXMania
 			//-----------------
 			#endregion
 
-            
+            /*
             if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.F1 ) )
             {
                 fX--;
@@ -745,6 +747,7 @@ namespace DTXMania
             //CDTXMania.act文字コンソール.tPrint( 0, 64, C文字コンソール.Eフォント種別.白, "ScaleY:" + fScaleY.ToString() );
             //CDTXMania.act文字コンソール.tPrint( 0, 80, C文字コンソール.Eフォント種別.白, "OFFSET:" + offset.ToString() );
             //CDTXMania.act文字コンソール.tPrint( 0, 96, C文字コンソール.Eフォント種別.白, "PanelZ:" + fZ.ToString() );
+            */
         }
         protected virtual void tコンボ表示_ギター( int nCombo値, int nジャンプインデックス )
 		{
@@ -884,6 +887,7 @@ namespace DTXMania
 				this.status[ i ].nジャンプインデックス値 = 99999;
 				this.status[ i ].n前回の時刻_ジャンプ用 = -1;
 				this.status[ i ].nコンボが切れた時刻 = -1;
+                this.b桁の数値が変わった[ i ] = new bool[ 10 ];
 			}
             this.ctコンボアニメ = new CCounter( 0, 130, 1, CDTXMania.Timer );
             this.ctコンボアニメ_2P = new CCounter( 0, 130, 1, CDTXMania.Timer );
@@ -954,6 +958,29 @@ namespace DTXMania
 				else
 				{
 					e今回の状態遷移イベント = EEvent.数値更新;
+
+                    int[] n位の数_Before = new int[ 10 ];
+                    int[] n位の数_After = new int[ 10 ];
+                    for( int j = 0; j < 2; j++ )
+                    {
+                        int n = ( j == 0 ? this.status[ i ].n現在表示中のCOMBO値 : this.status[ i ].nCOMBO値 );
+			            int n桁数 = 0;
+			            while( ( n > 0 ) && ( n桁数 < 10 ) )
+			            {
+				            if( j == 0 ) n位の数_Before[ n桁数 ] = n % 10;
+                            else n位の数_After[ n桁数 ] = n % 10;
+				            n = ( n - ( n % 10 ) ) / 10;
+				            n桁数++;
+			            }
+
+                    }
+                    for( int k = 0; k < 10; k++ )
+                    {
+                        if( n位の数_Before[ k ] != n位の数_After[ k ] )
+                            this.b桁の数値が変わった[ i ][ k ] = true;
+                        else
+                            this.b桁の数値が変わった[ i ][ k ] = false;
+                    }
 				}
 				//-----------------
 				#endregion

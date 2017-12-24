@@ -30,7 +30,8 @@ namespace DTXMania
 		}
 		public void OnManagedリソースの作成()
 		{
-            
+            this.txLabelName = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\6_Difficulty.png" ) );
+            this.rectLabelName = new Rectangle( 0, 0, 0, 0 );
 		}
 		public void OnManagedリソースの解放()
 		{
@@ -38,6 +39,7 @@ namespace DTXMania
             CDTXMania.tテクスチャの解放( ref this.txTitle );
             CDTXMania.tテクスチャの解放( ref this.txArtist );
             CDTXMania.tテクスチャの解放( ref this.txDiffPanel );
+            CDTXMania.tテクスチャの解放( ref this.txLabelName );
 
             CDTXMania.t安全にDisposeする( ref this.pfTitleName );
             CDTXMania.t安全にDisposeする( ref this.pfArtistName );
@@ -53,6 +55,10 @@ namespace DTXMania
             if( this.txDiffPanel != null )
             {
                 this.txDiffPanel.t2D描画( CDTXMania.app.Device, 520, 77 );
+                if( this.txLabelName != null )
+                {
+                    this.txLabelName.t2D描画( CDTXMania.app.Device, 616, 88, this.rectLabelName );
+                }
             }
             if( this.txTitle != null )
             {
@@ -94,18 +100,23 @@ namespace DTXMania
             {
                 case 0:
                     colorLabel = Color.FromArgb( 70, 140, 255 );
+                    this.rectLabelName = new Rectangle( 0, 0, 180, 28 );
                     break;
                 case 1:
                     colorLabel = Color.FromArgb( 236, 161, 0 );
+                    this.rectLabelName = new Rectangle( 0, 28, 180, 28 );
                     break;
                 case 2:
                     colorLabel = Color.FromArgb( 255, 107, 119 );
+                    this.rectLabelName = new Rectangle( 0, 54, 180, 28 );
                     break;
                 case 3:
                     colorLabel = Color.FromArgb( 188, 104, 225 );
+                    this.rectLabelName = new Rectangle( 0, 84, 180, 28 );
                     break;
                 case 4:
                     colorLabel = Color.FromArgb( 128, 128, 128 );
+                    this.rectLabelName = new Rectangle( 0, 112, 180, 28 );
                     break;
             }
 
@@ -170,9 +181,12 @@ namespace DTXMania
         private CTexture txDiffPanel;
         private CTexture txTitle;
         private CTexture txArtist;
+        private CTexture txLabelName;
 
         private CPrivateFastFont pfTitleName;
         private CPrivateFastFont pfArtistName;
+
+        private Rectangle rectLabelName;
         //-----------------
         #endregion
     }

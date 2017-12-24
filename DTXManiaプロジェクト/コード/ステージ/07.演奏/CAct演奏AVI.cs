@@ -442,7 +442,7 @@ namespace DTXMania
                             
                             mat *= SlimDX.Matrix.Scaling( fResizeRatio, fResizeRatio2 + 0.08f, 0);
                             mat *= SlimDX.Matrix.RotationY( C変換.DegreeToRadian( 30 ) );
-                            mat *= SlimDX.Matrix.Translation( 450, -50, 0 );
+                            mat *= SlimDX.Matrix.Translation( 450, -80, 0 );
 
                             //this.txクリップパネル.t2D描画( CDTXMania.app.Device, nPanelPos[ 0 ], nPanelPos[ 1 ] );
                             //this.tx描画用.vc拡大縮小倍率 = new Vector3( fResizeRatio, fResizeRatio, 1.0f );

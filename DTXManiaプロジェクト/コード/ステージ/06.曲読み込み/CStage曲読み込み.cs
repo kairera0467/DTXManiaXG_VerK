@@ -294,6 +294,7 @@ namespace DTXMania
                     } else {
                         this.tx背景 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\6_background Guitar.png" ) );
                     }
+                    this.actLoadMain.OnManagedリソースの作成();
                 }
                 base.OnManagedリソースの作成();
 			}
