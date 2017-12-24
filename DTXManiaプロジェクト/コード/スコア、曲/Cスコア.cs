@@ -281,6 +281,25 @@ namespace DTXMania
 					}
 				}
 			}
+
+            public STDGBVALUE<string> strレベル小数点含
+            {
+                get
+                {
+                    STDGBVALUE<string> ret = new STDGBVALUE<string>();
+                    for( int i = 0; i < 3; i++ )
+                    {
+                        int n整数 = this.レベル[ i ] / 10;
+                        int n小数 = ( this.レベル[ i ] - ( n整数 * 10 ) ) * 10;
+                        n小数 += this.レベルDec[ i ];
+
+                        ret[ i ] += string.Format( "{0:0}", n整数 );
+                        ret[ i ] += ".";
+                        ret[ i ] += string.Format( "{0,2:00}", n小数 );
+                    }
+                    return ret;
+                }
+            }
 		}
 
 		public bool bSongDBにキャッシュがあった;

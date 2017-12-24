@@ -114,12 +114,7 @@ namespace DTXMania
         //        if( CDTXMania.ConfigIni.bDrums有効 )
 				    //this.act演奏履歴パネル.On進行描画();
 				//this.actShowCurrentPosition.On進行描画();								// #27648 2011.3.28 yyagi
-                this.t決定アニメーション();
-                if( base.eフェーズID != CStage.Eフェーズ.選曲_決定演出 && base.eフェーズID != Eフェーズ.選曲_NowLoading画面へのフェードアウト )
-                {
-				    //this.actArtistComment.On進行描画();
-                    this.actPresound.On進行描画();
-                }
+                this.actPresound.On進行描画();
 				#region [ フェーズ処理 ]
 				switch ( base.eフェーズID )
 				{
@@ -256,7 +251,6 @@ namespace DTXMania
 									{
 										case C曲リストノード.Eノード種別.SCORE:
                                             CDTXMania.Skin.sound曲決定音.t再生する();
-                                            this.t決定アニメーション開始();
 											this.t曲を選択する();
 											break;
 
@@ -290,7 +284,6 @@ namespace DTXMania
 
 										case C曲リストノード.Eノード種別.RANDOM:
                                             CDTXMania.Skin.sound曲決定音.t再生する();
-                                            this.t決定アニメーション開始();
 											this.t曲をランダム選択する();
 											break;
 									}
@@ -484,21 +477,6 @@ namespace DTXMania
 					this.actSortSongs.t進行描画();
 					this.actQuickConfig.t進行描画();
 				}
-                else if( base.eフェーズID == CStage.Eフェーズ.選曲_決定演出
-                      && CDTXMania.act現在入力を占有中のプラグイン == null )
-                {
-                    #region [ Decide ]
-                    if( ( CDTXMania.Pad.b押されたDGB( Eパッド.Decide ) || CDTXMania.Pad.b押された( E楽器パート.DRUMS, Eパッド.RD ) ) ||
-                        ( ( CDTXMania.ConfigIni.bEnterがキー割り当てのどこにも使用されていない && CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.Return ) ) ) )
-                    {
-                        this.t決定アニメーション終了();
-                        if( this.ct決定演出待機.b進行中 )
-                        {
-                            this.ct決定演出待機.n現在の値 = this.ct決定演出待機.n終了値;
-                        }
-                    }
-                    #endregion
-                }
 			}
 			return 0;
 		}

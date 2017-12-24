@@ -488,11 +488,19 @@ namespace DTXMania
 			{
 				this.eフェードアウト完了時の戻り値 = E戻り値.選曲した;
 			//	this.actFOtoNowLoading.tフェードアウト開始();				// #27787 2012.3.10 yyagi 曲決定時の画面フェードアウトの省略
+                if( CDTXMania.bXGRelease )
+                {
 #if animetest
-                base.eフェーズID = CStage.Eフェーズ.選曲_決定演出;
+                    base.eフェーズID = CStage.Eフェーズ.選曲_決定演出;
 #else
-                base.eフェーズID = CStage.Eフェーズ.選曲_NowLoading画面へのフェードアウト;
+                    base.eフェーズID = CStage.Eフェーズ.選曲_NowLoading画面へのフェードアウト;
 #endif
+                }
+                else
+                {
+			    	this.actFOtoNowLoading.tフェードアウト開始();
+                    base.eフェーズID = CStage.Eフェーズ.選曲_NowLoading画面へのフェードアウト;
+                }
 			}
 			CDTXMania.Skin.bgm選曲画面.t停止する();
 		}

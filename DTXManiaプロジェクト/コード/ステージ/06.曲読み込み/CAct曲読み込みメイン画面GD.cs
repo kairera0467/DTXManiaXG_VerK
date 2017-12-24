@@ -4,6 +4,7 @@ using System.Text;
 using System.Drawing;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using SlimDX;
 using FDK;
 
@@ -31,6 +32,7 @@ namespace DTXMania
 		public void OnManagedリソースの作成()
 		{
             this.txLabelName = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\6_Difficulty.png" ) );
+            this.txDifficultyNumber = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\6_Difficulty_Number.png" ) );
             this.rectLabelName = new Rectangle( 0, 0, 0, 0 );
 		}
 		public void OnManagedリソースの解放()
@@ -40,6 +42,7 @@ namespace DTXMania
             CDTXMania.tテクスチャの解放( ref this.txArtist );
             CDTXMania.tテクスチャの解放( ref this.txDiffPanel );
             CDTXMania.tテクスチャの解放( ref this.txLabelName );
+            CDTXMania.tテクスチャの解放( ref this.txDifficultyNumber );
 
             CDTXMania.t安全にDisposeする( ref this.pfTitleName );
             CDTXMania.t安全にDisposeする( ref this.pfArtistName );
@@ -59,6 +62,7 @@ namespace DTXMania
                 {
                     this.txLabelName.t2D描画( CDTXMania.app.Device, 616, 88, this.rectLabelName );
                 }
+                this.t大文字表示( 538, 138, CDTXMania.stage選曲GITADORA.r確定されたスコア.譜面情報.strレベル小数点含.Drums );
             }
             if( this.txTitle != null )
             {
@@ -182,12 +186,63 @@ namespace DTXMania
         private CTexture txTitle;
         private CTexture txArtist;
         private CTexture txLabelName;
+        private CTexture txDifficultyNumber;
 
         private CPrivateFastFont pfTitleName;
         private CPrivateFastFont pfArtistName;
 
         private Rectangle rectLabelName;
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct ST文字位置
+        {
+            public char ch;
+            public Point pt;
+            public ST文字位置(char ch, Point pt)
+            {
+                this.ch = ch;
+                this.pt = pt;
+            }
+        }
+        private ST文字位置[] st大文字位置 = new ST文字位置[] {
+            new ST文字位置( '.', new Point( 780, 0 ) ),
+            new ST文字位置( '0', new Point( 0, 0 ) ),
+            new ST文字位置( '1', new Point( 78, 0 ) ),
+            new ST文字位置( '2', new Point( 156, 0 ) ),
+            new ST文字位置( '3', new Point( 234, 0 ) ),
+            new ST文字位置( '4', new Point( 312, 0 ) ),
+            new ST文字位置( '5', new Point( 390, 0 ) ),
+            new ST文字位置( '6', new Point( 468, 0 ) ),
+            new ST文字位置( '7', new Point( 546, 0 ) ),
+            new ST文字位置( '8', new Point( 624, 0 ) ),
+            new ST文字位置( '9', new Point( 702, 0 ) )
+        };
         //-----------------
+        private void t大文字表示(int x, int y, string str)
+        {
+            for( int i = 0; i < str.Length; i++ )
+            {
+                char c = str[ i ];
+                for( int j = 0; j < this.st大文字位置.Length; j++ )
+                {
+                    if( this.st大文字位置[ j ].ch == c )
+                    {
+                        Rectangle rc画像内の描画領域 = new Rectangle( this.st大文字位置[ j ].pt.X, this.st大文字位置[ j ].pt.Y, 78, 116 );
+                        if( c == '.' )
+                        {
+                            rc画像内の描画領域.Width -= 65;
+                        }
+                        if( this.txDifficultyNumber != null )
+                        {
+                            this.txDifficultyNumber.t2D描画( CDTXMania.app.Device, x, y, rc画像内の描画領域 );
+                        }
+                        break;
+                    }
+                }
+                if( c == '.' ) x += 16;
+                else x += 74;
+            }
+        }
         #endregion
     }
 }
