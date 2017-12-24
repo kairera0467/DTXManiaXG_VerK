@@ -26,10 +26,6 @@ namespace DTXMania
 			//this.actFont = font = new CActDFPFont();
 			//base.list子Activities.Add( font );
 			base.list子Activities.Add( this.actFIFO = new CActFIFOWhite() );
-            if( CDTXMania.bXGRelease )
-			    base.list子Activities.Add( this.actList = new CActConfigListXG() );
-            else
-			    base.list子Activities.Add( this.actList = new CActConfigListGD() );
 			base.list子Activities.Add( this.actKeyAssign = new CActConfigKeyAssign() );
 			base.list子Activities.Add( this.actオプションパネル = new CActオプションパネル() );
 			base.b活性化してない = true;
@@ -57,6 +53,10 @@ namespace DTXMania
 
 		public override void On活性化()
 		{
+            if( CDTXMania.bXGRelease )
+			    base.list子Activities.Add( this.actList = new CActConfigListXG() );
+            else
+			    base.list子Activities.Add( this.actList = new CActConfigListGD() );
 			Trace.TraceInformation( "コンフィグステージを活性化します。" );
 			Trace.Indent();
 			try
@@ -99,6 +99,7 @@ namespace DTXMania
 			}
 			finally
 			{
+                base.list子Activities.Remove( this.actList );
 				Trace.TraceInformation( "コンフィグステージの非活性化を完了しました。" );
 				Trace.Unindent();
 			}
