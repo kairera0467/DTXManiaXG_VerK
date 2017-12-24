@@ -27,7 +27,7 @@ namespace DTXMania
         //public static readonly string D3DXDLL = "d3dx9_42.dll";	// February 2010
         //public static readonly string D3DXDLL = "d3dx9_41.dll";	// March 2009
         //public static readonly bool bXGRelease = true; //システム内部にGITADORA風表示とで大きく異る箇所があるので、わかりやすくなるようにフラグを作成。
-        public static readonly bool bXGRelease = false;
+        public static bool bXGRelease = false;
 
 		public static CDTXMania app
 		{

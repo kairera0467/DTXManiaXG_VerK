@@ -529,6 +529,10 @@ namespace DTXMania
                             {
                                 this.txバー選択中.t2D描画( CDTXMania.app.Device, 660, 312 );
                             }
+                            if( ( this.stバー情報[ nパネル番号 ].eバー種別 == Eバー種別.Box || this.stバー情報[ nパネル番号 ].eバー種別 == Eバー種別.BackBox ) && this.txバー_フォルダ != null )
+                            {
+                                this.txバー_フォルダ.t2D描画( CDTXMania.app.Device, 660, 315 );
+                            }
 							//-----------------
 							#endregion
 							#region [ タイトル名テクスチャを描画。]
@@ -540,7 +544,7 @@ namespace DTXMania
                             //-----------------
                             #endregion
                             #region[ ジャケット画像を描画 ]
-                            if( this.txTumbnail[ nパネル番号 ] != null )
+                            if( this.txTumbnail[ nパネル番号 ] != null && ( this.stバー情報[ nパネル番号 ].eバー種別 == Eバー種別.Score || this.stバー情報[ nパネル番号 ].eバー種別 == Eバー種別.Random ) )
                             {
                                 //縮小 64x64
                                 float fRetW = 64.0f / this.txTumbnail[ nパネル番号 ].szテクスチャサイズ.Width;
@@ -583,10 +587,14 @@ namespace DTXMania
 //                            int x = i選曲バーX座標 + 500 - (int)(db割合0to1 * 500);
 							int y = this.ptバーの基本座標[ i ].Y;
 //							this.tバーの描画( x, y, this.stバー情報[ nパネル番号 ].eバー種別, false );
+                            if( ( this.stバー情報[ nパネル番号 ].eバー種別 == Eバー種別.Box || this.stバー情報[ nパネル番号 ].eバー種別 == Eバー種別.BackBox ) && this.txバー_フォルダ != null )
+                            {
+                                this.txバー_フォルダ.t2D描画( CDTXMania.app.Device, 691, y - 12 );
+                            }
 							//-----------------
 							#endregion
                             #region[ ジャケット画像とクリアマークを描画 ]
-                            if( this.txTumbnail[ nパネル番号 ] != null )
+                            if( this.txTumbnail[ nパネル番号 ] != null && ( this.stバー情報[ nパネル番号 ].eバー種別 == Eバー種別.Score || this.stバー情報[ nパネル番号 ].eバー種別 == Eバー種別.Random ) )
                             {
                                 //縮小 64x64
                                 float fRetW = 64.0f / this.txTumbnail[ nパネル番号 ].szテクスチャサイズ.Width;
@@ -656,10 +664,14 @@ namespace DTXMania
                             {
                                 this.txバー選択中.t2D描画( CDTXMania.app.Device, 660, 312 );
                             }
+                            if( ( this.stバー情報[ nパネル番号 ].eバー種別 == Eバー種別.Box || this.stバー情報[ nパネル番号 ].eバー種別 == Eバー種別.BackBox ) && this.txバー_フォルダ != null )
+                            {
+                                this.txバー_フォルダ.t2D描画( CDTXMania.app.Device, 660, y - 7 );
+                            }
                             //-----------------
                             #endregion
                             #region[ ジャケット画像とクリアマークを描画 ]
-                            if( this.txTumbnail[ nパネル番号 ] != null )
+                            if( this.txTumbnail[ nパネル番号 ] != null && ( this.stバー情報[ nパネル番号 ].eバー種別 == Eバー種別.Score || this.stバー情報[ nパネル番号 ].eバー種別 == Eバー種別.Random ) )
                             {
                                 //縮小 64x64
                                 float fRetW = 64.0f / this.txTumbnail[ nパネル番号 ].szテクスチャサイズ.Width;
@@ -731,12 +743,12 @@ namespace DTXMania
                         //}
                         if( ( this.stバー情報[ nパネル番号 ].eバー種別 == Eバー種別.Box || this.stバー情報[ nパネル番号 ].eバー種別 == Eバー種別.BackBox ) && this.txバー_フォルダ != null )
                         {
-                            this.txバー_フォルダ.t2D描画( CDTXMania.app.Device, 660, y - 12 );
+                            this.txバー_フォルダ.t2D描画( CDTXMania.app.Device, 691, y - 12 );
                         }
 						//-----------------
 						#endregion
                         #region[ ジャケット画像とクリアマークを描画 ]
-                        if( this.txTumbnail[ nパネル番号 ] != null )
+                        if( this.txTumbnail[ nパネル番号 ] != null && ( this.stバー情報[ nパネル番号 ].eバー種別 == Eバー種別.Score || this.stバー情報[ nパネル番号 ].eバー種別 == Eバー種別.Random ) )
                         {
                             //縮小 64x64
                             float fRetW = 64.0f / this.txTumbnail[ nパネル番号 ].szテクスチャサイズ.Width;
@@ -1070,6 +1082,11 @@ namespace DTXMania
         }
         private CTexture t指定された文字テクスチャを生成してバーに格納する( int nバー番号, string str文字, Eバー種別 eType )
         {
+            if( eType == Eバー種別.Random ) // 2017.12.24 ランダムの場合、固有の文字列を付与する
+            {
+                str文字 = "ランダムカテゴリー内";
+            }
+
             Bitmap bmp;
             bmp = prvFont.DrawPrivateFont( str文字, CPrivateFont.DrawMode.Edge, Color.Black, Color.Black, Color.White, Color.White, true );
             CTexture tx文字テクスチャ = CDTXMania.tテクスチャの生成( bmp, false );

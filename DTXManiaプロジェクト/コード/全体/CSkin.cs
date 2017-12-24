@@ -846,6 +846,10 @@ namespace DTXMania
                             str3 = strArray[0].Trim();
                             str4 = strArray[1].Trim();
                             //-----------------------------
+                            if (str3.Equals("SkinType"))
+                            {
+                                CDTXMania.bXGRelease = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 1, 0 ) == 0 ? true : false;
+                            }
                             if (str3.Equals("NamePlateType"))
                             {
                                 CDTXMania.ConfigIni.eNamePlateType = (Eタイプ)C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 3, (int)CDTXMania.ConfigIni.eNamePlateType );

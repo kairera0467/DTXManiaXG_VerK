@@ -22,10 +22,6 @@ namespace DTXMania
 			base.b活性化してない = true;
 			base.list子Activities.Add( this.actFI = new CActFIFOBlack() );	// #27787 2012.3.10 yyagi 曲読み込み画面のフェードインの省略
 			base.list子Activities.Add( this.actFO = new CActFIFOBlack() );
-
-            if( !CDTXMania.bXGRelease ) {
-                this.actLoadMain = new CAct曲読み込みメイン画面GD();
-            }
 		}
 
 
@@ -37,6 +33,10 @@ namespace DTXMania
 			Trace.Indent();
 			try
 			{
+                if( !CDTXMania.bXGRelease && this.actLoadMain == null ) {
+                    this.actLoadMain = new CAct曲読み込みメイン画面GD(); // 2017.12.24 スキン依存で生成の有無を決めるため、こちらに移動。
+                }
+
 				this.str曲タイトル = "";
 				this.strSTAGEFILE = "";
 				this.b音符を表示する = false;

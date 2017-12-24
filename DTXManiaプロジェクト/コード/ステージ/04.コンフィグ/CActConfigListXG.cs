@@ -53,6 +53,13 @@ namespace DTXMania
         //}
         #endregion
 
+        public override void On活性化()
+        {
+            this.prvFont = new CPrivateFastFont( CSkin.Path( @"Graphics\fonts\mplus-1p-heavy.ttf" ), 20 );
+			this.ftフォント = new Font( "MS PGothic", 18.0f, FontStyle.Bold, GraphicsUnit.Pixel );
+            base.On活性化();
+        }
+
         public override void OnManagedリソースの作成()
         {
             base.OnManagedリソースの作成();
@@ -63,14 +70,7 @@ namespace DTXMania
             CDTXMania.tテクスチャの解放( ref this.tx説明文パネル );
             base.OnManagedリソースの解放();
         }
-
-        public override void On活性化()
-        {
-            this.prvFont = new CPrivateFastFont( CSkin.Path( @"Graphics\fonts\mplus-1p-heavy.ttf" ), 20 );
-			this.ftフォント = new Font( "MS PGothic", 18.0f, FontStyle.Bold, GraphicsUnit.Pixel );
-            base.On活性化();
-        }
-
+        
         public override int On進行描画()
 		{
 			throw new InvalidOperationException( "t進行描画(bool)のほうを使用してください。" );
@@ -369,6 +369,11 @@ namespace DTXMania
 			}
 			//-----------------
 			#endregion
+
+            #region[ 説明文パネル ]
+            if( this.tx説明文 != null )
+                this.tx説明文.t2D描画( CDTXMania.app.Device, 0x43, 0x17e );
+            #endregion
 			
 			#region [ 項目リストにフォーカスがあって、かつスクロールが停止しているなら、パネルの上下に▲印を描画する。]
 			//-----------------
