@@ -1,0 +1,22 @@
+// DTXScript(仮) ver0.01
+// スキン情報定義用スクリプト
+// 
+// <引数>
+// string	項目名
+// string	要素
+//
+// <注意点>
+// ・各項目の注意事項を読んで下さい。
+
+//スキン名
+SKINNAME,matixx
+
+//スキンバージョン(用途未定)
+SKINVER,1
+
+//0の場合XGリリース、1の場合GITADORAリリースで使用できます。
+SKINMODE,0
+
+//NamePlateType(XG用のみ)
+//0にするとXG2、1にするとXG1風の表示になります。
+NAMEPLATETYPE,0

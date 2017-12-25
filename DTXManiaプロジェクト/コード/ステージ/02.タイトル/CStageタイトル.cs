@@ -229,7 +229,7 @@ namespace DTXMania
 				}
 				#endregion
                 #region[ バージョン表示 ]
-                string strVersion = "DTX:J:A:A:2017081100";
+                string strVersion = "DTX:J:A:A:2017122500";
 #if DEBUG
                 strVersion += "  DEBUG";
 #endif
