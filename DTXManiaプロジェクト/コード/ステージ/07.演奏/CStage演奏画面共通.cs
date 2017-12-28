@@ -1457,7 +1457,7 @@ namespace DTXMania
 							{
 								this.nヒット数_Auto含まない.Drums.Miss++;
 							}
-                            this.actClearBar.t区間内ミス通知( pChip.e楽器パート );
+                            if( !CDTXMania.bXGRelease ) this.actClearBar.t区間内ミス通知( pChip.e楽器パート );
 							break;
 						default:
 							this.nヒット数_Auto含む.Drums[ (int) eJudgeResult ]++;
@@ -1509,7 +1509,7 @@ namespace DTXMania
 							{
 								this.nヒット数_Auto含まない[ indexInst ].Miss++;
 							}
-                            this.actClearBar.t区間内ミス通知( pChip.e楽器パート );
+                            if( !CDTXMania.bXGRelease ) this.actClearBar.t区間内ミス通知( pChip.e楽器パート );
 							break;
 						default:	// #24068 2011.1.10 ikanick changed
 							// #24167 2011.1.16 yyagi changed
