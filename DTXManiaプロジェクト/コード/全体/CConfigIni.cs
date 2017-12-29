@@ -532,6 +532,7 @@ namespace DTXMania
         public bool bJudgeCountDisp;
         public bool bSkillModeを自動切替えする;
         public bool bXPerfect判定を有効にする;
+        public bool bWindowClipMode;
 
         public EMovieClipMode eMovieClipMode;
         public ESkillType eSkillMode;
@@ -1318,12 +1319,13 @@ namespace DTXMania
             this.bJudgeCountDisp = false;
             this.bSkillModeを自動切替えする = true;
             this.bXPerfect判定を有効にする = false;
+            this.bWindowClipMode = false;
             this.b曲名表示をdefのものにする = true;
             this.eHHOGraphics = Eタイプ.A;
             this.eJudgeAnimeType = Eタイプ.B;
             this.eLaneType = Eタイプ.A;
             this.eLBDGraphics = Eタイプ.A;
-            this.eMovieClipMode = EMovieClipMode.OFF;
+            this.eMovieClipMode = EMovieClipMode.FullScreen;
             this.eNamePlateType = Eタイプ.A;
             this.eRDPosition = ERDPosition.RCRD;
             this.eSkillMode = ESkillType.DTXMania;
@@ -1642,8 +1644,11 @@ namespace DTXMania
 			sw.WriteLine( "; BGAの表示(0:OFF, 1:ON)" );
 			sw.WriteLine( "BGA={0}", this.bBGA有効 ? 1 : 0 );
 			sw.WriteLine();
-			sw.WriteLine( "; クリップの表示位置(0:OFF, 1:ON)" );
-			sw.WriteLine( "MovieClipMode={0}", (int)this.eMovieClipMode );
+			//sw.WriteLine( "; クリップの表示位置(0:OFF, 1:FullScreen, 2:Window, 3:FullScreen + Window)" );
+			//sw.WriteLine( "MovieClipMode={0}", (int)this.eMovieClipMode );
+			//sw.WriteLine();
+			sw.WriteLine( "; クリップのウィンドウ表示(0:OFF, 1:ON)" );
+			sw.WriteLine( "WindowClipDisp={0}", this.bWindowClipMode ? 1 : 0 );
 			sw.WriteLine();
 			#endregion
 			#region [ フィルイン ]
@@ -2740,10 +2745,14 @@ namespace DTXMania
 											{
 												this.bBGA有効 = C変換.bONorOFF( str4[ 0 ] );
 											}
-                                            else if( str3.Equals( "MovieClipMode" ) )
-                                            {
-                                                this.eMovieClipMode = (EMovieClipMode) C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 3, (int) this.eMovieClipMode );
-                                            }
+                                            //else if( str3.Equals( "MovieClipMode" ) )
+                                            //{
+                                            //    this.eMovieClipMode = (EMovieClipMode) C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 3, (int) this.eMovieClipMode );
+                                            //}
+											else if ( str3.Equals( "WindowClipDisp" ) )
+											{
+												this.bWindowClipMode = C変換.bONorOFF( str4[ 0 ] );
+											}
 											#endregion
 											#region [ フィルイン関係 ]
 											else if ( str3.Equals( "FillInEffect" ) )

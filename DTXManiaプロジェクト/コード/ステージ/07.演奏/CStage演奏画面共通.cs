@@ -2008,16 +2008,20 @@ namespace DTXMania
 					this.eフェードアウト完了時の戻り値 = E演奏画面の戻り値.演奏中断;
 				}
 			}
-            if( keyboard.bキーが押された( (int) SlimDX.DirectInput.Key.F5 ) )
+            //if(  )
+            //{
+            //    if( CDTXMania.ConfigIni.eMovieClipMode == EMovieClipMode.OFF )
+            //        CDTXMania.ConfigIni.eMovieClipMode = EMovieClipMode.FullScreen;
+            //    else if( CDTXMania.ConfigIni.eMovieClipMode == EMovieClipMode.FullScreen )
+            //        CDTXMania.ConfigIni.eMovieClipMode = EMovieClipMode.Window;
+            //    else if( CDTXMania.ConfigIni.eMovieClipMode == EMovieClipMode.Window )
+            //        CDTXMania.ConfigIni.eMovieClipMode = EMovieClipMode.Both;
+            //    else if( CDTXMania.ConfigIni.eMovieClipMode == EMovieClipMode.Both )
+            //        CDTXMania.ConfigIni.eMovieClipMode = EMovieClipMode.OFF;
+            //}
+            if( keyboard.bキーが押された( (int) SlimDX.DirectInput.Key.F5 ) ) // 2017.12.29 kairera0467 #37846
             {
-                if( CDTXMania.ConfigIni.eMovieClipMode == EMovieClipMode.OFF )
-                    CDTXMania.ConfigIni.eMovieClipMode = EMovieClipMode.FullScreen;
-                else if( CDTXMania.ConfigIni.eMovieClipMode == EMovieClipMode.FullScreen )
-                    CDTXMania.ConfigIni.eMovieClipMode = EMovieClipMode.Window;
-                else if( CDTXMania.ConfigIni.eMovieClipMode == EMovieClipMode.Window )
-                    CDTXMania.ConfigIni.eMovieClipMode = EMovieClipMode.Both;
-                else if( CDTXMania.ConfigIni.eMovieClipMode == EMovieClipMode.Both )
-                    CDTXMania.ConfigIni.eMovieClipMode = EMovieClipMode.OFF;
+                CDTXMania.ConfigIni.bWindowClipMode = !CDTXMania.ConfigIni.bWindowClipMode;
             }
 
             if( CDTXMania.ConfigIni.bDrums有効 ) //2017.08.06 kairera0467 ギターは未実装

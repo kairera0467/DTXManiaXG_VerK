@@ -157,6 +157,7 @@ namespace DTXMania
         public STDGBVALUE<bool>[] bn00コンボに到達した = new STDGBVALUE<bool>[256];
         public STDGBVALUE<int> nコンボカウント = new STDGBVALUE<int>();
 
+#if DEBUG
         private float fX;
         private float fY;
         private float fZ;
@@ -164,6 +165,7 @@ namespace DTXMania
         private float fScaleX;
         private float fScaleY;
         private int offset;
+#endif
 
         // 内部クラス
 

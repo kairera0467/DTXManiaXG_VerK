@@ -202,6 +202,11 @@ namespace DTXMania
                 "必要とされます。",
 				"To use AVI playback or not." );
 			this.list項目リスト.Add( this.iSystemAVI );
+			this.iSystemWindowClipDisp = new CItemToggle( "MovieWindow", CDTXMania.ConfigIni.bWindowClipMode,
+				"ムービークリップの小窓表示を追加します。" +
+                "",
+				"" );
+			this.list項目リスト.Add( this.iSystemWindowClipDisp );
 			this.iSystemForceAVIFullscreen = new CItemToggle( "FullAVI", CDTXMania.ConfigIni.bForceAVIFullscreen,
 				"旧AVIの全画面表示：\n" +
 				"旧仕様の動画(AVI)の表示を強制的に全画面化します。\n" +
@@ -2975,6 +2980,7 @@ namespace DTXMania
         #region[ XG ]
         private CItemList iSystemNamePlateType;
         private CItemToggle iSystemJudgeCountDisp;
+        private CItemToggle iSystemWindowClipDisp;
         #endregion
 
         protected List<CItemBase> list項目リスト;
@@ -3244,6 +3250,7 @@ namespace DTXMania
             CDTXMania.ConfigIni.eNamePlateType = (Eタイプ)this.iSystemNamePlateType.n現在選択されている項目番号;
             CDTXMania.ConfigIni.bJudgeCountDisp = this.iSystemJudgeCountDisp.bON;
             CDTXMania.ConfigIni.nCommonBGMAdjustMs = this.iSystemBGMAdjust.n現在の値;                       // #36372 2016.06.19 kairera0467
+            CDTXMania.ConfigIni.bWindowClipMode = this.iSystemWindowClipDisp.bON;                           // #37846 2017.12.29 kairera0467
 		}
 		private void tConfigIniへ記録する_Bass()
 		{
