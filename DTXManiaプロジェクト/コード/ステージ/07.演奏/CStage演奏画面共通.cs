@@ -2860,9 +2860,11 @@ namespace DTXMania
 			this.actPanel.Stop();				// PANEL表示停止
 			CDTXMania.Timer.t一時停止();		// 再生時刻カウンタ停止
 
-			this.n現在のトップChip = CDTXMania.DTX.listChip.Count - 1;	// 終端にシーク
+			this.n現在のトップChip = CDTXMania.DTX.listChip.Count - 1;    // 終端にシーク
 
-			// 自分自身のOn活性化()相当の処理もすべき。
+            // 自分自身のOn活性化()相当の処理もすべき。
+
+            this.actScore.Reset();
 		}
 
 		public void t演奏位置の変更( int nStartBar )
@@ -2871,6 +2873,8 @@ namespace DTXMania
 			CDTXMania.DTX.t全チップの再生停止();
 			this.actAVI.Stop();
 			this.actBGA.Stop();
+
+            this.actScore.Reset();
 
 			#region [ 再生開始小節の変更 ]
 			nStartBar++;									// +1が必要

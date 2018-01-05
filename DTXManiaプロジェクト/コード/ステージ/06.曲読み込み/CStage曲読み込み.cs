@@ -50,16 +50,24 @@ namespace DTXMania
 					this.sd読み込み音 = null;
 				}
 
-                string strDTXファイルパス = ( CDTXMania.bコンパクトモード ) ? CDTXMania.strコンパクトモードファイル : "";
+                string strDTXファイルパス = "";
 
-                if( CDTXMania.bXGRelease )
+                if( CDTXMania.bコンパクトモード )
                 {
-                    strDTXファイルパス = CDTXMania.stage選曲XG.r確定されたスコア.ファイル情報.ファイルの絶対パス;
+                    strDTXファイルパス = CDTXMania.strコンパクトモードファイル;
                 }
                 else
                 {
-                    strDTXファイルパス = CDTXMania.stage選曲GITADORA.r確定されたスコア.ファイル情報.ファイルの絶対パス;
+                    if( CDTXMania.bXGRelease )
+                    {
+                        strDTXファイルパス = CDTXMania.stage選曲XG.r確定されたスコア.ファイル情報.ファイルの絶対パス;
+                    }
+                    else
+                    {
+                        strDTXファイルパス = CDTXMania.stage選曲GITADORA.r確定されたスコア.ファイル情報.ファイルの絶対パス;
+                    }
                 }
+
 				
 				CDTX cdtx = new CDTX( strDTXファイルパス, true );
 				this.str曲タイトル = cdtx.TITLE;

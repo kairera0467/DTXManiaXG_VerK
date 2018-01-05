@@ -128,6 +128,20 @@ namespace DTXMania
 			this.Set( part, this.Get( part ) + delta * rev );
 		}
 
+        /// <summary>
+        /// 全楽器パートにおいてスコアの情報をリセットする。(On活性化相当の処理)
+        /// </summary>
+        public void Reset()
+        {
+			this.n進行用タイマ = -1;
+			for( int i = 0; i < 3; i++ )
+			{
+				this.n現在表示中のスコア[ i ] = 0L;
+				this.n現在の本当のスコア[ i ] = 0L;
+				this.nスコアの増分[ i ] = 0L;
+			}
+        }
+
 
 		// CActivity 実装
 
