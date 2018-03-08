@@ -34,6 +34,8 @@ namespace DTXMania
             this.txLabelName = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\6_Difficulty.png" ) );
             this.txDifficultyNumber = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\6_Difficulty_Number.png" ) );
             this.rectLabelName = new Rectangle( 0, 0, 0, 0 );
+            this.pfTitleName = new CPrivateFastFont( new FontFamily( CDTXMania.ConfigIni.str選曲リストフォント), 40, FontStyle.Regular );
+            this.pfArtistName = new CPrivateFastFont( new FontFamily( CDTXMania.ConfigIni.str選曲リストフォント ), 30, FontStyle.Regular );
 		}
 		public void OnManagedリソースの解放()
 		{
@@ -144,7 +146,6 @@ namespace DTXMania
                 #region[ 曲名、アーティスト名テクスチャの生成 ]
                 if( ( str曲タイトル != null ) && ( str曲タイトル.Length > 0 ) )
                 {
-                    pfTitleName = new CPrivateFastFont( new FontFamily( CDTXMania.ConfigIni.str選曲リストフォント), 40, FontStyle.Regular );
                     Bitmap bmpSongName = new Bitmap(1, 1);
                     bmpSongName = pfTitleName.DrawPrivateFont( str曲タイトル, CPrivateFont.DrawMode.Edge, Color.Black, Color.White, Color.White, Color.White, true );
                     this.txTitle = CDTXMania.tテクスチャの生成( bmpSongName, false );
@@ -157,7 +158,6 @@ namespace DTXMania
 
                 if( ( strアーティスト名 != null) && ( strアーティスト名.Length > 0 ) )
                 {
-                    pfArtistName = new CPrivateFastFont( new FontFamily( CDTXMania.ConfigIni.str選曲リストフォント ), 30, FontStyle.Regular );
                     Bitmap bmpArtistName = new Bitmap( 1, 1 );
                     bmpArtistName = pfArtistName.DrawPrivateFont( strアーティスト名, CPrivateFont.DrawMode.Edge, Color.Black, Color.White, Color.White, Color.White, true );
                     this.txArtist = CDTXMania.tテクスチャの生成(bmpArtistName, false);

@@ -295,49 +295,7 @@ namespace DTXMania
         private CTexture tx曲名;
         private CPrivateFastFont prvFont;
         private string strSongName;
-
-		private bool tプレビュー画像の指定があれば構築する()
-		{
-			if( string.IsNullOrEmpty( CDTXMania.DTX.PREIMAGE ) )
-			{
-				return false;
-			}
-			CDTXMania.tテクスチャの解放( ref this.txリザルト画像 );
-			this.r表示するリザルト画像 = null;
-			string path = CDTXMania.DTX.strフォルダ名 + CDTXMania.DTX.PATH + CDTXMania.DTX.PREIMAGE;
-			if( !File.Exists( path ) )
-			{
-				Trace.TraceWarning( "ファイルが存在しません。({0})", new object[] { path } );
-				return false;
-			}
-			this.txリザルト画像 = CDTXMania.tテクスチャの生成( path );
-			this.r表示するリザルト画像 = this.txリザルト画像;
-			return ( this.r表示するリザルト画像 != null );
-		}
-		private bool tリザルト画像の指定があれば構築する()
-		{
-			int rank = CScoreIni.t総合ランク値を計算して返す( CDTXMania.stage結果.st演奏記録.Drums, CDTXMania.stage結果.st演奏記録.Guitar, CDTXMania.stage結果.st演奏記録.Bass );
-			if (rank == 99)	// #23534 2010.10.28 yyagi: 演奏チップが0個のときは、rankEと見なす
-			{
-				rank = 6;
-			}
-			if (string.IsNullOrEmpty(CDTXMania.DTX.RESULTIMAGE[rank]))
-			{
-				return false;
-			}
-			CDTXMania.tテクスチャの解放( ref this.txリザルト画像 );
-			this.r表示するリザルト画像 = null;
-			string path = CDTXMania.DTX.strフォルダ名 + CDTXMania.DTX.PATH + CDTXMania.DTX.RESULTIMAGE[ rank ];
-			if( !File.Exists( path ) )
-			{
-				Trace.TraceWarning( "ファイルが存在しません。({0})", new object[] { path } );
-				return false;
-			}
-			this.txリザルト画像 = CDTXMania.tテクスチャの生成( path );
-			this.r表示するリザルト画像 = this.txリザルト画像;
-			return ( this.r表示するリザルト画像 != null );
-		}
-		//-----------------
+        //-----------------
 		#endregion
 	}
 }

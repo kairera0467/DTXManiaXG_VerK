@@ -62,10 +62,6 @@ namespace DTXMania
                         }
                     }
 				}
-				for( int i = 0; i < 5; i++ )
-				{
-					this.str難易度ラベル[ i ] = c曲リストノード.ar難易度ラベル[ i ];
-				}
 				if( this.r直前の曲 != c曲リストノード )
 				{
 					this.n難易度開始文字位置 = 0;
@@ -98,7 +94,6 @@ namespace DTXMania
 			}
 			for( int j = 0; j < 5; j++ )
 			{
-				this.str難易度ラベル[ j ] = "";
                 this.n選択中の曲のレベル難易度毎[ j ] = 0;
 
                 this.db現在選択中の曲の曲別スキル値難易度毎[j] = 0.0;
@@ -219,7 +214,7 @@ namespace DTXMania
                             //    this.tx難易度数字XG.t2D描画(CDTXMania.app.Device, 94 + this.n本体X[j] + (i * 143), 51 + this.n本体Y[j] - y差分[i], new Rectangle(145, 54, 7, 8));
                             //}
 
-                            if( this.str難易度ラベル[ i ] != null && this.b現在選択中の曲に譜面がある[ i ].Drums )
+                            if( this.b現在選択中の曲に譜面がある[ i ].Drums )
                             {
                                 CDTXMania.act文字コンソール.tPrint( 570, 634 - ( 60 * i ), C文字コンソール.Eフォント種別.白, string.Format( "{0:0}", n難易度整数[i] ) + "." + string.Format("{0,2:00}", n難易度小数[i]) );
                             }
@@ -312,10 +307,7 @@ namespace DTXMania
         
 		private int n難易度開始文字位置;
 		private const int n難易度表示可能文字数 = 0x24;
-        private STDGBVALUE<int> n本体X;
-        private STDGBVALUE<int> n本体Y;
 		private C曲リストノード r直前の曲;
-		private string[] str難易度ラベル = new string[] { "", "", "", "", "" };
 		private CTexture txゲージ用数字他;
         private CTexture tx難易度パネル;
         private CTexture tx難易度数字XG;

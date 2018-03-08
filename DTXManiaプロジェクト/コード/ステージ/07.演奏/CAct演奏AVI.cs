@@ -572,15 +572,13 @@ namespace DTXMania
 						(bIsPreviewMovie) ? 269 : SampleFramework.GameWindowSize.Height
 						);
 #endif
-                if( this.tx描画用 != null )
-				    this.tx描画用.vc拡大縮小倍率 = new Vector3( Scale.X, Scale.Y, 1f );
                 this.txArフィルインエフェクト = new CTexture[ 31 ];
                 for( int ar = 0; ar < 31; ar++ )
                 {
                     this.txArフィルインエフェクト[ ar ] = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\StageEffect\7_StageEffect_" + ar.ToString() + ".png" ) );
                     if( this.txArフィルインエフェクト[ ar ] == null )
                         continue; //テクスチャが欠けていた場合は、事故防止のためにループを1つスキップする。
-                    if( this.txArフィルインエフェクト[ ar ] == null )
+                    if( this.txArフィルインエフェクト[ ar ] != null )
                     {
                         this.txArフィルインエフェクト[ ar ].b加算合成 = true;
                         this.txArフィルインエフェクト[ ar ].vc拡大縮小倍率 = new Vector3( 2.0f, 2.0f, 1.0f );

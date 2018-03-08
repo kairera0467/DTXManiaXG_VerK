@@ -21,6 +21,14 @@ namespace DTXMania
             base.On活性化();
         }
 
+        public override void On非活性化()
+        {
+            CDTXMania.t安全にDisposeする( ref this.ftGroupFont );
+            CDTXMania.t安全にDisposeする( ref this.pfNameFont );
+            CDTXMania.t安全にDisposeする( ref this.pfSongTitleFont );
+            base.On非活性化();
+        }
+
         public override void OnManagedリソースの作成()
 		{
 			if( !base.b活性化してない )
@@ -317,7 +325,6 @@ namespace DTXMania
 				CDTXMania.tテクスチャの解放( ref this.txパネル[ 0 ] );
 				CDTXMania.tテクスチャの解放( ref this.txパネル[ 1 ] );
                 CDTXMania.tテクスチャの解放( ref this.tx曲名パネル );
-                CDTXMania.t安全にDisposeする( ref this.pfSongTitleFont );
                 CDTXMania.tテクスチャの解放( ref this.txScore );
                 CDTXMania.tテクスチャの解放( ref this.txPart );
 				base.OnManagedリソースの解放();

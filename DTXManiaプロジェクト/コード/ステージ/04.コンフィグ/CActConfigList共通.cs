@@ -2918,7 +2918,6 @@ namespace DTXMania
 		private CItemToggle iSystemForceAVIFullscreen;
 		private CItemToggle iSystemBGA;
 //		private CItemToggle iSystemGraph; #24074 2011.01.23 comment-out ikanick オプション(Drums)へ移行
-		private CItemInteger iSystemBGAlpha;
 		private CItemToggle iSystemBGMSound;
 		private CItemInteger iSystemChipVolume;
 		private CItemList iSystemCYGroup;
@@ -2939,7 +2938,6 @@ namespace DTXMania
 		private CItemInteger iSystemMinComboBass;
 		private CItemInteger iSystemMinComboDrums;
 		private CItemInteger iSystemMinComboGuitar;
-		private CItemInteger iSystemPreviewImageWait;
 		private CItemInteger iSystemPreviewSoundWait;
 		private CItemToggle iSystemRandomFromSubBox;
 		private CItemBase iSystemReturnToMenu;
@@ -2949,7 +2947,6 @@ namespace DTXMania
 		private CItemToggle iSystemSoundMonitorDrums;
 		private CItemToggle iSystemSoundMonitorGuitar;
 		private CItemToggle iSystemStageFailed;
-		private CItemToggle iSystemStoicMode;
 		private CItemToggle iSystemVSyncWait;
 		private CItemList	iSystemShowLag;					// #25370 2011.6.3 yyagi
 		private CItemToggle iSystemAutoResultCapture;		// #25399 2011.6.9 yyagi
@@ -3044,14 +3041,12 @@ namespace DTXMania
         private CItemToggle iBassLaneFlush;
         private CItemToggle iBassGraph;
         private CItemList iBassShutterImage;
-
-		private CItemList iCommonDark;
+        
 		protected CItemInteger iCommonPlaySpeed;
 //		private CItemBase iCommonReturnToMenu;
 
 		private CItemThreeState iDrumsAutoPlayAll;
 		private CItemToggle iDrumsBass;
-		private CItemList iDrumsComboPosition;
 		private CItemToggle iDrumsCymbalRide;
 		private CItemToggle iDrumsFloorTom;
 		//private CItemToggle iDrumsHidden;
@@ -3076,7 +3071,6 @@ namespace DTXMania
 		//private CItemToggle iDrumsSudden;
 		private CItemToggle iDrumsTight;
 		private CItemToggle iDrumsGraph;        // #24074 2011.01.23 add ikanick
-		private CItemList iDrumsLanePosition;
         private CItemList iDrumsDark;
         private CItemList iDrumsLaneDispType;
         private CItemToggle iDrumsJudgeLineDisp;

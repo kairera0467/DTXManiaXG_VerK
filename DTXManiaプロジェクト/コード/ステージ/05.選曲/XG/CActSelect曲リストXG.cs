@@ -29,7 +29,7 @@ namespace DTXMania
 				return;
 
             FontStyle fStyle = CDTXMania.ConfigIni.b選曲リストフォントを太字にする ? FontStyle.Bold : FontStyle.Regular;
-            this.prvPanelFont = new CPrivateFastFont( new FontFamily( CDTXMania.ConfigIni.str選曲リストフォント ), 18, fStyle );
+            this.pfPanelFont = new CPrivateFastFont( new FontFamily( CDTXMania.ConfigIni.str選曲リストフォント ), 18, fStyle );
 
             base.On活性化();
 		}
@@ -55,6 +55,9 @@ namespace DTXMania
                 this.tx選曲パネル = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_image_panel.png" ) );
             else
                 this.tx選曲パネル = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_image_panel_guitar.png" ) );
+
+            FontStyle fStyle = CDTXMania.ConfigIni.b選曲リストフォントを太字にする ? FontStyle.Bold : FontStyle.Regular;
+            this.pf決定時パネルフォント = new CPrivateFastFont( new FontFamily( CDTXMania.ConfigIni.str選曲リストフォント), 19, fStyle);
 
             this.txパネル = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_music panel.png") );
             this.txパネル帯 = CDTXMania.tテクスチャの生成Af( CSkin.Path( @"Graphics\5_Backbar.png" ) );
@@ -170,7 +173,8 @@ namespace DTXMania
             CDTXMania.t安全にDisposeする( ref this.txクリアランプ );
             CDTXMania.t安全にDisposeする( ref this.txパネル帯 );
             CDTXMania.t安全にDisposeする( ref this.txベース曲パネル );
-            CDTXMania.t安全にDisposeする( ref this.prvPanelFont );
+            CDTXMania.t安全にDisposeする( ref this.pfPanelFont );
+            CDTXMania.t安全にDisposeする( ref this.pf決定時パネルフォント );
 
 			base.OnManagedリソースの解放();
 		}
@@ -955,7 +959,8 @@ namespace DTXMania
         private CTexture tx選択されている曲のジャケット画像;
         private CTexture txパネル;
         private CTexture txパネル帯;
-        private CPrivateFastFont prvPanelFont;
+        private CPrivateFastFont pfPanelFont;
+        private CPrivateFastFont pf決定時パネルフォント;
 		//protected STバー tx曲名バー;
 		//protected STバー情報[] stバー情報 = new STバー情報[ 15 ];
 		//protected ST選曲バー tx選曲バー;
@@ -1154,7 +1159,7 @@ namespace DTXMania
                     Bitmap bmpSongName = new Bitmap( 1, 1 );
                     if( bFoundTitleTexture == false )
                     {
-                        bmpSongName = this.prvPanelFont.DrawPrivateFont( str曲名, Color.White );
+                        bmpSongName = this.pfPanelFont.DrawPrivateFont( str曲名, Color.White );
                         if( ( bmpSongName.Size.Width / 1.25f ) > 240 )
                         {
                             graphics.DrawImage( bmpSongName, 4f, 2f, ( ( bmpSongName.Size.Width / 1.25f ) ), bmpSongName.Size.Height );
@@ -1166,7 +1171,7 @@ namespace DTXMania
                     }
                     if( bFoundArtistTexture == false )
                     {
-                        bmpSongName = this.prvPanelFont.DrawPrivateFont( strアーティスト名, Color.White );
+                        bmpSongName = this.pfPanelFont.DrawPrivateFont( strアーティスト名, Color.White );
                         if( ( bmpSongName.Size.Width / 1.25f ) > 240 )
                         {
                             graphics.DrawImage( bmpSongName, 220f - ( ( bmpSongName.Size.Width / 1.25f ) ), 252f, ( ( bmpSongName.Size.Width / 1.25f ) ), bmpSongName.Size.Height );
@@ -1256,12 +1261,11 @@ namespace DTXMania
 
                 if( bFoundTitleTexture == false || bFoundArtistTexture == false )
                 {
-                    FontStyle fStyle = CDTXMania.ConfigIni.b選曲リストフォントを太字にする ? FontStyle.Bold : FontStyle.Regular;
-                    CPrivateFastFont prvFont = new CPrivateFastFont( new FontFamily( CDTXMania.ConfigIni.str選曲リストフォント ), 19, fStyle );
+
                     Bitmap bmpSongName = new Bitmap( 1, 1 );
                     if( bFoundTitleTexture == false )
                     {
-                        bmpSongName = prvFont.DrawPrivateFont( str曲名, Color.White );
+                        bmpSongName = this.pf決定時パネルフォント.DrawPrivateFont( str曲名, Color.White );
                         //bmpSongName.Save( "test.png" );
                         if( ( bmpSongName.Size.Width / 1.25f ) > 290 )
                         {
@@ -1274,7 +1278,7 @@ namespace DTXMania
                     }
                     if( bFoundArtistTexture == false )
                     {
-                        bmpSongName = prvFont.DrawPrivateFont( strアーティスト名, Color.White );
+                        bmpSongName = this.pf決定時パネルフォント.DrawPrivateFont( strアーティスト名, Color.White );
                         if( ( bmpSongName.Size.Width / 1.25f ) > 290 )
                         {
                             graphics.DrawImage( bmpSongName, 290f - ( ( bmpSongName.Size.Width / 1.25f ) ), 328f, ( ( bmpSongName.Size.Width / 1.25f ) * ( 285.0f / ( bmpSongName.Size.Width / 1.25f ) ) ), bmpSongName.Size.Height );

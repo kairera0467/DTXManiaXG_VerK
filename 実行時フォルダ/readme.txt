@@ -9,7 +9,7 @@ DTXManiaXG(Ver.K)をDTXMania Release104を元に作り直したものです。
 .NET Frameworks 4.5.1に変更したため、Ver4.00からはWindowsXP環境では起動できません。
 
 ○諸注意
-・ドラム演奏にしか対応できていない状態にちかいです。
+・ドラム演奏にしか対応できていない状態に近いです。
 ・現在は5レーンギター譜面に対応できていません。
 
 ○導入について
@@ -81,11 +81,13 @@ DTXManiaXG(Ver.K)をDTXMania Release104を元に作り直したものです。
 
 
 ○連絡先
+Project:https://ja.osdn.net/projects/dtxmaniaxg-verk/
 HP:http://dtxxgk.at-ninja.jp/
 Mail:gennsou76573@gmail.com
 Twitter:@kairera0467
 
 ○更新履歴
+2018010500	4.01	致命的な不具合の修正
 2017122500	4.00	正式リリース
 					XG風表示とGITADORA風表示を統合
 					GITADORA風表示をmatixx風に作り直し(途中)

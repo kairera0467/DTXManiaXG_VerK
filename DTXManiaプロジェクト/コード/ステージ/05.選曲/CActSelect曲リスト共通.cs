@@ -822,13 +822,10 @@ namespace DTXMania
 		public int n目標のスクロールカウンタ;
 		private CTexture txSongNotFound, txEnumeratingSongs;
         protected CTexture[] txTumbnail = new CTexture[ 15 ];
-        private CTexture txクリアランプ;
         private CTexture tx選曲パネル;
         private CTexture tx選択されている曲の曲名;
         private CTexture tx選択されている曲のアーティスト名;
         private CTexture tx選択されている曲のジャケット画像;
-        private CTexture txパネル;
-        private CTexture txパネル帯;
         private CPrivateFastFont prvPanelFont;
 		public STバー情報[] stバー情報 = new STバー情報[ 15 ];
 		public ST選曲バー tx選曲バー;

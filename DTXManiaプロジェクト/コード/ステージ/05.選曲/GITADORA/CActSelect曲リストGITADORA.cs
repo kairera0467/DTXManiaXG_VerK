@@ -83,8 +83,8 @@ namespace DTXMania
         {
             this.b初めての進行描画 = true; //ここで有効にしなおさなければ他の場面に行き来することができなくなる
 
-            prvFont = new CPrivateFastFont( new FontFamily( CDTXMania.ConfigIni.str選曲リストフォント ), 24, FontStyle.Regular );
-            prvFontSmall = new CPrivateFastFont( new FontFamily( CDTXMania.ConfigIni.str選曲リストフォント ), 15, FontStyle.Regular );
+            this.prvFont = new CPrivateFastFont( new FontFamily( CDTXMania.ConfigIni.str選曲リストフォント ), 24, FontStyle.Regular );
+            this.prvFontSmall = new CPrivateFastFont( new FontFamily( CDTXMania.ConfigIni.str選曲リストフォント ), 15, FontStyle.Regular );
             base.On活性化();
         }
 
