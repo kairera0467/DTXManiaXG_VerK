@@ -4,6 +4,8 @@ using System.Text;
 using System.Drawing;
 using FDK;
 
+using SlimDXKey = SlimDX.DirectInput.Key;
+
 namespace DTXMania
 {
 	internal class CActSelectFO曲決定 : CActivity
@@ -74,19 +76,19 @@ namespace DTXMania
 			}
 
 
-			if( CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDX.DirectInput.Key.F3 ) )
+			if( CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDXKey.F3 ) )
 			{
                 this.counter.n現在の値--;
 			}
-			if( CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDX.DirectInput.Key.F4 ) )
+			if( CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDXKey.F4 ) )
 			{
                 this.counter.n現在の値++;
 			}
-			if( CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDX.DirectInput.Key.F5 ) )
+			if( CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDXKey.F5 ) )
 			{
                 this.counter.n現在の値 = 0;
 			}
-			if( CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDX.DirectInput.Key.F6 ) )
+			if( CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDXKey.F6 ) )
 			{
                 this.counter.n現在の値 = 50;
 			}

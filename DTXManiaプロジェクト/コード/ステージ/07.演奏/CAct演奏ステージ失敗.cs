@@ -56,7 +56,7 @@ namespace DTXMania
 		{
 			if( !base.b活性化してない )
 			{
-				CDTXMania.tテクスチャの解放( ref this.txStageFailed );
+				this.txStageFailed?.Dispose();
 				base.OnManagedリソースの解放();
 			}
 		}

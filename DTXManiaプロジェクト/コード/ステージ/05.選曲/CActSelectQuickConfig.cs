@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Text;
 using System.Drawing;
 using System.IO;
-using SlimDX;
+using SharpDX;
 using FDK;
 
 namespace DTXMania

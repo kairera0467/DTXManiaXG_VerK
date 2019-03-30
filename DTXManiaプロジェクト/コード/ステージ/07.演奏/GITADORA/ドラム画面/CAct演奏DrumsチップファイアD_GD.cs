@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 using System.Runtime.InteropServices;
-using SlimDX;
+using SharpDX;
 using FDK;
 
+using Rectangle = System.Drawing.Rectangle;
 namespace DTXMania
 {
 	internal class CAct演奏DrumsチップファイアD_GD : CActivity

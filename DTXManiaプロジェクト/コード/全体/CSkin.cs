@@ -268,7 +268,7 @@ namespace DTXMania
 
 			public void tRemoveMixer()
 			{
-				if ( CDTXMania.Sound管理.GetCurrentSoundDeviceType() != ESoundDeviceType.DirectSound )
+				if ( CDTXMania.Sound管理.GetCurrentSoundDeviceType() != "DirectSound" )
 				{
 					for ( int i = 0; i < 2; i++ )
 					{

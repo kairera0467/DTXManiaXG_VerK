@@ -8,9 +8,9 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Diagnostics;
 using System.Threading;
-using SlimDX;
-using SlimDX.Direct3D9;
 using FDK;
+
+using SlimDXKey = SlimDX.DirectInput.Key;
 
 namespace DTXMania
 {
@@ -336,7 +336,7 @@ namespace DTXMania
 			CDTXMania.Skin.tRemoveMixerAll();	// 効果音のストリームをミキサーから解除しておく
 
 			queueMixerSound = new Queue<stmixer>( 64 );
-			bIsDirectSound = ( CDTXMania.Sound管理.GetCurrentSoundDeviceType() == ESoundDeviceType.DirectSound );
+			bIsDirectSound = ( CDTXMania.Sound管理.GetCurrentSoundDeviceType() == "DirectSound" );
 			bUseOSTimer = CDTXMania.ConfigIni.bUseOSTimer;
 			this.bPAUSE = false;
 			if ( CDTXMania.DTXVmode.Enabled )
@@ -662,6 +662,7 @@ namespace DTXMania
 		protected CActFIFOBlack actFI;
 		protected CActFIFOBlack actFO;
 		protected CActFIFOWhite actFOClear;
+        protected CActFIFOWhiteClear actFOClearXG;
 		public CAct演奏ゲージ共通 actGauge;
         public CAct演奏BPMバー共通 actBPMBar;
         protected CAct演奏グラフ actGraph;
@@ -697,7 +698,7 @@ namespace DTXMania
                                                              //   HH SD BD HT LT FT CY HHO RD LC LP LBD
         protected readonly int[] nパッド0Atoレーン07 = new int[] { 1, 2, 3, 4, 5, 6, 7, 1, 9, 0, 8, 8 };
 		public STDGBVALUE<CHITCOUNTOFRANK> nヒット数_Auto含まない;
-		protected STDGBVALUE<CHITCOUNTOFRANK> nヒット数_Auto含む;
+		public STDGBVALUE<CHITCOUNTOFRANK> nヒット数_Auto含む;
         protected STDGBVALUE<CHITCOUNTOFRANK> nヒット数_TargetGhost; // #35411 2015.08.21 chnmr0 add
         protected STDGBVALUE<int> nコンボ数_TargetGhost;
         protected STDGBVALUE<int> n最大コンボ数_TargetGhost;
@@ -1902,11 +1903,11 @@ namespace DTXMania
 		protected void ChangeInputAdjustTimeInPlaying( IInputDevice keyboard, int plusminus )		// #23580 2011.1.16 yyagi UI for InputAdjustTime in playing screen.
 		{
 			int part, offset = plusminus;
-			if ( keyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.LeftShift ) || keyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.RightShift ) )	// Guitar InputAdjustTime
+			if ( keyboard.bキーが押されている( (int) SlimDXKey.LeftShift ) || keyboard.bキーが押されている( (int) SlimDXKey.RightShift ) )	// Guitar InputAdjustTime
 			{
 				part = (int) E楽器パート.GUITAR;
 			}
-			else if ( keyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.LeftAlt ) || keyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.RightAlt ) )	// Bass InputAdjustTime
+			else if ( keyboard.bキーが押されている( (int) SlimDXKey.LeftAlt ) || keyboard.bキーが押されている( (int) SlimDXKey.RightAlt ) )	// Bass InputAdjustTime
 			{
 				part = (int) E楽器パート.BASS;
 			}
@@ -1914,7 +1915,7 @@ namespace DTXMania
 			{
 				part = (int) E楽器パート.DRUMS;
 			}
-			if ( !keyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.LeftControl ) && !keyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.RightControl ) )
+			if ( !keyboard.bキーが押されている( (int) SlimDXKey.LeftControl ) && !keyboard.bキーが押されている( (int) SlimDXKey.RightControl ) )
 			{
 				offset *= 10;
 			}
@@ -1937,8 +1938,8 @@ namespace DTXMania
 		protected void tキー入力()
 		{
 			IInputDevice keyboard = CDTXMania.Input管理.Keyboard;
-			if ( keyboard.bキーが押された( (int) SlimDX.DirectInput.Key.F1 ) &&
-				( keyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.RightShift ) || keyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.LeftShift ) ) )
+			if ( keyboard.bキーが押された( (int) SlimDXKey.F1 ) &&
+				( keyboard.bキーが押されている( (int) SlimDXKey.RightShift ) || keyboard.bキーが押されている( (int) SlimDXKey.LeftShift ) ) )
 			{	// shift+f1 (pause)
 				this.bPAUSE = !this.bPAUSE;
 				if ( this.bPAUSE )
@@ -1961,47 +1962,47 @@ namespace DTXMania
 				this.t入力処理_ドラム();
 				this.t入力処理_ギターベース( E楽器パート.GUITAR );
 				this.t入力処理_ギターベース( E楽器パート.BASS );
-				if ( keyboard.bキーが押された( (int) SlimDX.DirectInput.Key.UpArrow ) && ( keyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.RightShift ) || keyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.LeftShift ) ) )
+				if ( keyboard.bキーが押された( (int) SlimDXKey.UpArrow ) && ( keyboard.bキーが押されている( (int) SlimDXKey.RightShift ) || keyboard.bキーが押されている( (int) SlimDXKey.LeftShift ) ) )
 				{	// shift (+ctrl) + UpArrow (BGMAdjust)
-					CDTXMania.DTX.t各自動再生音チップの再生時刻を変更する( ( keyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.LeftControl ) || keyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.RightControl ) ) ? 1 : 10 );
+					CDTXMania.DTX.t各自動再生音チップの再生時刻を変更する( ( keyboard.bキーが押されている( (int) SlimDXKey.LeftControl ) || keyboard.bキーが押されている( (int) SlimDXKey.RightControl ) ) ? 1 : 10 );
 					CDTXMania.DTX.tWave再生位置自動補正();
 				}
-				else if ( keyboard.bキーが押された( (int) SlimDX.DirectInput.Key.DownArrow ) && ( keyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.RightShift ) || keyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.LeftShift ) ) )
+				else if ( keyboard.bキーが押された( (int) SlimDXKey.DownArrow ) && ( keyboard.bキーが押されている( (int) SlimDXKey.RightShift ) || keyboard.bキーが押されている( (int) SlimDXKey.LeftShift ) ) )
 				{	// shift + DownArrow (BGMAdjust)
-					CDTXMania.DTX.t各自動再生音チップの再生時刻を変更する( ( keyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.LeftControl ) || keyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.RightControl ) ) ? -1 : -10 );
+					CDTXMania.DTX.t各自動再生音チップの再生時刻を変更する( ( keyboard.bキーが押されている( (int) SlimDXKey.LeftControl ) || keyboard.bキーが押されている( (int) SlimDXKey.RightControl ) ) ? -1 : -10 );
 					CDTXMania.DTX.tWave再生位置自動補正();
 				}
-                else if (!this.bPAUSE && keyboard.bキーが押された((int)SlimDX.DirectInput.Key.UpArrow) && (keyboard.bキーが押されている((int)SlimDX.DirectInput.Key.RightAlt) || keyboard.bキーが押されている((int)SlimDX.DirectInput.Key.LeftAlt)))
+                else if (!this.bPAUSE && keyboard.bキーが押された((int)SlimDXKey.UpArrow) && (keyboard.bキーが押されている((int)SlimDXKey.RightAlt) || keyboard.bキーが押されている((int)SlimDXKey.LeftAlt)))
                 {	// alt + UpArrow (CommonBGMAdjust)
-                    CDTXMania.DTX.t各自動再生音チップの再生時刻を変更する((keyboard.bキーが押されている((int)SlimDX.DirectInput.Key.LeftControl) || keyboard.bキーが押されている((int)SlimDX.DirectInput.Key.RightControl)) ? 1 : 10, false, true);
+                    CDTXMania.DTX.t各自動再生音チップの再生時刻を変更する((keyboard.bキーが押されている((int)SlimDXKey.LeftControl) || keyboard.bキーが押されている((int)SlimDXKey.RightControl)) ? 1 : 10, false, true);
                     CDTXMania.DTX.tWave再生位置自動補正();
                 }
-                else if (!this.bPAUSE && keyboard.bキーが押された((int)SlimDX.DirectInput.Key.DownArrow) && (keyboard.bキーが押されている((int)SlimDX.DirectInput.Key.RightAlt) || keyboard.bキーが押されている((int)SlimDX.DirectInput.Key.LeftAlt)))
+                else if (!this.bPAUSE && keyboard.bキーが押された((int)SlimDXKey.DownArrow) && (keyboard.bキーが押されている((int)SlimDXKey.RightAlt) || keyboard.bキーが押されている((int)SlimDXKey.LeftAlt)))
                 {	// alt + DownArrow (CommonBGMAdjust)
-                    CDTXMania.DTX.t各自動再生音チップの再生時刻を変更する((keyboard.bキーが押されている((int)SlimDX.DirectInput.Key.LeftControl) || keyboard.bキーが押されている((int)SlimDX.DirectInput.Key.RightControl)) ? -1 : -10, false, true);
+                    CDTXMania.DTX.t各自動再生音チップの再生時刻を変更する((keyboard.bキーが押されている((int)SlimDXKey.LeftControl) || keyboard.bキーが押されている((int)SlimDXKey.RightControl)) ? -1 : -10, false, true);
                     CDTXMania.DTX.tWave再生位置自動補正();
                 }
-				else if ( keyboard.bキーが押された( (int) SlimDX.DirectInput.Key.UpArrow ) )
+				else if ( keyboard.bキーが押された( (int) SlimDXKey.UpArrow ) )
 				{	// UpArrow(scrollspeed up)
 					ドラムスクロール速度アップ();
 				}
-				else if ( keyboard.bキーが押された( (int) SlimDX.DirectInput.Key.DownArrow ) )
+				else if ( keyboard.bキーが押された( (int) SlimDXKey.DownArrow ) )
 				{	// DownArrow (scrollspeed down)
 					ドラムスクロール速度ダウン();
 				}
-				else if ( keyboard.bキーが押された( (int) SlimDX.DirectInput.Key.Delete ) )
+				else if ( keyboard.bキーが押された( (int) SlimDXKey.Delete ) )
 				{	// del (debug info)
 					CDTXMania.ConfigIni.b演奏情報を表示する = !CDTXMania.ConfigIni.b演奏情報を表示する;
 				}
-				else if ( keyboard.bキーが押された( (int) SlimDX.DirectInput.Key.LeftArrow ) )		// #24243 2011.1.16 yyagi UI for InputAdjustTime in playing screen.
+				else if ( keyboard.bキーが押された( (int) SlimDXKey.LeftArrow ) )		// #24243 2011.1.16 yyagi UI for InputAdjustTime in playing screen.
 				{
 					ChangeInputAdjustTimeInPlaying( keyboard, -1 );
 				}
-				else if ( keyboard.bキーが押された( (int) SlimDX.DirectInput.Key.RightArrow ) )		// #24243 2011.1.16 yyagi UI for InputAdjustTime in playing screen.
+				else if ( keyboard.bキーが押された( (int) SlimDXKey.RightArrow ) )		// #24243 2011.1.16 yyagi UI for InputAdjustTime in playing screen.
 				{
 					ChangeInputAdjustTimeInPlaying( keyboard, +1 );
 				}
-				else if ( ( base.eフェーズID == CStage.Eフェーズ.共通_通常状態 ) && ( keyboard.bキーが押された( (int) SlimDX.DirectInput.Key.Escape ) || CDTXMania.Pad.b押されたGB( Eパッド.FT ) ) )
+				else if ( ( base.eフェーズID == CStage.Eフェーズ.共通_通常状態 ) && ( keyboard.bキーが押された( (int) SlimDXKey.Escape ) || CDTXMania.Pad.b押されたGB( Eパッド.FT ) ) )
 				{	// escape (exit)
 					this.actFO.tフェードアウト開始();
 					base.eフェーズID = CStage.Eフェーズ.共通_フェードアウト;
@@ -2019,7 +2020,7 @@ namespace DTXMania
             //    else if( CDTXMania.ConfigIni.eMovieClipMode == EMovieClipMode.Both )
             //        CDTXMania.ConfigIni.eMovieClipMode = EMovieClipMode.OFF;
             //}
-            if( keyboard.bキーが押された( (int) SlimDX.DirectInput.Key.F5 ) ) // 2017.12.29 kairera0467 #37846
+            if( keyboard.bキーが押された( (int) SlimDXKey.F5 ) ) // 2017.12.29 kairera0467 #37846
             {
                 CDTXMania.ConfigIni.bWindowClipMode = !CDTXMania.ConfigIni.bWindowClipMode;
             }
@@ -2280,6 +2281,7 @@ namespace DTXMania
                             {
                                 //CDTXMania.stage演奏ドラム画面.UnitTime = ((60.0 / (CDTXMania.stage演奏ドラム画面.actPlayInfo.dbBPM) / 16.0 ));
                                 this.actBPMBar.ctBPMバー = new CCounter(1, 16, (int)((60.0 / (this.actPlayInfo.dbBPM) / 16.0 ) * 1000.0 ), CDTXMania.Timer);
+                                this.actBPMBar.tStoryboard構築( this.actPlayInfo.dbBPM ); // 2019.03.28 kairera0467
                                 //CDTXMania.stage演奏ドラム画面.ctコンボ動作タイマ = new CCounter(1.0, 16.0, ((60.0 / (CDTXMania.stage演奏ドラム画面.actPlayInfo.dbBPM) / 16.0)), CSound管理.rc演奏用タイマ);
                                 if( CDTXMania.bXGRelease )
                                     this.actCombo.ctコンボ動作タイマ = new CCounter( 1, 16, (int)( ( 60.0 / ( this.actPlayInfo.dbBPM ) / 16.0 ) * 1000.0 ), CDTXMania.Timer );
@@ -2355,6 +2357,7 @@ namespace DTXMania
                                 {
                                     //CDTXMania.stage演奏ドラム画面.UnitTime = ((60.0 / (CDTXMania.stage演奏ドラム画面.actPlayInfo.dbBPM) / 16.0 ));
                                     this.actBPMBar.ctBPMバー = new CCounter(1, 16, (int)((60.0 / this.actPlayInfo.dbBPM / 16.0 ) * 1000 ), CDTXMania.Timer);
+                                    this.actBPMBar.tStoryboard構築( this.actPlayInfo.dbBPM ); // 2019.03.28 kairera0467
                                     //CDTXMania.stage演奏ドラム画面.ctコンボ動作タイマ = new CCounter(1.0, 16.0, ((60.0 / (CDTXMania.stage演奏ドラム画面.actPlayInfo.dbBPM) / 16.0)), CSound管理.rc演奏用タイマ);
                                     if( CDTXMania.bXGRelease )
                                         this.actCombo.ctコンボ動作タイマ = new CCounter( 1, 16, (int)( ( 60.0 / ( CDTXMania.stage演奏ドラム画面.actPlayInfo.dbBPM ) / 16.0 ) * 1000.0 ), CDTXMania.Timer );
@@ -2451,6 +2454,10 @@ namespace DTXMania
 					#region [ 50: 小節線 ]
 					case 0x50:	// 小節線
 						{
+						    if ( !pChip.bHit && ( pChip.nバーからの距離dot.Drums < 0 ) )
+						    {
+                                this.actBPMBar.tStoryboard実行(); // 2019.03.28 kairera0467
+                            }
 							this.t進行描画_チップ_小節線( configIni, ref dTX, ref pChip );
 							break;
 						}
@@ -2459,6 +2466,7 @@ namespace DTXMania
 					case 0x51:	// 拍線
 						if ( !pChip.bHit && ( pChip.nバーからの距離dot.Drums < 0 ) )
 						{
+                            this.actBPMBar.tStoryboard実行(); // 2019.03.28 kairera0467
 							pChip.bHit = true;
 						}
 						if ( ( ePlayMode == E楽器パート.DRUMS ) && ( configIni.nLaneDispType.Drums < 2 ) && pChip.b可視 && ( this.txチップ != null ) )
@@ -3585,12 +3593,22 @@ namespace DTXMania
 					break;
 
 				case CStage.Eフェーズ.演奏_STAGE_CLEAR_フェードアウト:
-					if ( this.actFOClear.On進行描画() == 0 )
-					{
-						break;
-					}
+                    if( CDTXMania.bXGRelease )
+                    {
+                        if ( this.actFOClearXG.On進行描画() == 0 )
+					    {
+						    break;
+					    }
+                    }
+                    else
+                    {
+					    if ( this.actFOClear.On進行描画() == 0 )
+					    {
+						    break;
+					    }
+                    }
+
 					return true;
-		
 			}
 			return false;
 		}

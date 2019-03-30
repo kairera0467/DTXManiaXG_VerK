@@ -9,9 +9,10 @@ using System.Text;
 using System.Globalization;
 using System.Runtime.InteropServices;
 
-using SlimDX;
+using SharpDX;
 using FDK;
 
+using Color = System.Drawing.Color;
 namespace DTXMania
 {
 	internal class CActSelect曲リスト共通 : CActivity
@@ -581,23 +582,26 @@ namespace DTXMania
 			#region [ Songs not found画像 ]
 			try
 			{
-				using( Bitmap image = new Bitmap( 1024, 512 ) ) //2016.03.05 kairera0467 サイズを2の乗数に変更。(わざわざ横1280にするのは無駄なので。)
-				using( Graphics graphics = Graphics.FromImage( image ) )
-				{
-					string[] s1 = { "曲データが見つかりません。", "Songs not found." };
-					string[] s2 = { "曲データをDTXManiaGR.exe以下の", "You need to install songs." };
-					string[] s3 = { "フォルダにインストールして下さい。", "" };
-					graphics.DrawString( s1[c], this.ft曲リスト用フォント, Brushes.DarkGray, (float) (2f * Scale.X), (float) (2f * Scale.Y) );
-					graphics.DrawString( s1[c], this.ft曲リスト用フォント, Brushes.White, (float) 0f, (float) 0f );
-					graphics.DrawString( s2[c], this.ft曲リスト用フォント, Brushes.DarkGray, (float) (2f * Scale.X), (float) (44f * Scale.Y) );
-					graphics.DrawString( s2[c], this.ft曲リスト用フォント, Brushes.White, (float) 0f, (float) (42f * Scale.Y) );
-					graphics.DrawString( s3[c], this.ft曲リスト用フォント, Brushes.DarkGray, (float) (2f * Scale.X), (float) (86f * Scale.Y) );
-					graphics.DrawString( s3[c], this.ft曲リスト用フォント, Brushes.White, (float) 0f, (float) (84f * Scale.Y) );
+                if( this.txSongNotFound == null )
+                {
+				    using( Bitmap image = new Bitmap( 1024, 512 ) ) //2016.03.05 kairera0467 サイズを2の乗数に変更。(わざわざ横1280にするのは無駄なので。)
+				    using( Graphics graphics = Graphics.FromImage( image ) )
+				    {
+					    string[] s1 = { "曲データが見つかりません。", "Songs not found." };
+					    string[] s2 = { "曲データをDTXManiaGR.exe以下の", "You need to install songs." };
+					    string[] s3 = { "フォルダにインストールして下さい。", "" };
+					    graphics.DrawString( s1[c], this.ft曲リスト用フォント, Brushes.DarkGray, (float) (2f * Scale.X), (float) (2f * Scale.Y) );
+					    graphics.DrawString( s1[c], this.ft曲リスト用フォント, Brushes.White, (float) 0f, (float) 0f );
+					    graphics.DrawString( s2[c], this.ft曲リスト用フォント, Brushes.DarkGray, (float) (2f * Scale.X), (float) (44f * Scale.Y) );
+					    graphics.DrawString( s2[c], this.ft曲リスト用フォント, Brushes.White, (float) 0f, (float) (42f * Scale.Y) );
+					    graphics.DrawString( s3[c], this.ft曲リスト用フォント, Brushes.DarkGray, (float) (2f * Scale.X), (float) (86f * Scale.Y) );
+					    graphics.DrawString( s3[c], this.ft曲リスト用フォント, Brushes.White, (float) 0f, (float) (84f * Scale.Y) );
 
-					this.txSongNotFound = new CTexture( CDTXMania.app.Device, image, CDTXMania.TextureFormat );
+					    this.txSongNotFound = new CTexture( CDTXMania.app.Device, image, CDTXMania.TextureFormat );
 
-					this.txSongNotFound.vc拡大縮小倍率 = new Vector3( 0.5f, 0.5f, 1f );	// 半分のサイズで表示する。
-				}
+					    this.txSongNotFound.vc拡大縮小倍率 = new Vector3( 0.5f, 0.5f, 1f );	// 半分のサイズで表示する。
+				    }
+                }
 			}
 			catch( CTextureCreateFailedException )
 			{
@@ -608,20 +612,23 @@ namespace DTXMania
 			#region [ "曲データを検索しています"画像 ]
 			try
 			{
-				using ( Bitmap image = new Bitmap( SampleFramework.GameWindowSize.Width, (int)(96 * Scale.Y) ) )
-				using ( Graphics graphics = Graphics.FromImage( image ) )
-				{
-					string[] s1 = { "曲データを検索しています。", "Now enumerating songs." };
-					string[] s2 = { "そのまましばらくお待ち下さい。", "Please wait..." };
-					graphics.DrawString( s1[c], this.ft曲リスト用フォント, Brushes.DarkGray, (float) (2f * Scale.X), (float) (2f * Scale.Y) );
-					graphics.DrawString( s1[c], this.ft曲リスト用フォント, Brushes.White, (float) 0f, (float) 0f );
-					graphics.DrawString( s2[c], this.ft曲リスト用フォント, Brushes.DarkGray, (float) (2f * Scale.X), (float) (44f * Scale.Y) );
-					graphics.DrawString( s2[c], this.ft曲リスト用フォント, Brushes.White, (float) 0f, (float) (42f * Scale.Y) );
+                if( this.txEnumeratingSongs == null )
+                {
+				    using ( Bitmap image = new Bitmap( SampleFramework.GameWindowSize.Width, (int)(96 * Scale.Y) ) )
+				    using ( Graphics graphics = Graphics.FromImage( image ) )
+				    {
+					    string[] s1 = { "曲データを検索しています。", "Now enumerating songs." };
+					    string[] s2 = { "そのまましばらくお待ち下さい。", "Please wait..." };
+					    graphics.DrawString( s1[c], this.ft曲リスト用フォント, Brushes.DarkGray, (float) (2f * Scale.X), (float) (2f * Scale.Y) );
+					    graphics.DrawString( s1[c], this.ft曲リスト用フォント, Brushes.White, (float) 0f, (float) 0f );
+					    graphics.DrawString( s2[c], this.ft曲リスト用フォント, Brushes.DarkGray, (float) (2f * Scale.X), (float) (44f * Scale.Y) );
+					    graphics.DrawString( s2[c], this.ft曲リスト用フォント, Brushes.White, (float) 0f, (float) (42f * Scale.Y) );
 
-					this.txEnumeratingSongs = new CTexture( CDTXMania.app.Device, image, CDTXMania.TextureFormat );
+					    this.txEnumeratingSongs = new CTexture( CDTXMania.app.Device, image, CDTXMania.TextureFormat );
 
-					this.txEnumeratingSongs.vc拡大縮小倍率 = new Vector3( 0.5f, 0.5f, 1f );	// 半分のサイズで表示する。
-				}
+					    this.txEnumeratingSongs.vc拡大縮小倍率 = new Vector3( 0.5f, 0.5f, 1f );	// 半分のサイズで表示する。
+				    }
+                }
 			}
 			catch ( CTextureCreateFailedException )
 			{

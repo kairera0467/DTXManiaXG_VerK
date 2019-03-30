@@ -72,22 +72,22 @@ namespace DTXMania
 				Trace.WriteLine( "EXEのあるフォルダ: " + Path.GetDirectoryName( Application.ExecutablePath ) );
 
 				#region [DLLの存在チェック]
-				if ( !tDLLの存在チェック( "dll\\SlimDX" + CDTXMania.SLIMDXDLL + ".dll",
-					"SlimDX" + CDTXMania.SLIMDXDLL + ".dll またはその依存するdllが存在しません。" + newLine + "DTXManiaをダウンロードしなおしてください。",
-					"SlimDX" + CDTXMania.SLIMDXDLL + ".dll, or its depended DLL, is not found." + newLine + "Please download DTXMania again."
-					) ) bDLLnotfound = true;
+				//if ( !tDLLの存在チェック( "dll\\SlimDX" + CDTXMania.SLIMDXDLL + ".dll",
+				//	"SlimDX" + CDTXMania.SLIMDXDLL + ".dll またはその依存するdllが存在しません。" + newLine + "DTXManiaをダウンロードしなおしてください。",
+				//	"SlimDX" + CDTXMania.SLIMDXDLL + ".dll, or its depended DLL, is not found." + newLine + "Please download DTXMania again."
+				//	) ) bDLLnotfound = true;
 				if ( !tDLLの存在チェック( "dll\\FDK.dll",
 					"FDK.dll またはその依存するdllが存在しません。" + newLine + "DTXManiaをダウンロードしなおしてください。",
 					"FDK.dll, or its depended DLL, is not found." + newLine + "Please download DTXMania again."
 					) ) bDLLnotfound = true;
-				if ( !tDLLの存在チェック( "xadec.dll",		// #35444 2015.8.27 yyagi; Changed dll path
-					"xadec.dll が存在しません。" + newLine + "DTXManiaをダウンロードしなおしてください。",
-					"xadec.dll is not found." + newLine + "Please download DTXMania again."
-					) ) bDLLnotfound = true;
-				if ( !tDLLの存在チェック( "dll\\SoundDecoder.dll",
-					"SoundDecoder.dll またはその依存するdllが存在しません。" + newLine + "DTXManiaをダウンロードしなおしてください。",
-					"SoundDecoder.dll, or its depended DLL, is not found." + newLine + "Please download DTXMania again."
-					) ) bDLLnotfound = true;
+				//if ( !tDLLの存在チェック( "xadec.dll",		// #35444 2015.8.27 yyagi; Changed dll path
+				//	"xadec.dll が存在しません。" + newLine + "DTXManiaをダウンロードしなおしてください。",
+				//	"xadec.dll is not found." + newLine + "Please download DTXMania again."
+				//	) ) bDLLnotfound = true;
+				//if ( !tDLLの存在チェック( "dll\\SoundDecoder.dll",
+				//	"SoundDecoder.dll またはその依存するdllが存在しません。" + newLine + "DTXManiaをダウンロードしなおしてください。",
+				//	"SoundDecoder.dll, or its depended DLL, is not found." + newLine + "Please download DTXMania again."
+				//	) ) bDLLnotfound = true;
 				if ( !tDLLの存在チェック( CDTXMania.D3DXDLL,
 					CDTXMania.D3DXDLL + " が存在しません。" + newLine + "DirectX Redist フォルダの DXSETUP.exe を実行し、" + newLine + "必要な DirectX ランタイムをインストールしてください。",
 					CDTXMania.D3DXDLL + " is not found." + newLine + "Please execute DXSETUP.exe in \"DirectX Redist\" folder, to install DirectX runtimes required for DTXMania.",

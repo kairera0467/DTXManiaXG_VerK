@@ -124,7 +124,7 @@ namespace DTXMania
                         }
 				    }
                 }
-                //if( CDTXMania.Input管理.Keyboard.bキーが押された(  (int) SlimDX.DirectInput.Key.F8 ) )
+                //if( CDTXMania.Input管理.Keyboard.bキーが押された(  (int) SlimDXKey.F8 ) )
                 //{
                 //    this.tGaugeAddAnime( E楽器パート.DRUMS );
                 //}

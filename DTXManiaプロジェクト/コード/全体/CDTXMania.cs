@@ -5,16 +5,18 @@ using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Diagnostics;
+using System.Runtime;
 using System.Runtime.InteropServices;
 using System.IO;
 using System.Threading;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Xml;
-using SlimDX;
-using SlimDX.Direct3D9;
+using SharpDX;
+using SharpDX.Direct3D9;
 using FDK;
 using SampleFramework;
 
+using Point = System.Drawing.Point;
 namespace DTXMania
 {
 	internal class CDTXMania : Game
@@ -322,6 +324,11 @@ namespace DTXMania
 			get;
 			set;
 		}
+        public static CAnimationManager AnimationManager
+        {
+            get;
+            set;
+        }
         public static STDGBVALUE< List<int> > listAutoGhostLag = new STDGBVALUE<List<int>>();
         public static STDGBVALUE< List<int> > listTargetGhsotLag = new STDGBVALUE<List<int>>();
         public static STDGBVALUE< CScoreIni.C演奏記録 > listTargetGhostScoreData = new STDGBVALUE< CScoreIni.C演奏記録 >();
@@ -559,6 +566,9 @@ namespace DTXMania
 			if ( this.bApplicationActive )	// DTXMania本体起動中の本体/モニタの省電力モード移行を抑止
 				CPowerManagement.tDisableMonitorSuspend();
 
+            if( AnimationManager == null )
+                AnimationManager = new CAnimationManager();
+
 			// #xxxxx 2013.4.8 yyagi; sleepの挿入位置を、EndScnene～Present間から、BeginScene前に移動。描画遅延を小さくするため。
 			#region [ スリープ ]
 			if ( ConfigIni.nフレーム毎スリープms >= 0 )			// #xxxxx 2011.11.27 yyagi
@@ -616,7 +626,10 @@ namespace DTXMania
 			#endregion
 
 			this.Device.BeginScene();
-			this.Device.Clear( ClearFlags.ZBuffer | ClearFlags.Target, Color.Black, 1f, 0 );
+			this.Device.Clear( ClearFlags.ZBuffer | ClearFlags.Target, SharpDX.Color.Black, 1f, 0 );
+
+            if( AnimationManager != null )
+                AnimationManager.t進行();
 
 			if( r現在のステージ != null )
 			{
@@ -1707,7 +1720,7 @@ for (int i = 0; i < 3; i++) {
 #if !GPUFlushAfterPresent
 			actFlushGPU.On進行描画();		// Flush GPU	// EndScene()～Present()間 (つまりVSync前) でFlush実行
 #endif
-			if ( Sound管理.GetCurrentSoundDeviceType() != ESoundDeviceType.DirectSound )
+			if ( Sound管理.GetCurrentSoundDeviceType() != "DirectSound" )
 			{
 				Sound管理.t再生中の処理をする();	// サウンドバッファの更新; 画面描画と同期させることで、スクロールをスムーズにする
 			}
@@ -2393,6 +2406,9 @@ for (int i = 0; i < 3; i++) {
 					case 2:
 						soundDeviceType = ESoundDeviceType.ExclusiveWASAPI;
 						break;
+                    case 3:
+                        soundDeviceType = ESoundDeviceType.SharedWASAPI;
+                        break;
 					default:
 						soundDeviceType = ESoundDeviceType.Unknown;
 						break;
@@ -2400,7 +2416,7 @@ for (int i = 0; i < 3; i++) {
 				Sound管理 = new CSound管理(base.Window.Handle,
 											soundDeviceType,
 											CDTXMania.ConfigIni.nWASAPIBufferSizeMs,
-					// CDTXMania.ConfigIni.nASIOBufferSizeMs,
+                                            CDTXMania.ConfigIni.bEventDrivenWASAPI,
 											0,
 											CDTXMania.ConfigIni.nASIODevice,
 											CDTXMania.ConfigIni.bUseOSTimer
@@ -2413,6 +2429,26 @@ for (int i = 0; i < 3; i++) {
 				FDK.CSound管理.bIsTimeStretch = CDTXMania.ConfigIni.bTimeStretch;
 				Sound管理.nMasterVolume = CDTXMania.ConfigIni.nMasterVolume;
 				//FDK.CSound管理.bIsMP3DecodeByWindowsCodec = CDTXMania.ConfigIni.bNoMP3Streaming;
+
+
+				string strDefaultSoundDeviceBusType = CSound管理.strDefaultDeviceBusType;
+				Trace.TraceInformation($"Bus type of the default sound device = {strDefaultSoundDeviceBusType}");
+
+				if (strDefaultSoundDeviceBusType.ToUpper().Equals("USB"))
+				{
+					if (CDTXMania.ConfigIni.bWarnSoundDeviceOnUSB)
+					{
+						string strWarnMes = "あなたがPCとMIDI機器を接続するためにお使いのケーブル(MIDI2.0-USB)は、MIDI入力が不安定なことが多く報告されているため、DTXManiaでのご利用はお勧めしません。\n\n"+
+                        "OKをクリックすると、続行します。(以後このメッセージを表示しません)\n" +
+                        "キャンセルをクリックすると、続行します。";
+						var ret = MessageBox.Show(strWarnMes, "DTXMania Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
+						if (ret == DialogResult.OK)
+						{
+							CDTXMania.ConfigIni.bWarnSoundDeviceOnUSB = false;
+						}
+					}
+				}
+
 				Trace.TraceInformation("サウンドデバイスの初期化を完了しました。");
 			}
 			catch (Exception e)
@@ -2572,7 +2608,7 @@ for (int i = 0; i < 3; i++) {
 		public void ShowWindowTitleWithSoundType()
 		{
 			string delay = "";
-			if ( Sound管理.GetCurrentSoundDeviceType() != ESoundDeviceType.DirectSound )
+			if ( Sound管理.GetCurrentSoundDeviceType() != "DirectSound" )
 			{
 				delay = "(" + Sound管理.GetSoundDelay() + "ms)";
 			}
@@ -2958,11 +2994,17 @@ for (int i = 0; i < 3; i++) {
 		}
 		private void tガベージコレクションを実行する()
 		{
+			//LOHに対するコンパクションを要求
+			GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
+		
 			GC.Collect();
 			GC.WaitForPendingFinalizers();
 			GC.Collect();
 			GC.WaitForPendingFinalizers();
-		}
+
+            //通常通り、LOHへのGCを抑制
+            GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.Default;
+        }
 		private void tプラグイン検索と生成()
 		{
 			this.listプラグイン = new List<STPlugin>();
@@ -3105,15 +3147,17 @@ for (int i = 0; i < 3; i++) {
 			{
 				for ( int i = 0; i < 0x10; i++ )
 				{
-					if ( ConfigIni.KeyAssign.System.Capture[ i ].コード > 0 &&
-						 e.KeyCode == DeviceConstantConverter.KeyToKeyCode( (SlimDX.DirectInput.Key) ConfigIni.KeyAssign.System.Capture[ i ].コード ) )
-					{
-						// Debug.WriteLine( "capture: " + string.Format( "{0:2x}", (int) e.KeyCode ) + " " + (int) e.KeyCode );
-						string strFullPath =
-						   Path.Combine( CDTXMania.strEXEのあるフォルダ, "Capture_img" );
-						strFullPath = Path.Combine( strFullPath, DateTime.Now.ToString( "yyyyMMddHHmmss" ) + ".png" );
-						SaveResultScreen( strFullPath );
-					}
+					//var captureCode = (SlimDX.DirectInput.Key) ConfigIni.KeyAssign[ (int)EKeyConfigPad.Capture ][ i ];
+
+					//if( (int) captureCode > 0 &&
+					//	e.KeyCode == DeviceConstantConverter.KeyToKeys( captureCode ) )
+					//{
+					//	// Debug.WriteLine( "capture: " + string.Format( "{0:2x}", (int) e.KeyCode ) + " " + (int) e.KeyCode );
+					//	string strFullPath =
+					//	   Path.Combine( CDTXMania.strEXEのあるフォルダ, "Capture_img" );
+					//	strFullPath = Path.Combine( strFullPath, DateTime.Now.ToString( "yyyyMMddHHmmss" ) + ".png" );
+					//	SaveResultScreen( strFullPath );
+					//}
 				}
 			}
 		}

@@ -5,8 +5,9 @@ using System.Diagnostics;
 using System.Text;
 using System.Runtime.InteropServices;
 using FDK;
-using SlimDX;
+using SharpDX;
 
+using Rectangle = System.Drawing.Rectangle;
 namespace DTXMania
 {
 	internal class CAct演奏Guitar判定文字列GD : CAct演奏判定文字列共通

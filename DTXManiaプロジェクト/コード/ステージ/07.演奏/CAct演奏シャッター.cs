@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
 using System.Diagnostics;
-using SlimDX;
-using SlimDX.Direct3D9;
+using SharpDX.Direct3D9;
 using FDK;
+
+using SlimDXKey = SlimDX.DirectInput.Key;
 
 namespace DTXMania
 {
@@ -90,7 +91,7 @@ namespace DTXMania
 			{
                 for( int i = 0; i < 3; i++ )
                 {
-                    CDTXMania.t安全にDisposeする( ref this.txShutter );
+                    this.txShutter[ i ]?.Dispose();
                 }
 
 				base.OnManagedリソースの解放();
@@ -151,9 +152,9 @@ namespace DTXMania
         public void tShutterMove( IInputDevice bKeyboard )
         {
             #region[ ShutterInSide Up ]
-            if ( bKeyboard.bキーが離されている( (int) SlimDX.DirectInput.Key.RightShift ) && bKeyboard.bキーが離されている( (int) SlimDX.DirectInput.Key.LeftShift ) )
+            if ( bKeyboard.bキーが離されている( (int) SlimDXKey.RightShift ) && bKeyboard.bキーが離されている( (int) SlimDXKey.LeftShift ) )
             {
-                if ( bKeyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.NumberPad8 ) )
+                if ( bKeyboard.bキーが押されている( (int) SlimDXKey.NumberPad8 ) )
                 {
                     if( nShutterStartTime <= 0 )
                     {
@@ -195,8 +196,8 @@ namespace DTXMania
                     }
                 }
             }
-            //else if( bKeyboard.bキーが離された( (int) SlimDX.DirectInput.Key.NumberPad8 ) )
-            if( bKeyboard.bキーが押された( (int) SlimDX.DirectInput.Key.NumberPad8 ) )
+            //else if( bKeyboard.bキーが離された( (int) SlimDXKey.NumberPad8 ) )
+            if( bKeyboard.bキーが押された( (int) SlimDXKey.NumberPad8 ) )
             {
                 if( nShutterStartTime > 0 )
                     nShutterStartTime = 0;
@@ -205,9 +206,9 @@ namespace DTXMania
             }
             #endregion
             #region[ ShutterInSide Down ]
-            if ( bKeyboard.bキーが離されている( (int) SlimDX.DirectInput.Key.RightShift ) && bKeyboard.bキーが離されている( (int) SlimDX.DirectInput.Key.LeftShift ) )
+            if ( bKeyboard.bキーが離されている( (int) SlimDXKey.RightShift ) && bKeyboard.bキーが離されている( (int) SlimDXKey.LeftShift ) )
             {
-                if ( bKeyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.NumberPad2 ) )
+                if ( bKeyboard.bキーが押されている( (int) SlimDXKey.NumberPad2 ) )
                 {
                     if( nShutterStartTime <= 0 )
                     {
@@ -249,8 +250,8 @@ namespace DTXMania
                     }
                 }
             }
-            //if( bKeyboard.bキーが離された( (int) SlimDX.DirectInput.Key.NumberPad2 ) )
-            if( bKeyboard.bキーが押された( (int) SlimDX.DirectInput.Key.NumberPad2 ) )
+            //if( bKeyboard.bキーが離された( (int) SlimDXKey.NumberPad2 ) )
+            if( bKeyboard.bキーが押された( (int) SlimDXKey.NumberPad2 ) )
             {
                 if( nShutterStartTime > 0 )
                     nShutterStartTime = 0;
@@ -259,9 +260,9 @@ namespace DTXMania
             }
             #endregion
             #region[ ShutterOutSide Up ]
-            if( bKeyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.LeftShift ) || bKeyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.RightShift ) )
+            if( bKeyboard.bキーが押されている( (int) SlimDXKey.LeftShift ) || bKeyboard.bキーが押されている( (int) SlimDXKey.RightShift ) )
             {
-                if( bKeyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.NumberPad8 ) )
+                if( bKeyboard.bキーが押されている( (int) SlimDXKey.NumberPad8 ) )
                 {
                     if( nShutterStartTime <= 0 )
                     {
@@ -303,7 +304,7 @@ namespace DTXMania
                     }
                 }
             }
-            if( bKeyboard.bキーが離された( (int) SlimDX.DirectInput.Key.NumberPad8 ) )
+            if( bKeyboard.bキーが離された( (int) SlimDXKey.NumberPad8 ) )
             {
                 if( nShutterStartTime > 0 )
                     nShutterStartTime = 0;
@@ -312,9 +313,9 @@ namespace DTXMania
             }
             #endregion
             #region[ ShutterOutSide Down ]
-            if( bKeyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.LeftShift ) || bKeyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.RightShift ) )
+            if( bKeyboard.bキーが押されている( (int) SlimDXKey.LeftShift ) || bKeyboard.bキーが押されている( (int) SlimDXKey.RightShift ) )
             {
-                if( bKeyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.NumberPad2 ) )
+                if( bKeyboard.bキーが押されている( (int) SlimDXKey.NumberPad2 ) )
                 {
                     if( nShutterStartTime <= 0 )
                     {
@@ -356,7 +357,7 @@ namespace DTXMania
                     }
                 }
             }
-            if( bKeyboard.bキーが離された( (int) SlimDX.DirectInput.Key.NumberPad2 ) )
+            if( bKeyboard.bキーが離された( (int) SlimDXKey.NumberPad2 ) )
             {
                 if( nShutterStartTime > 0 )
                     nShutterStartTime = 0;
@@ -381,19 +382,19 @@ namespace DTXMania
             }
 
             //デバッグ用
-            //if( bKeyboard.bキーが押された( (int) SlimDX.DirectInput.Key.D0 ) )
+            //if( bKeyboard.bキーが押された( (int) SlimDXKey.D0 ) )
             //{
             //    CDTXMania.ConfigIni.nShutterInSide.Drums = 100;
             //}
-            //if ( bKeyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.NumberPad2 ) )
+            //if ( bKeyboard.bキーが押されている( (int) SlimDXKey.NumberPad2 ) )
             //{
             //    CDTXMania.act文字コンソール.tPrint( 0, 0, C文字コンソール.Eフォント種別.白, "NUM2" );
             //}
-            //if ( bKeyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.NumberPad8 ) )
+            //if ( bKeyboard.bキーが押されている( (int) SlimDXKey.NumberPad8 ) )
             //{
             //    CDTXMania.act文字コンソール.tPrint( 0, 0, C文字コンソール.Eフォント種別.白, "NUM8" );
             //}
-            //if ( bKeyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.RightShift ) )
+            //if ( bKeyboard.bキーが押されている( (int) SlimDXKey.RightShift ) )
             //{
             //    CDTXMania.act文字コンソール.tPrint( 0, 16, C文字コンソール.Eフォント種別.白, "R SHIFT" );
             //}

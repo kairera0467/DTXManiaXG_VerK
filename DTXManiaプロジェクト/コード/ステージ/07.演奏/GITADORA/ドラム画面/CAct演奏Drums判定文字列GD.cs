@@ -5,8 +5,9 @@ using System.Diagnostics;
 using System.Text;
 using System.Runtime.InteropServices;
 using FDK;
-using SlimDX;
+using SharpDX;
 
+using Rectangle = System.Drawing.Rectangle;
 namespace DTXMania
 {
 	internal class CAct演奏Drums判定文字列GD : CAct演奏判定文字列共通
@@ -1437,9 +1438,7 @@ namespace DTXMania
                             int num4 = 0;
                             int num5 = 0;
                             int num6 = 0;
-                            int nJudgePosY = 0;
-                            if( CDTXMania.bXGRelease ) CDTXMania.stage演奏ドラム画面.演奏判定ライン座標.n判定ラインY座標( E楽器パート.DRUMS, false, CDTXMania.ConfigIni.bReverse.Drums, false, true );
-                            else CDTXMania.stage演奏ドラム画面GITADORA.演奏判定ライン座標.n判定ラインY座標( E楽器パート.DRUMS, false, CDTXMania.ConfigIni.bReverse.Drums, false, true );
+                            int nJudgePosY = CDTXMania.stage演奏ドラム画面GITADORA.演奏判定ライン座標.n判定ラインY座標( E楽器パート.DRUMS, false, CDTXMania.ConfigIni.bReverse.Drums, false, true );
                             base.iP_A = nJudgePosY - 211;
                             base.iP_B = nJudgePosY + 23; //これは固定値にしてもいいのではないか?
                             if( j < 10 )

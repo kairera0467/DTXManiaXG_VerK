@@ -7,10 +7,11 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Diagnostics;
 using System.Threading;
-using SlimDX;
-using SlimDX.Direct3D9;
+using SharpDX;
 using FDK;
 
+using Rectangle = System.Drawing.Rectangle;
+using Point = System.Drawing.Point;
 namespace DTXMania
 {
 	internal class CStage演奏ドラム画面GD : CStage演奏画面共通

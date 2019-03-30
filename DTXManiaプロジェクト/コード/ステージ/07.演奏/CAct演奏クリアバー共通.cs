@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
 using System.Diagnostics;
-using SlimDX;
-using SlimDX.Direct3D9;
+using SharpDX;
+using SharpDX.Direct3D9;
 using FDK;
 
 namespace DTXMania

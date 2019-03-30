@@ -8,10 +8,13 @@ using System.Drawing.Imaging;
 using System.Diagnostics;
 using System.Drawing.Text;
 using System.IO;
-using SlimDX;
+using SharpDX;
 using FDK;
 
-
+using Color = System.Drawing.Color;
+using Point = System.Drawing.Point;
+using Rectangle = System.Drawing.Rectangle;
+using SlimDXKey = SlimDX.DirectInput.Key;
 namespace DTXMania
 {
     internal class CActSelect曲リストGITADORA : CActSelect曲リスト共通
@@ -97,68 +100,78 @@ namespace DTXMania
 
         public override void OnManagedリソースの作成()
         {
-            this.txバー背景 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_Bar Background.png" ) );
-            this.txバー選択中 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_Bar selected.png" ) );
-            this.txバー選択中枠 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_Bar selected cursor.png" ) );
-            this.txバー_フォルダ = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar box.png" ) );
-
-            this.txジャケットパネル背景 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_JacketPanel Background.png" ) );
-            this.txジャケットパネル枠 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_Jacket sensor.png" ) );
-
-            this.tx水色 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\FIFO Tile lightblue.png" ) );
-            this.tx黒 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\FIFO Tile black.png" ) );
-            this.tx青色 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\FIFO Tile blue.png" ) );
-            this.tx群青 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\FIFO Tile darkblue.png" ) );
-
-			//this.tx曲名バー.Score = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar score.png" ), false );
-			//this.tx曲名バー.Box = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar box.png" ), false );
-			//this.tx曲名バー.Other = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar other.png" ), false );
-   //         this.tx曲名バー.Random = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar other.png" ), false );
-   //         this.tx曲名バー.BackBox = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar other.png" ), false );
-			//this.tx選曲バー.Score = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar score selected.png" ), false );
-			//this.tx選曲バー.Box = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar box selected.png" ), false );
-			//this.tx選曲バー.Other = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar other selected.png" ), false );
-			//this.tx選曲バー.Random = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar other selected.png" ), false );
-   //         this.tx選曲バー.BackBox = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar other selected.png" ), false );
-            //this.txスキル数字 = CDTXMania.tテクスチャの生成(CSkin.Path(@"Graphics\ScreenSelect skill number on list.png"), false);
-
-			for( int i = 0; i < 15; i++ )
-				this.t曲名バーの生成( i, this.stバー情報[ i ].strタイトル文字列, this.stバー情報[ i ].col文字色 );
-
-            #region[ テクスチャの復元 ]
-            int nKeys = this.dicThumbnail.Count;
-            string[] keys = new string[ nKeys ];
-            this.dicThumbnail.Keys.CopyTo( keys, 0 );
-            foreach( var key in keys )
-                this.dicThumbnail[ key ] = this.tパスを指定してサムネイル画像を生成して返す( 0, key, this.stバー情報[ 0 ].eバー種別  );
-
-            //ここは最初に表示される画像の復元に必要。
-            for( int i = 0; i < 15; i++ )
+            if( !this.b活性化してない )
             {
-                //this.tパネルの生成( i, this.stバー情報[ i ].strタイトル文字列, this.stバー情報[ i ].strアーティスト名, this.stバー情報[ i ].col文字色 );
-                if( this.stバー情報[ i ].strPreimageのパス != null )
-                {
-                    if( !this.dicThumbnail.ContainsKey( this.stバー情報[ i ].strPreimageのパス ) )
-                    {
-                        this.tパスを指定してサムネイル画像を生成する( i, this.stバー情報[ i ].strPreimageのパス, this.stバー情報[ i ].eバー種別  );
-                        this.dicThumbnail.Add( this.stバー情報[ i ].strPreimageのパス, this.txTumbnail[ i ] );
-                    }
-                    this.txTumbnail[ i ] = this.dicThumbnail[ this.stバー情報[ i ].strPreimageのパス ];
-                }
+                this.txバー背景 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_Bar Background.png" ) );
+                this.txバー選択中 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_Bar selected.png" ) );
+                this.txバー選択中枠 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_Bar selected cursor.png" ) );
+                this.txバー_フォルダ = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar box.png" ) );
 
-                if( this.stバー情報[ i ].strタイトル文字列 != null )
+                this.txジャケットパネル背景 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_JacketPanel Background.png" ) );
+                this.txジャケットパネル枠 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_Jacket sensor.png" ) );
+
+                this.tx水色 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\FIFO Tile lightblue.png" ) );
+                this.tx黒 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\FIFO Tile black.png" ) );
+                this.tx青色 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\FIFO Tile blue.png" ) );
+                this.tx群青 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\FIFO Tile darkblue.png" ) );
+
+			    //this.tx曲名バー.Score = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar score.png" ), false );
+			    //this.tx曲名バー.Box = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar box.png" ), false );
+			    //this.tx曲名バー.Other = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar other.png" ), false );
+       //         this.tx曲名バー.Random = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar other.png" ), false );
+       //         this.tx曲名バー.BackBox = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar other.png" ), false );
+			    //this.tx選曲バー.Score = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar score selected.png" ), false );
+			    //this.tx選曲バー.Box = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar box selected.png" ), false );
+			    //this.tx選曲バー.Other = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar other selected.png" ), false );
+			    //this.tx選曲バー.Random = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar other selected.png" ), false );
+       //         this.tx選曲バー.BackBox = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar other selected.png" ), false );
+                //this.txスキル数字 = CDTXMania.tテクスチャの生成(CSkin.Path(@"Graphics\ScreenSelect skill number on list.png"), false);
+
+			    for( int i = 0; i < 15; i++ )
+				    this.t曲名バーの生成( i, this.stバー情報[ i ].strタイトル文字列, this.stバー情報[ i ].col文字色 );
+
+                #region[ テクスチャの復元 ]
+                int nKeys = this.dicThumbnail.Count;
+                string[] keys = new string[ nKeys ];
+                this.dicThumbnail.Keys.CopyTo( keys, 0 );
+                foreach( var key in keys )
+                    this.dicThumbnail[ key ] = this.tパスを指定してサムネイル画像を生成して返す( 0, key, this.stバー情報[ 0 ].eバー種別  );
+
+                nKeys = this.dicThumbnail.Count;
+                keys = new string[ nKeys ];
+                this.dicMusicName.Keys.CopyTo( keys, 0 );
+                foreach( var key in keys )
+                    this.dicMusicName[ key ] = this.t指定された文字テクスチャを生成する( key );
+
+                //ここは最初に表示される画像の復元に必要。
+                for( int i = 0; i < 15; i++ )
                 {
-                    if( !this.dicMusicName.ContainsKey( this.stバー情報[ i ].strタイトル文字列 ) )
+                    //this.tパネルの生成( i, this.stバー情報[ i ].strタイトル文字列, this.stバー情報[ i ].strアーティスト名, this.stバー情報[ i ].col文字色 );
+                    if( this.stバー情報[ i ].strPreimageのパス != null )
                     {
-                        this.tパスを指定してサムネイル画像を生成する( i, this.stバー情報[ i ].strタイトル文字列, this.stバー情報[ i ].eバー種別  );
-                        this.dicMusicName.Add( this.stバー情報[ i ].strタイトル文字列, this.txMusicName[ i ] );
+                        if( !this.dicThumbnail.ContainsKey( this.stバー情報[ i ].strPreimageのパス ) )
+                        {
+                            this.tパスを指定してサムネイル画像を生成する( i, this.stバー情報[ i ].strPreimageのパス, this.stバー情報[ i ].eバー種別  );
+                            this.dicThumbnail.Add( this.stバー情報[ i ].strPreimageのパス, this.txTumbnail[ i ] );
+                        }
+                        this.txTumbnail[ i ] = this.dicThumbnail[ this.stバー情報[ i ].strPreimageのパス ];
                     }
-                    this.txMusicName[ i ] = this.dicMusicName[ this.stバー情報[ i ].strタイトル文字列 ];
+
+                    if( this.stバー情報[ i ].strタイトル文字列 != null )
+                    {
+                        if( !this.dicMusicName.ContainsKey( this.stバー情報[ i ].strタイトル文字列 ) )
+                        {
+                            this.t指定された文字テクスチャを生成してバーに格納する( i, this.stバー情報[ i ].strタイトル文字列, this.stバー情報[ i ].eバー種別  );
+                            this.dicMusicName.Add( this.stバー情報[ i ].strタイトル文字列, this.txMusicName[ i ] );
+                        }
+                        this.txMusicName[ i ] = this.dicMusicName[ this.stバー情報[ i ].strタイトル文字列 ];
+                    }
                 }
+                #endregion
+
+                base.OnManagedリソースの作成();
             }
-            #endregion
 
-            base.OnManagedリソースの作成();
         }
 
         public override void OnManagedリソースの解放()
@@ -176,6 +189,34 @@ namespace DTXMania
             CDTXMania.tテクスチャの解放( ref this.tx黒 );
             CDTXMania.tテクスチャの解放( ref this.tx青色 );
             CDTXMania.tテクスチャの解放( ref this.tx群青 );
+
+            #region[ ジャケット、曲名テクスチャ画像の解放 ]
+            // ジャケット
+            int nKeys = this.dicThumbnail.Count;
+            string[] keys = new string[ nKeys ];
+            this.dicThumbnail.Keys.CopyTo( keys, 0 );
+            foreach( var key in keys )
+            {
+                C共通.tDisposeする( this.dicThumbnail[ key ] );
+                this.dicThumbnail[ key ] = null;
+            }
+
+            // 曲名
+            nKeys = this.dicMusicName.Count;
+            keys = new string[ nKeys ];
+            this.dicMusicName.Keys.CopyTo( keys, 0 );
+            foreach( var key in keys )
+            {
+                C共通.tDisposeする( this.dicMusicName[ key ] );
+                this.dicMusicName[ key ] = null;
+            }
+
+            for( int i = 0; i < 15; i++ )
+            {
+                CDTXMania.tテクスチャの解放( ref this.txTumbnail[ i ] );
+                CDTXMania.tテクスチャの解放( ref this.txMusicName[ i ] );
+            }
+            #endregion
 
             base.OnManagedリソースの解放();
         }
@@ -201,9 +242,7 @@ namespace DTXMania
             //-----------------
             #endregion
 
-            if( this.txバー背景 != null )
-                this.txバー背景.t2D描画( CDTXMania.app.Device, 710, 0 );
-			
+		
 			// まだ選択中の曲が決まってなければ、曲ツリールートの最初の曲にセットする。
 
 			if( ( this.r現在選択中の曲 == null ) && ( CDTXMania.Songs管理.list曲ルート.Count > 0 ) )
@@ -350,6 +389,8 @@ namespace DTXMania
 						{
 							int n = ( ( ( this.n現在の選択行 - 7 ) + i ) + 15 ) % 15;
 							this.stバー情報[ n ].eバー種別 = this.e曲のバー種別を返す( song2 );
+                            CDTXMania.t安全にDisposeする( ref this.stバー情報[ n ].txタイトル名 );
+                            CDTXMania.t安全にDisposeする( ref this.stバー情報[ n ].txアーティスト名 );
 							song2 = this.r次の曲( song2 );
 						}
 
@@ -424,6 +465,8 @@ namespace DTXMania
 						{
 							int n = ( ( ( this.n現在の選択行 - 7 ) + i ) + 15 ) % 15;
 							this.stバー情報[ n ].eバー種別 = this.e曲のバー種別を返す( song2 );
+                            CDTXMania.t安全にDisposeする( ref this.stバー情報[ n ].txタイトル名 );
+                            CDTXMania.t安全にDisposeする( ref this.stバー情報[ n ].txアーティスト名 );
 							song2 = this.r次の曲( song2 );
 						}
 
@@ -453,7 +496,7 @@ namespace DTXMania
 				//-----------------
 				#endregion
 
-                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.F8 ) )
+                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F8 ) )
                 {
                     this.tTextureCacheClear();
                 }
@@ -472,6 +515,12 @@ namespace DTXMania
 
 				return 0;
 			}
+            else
+            {
+                // 曲があればバー背景を描画
+                if( this.txバー背景 != null )
+                    this.txバー背景.t2D描画( CDTXMania.app.Device, 710, 0 );
+            }
 
             int i選曲バーX座標 = 673; //選曲バーの座標用
             int i選択曲バーX座標 = 665; //選択曲バーの座標用
@@ -539,7 +588,7 @@ namespace DTXMania
 							//-----------------
                             if( this.txMusicName[ nパネル番号 ] != null )
                             {
-                                this.txMusicName[ nパネル番号 ].t2D描画( CDTXMania.app.Device, 770, 334 );
+                                this.txMusicName[ nパネル番号 ].t2D描画( CDTXMania.app.Device, 772, 334 );
                             }
                             //-----------------
                             #endregion
@@ -614,7 +663,7 @@ namespace DTXMania
 							//-----------------
                             if( this.txMusicName[ nパネル番号 ] != null )
                             {
-                                this.txMusicName[ nパネル番号 ].t2D描画( CDTXMania.app.Device, 806, y + 12 );
+                                this.txMusicName[ nパネル番号 ].t2D描画( CDTXMania.app.Device, 808, y + 12 );
                             }
 							//-----------------
 							#endregion
@@ -691,7 +740,7 @@ namespace DTXMania
                             //-----------------
                             if( this.txMusicName[ nパネル番号 ] != null )
                             {
-                                this.txMusicName[ nパネル番号 ].t2D描画( CDTXMania.app.Device, 770, y + 12 );
+                                this.txMusicName[ nパネル番号 ].t2D描画( CDTXMania.app.Device, 772, y + 12 );
                             }
 
                             //CDTXMania.act文字コンソール.tPrint( 0, n見た目の行番号 * 16, C文字コンソール.Eフォント種別.赤, this.stバー情報[ nパネル番号 ].strタイトル文字列 );
@@ -770,7 +819,7 @@ namespace DTXMania
 						//	this.stバー情報[ nパネル番号 ].txタイトル名.t2D描画( CDTXMania.app.Device, x + 0x58, y + 6 );
                         if( this.txMusicName[ nパネル番号 ] != null )
                         {
-                            this.txMusicName[ nパネル番号 ].t2D描画( CDTXMania.app.Device, 806, y + 12 );
+                            this.txMusicName[ nパネル番号 ].t2D描画( CDTXMania.app.Device, 808, y + 12 );
                         }
 
                         //CDTXMania.act文字コンソール.tPrint( 0, n見た目の行番号 * 16, C文字コンソール.Eフォント種別.白, this.stバー情報[ nパネル番号 ].strタイトル文字列 );
@@ -813,7 +862,7 @@ namespace DTXMania
 			tアイテム数の描画();
             #endregion
 
-            //if( CDTXMania.Input管理.Keyboard.bキーが押されている( (int)SlimDX.DirectInput.Key.F7 ) )
+            //if( CDTXMania.Input管理.Keyboard.bキーが押されている( (int)SlimDXKey.F7 ) )
             {
                 //this.tPuzzleFIFOTest();
             }
@@ -1087,8 +1136,7 @@ namespace DTXMania
                 str文字 = "ランダムカテゴリー内";
             }
 
-            Bitmap bmp;
-            bmp = prvFont.DrawPrivateFont( str文字, CPrivateFont.DrawMode.Edge, Color.Black, Color.Black, Color.White, Color.White, true );
+            Bitmap bmp = prvFont.DrawPrivateFont( str文字, CPrivateFont.DrawMode.Edge, Color.Black, Color.White, Color.White, Color.White );
             CTexture tx文字テクスチャ = CDTXMania.tテクスチャの生成( bmp, false );
             bmp.Dispose();
 
@@ -1103,8 +1151,7 @@ namespace DTXMania
             //if(prvFont != null)
             //    prvFont.Dispose();
             
-            Bitmap bmp;
-            bmp = prvFont.DrawPrivateFont( str文字, CPrivateFont.DrawMode.Edge, Color.Black, Color.White, Color.White, Color.White, false );
+            Bitmap bmp = prvFont.DrawPrivateFont( str文字, CPrivateFont.DrawMode.Edge, Color.Black, Color.White, Color.White, Color.White );
             CTexture tx文字テクスチャ = CDTXMania.tテクスチャの生成( bmp, false );
             bmp.Dispose();
 
@@ -1112,8 +1159,7 @@ namespace DTXMania
         }
         private CTexture t指定された文字テクスチャを生成する_小( string str文字 )
         {
-            Bitmap bmp;
-            bmp = prvFontSmall.DrawPrivateFont( str文字, CPrivateFont.DrawMode.Edge, Color.Black, Color.White, Color.White, Color.White, true );
+            Bitmap bmp = prvFontSmall.DrawPrivateFont( str文字, CPrivateFont.DrawMode.Edge, Color.Black, Color.White, Color.White, Color.White );
             CTexture tx文字テクスチャ = CDTXMania.tテクスチャの生成( bmp, false );
             bmp.Dispose();
 
@@ -1158,7 +1204,7 @@ namespace DTXMania
 					g.DrawString( str曲名, this.ft曲リスト用フォント, new SolidBrush( this.color文字影 ), (float) 2f, (float) ( y + 2f ) );
 					g.DrawString( str曲名, this.ft曲リスト用フォント, new SolidBrush( color ), 0f, y );
 
-					CDTXMania.t安全にDisposeする( ref this.stバー情報[ nバー番号 ].txタイトル名 );
+					CDTXMania.tテクスチャの解放( ref this.stバー情報[ nバー番号 ].txタイトル名 );
 
 					this.stバー情報[ nバー番号 ].txタイトル名 = new CTexture( CDTXMania.app.Device, bmp, CDTXMania.TextureFormat );
 					this.stバー情報[ nバー番号 ].txタイトル名.vc拡大縮小倍率 = new Vector3( f拡大率X, 0.5f, 1f );

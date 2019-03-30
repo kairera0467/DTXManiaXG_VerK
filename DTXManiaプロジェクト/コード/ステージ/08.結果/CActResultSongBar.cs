@@ -57,7 +57,7 @@ namespace DTXMania
 
 		#region [ private ]
 		//-----------------
-
+        
 		//-----------------
 		#endregion
 	}

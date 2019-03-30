@@ -5,9 +5,12 @@ using System.Drawing;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
-using SlimDX;
+using SharpDX;
 using FDK;
 
+using Color = System.Drawing.Color;
+using Rectangle = System.Drawing.Rectangle;
+using Point = System.Drawing.Point;
 namespace DTXMania
 {
 	internal class CAct曲読み込みメイン画面GD
@@ -146,8 +149,7 @@ namespace DTXMania
                 #region[ 曲名、アーティスト名テクスチャの生成 ]
                 if( ( str曲タイトル != null ) && ( str曲タイトル.Length > 0 ) )
                 {
-                    Bitmap bmpSongName = new Bitmap(1, 1);
-                    bmpSongName = pfTitleName.DrawPrivateFont( str曲タイトル, CPrivateFont.DrawMode.Edge, Color.Black, Color.White, Color.White, Color.White, true );
+                    Bitmap bmpSongName = pfTitleName.DrawPrivateFont( str曲タイトル, CPrivateFont.DrawMode.Edge, Color.Black, Color.White, Color.White, Color.White );
                     this.txTitle = CDTXMania.tテクスチャの生成( bmpSongName, false );
                     bmpSongName.Dispose();
                 }
@@ -158,8 +160,7 @@ namespace DTXMania
 
                 if( ( strアーティスト名 != null) && ( strアーティスト名.Length > 0 ) )
                 {
-                    Bitmap bmpArtistName = new Bitmap( 1, 1 );
-                    bmpArtistName = pfArtistName.DrawPrivateFont( strアーティスト名, CPrivateFont.DrawMode.Edge, Color.Black, Color.White, Color.White, Color.White, true );
+                    Bitmap bmpArtistName = pfArtistName.DrawPrivateFont( strアーティスト名, CPrivateFont.DrawMode.Edge, Color.Black, Color.White, Color.White, Color.White );
                     this.txArtist = CDTXMania.tテクスチャの生成(bmpArtistName, false);
                     bmpArtistName.Dispose();
                 }

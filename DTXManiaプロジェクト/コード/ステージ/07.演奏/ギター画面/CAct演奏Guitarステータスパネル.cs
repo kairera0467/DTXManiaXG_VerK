@@ -120,8 +120,8 @@ namespace DTXMania
                     gNamePlate.PageUnit = GraphicsUnit.Pixel;
 
                     #region[ カードネーム ]
-                    this.strPlayerName[ 0 ] = string.IsNullOrEmpty( CDTXMania.ConfigIni.strCardName[ 1 ] ) ? "GUEST" : CDTXMania.ConfigIni.strCardName[ 1 ];
-                    this.strPlayerName[ 1 ] = string.IsNullOrEmpty( CDTXMania.ConfigIni.strCardName[ 2 ] ) ? "GUEST" : CDTXMania.ConfigIni.strCardName[ 2 ];
+                    this.strPlayerName[ 0 ] = CDTXMania.ConfigIni.strGetCardName( E楽器パート.GUITAR );
+                    this.strPlayerName[ 1 ] = CDTXMania.ConfigIni.strGetCardName( E楽器パート.BASS );
                     this.strGroupName[ 0 ] = string.IsNullOrEmpty( CDTXMania.ConfigIni.strGroupName[ 1 ] ) ? "" : CDTXMania.ConfigIni.strGroupName[ 1 ];
                     this.strGroupName[ 1 ] = string.IsNullOrEmpty( CDTXMania.ConfigIni.strGroupName[ 2 ] ) ? "" : CDTXMania.ConfigIni.strGroupName[ 2 ];
 

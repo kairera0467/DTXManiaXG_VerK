@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
 using FDK;
-using SlimDX.Direct3D9;
+using SharpDX.Direct3D9;
 
 namespace DTXMania
 {
@@ -44,25 +44,31 @@ namespace DTXMania
 
         public override void OnManagedリソースの作成()
         {
-            for( int i = 0; i < 10; i++ )
+            if( !this.b活性化してない )
             {
-                if( CDTXMania.ConfigIni.nLaneDispType.Drums == 0 || CDTXMania.ConfigIni.nLaneDispType.Drums == 2 )
-                    this.txLane[ i ] = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_Paret.png" ) );
-                else
-                    this.txLane[ i ] = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\Tile black 64x64.png" ) );
+                for( int i = 0; i < 10; i++ )
+                {
+                    if( CDTXMania.ConfigIni.nLaneDispType.Drums == 0 || CDTXMania.ConfigIni.nLaneDispType.Drums == 2 )
+                        this.txLane[ i ] = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_Paret.png" ) );
+                    else
+                        this.txLane[ i ] = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\Tile black 64x64.png" ) );
+                }
+                this.txLaneShadow = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_Drums_Shadow.png" ) );
+                base.OnManagedリソースの作成();
             }
-            this.txLaneShadow = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_Drums_Shadow.png" ) );
-            base.OnManagedリソースの作成();
         }
 
         public override void OnManagedリソースの解放()
         {
-            for( int i = 0; i < 10; i++ )
-            { 
-                CDTXMania.tテクスチャの解放( ref this.txLane[ i ] );
+            if( !this.b活性化してない )
+            {
+                for( int i = 0; i < 10; i++ )
+                { 
+                    CDTXMania.tテクスチャの解放( ref this.txLane[ i ] );
+                }
+                CDTXMania.tテクスチャの解放( ref this.txLaneShadow );
+                base.OnManagedリソースの解放();
             }
-            CDTXMania.tテクスチャの解放( ref this.txLaneShadow );
-            base.OnManagedリソースの解放();
         }
 
         public override int On進行描画()

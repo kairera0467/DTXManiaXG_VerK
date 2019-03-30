@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
-using SlimDX;
-using SlimDX.DirectInput;
+using SharpDX;
+using SharpDX.DirectInput;
 
 namespace FDK
 {
@@ -22,8 +22,9 @@ namespace FDK
 				this.devJoystick.SetCooperativeLevel( hWnd, CooperativeLevel.Foreground | CooperativeLevel.Exclusive );
 				this.devJoystick.Properties.BufferSize = 32;
 				Trace.TraceInformation( this.devJoystick.Information.InstanceName + "を生成しました。" );
+				this.strDeviceName = this.devJoystick.Information.InstanceName;
 			}
-			catch( DirectInputException )
+			catch
 			{
 				if( this.devJoystick != null )
 				{
@@ -35,10 +36,10 @@ namespace FDK
 			}
 			foreach( DeviceObjectInstance instance in this.devJoystick.GetObjects() )
 			{
-				if( ( instance.ObjectType & ObjectDeviceType.Axis ) != ObjectDeviceType.All )
+				if( ( instance.ObjectId.Flags & DeviceObjectTypeFlags.Axis ) != DeviceObjectTypeFlags.All )
 				{
-					this.devJoystick.GetObjectPropertiesById( (int) instance.ObjectType ).SetRange( -1000, 1000 );
-					this.devJoystick.GetObjectPropertiesById( (int) instance.ObjectType ).DeadZone = 5000;		// 50%をデッドゾーンに設定
+					this.devJoystick.GetObjectPropertiesById( instance.ObjectId ).Range = new InputRange( -1000, 1000 );
+					this.devJoystick.GetObjectPropertiesById( instance.ObjectId ).DeadZone = 5000;		// 50%をデッドゾーンに設定
 																												// 軸をON/OFFの2値で使うならこれで十分
 				}
 			}
@@ -46,7 +47,7 @@ namespace FDK
 			{
 				this.devJoystick.Acquire();
 			}
-			catch( DirectInputException )
+			catch
 			{
 			}
 
@@ -90,6 +91,11 @@ namespace FDK
 			get;
 			private set; 
 		}
+		public string strDeviceName
+		{
+			get;
+			set;
+		}
 
 		public void tポーリング( bool bWindowがアクティブ中, bool bバッファ入力を使用する )
 		{
@@ -101,8 +107,11 @@ namespace FDK
 			}
 			#endregion
 
-			if ( ( bWindowがアクティブ中 && !this.devJoystick.Acquire().IsFailure ) && !this.devJoystick.Poll().IsFailure )
+			if ( bWindowがアクティブ中 )
 			{
+				this.devJoystick.Acquire();
+				this.devJoystick.Poll();
+
 				// this.list入力イベント = new List<STInputEvent>( 32 );
 				this.list入力イベント.Clear();						// #xxxxx 2012.6.11 yyagi; To optimize, I removed new();
 
@@ -112,9 +121,9 @@ namespace FDK
 					#region [ a.バッファ入力 ]
 					//-----------------------------
 					var bufferedData = this.devJoystick.GetBufferedData();
-					if( Result.Last.IsSuccess && bufferedData != null )
+					//if( Result.Last.IsSuccess && bufferedData != null )
 					{
-						foreach ( JoystickState data in bufferedData )
+						foreach ( JoystickUpdate data in bufferedData )
 						{
 #if false
 //if ( 0 < data.X && data.X < 128 && 0 < data.Y && data.Y < 128 && 0 < data.Z && data.Z < 128 )
@@ -146,97 +155,83 @@ pp3 += ( data.IsReleased( ii ) ) ? "1" : "0";
 Trace.TraceInformation( "TS={0}: IsPressed={1}, IsReleased={2}", data.TimeStamp, pp2, pp3 );
 }
 #endif
-							switch ( data.JoystickDeviceType )
+							switch ( data.Offset )
 							{
-								case (int)JoystickDeviceType.X:
+								case JoystickOffset.X:
 									#region [ X軸－ ]
 									//-----------------------------
-									bButtonUpDown( data, data.X, 0, 1 );
+									bButtonUpDown( data, data.Value, 0, 1 );
 									//-----------------------------
 									#endregion
 									#region [ X軸＋ ]
 									//-----------------------------
-									bButtonUpDown( data, data.X, 1, 0 );
+									bButtonUpDown( data, data.Value, 1, 0 );
 									//-----------------------------
 									#endregion
 									break;
-								case (int)JoystickDeviceType.Y:
+								case JoystickOffset.Y:
 									#region [ Y軸－ ]
 									//-----------------------------
-									bButtonUpDown( data, data.Y, 2, 3 );
+									bButtonUpDown( data, data.Value, 2, 3 );
 									//-----------------------------
 									#endregion
 									#region [ Y軸＋ ]
 									//-----------------------------
-									bButtonUpDown( data, data.Y, 3, 2 );
+									bButtonUpDown( data, data.Value, 3, 2 );
+									//-----------------------------
 									#endregion
 									break;
-								case (int)JoystickDeviceType.Z:
+								case JoystickOffset.Z:
 									#region [ Z軸－ ]
 									//-----------------------------
-									bButtonUpDown( data, data.Z, 4, 5 );
+									bButtonUpDown( data, data.Value, 4, 5 );
 									//-----------------------------
 									#endregion
 									#region [ Z軸＋ ]
 									//-----------------------------
-									bButtonUpDown( data, data.Z, 5, 4 );
+									bButtonUpDown( data, data.Value, 5, 4 );
+									//-----------------------------
 									#endregion
 									break;
-								case (int)JoystickDeviceType.POV0:
-								case (int)JoystickDeviceType.POV1:
-								case (int)JoystickDeviceType.POV2:
-								case (int)JoystickDeviceType.POV3:
-									// #24341 2011.3.12 yyagi: POV support
-									// #26880 2011.12.6 yyagi: improve to support "pullup" of POV buttons
+								// #24341 2011.3.12 yyagi: POV support
+								// #26880 2011.12.6 yyagi: improve to support "pullup" of POV buttons
+								case JoystickOffset.PointOfViewControllers0:
 									#region [ POV HAT 4/8way ]
-									int[] povs = data.GetPointOfViewControllers();
-									if ( povs != null )
-									{
-										STInputEvent e = new STInputEvent();
-										int p = ( (int) data.JoystickDeviceType - (int) JoystickDeviceType.POV0 ) / ( (int) JoystickDeviceType.POV1 - (int) JoystickDeviceType.POV0 );	// p = 0,1,2,3
-																					// #31030 2013.3.25 yyagi; p is not 0123 but 048.. Sop must be divided into 4 ( POV1 - POV0 == 4).
-										int nPovDegree = povs[ p ];
-										int nWay = ( nPovDegree + 2250 ) / 4500;
-										if ( nWay == 8 ) nWay = 0;
-									//Debug.WriteLine( "POVS:" + povs[ 0 ].ToString( CultureInfo.CurrentCulture ) + ", " +stevent.nKey );
-//Debug.WriteLine( "nPovDegree=" + nPovDegree );
-										if ( nPovDegree == -1 )
-										{
-											e.nKey = 6 + 128 + this.nPovState[ p ];
-											this.nPovState[ p ] = -1;
-//Debug.WriteLine( "POVS離された" + data.TimeStamp + " " + e.nKey );
-											e.b押された = false;
-											e.nVelocity = 0;
-											this.bButtonState[ e.nKey ] = false;
-											this.bButtonPullUp[ e.nKey ] = true;
-										} else {
-											this.nPovState[ p ] = nWay;
-											e.nKey = 6 + 128 + nWay;
-											e.b押された = true;
-											e.nVelocity = CInput管理.n通常音量;
-											this.bButtonState[ e.nKey ] = true;
-											this.bButtonPushDown[ e.nKey ] = true;
-//Debug.WriteLine( "POVS押された" + data.TimeStamp + " " + e.nKey );
-										}
-										//e.nTimeStamp = data.TimeStamp;
-										e.nTimeStamp = CSound管理.rc演奏用タイマ.nサウンドタイマーのシステム時刻msへの変換( data.TimeStamp );
-										this.list入力イベント.Add( e );
-									}
+									POVの処理( 0, data.Value );
+									#endregion
+									break;
+								case JoystickOffset.PointOfViewControllers1:
+									#region [ POV HAT 4/8way ]
+									POVの処理( 1, data.Value );
+									#endregion
+									break;
+								case JoystickOffset.PointOfViewControllers2:
+									#region [ POV HAT 4/8way ]
+									POVの処理( 2, data.Value );
+									#endregion
+									break;
+								case JoystickOffset.PointOfViewControllers3:
+									#region [ POV HAT 4/8way ]
+									POVの処理( 3, data.Value );
 									#endregion
 									break;
 								default:
 									#region [ ボタン ]
 									//-----------------------------
-									for ( int i = 0; i < 32; i++ )
+
+									//for ( int i = 0; i < 32; i++ )
+									if( data.Offset >= JoystickOffset.Buttons0 && data.Offset <= JoystickOffset.Buttons31 )
 									{
-										if ( data.IsPressed( i ) )
+										int i = data.Offset - JoystickOffset.Buttons0;
+
+										if ( ( data.Value & 0x80 ) != 0 )
 										{
 											STInputEvent e = new STInputEvent()
 											{
 												nKey = 6 + i,
 												b押された = true,
 												b離された = false,
-												nTimeStamp = CSound管理.rc演奏用タイマ.nサウンドタイマーのシステム時刻msへの変換( data.TimeStamp ),
+												nTimeStamp = CSound管理.rc演奏用タイマ.nサウンドタイマーのシステム時刻msへの変換( data.Timestamp ),
 												nVelocity = CInput管理.n通常音量
 											};
 											this.list入力イベント.Add( e );
@@ -244,14 +239,14 @@ Trace.TraceInformation( "TS={0}: IsPressed={1}, IsReleased={2}", data.TimeStamp,
 											this.bButtonState[ 6 + i ] = true;
 											this.bButtonPushDown[ 6 + i ] = true;
 										}
-										else if ( data.IsReleased( i ) )
+										else //if ( ( data.Value & 0x80 ) == 0 )
 										{
 											var ev = new STInputEvent()
 											{
 												nKey = 6 + i,
 												b押された = false,
 												b離された = true,
-												nTimeStamp = CSound管理.rc演奏用タイマ.nサウンドタイマーのシステム時刻msへの変換( data.TimeStamp ),
+												nTimeStamp = CSound管理.rc演奏用タイマ.nサウンドタイマーのシステム時刻msへの変換( data.Timestamp ),
 												nVelocity = CInput管理.n通常音量,
 											};
 											this.list入力イベント.Add( ev );
@@ -264,6 +259,40 @@ Trace.TraceInformation( "TS={0}: IsPressed={1}, IsReleased={2}", data.TimeStamp,
 									#endregion
 									break;
 							}
+
+							#region [ ローカル関数 ]
+							void POVの処理( int p, int nPovDegree )
+							{
+								STInputEvent e = new STInputEvent();
+								int nWay = ( nPovDegree + 2250 ) / 4500;
+								if( nWay == 8 ) nWay = 0;
+								//Debug.WriteLine( "POVS:" + povs[ 0 ].ToString( CultureInfo.CurrentCulture ) + ", " +stevent.nKey );
+								//Debug.WriteLine( "nPovDegree=" + nPovDegree );
+								if( nPovDegree == -1 )
+								{
+									e.nKey = 6 + 128 + this.nPovState[ p ];
+									this.nPovState[ p ] = -1;
+									//Debug.WriteLine( "POVS離された" + data.TimeStamp + " " + e.nKey );
+									e.b押された = false;
+									e.nVelocity = 0;
+									this.bButtonState[ e.nKey ] = false;
+									this.bButtonPullUp[ e.nKey ] = true;
+								}
+								else
+								{
+									this.nPovState[ p ] = nWay;
+									e.nKey = 6 + 128 + nWay;
+									e.b押された = true;
+									e.nVelocity = CInput管理.n通常音量;
+									this.bButtonState[ e.nKey ] = true;
+									this.bButtonPushDown[ e.nKey ] = true;
+									//Debug.WriteLine( "POVS押された" + data.TimeStamp + " " + e.nKey );
+								}
+								//e.nTimeStamp = data.TimeStamp;
+								e.nTimeStamp = CSound管理.rc演奏用タイマ.nサウンドタイマーのシステム時刻msへの変換( data.Timestamp );
+								this.list入力イベント.Add( e );
+							}
+							#endregion
 						}
 					}
 					//-----------------------------
@@ -274,7 +303,7 @@ Trace.TraceInformation( "TS={0}: IsPressed={1}, IsReleased={2}", data.TimeStamp,
 					#region [ b.状態入力 ]
 					//-----------------------------
 					JoystickState currentState = this.devJoystick.GetCurrentState();
-					if( Result.Last.IsSuccess && currentState != null )
+					//if( Result.Last.IsSuccess && currentState != null )
 					{
 						#region [ X軸－ ]
 						//-----------------------------
@@ -507,7 +536,7 @@ Trace.TraceInformation( "TS={0}: IsPressed={1}, IsReleased={2}", data.TimeStamp,
 						#region [ ボタン ]
 						//-----------------------------
 						bool bIsButtonPressedReleased = false;
-						bool[] buttons = currentState.GetButtons();
+						bool[] buttons = currentState.Buttons;
 						for( int j = 0; ( j < buttons.Length ) && ( j < 128 ); j++ )
 						{
 							if( this.bButtonState[ 6 + j ] == false && buttons[ j ] )
@@ -545,7 +574,7 @@ Trace.TraceInformation( "TS={0}: IsPressed={1}, IsReleased={2}", data.TimeStamp,
 						#endregion
 						// #24341 2011.3.12 yyagi: POV support
 						#region [ POV HAT 4/8way (only single POV switch is supported)]
-						int[] povs = currentState.GetPointOfViewControllers();
+						int[] povs = currentState.PointOfViewControllers;
 						if ( povs != null )
 						{
 							if ( povs[ 0 ] >= 0 )
@@ -663,7 +692,7 @@ Trace.TraceInformation( "TS={0}: IsPressed={1}, IsReleased={2}", data.TimeStamp,
 		private Joystick devJoystick;
 		//private CTimer timer;
 
-		private void bButtonUpDown( JoystickState data, int axisdata, int target, int contrary )	// #26871 2011.12.3 軸の反転に対応するためにリファクタ
+		private void bButtonUpDown( JoystickUpdate data, int axisdata, int target, int contrary )	// #26871 2011.12.3 軸の反転に対応するためにリファクタ
 		{
 			int targetsign = ( target < contrary ) ? -1 : 1;
 			if ( Math.Abs( axisdata ) > 500 && ( targetsign == Math.Sign( axisdata ) ) )			// 軸の最大値の半分を超えていて、かつ
@@ -699,7 +728,7 @@ Trace.TraceInformation( "TS={0}: IsPressed={1}, IsReleased={2}", data.TimeStamp,
 		/// <param name="data"></param>
 		/// <param name="currentMode">直前のボタン状態 true=押されていた</param>
 		/// <returns>上げ下げイベント発生時true</returns>
-		private bool bDoUpDownCore( int target, JoystickState data, bool lastMode )
+		private bool bDoUpDownCore( int target, JoystickUpdate data, bool lastMode )
 		{
 			if ( this.bButtonState[ target ] == lastMode )
 			{
@@ -707,7 +736,7 @@ Trace.TraceInformation( "TS={0}: IsPressed={1}, IsReleased={2}", data.TimeStamp,
 				{
 					nKey = target,
 					b押された = !lastMode,
-					nTimeStamp = CSound管理.rc演奏用タイマ.nサウンドタイマーのシステム時刻msへの変換( data.TimeStamp ),
+					nTimeStamp = CSound管理.rc演奏用タイマ.nサウンドタイマーのシステム時刻msへの変換( data.Timestamp ),
 					nVelocity = ( lastMode ) ? 0 : CInput管理.n通常音量
 				};
 				this.list入力イベント.Add( e );

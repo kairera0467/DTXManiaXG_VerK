@@ -8,6 +8,7 @@ using System.Drawing;
 using System.IO;
 using FDK;
 
+using SlimDXKey = SlimDX.DirectInput.Key;
 
 namespace DTXMania
 {
@@ -267,8 +268,8 @@ namespace DTXMania
 				if ( this.bキー入力待ち )
 				{
 					#region [ Shift-F1: CONFIG画面 ]
-					if ( ( CDTXMania.Input管理.Keyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.RightShift ) || CDTXMania.Input管理.Keyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.LeftShift ) ) &&
-						CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDX.DirectInput.Key.F1 ) )
+					if ( ( CDTXMania.Input管理.Keyboard.bキーが押されている( (int) SlimDXKey.RightShift ) || CDTXMania.Input管理.Keyboard.bキーが押されている( (int) SlimDXKey.LeftShift ) ) &&
+						CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDXKey.F1 ) )
 					{	// [SHIFT] + [F1] CONFIG
 						CDTXMania.Skin.sound取消音.t再生する();
 						tCancel();
@@ -276,7 +277,7 @@ namespace DTXMania
 					}
 					#endregion
 					#region [ キー入力: キャンセル ]
-					else if ( CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDX.DirectInput.Key.Escape )
+					else if ( CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDXKey.Escape )
 						|| CDTXMania.Pad.b押された( E楽器パート.DRUMS, Eパッド.LC )
 						|| CDTXMania.Pad.b押されたGB( Eパッド.Cancel ) )
 					{	// キャンセル
@@ -303,7 +304,7 @@ namespace DTXMania
 						CDTXMania.Pad.b押された( E楽器パート.DRUMS, Eパッド.Decide )	// #24756 2011.4.1 yyagi: Add condition "Drum-Decide" to enable CY in Sort Menu.
 						|| CDTXMania.Pad.b押された( E楽器パート.DRUMS, Eパッド.RD )
 						/*|| CDTXMania.Pad.b押された( E楽器パート.DRUMS, Eパッド.LC )*/
-						|| ( CDTXMania.ConfigIni.bEnterがキー割り当てのどこにも使用されていない && CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDX.DirectInput.Key.Return ) ) )
+						|| ( CDTXMania.ConfigIni.bEnterがキー割り当てのどこにも使用されていない && CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDXKey.Return ) ) )
 					{
 						eInst = E楽器パート.DRUMS;
 						eAction = ESortAction.Decide;
@@ -314,15 +315,15 @@ namespace DTXMania
 					}
 					#endregion
 					#region [ キー入力: 前に移動 ]
-					this.ctキー反復用.Up.tキー反復( CDTXMania.Input管理.Keyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.UpArrow ), new CCounter.DGキー処理( this.t前に移動 ) );
+					this.ctキー反復用.Up.tキー反復( CDTXMania.Input管理.Keyboard.bキーが押されている( (int) SlimDXKey.UpArrow ), new CCounter.DGキー処理( this.t前に移動 ) );
 					this.ctキー反復用.R.tキー反復( CDTXMania.Pad.b押されているGB( Eパッド.R ), new CCounter.DGキー処理( this.t前に移動 ) );
 					if ( CDTXMania.Pad.b押された( E楽器パート.DRUMS, Eパッド.SD ) )
 					{
 						this.t前に移動();
 					}
-					#endregion
-					#region [ キー入力: 次に移動 ]
-					this.ctキー反復用.Down.tキー反復( CDTXMania.Input管理.Keyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.DownArrow ), new CCounter.DGキー処理( this.t次に移動 ) );
+                    #endregion
+                    #region [ キー入力: 次に移動 ]
+                    this.ctキー反復用.Down.tキー反復( CDTXMania.Input管理.Keyboard.bキーが押されている( (int) SlimDXKey.DownArrow ), new CCounter.DGキー処理( this.t次に移動 ) );
 					this.ctキー反復用.B.tキー反復( CDTXMania.Pad.b押されているGB( Eパッド.G ), new CCounter.DGキー処理( this.t次に移動 ) );
 					if ( CDTXMania.Pad.b押された( E楽器パート.DRUMS, Eパッド.FT ) )
 					{

@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
-using System.Runtime.InteropServices;
 using System.Diagnostics;
-using SlimDX.DirectInput;
 
 namespace FDK
 {

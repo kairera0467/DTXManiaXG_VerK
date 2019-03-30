@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
 using FDK;
-using SlimDX.Direct3D9;
+using SharpDX.Direct3D9;
 
 namespace DTXMania
 {
@@ -26,31 +26,34 @@ namespace DTXMania
 
         public override void OnManagedリソースの作成()
         {
-            //matixxは縦17pxずつ
-            #region[ ゲージ粒 ]
-            Bitmap canvas = new Bitmap( 7, 17 ); //現在:7px 記録:3px
-            Graphics g = Graphics.FromImage(canvas);
+            if( !this.b活性化してない )
+            {
+                //matixxは縦17pxずつ
+                #region[ ゲージ粒 ]
+                Bitmap canvas = new Bitmap( 7, 17 ); //現在:7px 記録:3px
+                Graphics g = Graphics.FromImage(canvas);
 
-            SolidBrush sbOK = new SolidBrush( Color.FromArgb( 225, 225, 60 ) );
-            SolidBrush sbNG  = new SolidBrush( Color.FromArgb( 110, 140, 230 ) );
+                SolidBrush sbOK = new SolidBrush( Color.FromArgb( 225, 225, 60 ) );
+                SolidBrush sbNG  = new SolidBrush( Color.FromArgb( 110, 140, 230 ) );
 
-            //OK色
-            g.FillRectangle( sbOK, 0, 0, 7, 17 );
-            this.txClearGauge_OK = CDTXMania.tテクスチャの生成( canvas );
+                //OK色
+                g.FillRectangle( sbOK, 0, 0, 7, 17 );
+                this.txClearGauge_OK = CDTXMania.tテクスチャの生成( canvas );
             
-            //NG色
-            g.FillRectangle( sbNG, 0, 0, 7, 17 );
-            this.txClearGauge_NG = CDTXMania.tテクスチャの生成( canvas );
+                //NG色
+                g.FillRectangle( sbNG, 0, 0, 7, 17 );
+                this.txClearGauge_NG = CDTXMania.tテクスチャの生成( canvas );
 
 
-            g.Dispose();
-            sbOK.Dispose();
-            sbNG.Dispose();
-            canvas.Dispose();
-            #endregion
-            this.txSongBar_Cursor = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_Songbar Cursor.png" ) );
+                g.Dispose();
+                sbOK.Dispose();
+                sbNG.Dispose();
+                canvas.Dispose();
+                #endregion
+                this.txSongBar_Cursor = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_Songbar Cursor.png" ) );
 
-            base.OnManagedリソースの作成();
+                base.OnManagedリソースの作成();
+            }
         }
 
         public override void OnManagedリソースの解放()

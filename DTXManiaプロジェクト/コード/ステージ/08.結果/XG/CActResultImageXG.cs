@@ -4,10 +4,12 @@ using System.Text;
 using System.Diagnostics;
 using System.IO;
 using System.Drawing;
-using SlimDX;
-using SlimDX.Direct3D9;
+using SharpDX;
+using SharpDX.Direct3D9;
 using FDK;
 
+using Color = System.Drawing.Color;
+using Rectangle = System.Drawing.Rectangle;
 namespace DTXMania
 {
 	internal class CActResultImageXG : CActResultImage共通
@@ -24,6 +26,7 @@ namespace DTXMania
 
 		public override void On活性化()
 		{
+            if( !CDTXMania.bXGRelease ) return;
             if( CDTXMania.ConfigIni.eNamePlateType == Eタイプ.A )
             {
                 this.nAlbumWidth = 102;
@@ -93,6 +96,8 @@ namespace DTXMania
 		}
 		public override void On非活性化()
 		{
+            if( !CDTXMania.bXGRelease ) return;
+
 			if( this.ct登場用 != null )
 			{
 				this.ct登場用 = null;
@@ -101,60 +106,35 @@ namespace DTXMania
 		}
 		public override void OnManagedリソースの作成()
 		{
+            if( !CDTXMania.bXGRelease ) return;
 			if( !base.b活性化してない )
 			{
-                this.txリザルト画像がないときの画像 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_preimage default.png" ) );
                 this.tx中央パネル = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\8_Center Panel.png" ) );
 
-                if( CDTXMania.bXGRelease )
-                {
-                    if( string.IsNullOrEmpty( CDTXMania.DTX.TITLE ) || ( !CDTXMania.bコンパクトモード && CDTXMania.ConfigIni.b曲名表示をdefのものにする ) )
-                        this.strSongName = CDTXMania.stage選曲XG.r現在選択中の曲.strタイトル;
-                    else
-                        this.strSongName = CDTXMania.DTX.TITLE;
+                if( string.IsNullOrEmpty( CDTXMania.DTX.TITLE ) || ( !CDTXMania.bコンパクトモード && CDTXMania.ConfigIni.b曲名表示をdefのものにする ) )
+                    this.strSongName = CDTXMania.stage選曲XG.r現在選択中の曲.strタイトル;
+                else
+                    this.strSongName = CDTXMania.DTX.TITLE;
 
-                    if( File.Exists( CDTXMania.stage選曲XG.r確定されたスコア.ファイル情報.フォルダの絶対パス + "\\TitleTexture.png" ) )
-                        this.tx曲名 = CDTXMania.tテクスチャの生成( CDTXMania.stage選曲XG.r確定されたスコア.ファイル情報.フォルダの絶対パス + "\\TitleTexture.png" );
-                    else
-                    {
-                        this.prvFont = new CPrivateFastFont( new FontFamily( CDTXMania.ConfigIni.str選曲リストフォント ), 18 );
-                        Bitmap bmpSongName = this.prvFont.DrawPrivateFont( this.strSongName, Color.White );
-                        this.tx曲名 = CDTXMania.tテクスチャの生成( bmpSongName, false );
-
-                        CDTXMania.t安全にDisposeする( ref bmpSongName );
-                    }
-                }
+                if( File.Exists( CDTXMania.stage選曲XG.r確定されたスコア.ファイル情報.フォルダの絶対パス + "\\TitleTexture.png" ) )
+                    this.tx曲名 = CDTXMania.tテクスチャの生成( CDTXMania.stage選曲XG.r確定されたスコア.ファイル情報.フォルダの絶対パス + "\\TitleTexture.png" );
                 else
                 {
-                    if( string.IsNullOrEmpty( CDTXMania.DTX.TITLE ) || ( !CDTXMania.bコンパクトモード && CDTXMania.ConfigIni.b曲名表示をdefのものにする ) )
-                        this.strSongName = CDTXMania.stage選曲GITADORA.r現在選択中の曲.strタイトル;
-                    else
-                        this.strSongName = CDTXMania.DTX.TITLE;
+                    this.prvFont = new CPrivateFastFont( new FontFamily( CDTXMania.ConfigIni.str選曲リストフォント ), 18 );
+                    Bitmap bmpSongName = this.prvFont.DrawPrivateFont( this.strSongName, Color.White );
+                    this.tx曲名 = CDTXMania.tテクスチャの生成( bmpSongName, false );
 
-                    if( File.Exists( CDTXMania.stage選曲GITADORA.r確定されたスコア.ファイル情報.フォルダの絶対パス + "\\TitleTexture.png" ) )
-                        this.tx曲名 = CDTXMania.tテクスチャの生成( CDTXMania.stage選曲GITADORA.r確定されたスコア.ファイル情報.フォルダの絶対パス + "\\TitleTexture.png" );
-                    else
-                    {
-                        this.prvFont = new CPrivateFastFont( new FontFamily( CDTXMania.ConfigIni.str選曲リストフォント ), 18 );
-                        Bitmap bmpSongName = this.prvFont.DrawPrivateFont( this.strSongName, Color.White );
-                        this.tx曲名 = CDTXMania.tテクスチャの生成( bmpSongName, false );
-
-                        CDTXMania.t安全にDisposeする( ref bmpSongName );
-                    }
+                    CDTXMania.t安全にDisposeする( ref bmpSongName );
                 }
-
-
-
 
 				base.OnManagedリソースの作成();
 			}
 		}
 		public override void OnManagedリソースの解放()
 		{
+            if( !CDTXMania.bXGRelease ) return;
 			if( !base.b活性化してない )
 			{
-				CDTXMania.tテクスチャの解放( ref this.txリザルト画像 );
-				CDTXMania.tテクスチャの解放( ref this.txリザルト画像がないときの画像 );
                 CDTXMania.tテクスチャの解放( ref this.tx中央パネル );
                 CDTXMania.tテクスチャの解放( ref this.tx曲名 );
 
@@ -164,6 +144,7 @@ namespace DTXMania
 		}
 		public override int On進行描画()
 		{
+            if( !CDTXMania.bXGRelease ) return 1;
 			if( base.b活性化してない )
 			{
 				return 0;
@@ -191,62 +172,26 @@ namespace DTXMania
                 int width = this.r表示するリザルト画像.szテクスチャサイズ.Width;
                 int height = this.r表示するリザルト画像.szテクスチャサイズ.Height;
 
-                /*if( this.ct登場用.n現在の値 < 500 )
+
+                this.r表示するリザルト画像.vc拡大縮小倍率.X = ((float)this.nAlbumWidth) / ((float)width);
+                this.r表示するリザルト画像.vc拡大縮小倍率.Y = ((float)this.nAlbumHeight) / ((float)height);
+
+                int nアルバムX = 436;
+                int nアルバムY = 271;
+
+                if( CDTXMania.ConfigIni.eNamePlateType == Eタイプ.A )
                 {
-
-                    var mat = Matrix.Identity;
-
-                    //mat *= Matrix.RotationX( 0.1f - ( ( 0.1f / 200.0f ) * this.ct登場用.n現在の値 ) );
-                    mat *= Matrix.RotationY( this.ct登場用.n現在の値 < 200 ? ( -0.2f - ( ( -0.2f / 200.0f ) * this.ct登場用.n現在の値 ) ) : 0.0f );
-                    //mat *= Matrix.RotationZ( this.ct登場用.n現在の値 < 500 ? ( -0.2f - ( ( -0.2f / 500.0f ) * this.ct登場用.n現在の値 ) ) : 0.0f );
-                    mat *= Matrix.Scaling( ((float)this.nAlbumWidth) / ((float)width), ((float)this.nAlbumHeight) / (float)height, 0.0f );
-
-                    mat *= Matrix.Translation(0f, 0f, 0f);
-
-                    this.r表示するリザルト画像.t3D描画( CDTXMania.app.Device, mat );
+                    nアルバムX = 449;
+                    nアルバムY = 284;
                 }
-                else 
-                */
-                {
-                    this.r表示するリザルト画像.vc拡大縮小倍率.X = ((float)this.nAlbumWidth) / ((float)width);
-                    this.r表示するリザルト画像.vc拡大縮小倍率.Y = ((float)this.nAlbumHeight) / ((float)height);
 
-                    int nアルバムX = 436;
-                    int nアルバムY = 271;
-
-                    if( CDTXMania.ConfigIni.eNamePlateType == Eタイプ.A )
-                    {
-                        nアルバムX = 449;
-                        nアルバムY = 284;
-                    }
-
-                    this.r表示するリザルト画像.t2D描画(CDTXMania.app.Device, nアルバムX, nアルバムY, new Rectangle(0, 0, width, height));
-                }
+                this.r表示するリザルト画像.t2D描画(CDTXMania.app.Device, nアルバムX, nアルバムY, new Rectangle(0, 0, width, height));
             }
             #endregion
             if( CDTXMania.bXGRelease )
             {
+                
                 if ( File.Exists( CDTXMania.stage選曲XG.r確定されたスコア.ファイル情報.フォルダの絶対パス + "\\TitleTexture.png" ) )
-                {
-                    if( this.tx曲名 != null )
-                    {
-                        this.tx曲名.vc拡大縮小倍率 = new Vector3( 0.75f, 0.75f, 1f );
-                        this.tx曲名.t2D描画( CDTXMania.app.Device, 576, 345 );
-                    }
-                }
-                else
-                {
-                    if( this.tx曲名 != null )
-                    {
-                        this.tx曲名.vc拡大縮小倍率.X = 0.75f;
-                        this.tx曲名.t2D描画( CDTXMania.app.Device, 576, 346 );
-
-                    }
-                }
-            }
-            else
-            {
-                if ( File.Exists( CDTXMania.stage選曲GITADORA.r確定されたスコア.ファイル情報.フォルダの絶対パス + "\\TitleTexture.png" ) )
                 {
                     if( this.tx曲名 != null )
                     {

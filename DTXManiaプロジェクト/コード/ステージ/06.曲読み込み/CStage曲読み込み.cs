@@ -4,11 +4,14 @@ using System.Text;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using SlimDX;
+using SharpDX;
 using System.Drawing.Text;
 using System.Runtime.InteropServices;
 using FDK;
 
+using Color = System.Drawing.Color;
+using RectangleF = System.Drawing.RectangleF;
+using SlimDXKey = SlimDX.DirectInput.Key;
 namespace DTXMania
 {
 	internal class CStage曲読み込み : CStage
@@ -348,15 +351,22 @@ namespace DTXMania
 					this.nBGM再生開始時刻 = CSound管理.rc演奏用タイマ.n現在時刻;
 					this.nBGMの総再生時間ms = CDTXMania.Skin.sound曲読込開始音.n長さ_現在のサウンド;
 				}
-//				this.actFI.tフェードイン開始();							// #27787 2012.3.10 yyagi 曲読み込み画面のフェードインの省略
-				base.eフェーズID = CStage.Eフェーズ.共通_フェードイン;
-				base.b初めての進行描画 = false;
 
 				nWAVcount = 1;
 				bitmapFilename = new Bitmap( SampleFramework.GameWindowSize.Width, (int)(fFontSizeFilename * Scale.X) );
 				graphicsFilename = Graphics.FromImage( bitmapFilename );
 				graphicsFilename.TextRenderingHint = TextRenderingHint.AntiAlias;
 				ftFilename = new Font( "MS PGothic", fFontSizeFilename * Scale.X, FontStyle.Bold, GraphicsUnit.Pixel );
+
+                if( !CDTXMania.bXGRelease && !CDTXMania.bコンパクトモード ) {
+                    this.actLoadMain.t指定されたパスからジャケット画像を生成する( CDTXMania.stage選曲GITADORA.r確定されたスコア.ファイル情報.フォルダの絶対パス + CDTXMania.stage選曲GITADORA.r確定されたスコア.譜面情報.Preimage );
+                    this.actLoadMain.t難易度パネルの描画( CDTXMania.stage選曲GITADORA.n確定された曲の難易度 );
+                    this.actLoadMain.t曲名アーティスト名テクスチャの生成( CDTXMania.stage選曲GITADORA.r確定された曲.strタイトル, CDTXMania.stage選曲GITADORA.r確定されたスコア.譜面情報.アーティスト名 );
+                }
+
+//				this.actFI.tフェードイン開始();							// #27787 2012.3.10 yyagi 曲読み込み画面のフェードインの省略
+				base.eフェーズID = CStage.Eフェーズ.共通_フェードイン;
+				base.b初めての進行描画 = false;
 			}
 			//-----------------------------
 			#endregion
@@ -381,12 +391,6 @@ namespace DTXMania
 			#endregion
 
             if( !CDTXMania.bXGRelease ) {
-                if( !CDTXMania.bコンパクトモード ) { 
-                    this.actLoadMain.t指定されたパスからジャケット画像を生成する( CDTXMania.stage選曲GITADORA.r確定されたスコア.ファイル情報.フォルダの絶対パス + CDTXMania.stage選曲GITADORA.r確定されたスコア.譜面情報.Preimage );
-                    this.actLoadMain.t難易度パネルの描画( CDTXMania.stage選曲GITADORA.n確定された曲の難易度 );
-                    this.actLoadMain.t曲名アーティスト名テクスチャの生成( CDTXMania.stage選曲GITADORA.r確定された曲.strタイトル, CDTXMania.stage選曲GITADORA.r確定されたスコア.譜面情報.アーティスト名 );
-                }
-                
                 this.actLoadMain.On進行描画();
             }
 
@@ -654,21 +658,10 @@ namespace DTXMania
 						span = ( TimeSpan ) ( DateTime.Now - timeBeginLoad );
 						Trace.TraceInformation( "総読込時間:                {0}", span.ToString() );
 
-						if ( bitmapFilename != null )
-						{
-							bitmapFilename.Dispose();
-							bitmapFilename = null;
-						}
-						if ( graphicsFilename != null )
-						{
-							graphicsFilename.Dispose();
-							graphicsFilename = null;
-						}
-						if ( ftFilename != null )
-						{
-							ftFilename.Dispose();
-							ftFilename = null;
-						}
+						bitmapFilename?.Dispose();
+						graphicsFilename?.Dispose();
+						ftFilename?.Dispose();
+
 						CDTXMania.Timer.t更新();
 						base.eフェーズID = CStage.Eフェーズ.NOWLOADING_システムサウンドBGMの完了を待つ;
 						return (int) E曲読込画面の戻り値.継続;
@@ -735,7 +728,7 @@ namespace DTXMania
 			IInputDevice keyboard = CDTXMania.Input管理.Keyboard;
             if( base.eフェーズID != Eフェーズ.共通_フェードアウト )
             {
-			    if 	( keyboard.bキーが押された( (int) SlimDX.DirectInput.Key.Escape ) )		// escape (exit)
+			    if 	( keyboard.bキーが押された( (int) SlimDXKey.Escape ) )		// escape (exit)
 			    {
 				    return true;    //2017.06.17 kairera0467 フェードアウト中はキー操作ができないよう変更。
 			    }

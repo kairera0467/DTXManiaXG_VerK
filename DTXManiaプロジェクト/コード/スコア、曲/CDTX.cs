@@ -1966,7 +1966,7 @@ namespace DTXMania
 
 				string str = string.IsNullOrEmpty(this.PATH_WAV) ? this.strフォルダ名 : this.PATH_WAV;
 				str = str + cwav.strファイル名;
-				bool bIsDirectSound = ( CDTXMania.Sound管理.GetCurrentSoundDeviceType() == ESoundDeviceType.DirectSound );
+				bool bIsDirectSound = ( CDTXMania.Sound管理.GetCurrentSoundDeviceType() == "DirectSound" );
 				try
 				{
 					//try
@@ -2022,7 +2022,7 @@ namespace DTXMania
 
 					#region [ 同時発音数を、チャンネルによって変える ]
 					int nPoly = nPolyphonicSounds;
-					if ( CDTXMania.Sound管理.GetCurrentSoundDeviceType() != ESoundDeviceType.DirectSound )	// DShowでの再生の場合はミキシング負荷が高くないため、
+					if ( CDTXMania.Sound管理.GetCurrentSoundDeviceType() != "DirectSound" )	// DShowでの再生の場合はミキシング負荷が高くないため、
 					{																		// チップのライフタイム管理を行わない
 						if      ( cwav.bIsBassSound )   nPoly = (nPolyphonicSounds >= 2)? 2 : 1;
 						else if ( cwav.bIsGuitarSound ) nPoly = (nPolyphonicSounds >= 2)? 2 : 1;
@@ -3396,7 +3396,7 @@ namespace DTXMania
 		/// </summary>
 		public void PlanToAddMixerChannel()
 		{
-			if ( CDTXMania.Sound管理.GetCurrentSoundDeviceType() == ESoundDeviceType.DirectSound )	// DShowでの再生の場合はミキシング負荷が高くないため、
+			if ( CDTXMania.Sound管理.GetCurrentSoundDeviceType() == "DirectSound" )	// DShowでの再生の場合はミキシング負荷が高くないため、
 			{																		// チップのライフタイム管理を行わない
 				return;
 			}

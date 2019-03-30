@@ -7,10 +7,12 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Diagnostics;
 using System.Threading;
-using SlimDX;
-using SlimDX.Direct3D9;
+using SharpDX;
 using FDK;
 
+using Color = System.Drawing.Color;
+using Rectangle = System.Drawing.Rectangle;
+using Point = System.Drawing.Point;
 namespace DTXMania
 {
 	internal class CStage演奏ドラム画面 : CStage演奏画面共通
@@ -49,6 +51,7 @@ namespace DTXMania
 			base.list子Activities.Add( this.actFI = new CActFIFOBlack() );
 			base.list子Activities.Add( this.actFO = new CActFIFOBlack() );
 			base.list子Activities.Add( this.actFOClear = new CActFIFOWhite() );
+            base.list子Activities.Add( this.actFOClearXG = new CActFIFOWhiteClear() );
 		}
 
 
@@ -61,7 +64,7 @@ namespace DTXMania
 			base.t演奏結果を格納する_ベース( out Bass );
 
 			r空打ちドラムチップ = new CDTX.CChip[ 11 ];
-			for ( int i = 0; i < 11; i++ )
+			for( int i = 0; i < 11; i++ )
 			{
 				r空打ちドラムチップ[ i ] = this.r空うちChip( E楽器パート.DRUMS, (Eパッド) i );
 				if( r空打ちドラムチップ[ i ] == null )
@@ -111,9 +114,9 @@ namespace DTXMania
                 
                 // #35411 2015.08.21 chnmr0 add
                 // ゴースト利用可のなとき、0で初期化
-                if (CDTXMania.ConfigIni.eTargetGhost.Drums != ETargetGhostData.NONE)
+                if( CDTXMania.ConfigIni.eTargetGhost.Drums != ETargetGhostData.NONE )
                 {
-                    if (CDTXMania.listTargetGhsotLag[(int)E楽器パート.DRUMS] != null)
+                    if( CDTXMania.listTargetGhsotLag[ (int)E楽器パート.DRUMS ] != null )
                     {
                         this.actGraph.dbグラフ値目標_渡 = 0;
                     }
@@ -160,7 +163,7 @@ namespace DTXMania
 		}
 		public override int On進行描画()
 		{
-			base.sw.Start();
+			//base.sw.Start();
 			if( !base.b活性化してない )
 			{
 				bool bIsFinishedPlaying = false;
@@ -168,6 +171,7 @@ namespace DTXMania
 				#region [ 初めての進行描画 ]
 				if ( base.b初めての進行描画 )
 				{
+			        base.sw.Start();
 					this.PrepareAVITexture();
 
 					CSound管理.rc演奏用タイマ.tリセット();
@@ -179,6 +183,7 @@ namespace DTXMania
 
                     this.actBPMBar.ctBPMバー = new CCounter( 1, 16, (int)( ( 60.0 / ( CDTXMania.stage演奏ドラム画面.actPlayInfo.dbBPM ) / 16.0 ) * 1000.0 ), CDTXMania.Timer );
                     this.ctコンボ動作タイマ = new CCounter( 1, 16, (int)( ( 60.0 / ( CDTXMania.stage演奏ドラム画面.actPlayInfo.dbBPM ) / 16.0 ) * 1000.0 ), CDTXMania.Timer );
+                    this.actBPMBar.tStoryboard構築( CDTXMania.stage演奏ドラム画面.actPlayInfo.dbBPM );
 
                     // this.actChipFireD.Start( Eレーン.HH );	// #31554 2013.6.12 yyagi
                     // 初チップヒット時のもたつき回避。最初にactChipFireD.Start()するときにJITが掛かって？
@@ -263,23 +268,53 @@ namespace DTXMania
 						    CDTXMania.Timer.t一時停止();		// 再生時刻カウンタ停止
 						}
 						Thread.Sleep( 5 );
-						// DTXCからの次のメッセージを待ち続ける
+                        // DTXCからの次のメッセージを待ち続ける
 					}
 					else
 					{
+                        this.actBPMBar.bサビ区間 = true;
+                        this.actBPMBar.tStoryboard消去();
+                        this.actBPMBar.ctBPMバー = new CCounter( 1, 16, (int)( ( 60.0 / ( 300.0 ) / 16.0 ) * 1000.0 ), CDTXMania.Timer );
+
+
 						this.eフェードアウト完了時の戻り値 = E演奏画面の戻り値.ステージクリア;
 						base.eフェーズID = CStage.Eフェーズ.演奏_STAGE_CLEAR_フェードアウト;
-						this.actFOClear.tフェードアウト開始();
+                        CDTXMania.Skin.soundステージクリア音.t再生する();
+                        this.actFOClearXG.tフェードアウト開始();
 					}
 				}
-				if ( this.eフェードアウト完了時の戻り値 == E演奏画面の戻り値.再読込_再演奏)
+				if( this.eフェードアウト完了時の戻り値 == E演奏画面の戻り値.再読込_再演奏 )
 				{
 					bIsFinishedFadeout = true;
 				}
 				if( bIsFinishedFadeout )
 				{
-					Debug.WriteLine( "Total On進行描画=" + sw.ElapsedMilliseconds + "ms" );
-					return (int) this.eフェードアウト完了時の戻り値;
+                    //if (!CDTXMania.Skin.soundステージクリア音.b再生中 && !CDTXMania.Skin.soundSTAGEFAILED音.b再生中)
+                    //if( !this.actFOClearXG.counter.b進行中 && !CDTXMania.Skin.soundSTAGEFAILED音.b再生中 )
+                    //{
+                        //Debug.WriteLine( "Total On進行描画=" + sw.ElapsedMilliseconds + "ms" );
+					    //return (int) this.eフェードアウト完了時の戻り値;
+                    //}
+                    switch( base.eフェードアウト完了時の戻り値 )
+                    {
+                        case E演奏画面の戻り値.ステージクリア:
+                            if( this.actFOClearXG.counter.b終了値に達した )
+                            {
+                                Debug.WriteLine( "Total On進行描画=" + sw.ElapsedMilliseconds + "ms" );
+					            return (int) this.eフェードアウト完了時の戻り値;
+                            }
+                            break;
+                        case E演奏画面の戻り値.ステージ失敗:
+                            if( !CDTXMania.Skin.soundSTAGEFAILED音.b再生中 )
+                            {
+                                Debug.WriteLine( "Total On進行描画=" + sw.ElapsedMilliseconds + "ms" );
+					            return (int) this.eフェードアウト完了時の戻り値;
+                            }
+                            break;
+                        default:
+                            Debug.WriteLine( "Total On進行描画=" + sw.ElapsedMilliseconds + "ms" );
+					        return (int) this.eフェードアウト完了時の戻り値;
+                    }
 				}
 				ManageMixerQueue();
 

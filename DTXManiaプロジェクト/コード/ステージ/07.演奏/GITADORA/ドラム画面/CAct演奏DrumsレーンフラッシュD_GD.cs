@@ -137,7 +137,7 @@ namespace DTXMania
 		{
 			if ( !base.b活性化してない )
 			{
-                CDTXMania.tテクスチャの解放( ref this.txLaneFlush );
+                this.txLaneFlush?.Dispose();
 				base.OnManagedリソースの解放();
 			}
 		}

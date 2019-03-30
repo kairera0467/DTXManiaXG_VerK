@@ -26,25 +26,6 @@ namespace DTXMania
 				this.n現在選択中の曲の難易度 = CDTXMania.stage選曲GITADORA.n現在選択中の曲の難易度;
 				for( int i = 0; i < 3; i++ )
 				{
-                    if (CDTXMania.ConfigIni.eSkillMode == ESkillType.DTXMania)
-                        this.n現在選択中の曲の最高ランク[i] = cスコア.譜面情報.最大ランク[i];
-                    else if (CDTXMania.ConfigIni.eSkillMode == ESkillType.XG )
-                        this.n現在選択中の曲の最高ランク[i] = DTXMania.CScoreIni.tXGランク値を計算して返す( cスコア.譜面情報.最大スキル[i] );
-
-					int nLevel = cスコア.譜面情報.レベル[ i ];
-					if( nLevel < 0 )
-					{
-						nLevel = 0;
-					}
-					if( nLevel > 99 )
-					{
-						nLevel = 99;
-					}
-					this.n現在選択中の曲のレベル[ i ] = nLevel;
-					this.n現在選択中の曲の最高ランク[ i ] = cスコア.譜面情報.最大ランク[ i ];
-					this.b現在選択中の曲がフルコンボ[ i ] = cスコア.譜面情報.フルコンボ[ i ];
-					this.db現在選択中の曲の最高スキル値[ i ] = cスコア.譜面情報.最大スキル[ i ];
-
                     for( int j = 0; j < 5; j++ )
                     {
                         if( c曲リストノード.arスコア[ j ] != null )
@@ -59,9 +40,25 @@ namespace DTXMania
                             this.db現在選択中の曲の最高スキル値難易度毎[ j ][ i ] = c曲リストノード.arスコア[ j ].譜面情報.最大スキル[i];
                             this.b現在選択中の曲がフルコンボ難易度毎[j][i] = c曲リストノード.arスコア[j].譜面情報.フルコンボ[i];
                             this.b現在選択中の曲に譜面がある[j][i] = c曲リストノード.arスコア[j].譜面情報.b譜面がある[i];
+
+                        }
+                        else //2018.03.18 kairera0467 #38056
+                        {
+                            this.n現在選択中の曲のレベル難易度毎DGB[j][i] = 0;
+                            this.n現在選択中の曲のレベル小数点難易度毎DGB[j][i] = 0;
+                            this.n現在選択中の曲の最高ランク難易度毎[j][i] = 99;
+                            this.b現在選択中の曲がフルコンボ難易度毎[j][i] = false;
+                            this.b現在選択中の曲に譜面がある[j][i] = false;
                         }
                     }
 				}
+				for( int i = 0; i < 5; i++ )
+				{
+                    if( c曲リストノード.arスコア[ i ] != null )
+                    {
+                        this.n選択中の曲のノート数_難易度毎[ i ] = cスコア.譜面情報.n可視チップ数;
+                    }
+                }
 				if( this.r直前の曲 != c曲リストノード )
 				{
 					this.n難易度開始文字位置 = 0;
@@ -78,11 +75,7 @@ namespace DTXMania
 			this.n現在選択中の曲の難易度 = 0;
 			for( int i = 0; i < 3; i++ )
 			{
-				this.n現在選択中の曲のレベル[ i ] = 0;
                 this.db現在選択中の曲の曲別スキル値難易度毎[ i ] = 0.0;
-				this.n現在選択中の曲の最高ランク[ i ] = (int)CScoreIni.ERANK.UNKNOWN;
-				this.b現在選択中の曲がフルコンボ[ i ] = false;
-				this.db現在選択中の曲の最高スキル値[ i ] = 0.0;
                 for (int j = 0; j < 5; j++)
                 {
                     this.n現在選択中の曲のレベル難易度毎DGB[j][i] = 0;
@@ -122,6 +115,7 @@ namespace DTXMania
 
                 this.txNotesData背景 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_NotesData background.png" ) );
                 this.txNotesDataゲージ = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_NotesData gauge.png" ) );
+                this.txTotalNotes数字 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_TotalNotes_Number.png" ) );
 
 				base.OnManagedリソースの作成();
 			}
@@ -138,6 +132,7 @@ namespace DTXMania
 
                 CDTXMania.tテクスチャの解放( ref this.txNotesData背景 );
                 CDTXMania.tテクスチャの解放( ref this.txNotesDataゲージ );
+                CDTXMania.tテクスチャの解放( ref this.txTotalNotes数字 );
 
 				base.OnManagedリソースの解放();
 			}
@@ -236,27 +231,30 @@ namespace DTXMania
                                         this.txNotesDataゲージ.t2D描画( CDTXMania.app.Device, 260 + i * 12, 355, new Rectangle( 0, 0, 4, 270 ) );
                                     }
 
-                                    double ret = this.dbノーツグラフゲージ割合計算( CDTXMania.stage選曲GITADORA.r現在選択中のスコア.譜面情報.n可視チップ数.LC );
+                                    double ret = this.dbノーツグラフゲージ割合計算( this.n選択中の曲のノート数_難易度毎[ base.n現在選択中の曲の難易度 ].LC );
                                     this.txNotesDataゲージ.t2D描画( CDTXMania.app.Device, 260, 625 - (int)(270 * ret), new Rectangle( 4, 0, 4, (int)(270 * ret) ) );
-                                    ret = this.dbノーツグラフゲージ割合計算( CDTXMania.stage選曲GITADORA.r現在選択中のスコア.譜面情報.n可視チップ数.HH + CDTXMania.stage選曲GITADORA.r現在選択中のスコア.譜面情報.n可視チップ数.HHO );
+                                    ret = this.dbノーツグラフゲージ割合計算( this.n選択中の曲のノート数_難易度毎[ base.n現在選択中の曲の難易度 ].HH + this.n選択中の曲のノート数_難易度毎[ base.n現在選択中の曲の難易度 ].HHO );
                                     this.txNotesDataゲージ.t2D描画( CDTXMania.app.Device, 272, 625 - (int)(270 * ret), new Rectangle( 8, 0, 4, (int)(270 * ret) ) );
-                                    ret = this.dbノーツグラフゲージ割合計算( CDTXMania.stage選曲GITADORA.r現在選択中のスコア.譜面情報.n可視チップ数.LP + CDTXMania.stage選曲GITADORA.r現在選択中のスコア.譜面情報.n可視チップ数.LBD );
+                                    ret = this.dbノーツグラフゲージ割合計算( this.n選択中の曲のノート数_難易度毎[ base.n現在選択中の曲の難易度 ].LP + this.n選択中の曲のノート数_難易度毎[ base.n現在選択中の曲の難易度 ].LBD );
                                     this.txNotesDataゲージ.t2D描画( CDTXMania.app.Device, 284, 625 - (int)(270 * ret), new Rectangle( 12, 0, 4, (int)(270 * ret) ) );
-                                    ret = this.dbノーツグラフゲージ割合計算( CDTXMania.stage選曲GITADORA.r現在選択中のスコア.譜面情報.n可視チップ数.SD );
+                                    ret = this.dbノーツグラフゲージ割合計算( this.n選択中の曲のノート数_難易度毎[ base.n現在選択中の曲の難易度 ].SD );
                                     this.txNotesDataゲージ.t2D描画( CDTXMania.app.Device, 296, 625 - (int)(270 * ret), new Rectangle( 16, 0, 4, (int)(270 * ret) ) );
-                                    ret = this.dbノーツグラフゲージ割合計算( CDTXMania.stage選曲GITADORA.r現在選択中のスコア.譜面情報.n可視チップ数.HT );
+                                    ret = this.dbノーツグラフゲージ割合計算( this.n選択中の曲のノート数_難易度毎[ base.n現在選択中の曲の難易度 ].HT );
                                     this.txNotesDataゲージ.t2D描画( CDTXMania.app.Device, 308, 625 - (int)(270 * ret), new Rectangle( 20, 0, 4, (int)(270 * ret) ) );
-                                    ret = this.dbノーツグラフゲージ割合計算( CDTXMania.stage選曲GITADORA.r現在選択中のスコア.譜面情報.n可視チップ数.BD );
+                                    ret = this.dbノーツグラフゲージ割合計算( this.n選択中の曲のノート数_難易度毎[ base.n現在選択中の曲の難易度 ].BD );
                                     this.txNotesDataゲージ.t2D描画( CDTXMania.app.Device, 320, 625 - (int)(270 * ret), new Rectangle( 24, 0, 4, (int)(270 * ret) ) );
-                                    ret = this.dbノーツグラフゲージ割合計算( CDTXMania.stage選曲GITADORA.r現在選択中のスコア.譜面情報.n可視チップ数.LT );
+                                    ret = this.dbノーツグラフゲージ割合計算( this.n選択中の曲のノート数_難易度毎[ base.n現在選択中の曲の難易度 ].LT );
                                     this.txNotesDataゲージ.t2D描画( CDTXMania.app.Device, 332, 625 - (int)(270 * ret), new Rectangle( 28, 0, 4, (int)(270 * ret) ) );
-                                    ret = this.dbノーツグラフゲージ割合計算( CDTXMania.stage選曲GITADORA.r現在選択中のスコア.譜面情報.n可視チップ数.FT );
+                                    ret = this.dbノーツグラフゲージ割合計算( this.n選択中の曲のノート数_難易度毎[ base.n現在選択中の曲の難易度 ].FT );
                                     this.txNotesDataゲージ.t2D描画( CDTXMania.app.Device, 344, 625 - (int)(270 * ret), new Rectangle( 32, 0, 4, (int)(270 * ret) ) );
-                                    ret = this.dbノーツグラフゲージ割合計算( CDTXMania.stage選曲GITADORA.r現在選択中のスコア.譜面情報.n可視チップ数.CY );
+                                    ret = this.dbノーツグラフゲージ割合計算( this.n選択中の曲のノート数_難易度毎[ base.n現在選択中の曲の難易度 ].CY );
                                     this.txNotesDataゲージ.t2D描画( CDTXMania.app.Device, 356, 625 - (int)(270 * ret), new Rectangle( 36, 0, 4, (int)(270 * ret) ) );
-                                    ret = this.dbノーツグラフゲージ割合計算( CDTXMania.stage選曲GITADORA.r現在選択中のスコア.譜面情報.n可視チップ数.RD );
+                                    ret = this.dbノーツグラフゲージ割合計算( this.n選択中の曲のノート数_難易度毎[ base.n現在選択中の曲の難易度 ].RD );
                                     this.txNotesDataゲージ.t2D描画( CDTXMania.app.Device, 368, 625 - (int)(270 * ret), new Rectangle( 40, 0, 4, (int)(270 * ret) ) );
                                 }
+
+                                // TotalNotes
+                                this.tTotalNotes数字表示( 280, 658, String.Format( "{0,5:####0}", this.n選択中の曲のノート数_難易度毎[ base.n現在選択中の曲の難易度 ].Drums ) );
                             }
 
                             //CDTXMania.act文字コンソール.tPrint( 380, 400, C文字コンソール.Eフォント種別.白, "LC:" + CDTXMania.stage選曲GITADORA.r現在選択中のスコア.譜面情報.n可視チップ数.LC.ToString() );
@@ -295,13 +293,9 @@ namespace DTXMania
 			}
 		}
 
-		private STDGBVALUE<bool> b現在選択中の曲がフルコンボ;
 		private CCounter ct登場アニメ用;
 		private CCounter ct難易度スクロール用;
 		private CCounter ct難易度矢印用;
-		private STDGBVALUE<double> db現在選択中の曲の最高スキル値;
-		private STDGBVALUE<int> n現在選択中の曲のレベル;
-		private STDGBVALUE<int> n現在選択中の曲の最高ランク;
         
         private int[] n選択中の曲のレベル難易度毎 = new int[5];
         
@@ -316,6 +310,7 @@ namespace DTXMania
 
         private CTexture txNotesData背景;
         private CTexture txNotesDataゲージ; //クリアバーだけはソフトウェア側で生成する
+        private CTexture txTotalNotes数字;
 
         [StructLayout(LayoutKind.Sequential)]
         private struct ST文字位置
@@ -383,7 +378,20 @@ namespace DTXMania
             new ST達成率数字( '%', new Rectangle( 70, 62, 9, 16 ) ),
             new ST達成率数字( '.', new Rectangle( 79, 62, 3, 16 ) )
         };
-        
+
+        private ST文字位置[] stノート数数字 = new ST文字位置[]{
+            new ST文字位置( '0', new Point( 0, 0 ) ),
+            new ST文字位置( '1', new Point( 16, 0 ) ),
+            new ST文字位置( '2', new Point( 32, 0 ) ),
+            new ST文字位置( '3', new Point( 48, 0 ) ),
+            new ST文字位置( '4', new Point( 64, 0 ) ),
+            new ST文字位置( '5', new Point( 0, 24 ) ),
+            new ST文字位置( '6', new Point( 16, 24 ) ),
+            new ST文字位置( '7', new Point( 32, 24 ) ),
+            new ST文字位置( '8', new Point( 48, 24 ) ),
+            new ST文字位置( '9', new Point( 64, 24 ) )
+        };
+
         private void t小文字表示(int x, int y, string str)
         {
             foreach (char ch in str)
@@ -455,6 +463,26 @@ namespace DTXMania
                     x += 4;
                 else
                     x += 8;
+            }
+        }
+
+        private void tTotalNotes数字表示( int x, int y, string str )
+        {
+            foreach( char ch in str )
+            {
+                for( int i = 0; i < this.stノート数数字.Length; i++ )
+                {
+                    if( this.st小文字位置[i].ch == ch )
+                    {
+                        Rectangle rectangle = new Rectangle( this.stノート数数字[ i ].pt.X, this.stノート数数字[ i ].pt.Y, 16, 24 );
+                        if( this.txTotalNotes数字 != null )
+                        {
+                            this.txTotalNotes数字.t2D描画( CDTXMania.app.Device, x, y, rectangle );
+                        }
+                        break;
+                    }
+                }
+                x += 14;
             }
         }
         private void t難易度カーソル描画( int x, int current )

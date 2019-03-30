@@ -7,7 +7,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Diagnostics;
 using System.Threading;
-using SlimDX.Direct3D9;
+using SharpDX.Direct3D9;
 using FDK;
 
 namespace DTXMania

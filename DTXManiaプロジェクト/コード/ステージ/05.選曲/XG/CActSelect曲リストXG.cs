@@ -9,9 +9,11 @@ using System.Text;
 using System.Globalization;
 using System.Runtime.InteropServices;
 
-using SlimDX;
+using SharpDX;
 using FDK;
 
+using Color = System.Drawing.Color;
+using Rectangle = System.Drawing.Rectangle;
 namespace DTXMania
 {
 	internal class CActSelect曲リストXG : CActSelect曲リスト共通
@@ -455,9 +457,9 @@ namespace DTXMania
 
 				return 0;
 			}
-            var bar = SlimDX.Matrix.Identity;
+            var bar = Matrix.Identity;
 
-            var barL = SlimDX.Matrix.Identity;
+            var barL = Matrix.Identity;
 
             Matrix[] barC = new Matrix[2];
             Matrix[] barLa = new Matrix[2];
@@ -471,11 +473,11 @@ namespace DTXMania
             Vector3 VecTarg = new Vector3( 0.0f, 0.0f, 0.0f );
             Vector3 VecUp = new Vector3( 0.0f, 1.0f, 0.0f );
 
-            bar *= SlimDX.Matrix.LookAtLH( VecCam, VecTarg, VecUp );
-            barL *= SlimDX.Matrix.LookAtLH( VecCam, VecTarg, VecUp );
+            bar *= Matrix.LookAtLH( VecCam, VecTarg, VecUp );
+            barL *= Matrix.LookAtLH( VecCam, VecTarg, VecUp );
 
-            bar *= SlimDX.Matrix.RotationYawPitchRoll( -0.40f, 0.0f, 0.0f ); ////通常のRotationと何が違うのかわからない(Axisから倍率を抜いただけ?)
-            barL *= SlimDX.Matrix.RotationYawPitchRoll( 0.40f, 0.0f, 0.0f );
+            bar *= Matrix.RotationYawPitchRoll( -0.40f, 0.0f, 0.0f ); ////通常のRotationと何が違うのかわからない(Axisから倍率を抜いただけ?)
+            barL *= Matrix.RotationYawPitchRoll( 0.40f, 0.0f, 0.0f );
 
 
             //bar *= SlimDX.Matrix.PerspectiveFovLH( C変換.DegreeToRadian(45), 1280.0f/720.0f, 1.0f, 500000.0f ); //カメラの視野角など調整
@@ -483,8 +485,8 @@ namespace DTXMania
             //ワールド変換とか意味ワカンネ
             #endregion
 
-            bar *= SlimDX.Matrix.Translation(600f, 121f, 190f);
-            barL *= SlimDX.Matrix.Translation(-600f, 121f, 190f);
+            bar *= Matrix.Translation(600f, 121f, 190f);
+            barL *= Matrix.Translation(-600f, 121f, 190f);
 
 
             for( int i = 0; i < 2; i++ )
@@ -493,19 +495,19 @@ namespace DTXMania
                 if( i == 0 ) fRate = -1.0f;
 
                 barC[ i ] = Matrix.Identity;
-                barC[ i ] *= SlimDX.Matrix.LookAtLH( VecCam, VecTarg, VecUp );
-                barC[ i ] *= SlimDX.Matrix.RotationYawPitchRoll( -0.41f * fRate, 0.0f, 0.0f );
-                barC[ i ] *= SlimDX.Matrix.Translation( 592f * fRate, 148f, 186f);
+                barC[ i ] *= Matrix.LookAtLH( VecCam, VecTarg, VecUp );
+                barC[ i ] *= Matrix.RotationYawPitchRoll( -0.41f * fRate, 0.0f, 0.0f );
+                barC[ i ] *= Matrix.Translation( 592f * fRate, 148f, 186f);
 
                 barLa[ i ] = Matrix.Identity;
-                barLa[ i ] *= SlimDX.Matrix.LookAtLH( VecCam, VecTarg, VecUp );
-                barLa[ i ] *= SlimDX.Matrix.RotationYawPitchRoll( -0.41f * fRate, 0.0f, 0.0f );
-                barLa[ i ] *= SlimDX.Matrix.Translation( 592f * fRate, 100f, 186f);
+                barLa[ i ] *= Matrix.LookAtLH( VecCam, VecTarg, VecUp );
+                barLa[ i ] *= Matrix.RotationYawPitchRoll( -0.41f * fRate, 0.0f, 0.0f );
+                barLa[ i ] *= Matrix.Translation( 592f * fRate, 100f, 186f);
 
                 barU[ i ] = Matrix.Identity;
-                barU[ i ] *= SlimDX.Matrix.LookAtLH( VecCam, VecTarg, VecUp );
-                barU[ i ] *= SlimDX.Matrix.RotationYawPitchRoll( -0.41f * fRate, 0.0f, 0.0f );
-                barU[ i ] *= SlimDX.Matrix.Translation( 592f * fRate, -106f, 186f);
+                barU[ i ] *= Matrix.LookAtLH( VecCam, VecTarg, VecUp );
+                barU[ i ] *= Matrix.RotationYawPitchRoll( -0.41f * fRate, 0.0f, 0.0f );
+                barU[ i ] *= Matrix.Translation( 592f * fRate, -106f, 186f);
             }
 
             if( this.txパネル帯 != null )
@@ -523,8 +525,8 @@ namespace DTXMania
             #region[ ジャケット画像のMatrix配列 ]
             //パネル1枚1枚にMatrixを割り当ててみる。
             //とりあえず構造の最適化無しで地味に作ってみる。
-            Matrix[] matSongPanel = new SlimDX.Matrix[ 15 ];
-            Matrix[] matJacket = new SlimDX.Matrix[ 15 ];
+            Matrix[] matSongPanel = new Matrix[ 15 ];
+            Matrix[] matJacket = new Matrix[ 15 ];
             ST中心点[] st3D座標 = new ST中心点[] {
 			#region [ 計算なんてしていない。 ]
 		    	//-----------------
@@ -553,17 +555,17 @@ namespace DTXMania
             for( int i = 0; i < 15; i++ )
             {
                 matSongPanel[ i ] = Matrix.Identity;
-                matSongPanel[ i ] *= SlimDX.Matrix.LookAtLH( VecCam, VecTarg, VecUp );
-                matSongPanel[ i ] *= SlimDX.Matrix.Scaling(0.62f, 0.88f, 1.0f);
-                //matSongPanel[ i ] *= SlimDX.Matrix.RotationYawPitchRoll( st3D座標[ i ].rotY, 0.0f, 0.0f );
-                //matSongPanel[ i ] *= SlimDX.Matrix.Translation( st3D座標[ i ].x, st3D座標[ i ].y, st3D座標[ i ].z );
+                matSongPanel[ i ] *= Matrix.LookAtLH( VecCam, VecTarg, VecUp );
+                matSongPanel[ i ] *= Matrix.Scaling(0.62f, 0.88f, 1.0f);
+                //matSongPanel[ i ] *= Matrix.RotationYawPitchRoll( st3D座標[ i ].rotY, 0.0f, 0.0f );
+                //matSongPanel[ i ] *= Matrix.Translation( st3D座標[ i ].x, st3D座標[ i ].y, st3D座標[ i ].z );
 
 
                 matJacket[ i ] = Matrix.Identity;
-                matJacket[ i ] *= SlimDX.Matrix.LookAtLH( VecCam, VecTarg, VecUp );
-                //matJacket[ i ] *= SlimDX.Matrix.RotationYawPitchRoll( st3D座標[ i ].rotY, 0.0f, 0.0f ); //ジャケット画像は計算順序を変える。
+                matJacket[ i ] *= Matrix.LookAtLH( VecCam, VecTarg, VecUp );
+                //matJacket[ i ] *= Matrix.RotationYawPitchRoll( st3D座標[ i ].rotY, 0.0f, 0.0f ); //ジャケット画像は計算順序を変える。
 
-                //matJacket[ i ] *= SlimDX.Matrix.Translation( st3D座標[ i ].x, 0f, st3D座標[ i ].z );
+                //matJacket[ i ] *= Matrix.Translation( st3D座標[ i ].x, 0f, st3D座標[ i ].z );
             }
             #endregion
 
@@ -583,8 +585,8 @@ namespace DTXMania
                             //-----------------
                             if( this.stバー情報[ nパネル番号 ].txパネル != null )
                             {
-                                matSongPanel[ i ] *= SlimDX.Matrix.RotationYawPitchRoll( st3D座標[ i ].rotY, 0.0f, 0.0f );
-                                matSongPanel[ i ] *= SlimDX.Matrix.Translation( st3D座標[ i ].x, st3D座標[ i ].y, st3D座標[ i ].z );
+                                matSongPanel[ i ] *= Matrix.RotationYawPitchRoll( st3D座標[ i ].rotY, 0.0f, 0.0f );
+                                matSongPanel[ i ] *= Matrix.Translation( st3D座標[ i ].x, st3D座標[ i ].y, st3D座標[ i ].z );
                                 this.stバー情報[ nパネル番号 ].txパネル.t3D描画( CDTXMania.app.Device, matSongPanel[ i ] );
                             }
                             if( this.txTumbnail[nパネル番号] != null )
@@ -592,9 +594,9 @@ namespace DTXMania
                                 float f拡大率 = (float)172.0 / this.txTumbnail[ nパネル番号 ].szテクスチャサイズ.Width;
                                 float f拡大率2 = (float)172.0 / this.txTumbnail[ nパネル番号 ].szテクスチャサイズ.Height;
 
-                                matJacket[ i ] *= SlimDX.Matrix.Scaling( f拡大率 * CTexture.f画面比率 - 0.084f, f拡大率2 * CTexture.f画面比率 + 0.05f, 1.0f );
-                                matJacket[ i ] *= SlimDX.Matrix.RotationYawPitchRoll( st3D座標[ i ].rotY, 0.0f, 0.0f );
-                                matJacket[ i ] *= SlimDX.Matrix.Translation( st3D座標[ i ].x, st3D座標[ i ].y - 1.5f, st3D座標[ i ].z );
+                                matJacket[ i ] *= Matrix.Scaling( f拡大率 * CTexture.f画面比率 - 0.084f, f拡大率2 * CTexture.f画面比率 + 0.05f, 1.0f );
+                                matJacket[ i ] *= Matrix.RotationYawPitchRoll( st3D座標[ i ].rotY, 0.0f, 0.0f );
+                                matJacket[ i ] *= Matrix.Translation( st3D座標[ i ].x, st3D座標[ i ].y - 1.5f, st3D座標[ i ].z );
  
                                 this.txTumbnail[ nパネル番号 ].t3D描画(CDTXMania.app.Device, matJacket[ i ] );
                             }
@@ -613,8 +615,8 @@ namespace DTXMania
                             //-----------------
                             if( this.stバー情報[ nパネル番号 ].txパネル != null )
                             {
-                                matSongPanel[ i ] *= SlimDX.Matrix.RotationYawPitchRoll( st3D座標[ i ].rotY, 0.0f, 0.0f );
-                                matSongPanel[ i ] *= SlimDX.Matrix.Translation( st3D座標[ i ].x, st3D座標[ i ].y, st3D座標[ i ].z );
+                                matSongPanel[ i ] *= Matrix.RotationYawPitchRoll( st3D座標[ i ].rotY, 0.0f, 0.0f );
+                                matSongPanel[ i ] *= Matrix.Translation( st3D座標[ i ].x, st3D座標[ i ].y, st3D座標[ i ].z );
                                 this.stバー情報[ nパネル番号 ].txパネル.t3D描画( CDTXMania.app.Device, matSongPanel[ i ] );
                             }
                             if( this.txTumbnail[nパネル番号] != null )
@@ -622,9 +624,9 @@ namespace DTXMania
                                 float f拡大率 = (float)172.0 / this.txTumbnail[nパネル番号].szテクスチャサイズ.Width ;
                                 float f拡大率2 = (float)172.0 / this.txTumbnail[nパネル番号].szテクスチャサイズ.Height;
 
-                                matJacket[ i ] *= SlimDX.Matrix.Scaling( f拡大率 * CTexture.f画面比率 - 0.084f, f拡大率2 * CTexture.f画面比率 + 0.05f, 1.0f );
-                                matJacket[ i ] *= SlimDX.Matrix.RotationYawPitchRoll( st3D座標[ i ].rotY, 0.0f, 0.0f );
-                                matJacket[ i ] *= SlimDX.Matrix.Translation( st3D座標[ i ].x, st3D座標[ i ].y - 1.5f, st3D座標[ i ].z );
+                                matJacket[ i ] *= Matrix.Scaling( f拡大率 * CTexture.f画面比率 - 0.084f, f拡大率2 * CTexture.f画面比率 + 0.05f, 1.0f );
+                                matJacket[ i ] *= Matrix.RotationYawPitchRoll( st3D座標[ i ].rotY, 0.0f, 0.0f );
+                                matJacket[ i ] *= Matrix.Translation( st3D座標[ i ].x, st3D座標[ i ].y - 1.5f, st3D座標[ i ].z );
 
                                 this.txTumbnail[nパネル番号].t3D描画( CDTXMania.app.Device, matJacket[ i ] );
                             }
@@ -750,8 +752,8 @@ namespace DTXMania
                         //-----------------
                         if( this.stバー情報[ nパネル番号 ].txパネル != null )
                         {
-                            matSongPanel[ i ] *= SlimDX.Matrix.RotationYawPitchRoll( fR, 0.0f, 0.0f );
-                            matSongPanel[ i ] *= SlimDX.Matrix.Translation( fX, st3D座標[ i ].y, fZ );
+                            matSongPanel[ i ] *= Matrix.RotationYawPitchRoll( fR, 0.0f, 0.0f );
+                            matSongPanel[ i ] *= Matrix.Translation( fX, st3D座標[ i ].y, fZ );
                             this.stバー情報[ nパネル番号 ].txパネル.t3D描画( CDTXMania.app.Device, matSongPanel[ i ] );
                         }
                         if( this.txTumbnail[ nパネル番号 ] != null )
@@ -759,9 +761,9 @@ namespace DTXMania
                             float f拡大率 = (float)172.0 / this.txTumbnail[ nパネル番号 ].szテクスチャサイズ.Width;
                             float f拡大率2 = (float)172.0 / this.txTumbnail[ nパネル番号 ].szテクスチャサイズ.Height;
 
-                            matJacket[ i ] *= SlimDX.Matrix.Scaling( f拡大率 * CTexture.f画面比率 - 0.084f, f拡大率2 * CTexture.f画面比率 + 0.05f, 1.0f );
-                            matJacket[ i ] *= SlimDX.Matrix.RotationYawPitchRoll( fR, 0.0f, 0.0f );
-                            matJacket[ i ] *= SlimDX.Matrix.Translation( fX, st3D座標[ i ].y - 1.5f, fZ );
+                            matJacket[ i ] *= Matrix.Scaling( f拡大率 * CTexture.f画面比率 - 0.084f, f拡大率2 * CTexture.f画面比率 + 0.05f, 1.0f );
+                            matJacket[ i ] *= Matrix.RotationYawPitchRoll( fR, 0.0f, 0.0f );
+                            matJacket[ i ] *= Matrix.Translation( fX, st3D座標[ i ].y - 1.5f, fZ );
 
                             this.txTumbnail[ nパネル番号 ].t3D描画( CDTXMania.app.Device, matJacket[ i ] );
                         }
@@ -778,8 +780,8 @@ namespace DTXMania
                         //-----------------
                         if( this.stバー情報[ nパネル番号 ].txパネル != null )
                         {
-                            matSongPanel[ i ] *= SlimDX.Matrix.RotationYawPitchRoll( st3D座標[ i ].rotY, 0.0f, 0.0f );
-                            matSongPanel[ i ] *= SlimDX.Matrix.Translation( fX, st3D座標[ i ].y, fZ );
+                            matSongPanel[ i ] *= Matrix.RotationYawPitchRoll( st3D座標[ i ].rotY, 0.0f, 0.0f );
+                            matSongPanel[ i ] *= Matrix.Translation( fX, st3D座標[ i ].y, fZ );
                             this.stバー情報[ nパネル番号 ].txパネル.t3D描画( CDTXMania.app.Device, matSongPanel[ i ] );
                         }
                         if( this.txTumbnail[ nパネル番号 ] != null )
@@ -787,9 +789,9 @@ namespace DTXMania
                             float f拡大率 = (float)172.0 / this.txTumbnail[ nパネル番号 ].szテクスチャサイズ.Width ;
                             float f拡大率2 = (float)172.0 / this.txTumbnail[ nパネル番号 ].szテクスチャサイズ.Height;
 
-                            matJacket[ i ] *= SlimDX.Matrix.Scaling( f拡大率 * CTexture.f画面比率 - 0.084f, f拡大率2 * CTexture.f画面比率 + 0.05f, 1.0f );
-                            matJacket[ i ] *= SlimDX.Matrix.RotationYawPitchRoll( st3D座標[ i ].rotY, 0.0f, 0.0f );
-                            matJacket[ i ] *= SlimDX.Matrix.Translation( fX, st3D座標[ i ].y - 1.5f, fZ );
+                            matJacket[ i ] *= Matrix.Scaling( f拡大率 * CTexture.f画面比率 - 0.084f, f拡大率2 * CTexture.f画面比率 + 0.05f, 1.0f );
+                            matJacket[ i ] *= Matrix.RotationYawPitchRoll( st3D座標[ i ].rotY, 0.0f, 0.0f );
+                            matJacket[ i ] *= Matrix.Translation( fX, st3D座標[ i ].y - 1.5f, fZ );
 
                             this.txTumbnail[ nパネル番号 ].t3D描画( CDTXMania.app.Device, matJacket[ i ] );
                         }

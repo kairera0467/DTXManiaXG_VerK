@@ -4,7 +4,9 @@ using System.IO;
 using System.Text;
 using System.Diagnostics;
 using FDK;
-using SlimDX.Direct3D9;
+using SharpDX.Direct3D9;
+
+using SlimDXKey = SlimDX.DirectInput.Key;
 
 namespace DTXMania
 {
@@ -44,9 +46,14 @@ namespace DTXMania
 			base.eステージID = CStage.Eステージ.結果;
 			base.eフェーズID = CStage.Eフェーズ.共通_通常状態;
 			base.b活性化してない = true;
-			base.list子Activities.Add( this.actResultImage = new CActResultImage共通() );
-			base.list子Activities.Add( this.actParameterPanel = new CActResultParameterPanel() );
-			base.list子Activities.Add( this.actRank = new CActResultRank() );
+			//base.list子Activities.Add( this.actResultImage = new CActResultImage共通() );
+			base.list子Activities.Add( this.actResultImageXG = new CActResultImageXG() );
+            base.list子Activities.Add( this.actResultImageGD = new CActResultImageGD() );
+			//base.list子Activities.Add( this.actParameterPanel = new CActResultParameterPanel() );
+			base.list子Activities.Add( this.actParameterPanelXG = new CActResultParameterPanelXG() );
+			base.list子Activities.Add( this.actParameterPanelGD = new CActResultParameterPanelGD() );
+			base.list子Activities.Add( this.actRankXG = new CActResultRankXG() );
+			base.list子Activities.Add( this.actRankGD = new CActResultRankGD() );
 			base.list子Activities.Add( this.actSongBar = new CActResultSongBar() );
 			base.list子Activities.Add( this.actOption = new CActオプションパネル() );
 			base.list子Activities.Add( this.actFI = new CActFIFOWhite() );
@@ -495,27 +502,38 @@ namespace DTXMania
 				{
 					num = 0;
 				}
-                //if( this.tx上部パネル != null )
-                //{
-                //    this.tx上部パネル.t2D描画( CDTXMania.app.Device, 0, num * Scale.Y );
-                //}
-                //if( this.tx下部パネル != null )
-                //{
-                //    this.tx下部パネル.t2D描画( CDTXMania.app.Device, 0, ( SampleFramework.GameWindowSize.Height - this.tx下部パネル.sz画像サイズ.Height) );
-                //}
                 //this.actOption.On進行描画();
-                if( this.actResultImage.On進行描画() == 0 )
+                if( CDTXMania.bXGRelease )
                 {
-                    this.bアニメが完了 = false;
+                    if( this.actResultImageXG.On進行描画() == 0 )
+                    {
+                        //this.bアニメが完了 = false;
+                    }
+                    if ( this.actParameterPanelXG.On進行描画() == 0 )
+                    {
+                        //this.bアニメが完了 = false;
+                    }
+                    if ( this.actRankXG.On進行描画() == 0 )
+                    {
+                        //this.bアニメが完了 = false;
+                    }
                 }
-                if ( this.actParameterPanel.On進行描画() == 0 )
+                else
                 {
-                    this.bアニメが完了 = false;
+                    if( this.actResultImageGD.On進行描画() == 0 )
+                    {
+                        //this.bアニメが完了 = false;
+                    }
+                    if ( this.actParameterPanelGD.On進行描画() == 0 )
+                    {
+                        //this.bアニメが完了 = false;
+                    }
+                    if ( this.actRankGD.On進行描画() == 0 )
+                    {
+                        //this.bアニメが完了 = false;
+                    }
                 }
-                if ( this.actRank.On進行描画() == 0 )
-                {
-                    this.bアニメが完了 = false;
-                }
+                
 				if( base.eフェーズID == CStage.Eフェーズ.共通_フェードイン )
 				{
 					if( this.actFI.On進行描画() != 0 )
@@ -618,16 +636,16 @@ namespace DTXMania
 							}
 						}
 					}
-					if( ( ( CDTXMania.Pad.b押されたDGB( Eパッド.CY ) || CDTXMania.Pad.b押された( E楽器パート.DRUMS, Eパッド.RD ) ) || ( CDTXMania.Pad.b押された( E楽器パート.DRUMS, Eパッド.LC ) || CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.Return ) ) ) && !this.bアニメが完了 )
+					if( ( ( CDTXMania.Pad.b押されたDGB( Eパッド.CY ) || CDTXMania.Pad.b押された( E楽器パート.DRUMS, Eパッド.RD ) ) || ( CDTXMania.Pad.b押された( E楽器パート.DRUMS, Eパッド.LC ) || CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.Return ) ) ) && !this.bアニメが完了 )
 					{
 						this.actFI.tフェードイン完了();					// #25406 2011.6.9 yyagi
-						this.actResultImage.tアニメを完了させる();
-						this.actParameterPanel.tアニメを完了させる();
-						this.actRank.tアニメを完了させる();
+						//this.actResultImage.tアニメを完了させる();
+						//this.actParameterPanel.tアニメを完了させる();
+						//this.actRank.tアニメを完了させる();
 						this.ct登場用.t停止();
 					}
 					#region [ #24609 2011.4.7 yyagi リザルト画面で[F12]を押下すると、リザルト画像をpngで保存する機能は、CDTXManiaに移管。 ]
-//					if ( CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDX.DirectInput.Key.F12 ) &&
+//					if ( CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDXKey.F12 ) &&
 //						CDTXMania.ConfigIni.bScoreIniを出力する )
 //					{
 //						CheckAndSaveResultScreen(false);
@@ -636,14 +654,14 @@ namespace DTXMania
 					#endregion
 					if ( base.eフェーズID == CStage.Eフェーズ.共通_通常状態 )
 					{
-						if ( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.Escape ) )
+						if ( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.Escape ) )
 						{
 							CDTXMania.Skin.sound取消音.t再生する();
 							this.actFO.tフェードアウト開始();
 							base.eフェーズID = CStage.Eフェーズ.共通_フェードアウト;
 							this.eフェードアウト完了時の戻り値 = E戻り値.完了;
 						}
-						if ( ( ( CDTXMania.Pad.b押されたDGB( Eパッド.CY ) || CDTXMania.Pad.b押された( E楽器パート.DRUMS, Eパッド.RD ) ) || ( CDTXMania.Pad.b押された( E楽器パート.DRUMS, Eパッド.LC ) || CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDX.DirectInput.Key.Return ) ) ) && this.bアニメが完了 )
+						if ( ( ( CDTXMania.Pad.b押されたDGB( Eパッド.CY ) || CDTXMania.Pad.b押された( E楽器パート.DRUMS, Eパッド.RD ) ) || ( CDTXMania.Pad.b押された( E楽器パート.DRUMS, Eパッド.LC ) || CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDXKey.Return ) ) ) && this.bアニメが完了 )
 						{
 							CDTXMania.Skin.sound取消音.t再生する();
 //							this.actFO.tフェードアウト開始();
@@ -673,10 +691,14 @@ namespace DTXMania
 		private CActFIFOBlack actFO;
 		private CActオプションパネル actOption;
 		private CAct演奏AVI actAVI;
-		private CActResultParameterPanel actParameterPanel;
-		private CActResultRank actRank;
-		private CActResultImage共通 actResultImage;
-		private CActResultSongBar actSongBar;
+		private CActResultParameterPanelXG actParameterPanelXG;
+        private CActResultParameterPanelGD actParameterPanelGD;
+		private CActResultRankXG actRankXG;
+		private CActResultRankGD actRankGD;
+        //private CActResultImage共通 actResultImage;
+        private CActResultImageXG actResultImageXG;
+        private CActResultImageGD actResultImageGD;
+        private CActResultSongBar actSongBar;
 		private bool bアニメが完了;
 		private bool bIsCheckedWhetherResultScreenShouldSaveOrNot;				// #24509 2011.3.14 yyagi
 		private readonly int[] nチャンネル0Atoレーン07;

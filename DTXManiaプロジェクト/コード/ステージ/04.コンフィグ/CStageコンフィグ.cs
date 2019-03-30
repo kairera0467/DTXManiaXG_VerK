@@ -5,8 +5,12 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Drawing;
 using System.Diagnostics;
+using SharpDX;
 using FDK;
 
+using Color = System.Drawing.Color;
+using Rectangle = System.Drawing.Rectangle;
+using SlimDXKey = SlimDX.DirectInput.Key;
 namespace DTXMania
 {
 	internal class CStageコンフィグ : CStage
@@ -279,7 +283,7 @@ namespace DTXMania
 			// 曲データの一覧取得中は、キー入力を無効化する
 			if ( !CDTXMania.EnumSongs.IsEnumerating || CDTXMania.actEnumSongs.bコマンドでの曲データ取得 != true )
 			{
-				if ( ( CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDX.DirectInput.Key.Escape ) || CDTXMania.Pad.b押された( E楽器パート.DRUMS, Eパッド.LC ) ) || CDTXMania.Pad.b押されたGB( Eパッド.FT ) )
+				if ( ( CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDXKey.Escape ) || CDTXMania.Pad.b押された( E楽器パート.DRUMS, Eパッド.LC ) ) || CDTXMania.Pad.b押されたGB( Eパッド.FT ) )
 				{
 					CDTXMania.Skin.sound取消音.t再生する();
 					if ( !this.bメニューにフォーカス中 )
@@ -303,7 +307,7 @@ namespace DTXMania
 					}
 				}
 				#region [ ← ]
-				else if ( CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDX.DirectInput.Key.LeftArrow ) )	// 左カーソルキー
+				else if ( CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDXKey.LeftArrow ) )	// 左カーソルキー
 				{
 					if ( !this.bメニューにフォーカス中 )
 					{
@@ -327,7 +331,7 @@ namespace DTXMania
 					}
 				}
 				#endregion
-				else if ( ( CDTXMania.Pad.b押されたDGB( Eパッド.CY ) || CDTXMania.Pad.b押された( E楽器パート.DRUMS, Eパッド.RD ) ) || ( ( CDTXMania.ConfigIni.bEnterがキー割り当てのどこにも使用されていない && CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDX.DirectInput.Key.Return ) ) ) )
+				else if ( ( CDTXMania.Pad.b押されたDGB( Eパッド.CY ) || CDTXMania.Pad.b押された( E楽器パート.DRUMS, Eパッド.RD ) ) || ( ( CDTXMania.ConfigIni.bEnterがキー割り当てのどこにも使用されていない && CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDXKey.Return ) ) ) )
 				{
 					#region [ EXIT ]
 					if ( this.n現在のメニュー番号 == 4 )
@@ -367,7 +371,7 @@ namespace DTXMania
 					}
 				}
 				#region [ → ]
-				else if ( CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDX.DirectInput.Key.RightArrow ) )	// 右カーソルキー
+				else if ( CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDXKey.RightArrow ) )	// 右カーソルキー
 				{
 					#region [ EXIT ]
 					if ( this.n現在のメニュー番号 == 4 )
@@ -383,13 +387,13 @@ namespace DTXMania
 					}
 				}
 				#endregion
-				this.ctキー反復用.Up.tキー反復( CDTXMania.Input管理.Keyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.UpArrow ), new CCounter.DGキー処理( this.tカーソルを上へ移動する ) );
+				this.ctキー反復用.Up.tキー反復( CDTXMania.Input管理.Keyboard.bキーが押されている( (int) SlimDXKey.UpArrow ), new CCounter.DGキー処理( this.tカーソルを上へ移動する ) );
 				this.ctキー反復用.R.tキー反復( CDTXMania.Pad.b押されているGB( Eパッド.HH ), new CCounter.DGキー処理( this.tカーソルを上へ移動する ) );
 				if ( CDTXMania.Pad.b押された( E楽器パート.DRUMS, Eパッド.SD ) )
 				{
 					this.tカーソルを上へ移動する();
 				}
-				this.ctキー反復用.Down.tキー反復( CDTXMania.Input管理.Keyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.DownArrow ), new CCounter.DGキー処理( this.tカーソルを下へ移動する ) );
+				this.ctキー反復用.Down.tキー反復( CDTXMania.Input管理.Keyboard.bキーが押されている( (int) SlimDXKey.DownArrow ), new CCounter.DGキー処理( this.tカーソルを下へ移動する ) );
 				this.ctキー反復用.B.tキー反復( CDTXMania.Pad.b押されているGB( Eパッド.BD ), new CCounter.DGキー処理( this.tカーソルを下へ移動する ) );
 				if ( CDTXMania.Pad.b押された( E楽器パート.DRUMS, Eパッド.FT ) )
 				{

@@ -450,7 +450,7 @@ namespace DTXMania
 				"You should use WASAPI or ASIO to decrease the sound lag.\n" +
 				"\n" +
 				"Note: Exit CONFIGURATION to make the setting take effect.",
-				new string[] { "DSound", "ASIO", "WASAPI" } );
+				new string[] { "DSound", "ASIO", "WASAPI排他", "WASAPI共有" } );
 			this.list項目リスト.Add( this.iSystemSoundType );
 
 			// #24820 2013.1.15 yyagi
@@ -552,6 +552,13 @@ namespace DTXMania
 				"Note:\n" +
 				"Only for WASAPI/ASIO mode." );
 			this.list項目リスト.Add( this.iSystemMasterVolume );
+
+            this.iSystemWASAPIEventDriven = new CItemToggle("WASAPIEventDriven", CDTXMania.ConfigIni.bEventDrivenWASAPI,
+                "WASAPIをEvent Drivenモードで使用します。\n" +
+                "これを使うと、サウンド出力の遅延をより小さくできますが、システム負荷は上昇します。",
+                "Use WASAPI Event Driven mode.\n" +
+                "It reduce sound output lag, but it also decreases system performance.");
+            this.list項目リスト.Add( this.iSystemWASAPIEventDriven );
 
 			this.iSystemSkinSubfolder = new CItemList( "Skin (General)", CItemBase.Eパネル種別.通常, nSkinIndex,
 				"スキン切替：スキンを切り替えます。\n",
@@ -2440,6 +2447,9 @@ namespace DTXMania
 					case 2:
 						soundDeviceType = ESoundDeviceType.ExclusiveWASAPI;
 						break;
+                    case 3:
+                        soundDeviceType = ESoundDeviceType.SharedWASAPI;
+                        break;
 					default:
 						soundDeviceType = ESoundDeviceType.Unknown;
 						break;
@@ -2447,6 +2457,7 @@ namespace DTXMania
 
 				CDTXMania.Sound管理.t初期化( soundDeviceType,
 										this.iSystemWASAPIBufferSizeMs.n現在の値,
+                                        false,
 										0,
 										// this.iSystemASIOBufferSizeMs.n現在の値,
 										this.iSystemASIODevice.n現在選択されている項目番号,
@@ -2964,6 +2975,7 @@ namespace DTXMania
 		private int iSystemASIODevice_initial;
 		private CItemToggle iSystemSoundTimerType;			// #33689 2014.6.17 yyagi
 		private int iSystemSoundTimerType_initial;			// #33689 2014.6.17 yyagi
+        private CItemToggle iSystemWASAPIEventDriven;
 
 		private CItemToggle iSystemTimeStretch;				// #23664 2013.2.24 yyagi
 		private CItemList iSystemJudgePosGuitar;			// #33891 2014.6.26 yyagi

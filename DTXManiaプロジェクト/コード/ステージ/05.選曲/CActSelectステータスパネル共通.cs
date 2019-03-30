@@ -80,12 +80,7 @@ namespace DTXMania
 				this.rc = rc;
 			}
 		}
-
-		STDGBVALUE<bool> b現在選択中の曲がフルコンボ;
-		private STDGBVALUE<double> db現在選択中の曲の最高スキル値;
-		private STDGBVALUE<int> n現在選択中の曲のレベル;
-		private STDGBVALUE<int> n現在選択中の曲の最高ランク;
-
+        
         protected STDGBVALUE<bool>[] b現在選択中の曲がFC難易度毎 = new STDGBVALUE<bool>[5];
         protected STDGBVALUE<bool>[] b現在選択中の曲に譜面がある = new STDGBVALUE<bool>[5];
         protected STDGBVALUE<bool>[] b現在選択中の曲がフルコンボ難易度毎 = new STDGBVALUE<bool>[5];
@@ -93,6 +88,7 @@ namespace DTXMania
         protected STDGBVALUE<int>[] n現在選択中の曲のレベル小数点難易度毎DGB = new STDGBVALUE<int>[5];
         protected STDGBVALUE<double>[] db現在選択中の曲の最高スキル値難易度毎 = new STDGBVALUE<double>[5];
         protected STDGBVALUE<int>[] n現在選択中の曲の最高ランク難易度毎 = new STDGBVALUE<int>[5];
+        protected CDTX.STLANEINT[] n選択中の曲のノート数_難易度毎 = new CDTX.STLANEINT[5];
         protected double[] db現在選択中の曲の曲別スキル値難易度毎 = new double[5];
         private int[] n選択中の曲のレベル難易度毎 = new int[5];
 

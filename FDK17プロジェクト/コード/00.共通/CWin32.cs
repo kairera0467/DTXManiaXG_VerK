@@ -363,8 +363,8 @@ namespace FDK
 		[return: MarshalAs( UnmanagedType.Bool )]
 		[DllImport( "user32.dll", CharSet = CharSet.Auto )]
 		public static extern bool PeekMessage( out WindowMessage message, IntPtr hwnd, uint messageFilterMin, uint messageFilterMax, uint flags );
-		[DllImport( "kernel32.dll", CharSet = CharSet.Auto )]
-		public static extern uint SetThreadExecutionState( uint esFlags );
+		//[DllImport( "kernel32.dll", CharSet = CharSet.Auto )]
+		//public static extern uint SetThreadExecutionState( uint esFlags );
 		[DllImport( "Kernel32.Dll" )]
 		public static unsafe extern void CopyMemory( void* pDest, void* pSrc, uint numOfBytes );
 
@@ -386,6 +386,32 @@ namespace FDK
 		public static extern void GetSystemInfo( ref SYSTEM_INFO ptmpsi );
 		[DllImport( "kernel32.dll" )]
 		internal static extern ExecutionState SetThreadExecutionState( ExecutionState esFlags );
+
+		
+		[DllImport("PowrProf.dll")]
+		public static extern UInt32 PowerEnumerate(IntPtr RootPowerKey, IntPtr SchemeGuid, IntPtr SubGroupOfPowerSettingGuid, UInt32 AcessFlags, UInt32 Index, ref Guid Buffer, ref UInt32 BufferSize);
+		public enum AccessFlags : uint
+		{
+			ACCESS_SCHEME = 16,
+			ACCESS_SUBGROUP = 17,
+			ACCESS_INDIVIDUAL_SETTING = 18
+		}
+		[DllImport( "PowrProf.dll" )]
+		public static extern UInt32 PowerReadFriendlyName( IntPtr RootPowerKey, ref Guid SchemeGuid, IntPtr SubGroupOfPowerSettingGuid, IntPtr PowerSettingGuid, IntPtr Buffer, ref UInt32 BufferSize );
+		[DllImport( "PowrProf.dll" )]
+		public static extern uint PowerGetActiveScheme( IntPtr UserRootPowerKey, ref IntPtr ActivePolicyGuid );
+		[DllImport( "PowrProf.dll" )]
+		public static extern uint PowerSetActiveScheme(IntPtr UserRootPowerKey, ref Guid SchemeGuid);
+		[DllImport( "powrprof.dll" )]
+		public static extern uint CallNtPowerInformation(
+			int InformationLevel,
+			IntPtr lpInputBuffer,
+			int nInputBufferSize,
+			out SYSTEM_POWER_CAPABILITIES spi,
+			int nOutputBufferSize
+		);
+
+
 		//-----------------
 		#endregion
 
@@ -442,6 +468,24 @@ namespace FDK
 			public ushort nBlockAlign;
 			public ushort wBitsPerSample;
 			public ushort cbSize;
+
+			public WAVEFORMATEX (
+				ushort _wFormatTag,
+				ushort _nChannels,
+				uint _nSamplesPerSec,
+				uint _nAvgBytesPerSec,
+				ushort _nBlockAlign,
+				ushort _wBitsPerSample,
+				ushort _cbSize) : this()
+			{
+				wFormatTag = _wFormatTag;
+				nChannels = _nChannels;
+				nSamplesPerSec = _nSamplesPerSec;
+				nAvgBytesPerSec = _nAvgBytesPerSec;
+				nBlockAlign = _nBlockAlign;
+				wBitsPerSample = _wBitsPerSample;
+				cbSize = _cbSize;
+			}
 		}
 
 		[StructLayout( LayoutKind.Sequential )]
@@ -485,6 +529,114 @@ namespace FDK
 			public uint dwAllocationGranularity;
 			public uint dwProcessorLevel;
 			public uint dwProcessorRevision;
+		}
+		public struct BATTERY_REPORTING_SCALE
+		{
+			public ulong Granularity;
+			public ulong Capacity;
+		}
+		public enum SYSTEM_POWER_STATE
+		{
+			PowerSystemUnspecified = 0,
+			PowerSystemWorking = 1,
+			PowerSystemSleeping1 = 2,
+			PowerSystemSleeping2 = 3,
+			PowerSystemSleeping3 = 4,
+			PowerSystemHibernate = 5,
+			PowerSystemShutdown = 6,
+			PowerSystemMaximum = 7
+		}
+		public struct SYSTEM_POWER_INFORMATION
+		{
+			public uint MaxIdlenessAllowed;
+			public uint Idleness;
+			public uint TimeRemaining;
+			public byte CoolingMode;
+		}
+		public enum POWER_INFORMATION_LEVEL : int
+		{
+			AdministratorPowerPolicy		= 9,
+			LastSleepTime1					= 5,
+			LastWakeTime					= 14,
+ 			ProcessorInformation			= 11,
+			ProcessorPowerPolicyAc			= 18,
+			ProcessorPowerPolicyCurrent		= 22,
+			ProcessorPowerPolicyDc			= 19,
+			SystemBatteryState				= 5,
+			SystemExecutionState			= 16,
+			SystemPowerCapabilities			= 4,
+			SystemPowerInformation			= 12,
+			SystemPowerPolicyAc				= 0,
+			SystemPowerPolicyCurrent		= 8,
+			SystemPowerPolicyDc				= 1,
+			SystemReserveHiberFile			= 10,
+			VerifyProcessorPowerPolicyAc	= 20,
+			VerifyProcessorPowerPolicyDc	= 21,
+			VerifySystemPolicyAc			= 2,
+			VerifySystemPolicyDc			= 3
+		}
+
+		// http://www.pinvoke.net/default.aspx/Structures/SYSTEM_POWER_STATE.html
+		public struct SYSTEM_POWER_CAPABILITIES
+		{
+			[MarshalAs( UnmanagedType.U1 )]
+			public bool PowerButtonPresent;
+			[MarshalAs( UnmanagedType.U1 )]
+			public bool SleepButtonPresent;
+			[MarshalAs( UnmanagedType.U1 )]
+			public bool LidPresent;
+			[MarshalAs( UnmanagedType.U1 )]
+			public bool SystemS1;
+			[MarshalAs( UnmanagedType.U1 )]
+			public bool SystemS2;
+			[MarshalAs( UnmanagedType.U1 )]
+			public bool SystemS3;
+			[MarshalAs( UnmanagedType.U1 )]
+			public bool SystemS4;
+			[MarshalAs( UnmanagedType.U1 )]
+			public bool SystemS5;
+			[MarshalAs( UnmanagedType.U1 )]
+			public bool HiberFilePresent;
+			[MarshalAs( UnmanagedType.U1 )]
+			public bool FullWake;
+			[MarshalAs( UnmanagedType.U1 )]
+			public bool VideoDimPresent;
+			[MarshalAs( UnmanagedType.U1 )]
+			public bool ApmPresent;
+			[MarshalAs( UnmanagedType.U1 )]
+			public bool UpsPresent;
+			[MarshalAs( UnmanagedType.U1 )]
+			public bool ThermalControl;
+			[MarshalAs( UnmanagedType.U1 )]
+			public bool ProcessorThrottle;
+			public byte ProcessorMinThrottle;
+			public byte ProcessorMaxThrottle;   // Also known as ProcessorThrottleScale before Windows XP
+			[MarshalAs( UnmanagedType.U1 )]
+			public bool FastSystemS4;			// Ignore if earlier than Windows XP
+			[MarshalAs( UnmanagedType.U1 )]
+			public bool Hiberboot;				// Ignore if earlier than Windows XP
+			[MarshalAs( UnmanagedType.U1 )]
+			public bool WakeAlarmPresent;		// Ignore if earlier than Windows XP
+			[MarshalAs( UnmanagedType.U1 )]
+			public bool AoAc;					// Ignore if earlier than Windows XP
+			[MarshalAs( UnmanagedType.U1 )]
+			public bool DiskSpinDown;
+			public byte HiberFileType;			// Ignore if earlier than Windows 10 (10.0.10240.0)
+			[MarshalAs( UnmanagedType.U1 )]
+			public bool AoAcConnectivitySupported;  // Ignore if earlier than Windows 10 (10.0.10240.0)
+			[MarshalAs( UnmanagedType.ByValArray, SizeConst = 6 )]
+			private readonly byte[] spare3;
+			[MarshalAs( UnmanagedType.U1 )]
+			public bool SystemBatteriesPresent;
+			[MarshalAs( UnmanagedType.U1 )]
+			public bool BatteriesAreShortTerm;
+			[MarshalAs( UnmanagedType.ByValArray, SizeConst = 3 )]
+			public BATTERY_REPORTING_SCALE[] BatteryScale;
+			public SYSTEM_POWER_STATE AcOnLineWake;
+			public SYSTEM_POWER_STATE SoftLidWake;
+			public SYSTEM_POWER_STATE RtcWake;
+			public SYSTEM_POWER_STATE MinDeviceWakeState;
+			public SYSTEM_POWER_STATE DefaultLowLatencyWake;
 		}
 		//-----------------
 		#endregion

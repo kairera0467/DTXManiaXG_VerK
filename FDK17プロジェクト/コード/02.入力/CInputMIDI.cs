@@ -12,7 +12,6 @@ namespace FDK
 		public uint hMidiIn;
 		public List<STInputEvent> listEventBuffer;
 
-
 		// コンストラクタ
 
 		public CInputMIDI( uint nID )
@@ -23,6 +22,7 @@ namespace FDK
 			this.e入力デバイス種別 = E入力デバイス種別.MidiIn;
 			this.GUID = "";
 			this.ID = (int) nID;
+			this.strDeviceName = "";	// CInput管理で初期化する
 		}
 
 
@@ -65,6 +65,7 @@ namespace FDK
 		public string GUID { get; private set; }
 		public int ID { get; private set; }
 		public List<STInputEvent> list入力イベント { get; private set; }
+		public string strDeviceName { get; set; }
 
 		public void tポーリング( bool bWindowがアクティブ中, bool bバッファ入力を使用する )
 		{

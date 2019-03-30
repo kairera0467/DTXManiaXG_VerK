@@ -4,8 +4,10 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Drawing;
-using SlimDX.DirectInput;
+using System.IO;
 using FDK;
+
+using SlimDXKey = SlimDX.DirectInput.Key;
 
 namespace DTXMania
 {
@@ -148,20 +150,20 @@ namespace DTXMania
 				if ( base.eフェーズID == CStage.Eフェーズ.共通_通常状態		// 通常状態、かつ
 					&& CDTXMania.act現在入力を占有中のプラグイン == null )	// プラグインの入力占有がない
 				{
-					if ( CDTXMania.Input管理.Keyboard.bキーが押された( (int) Key.Escape ) )
+					if ( CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDXKey.Escape ) )
 						return (int) E戻り値.EXIT;
 
-					this.ctキー反復用.Up.tキー反復( CDTXMania.Input管理.Keyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.UpArrow ), new CCounter.DGキー処理( this.tカーソルを上へ移動する ) );
+					this.ctキー反復用.Up.tキー反復( CDTXMania.Input管理.Keyboard.bキーが押されている( (int) SlimDXKey.UpArrow ), new CCounter.DGキー処理( this.tカーソルを上へ移動する ) );
 					this.ctキー反復用.R.tキー反復( CDTXMania.Pad.b押されているGB( Eパッド.HH ), new CCounter.DGキー処理( this.tカーソルを上へ移動する ) );
 					if ( CDTXMania.Pad.b押された( E楽器パート.DRUMS, Eパッド.SD ) )
 						this.tカーソルを上へ移動する();
 
-					this.ctキー反復用.Down.tキー反復( CDTXMania.Input管理.Keyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.DownArrow ), new CCounter.DGキー処理( this.tカーソルを下へ移動する ) );
+					this.ctキー反復用.Down.tキー反復( CDTXMania.Input管理.Keyboard.bキーが押されている( (int) SlimDXKey.DownArrow ), new CCounter.DGキー処理( this.tカーソルを下へ移動する ) );
 					this.ctキー反復用.B.tキー反復( CDTXMania.Pad.b押されているGB( Eパッド.BD ), new CCounter.DGキー処理( this.tカーソルを下へ移動する ) );
 					if ( CDTXMania.Pad.b押された( E楽器パート.DRUMS, Eパッド.FT ) )
 						this.tカーソルを下へ移動する();
 
-					if ( ( CDTXMania.Pad.b押されたDGB( Eパッド.CY ) || CDTXMania.Pad.b押された( E楽器パート.DRUMS, Eパッド.RD ) ) || ( CDTXMania.Pad.b押された( E楽器パート.DRUMS, Eパッド.LC ) || ( CDTXMania.ConfigIni.bEnterがキー割り当てのどこにも使用されていない && CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDX.DirectInput.Key.Return ) ) ) )
+					if ( ( CDTXMania.Pad.b押されたDGB( Eパッド.CY ) || CDTXMania.Pad.b押された( E楽器パート.DRUMS, Eパッド.RD ) ) || ( CDTXMania.Pad.b押された( E楽器パート.DRUMS, Eパッド.LC ) || ( CDTXMania.ConfigIni.bEnterがキー割り当てのどこにも使用されていない && CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.Return ) ) ) )
 					{
 						if ( ( this.n現在のカーソル行 == (int) E戻り値.GAMESTART - 1 ) && CDTXMania.Skin.soundゲーム開始音.b読み込み成功 )
 						{

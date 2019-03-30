@@ -24,7 +24,10 @@ namespace FDK
 		{
 			get;
 		}
-
+		string strDeviceName
+		{
+			get;
+		}
 
 		// メソッドインターフェース
 

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
-using SlimDX;
-using SlimDX.Direct3D9;
+using SharpDX;
+using SharpDX.Direct3D9;
 using FDK;
 using System.Diagnostics;
 
@@ -475,9 +475,9 @@ namespace DTXMania
 
                     Matrix mat = Matrix.Identity;
 
-                    mat *= SlimDX.Matrix.Scaling( fResizeRatio, fResizeRatio2 + 0.08f, 0);
-                    mat *= SlimDX.Matrix.RotationY( C変換.DegreeToRadian( 30 ) );
-                    mat *= SlimDX.Matrix.Translation( 450, -80, 0 );
+                    mat *= Matrix.Scaling( fResizeRatio, fResizeRatio2 + 0.08f, 0);
+                    mat *= Matrix.RotationY( C変換.DegreeToRadian( 30 ) );
+                    mat *= Matrix.Translation( 450, -80, 0 );
 
                     //this.txクリップパネル.t2D描画( CDTXMania.app.Device, nPanelPos[ 0 ], nPanelPos[ 1 ] );
                     //this.tx描画用.vc拡大縮小倍率 = new Vector3( fResizeRatio, fResizeRatio, 1.0f );
@@ -575,7 +575,9 @@ namespace DTXMania
                 this.txArフィルインエフェクト = new CTexture[ 31 ];
                 for( int ar = 0; ar < 31; ar++ )
                 {
-                    this.txArフィルインエフェクト[ ar ] = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\StageEffect\7_StageEffect_" + ar.ToString() + ".png" ) );
+                    if( this.txArフィルインエフェクト[ ar ] == null ) {
+                        this.txArフィルインエフェクト[ ar ] = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\StageEffect\7_StageEffect_" + ar.ToString() + ".png" ) );
+                    }
                     if( this.txArフィルインエフェクト[ ar ] == null )
                         continue; //テクスチャが欠けていた場合は、事故防止のためにループを1つスキップする。
                     if( this.txArフィルインエフェクト[ ar ] != null )
@@ -604,17 +606,19 @@ namespace DTXMania
 		{
 			if( !base.b活性化してない )
 			{
-				if( this.tx描画用 != null )
-				{
-					this.tx描画用.Dispose();
-					this.tx描画用 = null;
-				}
+				this.tx描画用?.Dispose();
+				this.tx描画用 = null;
                 for( int ar = 0; ar < 31; ar++ )
                 {
-                    CDTXMania.tテクスチャの解放( ref this.txArフィルインエフェクト[ ar ] );
+                    if( this.txArフィルインエフェクト != null )
+                    {
+                        this.txArフィルインエフェクト[ ar ]?.Dispose();
+                    }
                 }
-                CDTXMania.tテクスチャの解放( ref this.txクリップパネル );
+                this.txArフィルインエフェクト = null;
+                this.txクリップパネル?.Dispose();
                 this.ctStageEffect進行 = null;
+
 				base.OnManagedリソースの解放();
 			}
 		}

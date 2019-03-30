@@ -7,11 +7,11 @@ using FDK;
 
 namespace DTXMania
 {
-	internal class CActResultRank : CActivity
+	internal class CActResultRankXG : CActResultRank共通
 	{
 		// コンストラクタ
 
-		public CActResultRank()
+		public CActResultRankXG()
 		{
 			base.b活性化してない = true;
 		}

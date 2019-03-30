@@ -7,6 +7,8 @@ using System.Diagnostics;
 using System.Web;
 using FDK;
 
+using SlimDXKey = SlimDX.DirectInput.Key;
+
 namespace DTXMania
 {
 	internal class CConfigIni
@@ -435,6 +437,7 @@ namespace DTXMania
 			// DirectSound,
 			ASIO,
 			WASAPI,
+            WASAPI_Share,
 			Unknown=99
 		}
 		// プロパティ
@@ -525,6 +528,8 @@ namespace DTXMania
 		public bool bUseBoxDefSkin;						// #28195 2012.5.6 yyagi Skin切替用 box.defによるスキン変更機能を使用するか否か
         public STDGBVALUE<EAutoGhostData> eAutoGhost;               // #35411 2015.8.18 chnmr0 プレー時使用ゴーストデータ種別
         public STDGBVALUE<ETargetGhostData> eTargetGhost;               // #35411 2015.8.18 chnmr0 ゴーストデータ再生方法
+        public bool bWarnMIDI20USB;                 // #37961 2019.1.21 add yyagi USBケーブル「MIDI2.0-USB」を使用しているときの警告表示有無
+        public bool bWarnSoundDeviceOnUSB;          // #38358 2019.2.1 add yyagi USB接続のサウンドデバイスを使用しているときの警告表示有無
 
         #region[ Ver.K追加 ]
         public bool bCLASSIC譜面判別を有効にする;
@@ -558,7 +563,7 @@ namespace DTXMania
         public STDGBVALUE<int> nNameColor;
         public STDGBVALUE<int> nShutterInSide;
         public STDGBVALUE<int> nShutterOutSide;
-        public STDGBVALUE<string> strCardName;
+        private STDGBVALUE<string> strCardName;
         public STDGBVALUE<string> strGroupName;
         public string strResultSongNameFont;
         public STDGBVALUE<string> strShutterImageName;      // #36144 kairera0467 シャッター画像のパスではなくcsvに登録した名前を格納する。
@@ -567,6 +572,18 @@ namespace DTXMania
         public STDGBVALUE<Eランダムモード> eRandomPedal;
         public STDGBVALUE<bool> bAssignToLBD;
 
+        #endregion
+        #region[ Ver.K 追加取得処理 ]
+        /// <summary>
+        /// Config.iniからプレイヤー名を取得する。
+        /// Config.iniが空だった場合は「GUEST」が返される
+        /// </summary>
+        /// <param name="epart">取得する楽器パート</param>
+        /// <returns>プレイヤー名</returns>
+        public string strGetCardName( E楽器パート epart )
+        {
+            return String.IsNullOrEmpty( this.strCardName[ (int)epart ] ) ? "GUEST" : this.strCardName[ (int)epart ];
+        }
         #endregion
 
         public bool bConfigIniがないかDTXManiaのバージョンが異なる
@@ -601,7 +618,7 @@ namespace DTXMania
 					{
 						for( int k = 0; k < 0x10; k++ )
 						{
-							if( ( this.KeyAssign[ i ][ j ][ k ].入力デバイス == E入力デバイス.キーボード ) && ( this.KeyAssign[ i ][ j ][ k ].コード == (int) SlimDX.DirectInput.Key.Return ) )
+							if( ( this.KeyAssign[ i ][ j ][ k ].入力デバイス == E入力デバイス.キーボード ) && ( this.KeyAssign[ i ][ j ][ k ].コード == (int) SlimDXKey.Return ) )
 							{
 								return false;
 							}
@@ -742,6 +759,7 @@ namespace DTXMania
 		public int nWASAPIBufferSizeMs;				// #24820 2013.1.15 yyagi WASAPIのバッファサイズ
 //		public int nASIOBufferSizeMs;				// #24820 2012.12.28 yyagi ASIOのバッファサイズ
 		public int nASIODevice;						// #24820 2013.1.17 yyagi ASIOデバイス
+        public bool bEventDrivenWASAPI;              // #36261 2016.4.27 yyagi WASAPI動作をevent drivenにするかどうか
 		public bool bUseOSTimer;					// #33689 2014.6.6 yyagi 演奏タイマーの種類
 		public bool bDynamicBassMixerManagement;	// #24820
 		public bool bTimeStretch;					// #23664 2013.2.24 yyagi ピッチ変更無しで再生速度を変更するかどうか
@@ -1291,11 +1309,12 @@ namespace DTXMania
 			this.bUseBoxDefSkin = true;					// #28195 2012.5.6 yyagi box.defによるスキン切替機能を使用するか否か
 			this.bTight = false;                        // #29500 2012.9.11 kairera0467 TIGHTモード
 			#region [ WASAPI/ASIO ]
-			this.nSoundDeviceType = FDK.COS.bIsVistaOrLater ?
+			this.nSoundDeviceType = FDK.COS.bIsVistaOrLater() ?
 				(int) ESoundDeviceTypeForConfig.WASAPI : (int) ESoundDeviceTypeForConfig.ACM;	// #24820 2012.12.23 yyagi 初期値はACM | #31927 2013.8.25 yyagi OSにより初期値変更
 			this.nWASAPIBufferSizeMs = 50;				// #24820 2013.1.15 yyagi 初期値は50(0で自動設定)
 			this.nASIODevice = 0;						// #24820 2013.1.17 yyagi
 //			this.nASIOBufferSizeMs = 0;					// #24820 2012.12.25 yyagi 初期値は0(自動設定)
+            this.bEventDrivenWASAPI = false;
 			#endregion
 
 			this.bUseOSTimer = false;;					// #33689 2014.6.6 yyagi 初期値はfalse (FDKのタイマー。ＦＲＯＭ氏考案の独自タイマー)
@@ -1362,6 +1381,9 @@ namespace DTXMania
 
             //this.bNoMP3Streaming = false;
 			this.nMasterVolume = 100;					// #33700 2014.4.26 yyagi マスターボリュームの設定(WASAPI/ASIO用)
+
+            this.bWarnMIDI20USB = true;
+            this.bWarnSoundDeviceOnUSB = true;
 		}
 		public CConfigIni( string iniファイル名 )
 			: this()
@@ -1569,6 +1591,10 @@ namespace DTXMania
 			sw.WriteLine( "; Playback timer used for WASAPI/ASIO" );
 			sw.WriteLine( "; (0=FDK Timer, 1=System Timer)" );
 			sw.WriteLine( "SoundTimerType={0}", this.bUseOSTimer ? 1 : 0 );
+			sw.WriteLine();
+
+			sw.WriteLine( "; WASAPI使用時にEventDrivenモードを使う" );
+			sw.WriteLine( "EventDrivenWASAPI={0}", this.bEventDrivenWASAPI ? 1 : 0 );
 			sw.WriteLine();
 
 			sw.WriteLine( "; 全体ボリュームの設定" );
@@ -2640,7 +2666,7 @@ namespace DTXMania
 											#region [ WASAPI/ASIO関係 ]
 											else if ( str3.Equals( "SoundDeviceType" ) )
 											{
-												this.nSoundDeviceType = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 2, this.nSoundDeviceType );
+												this.nSoundDeviceType = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 3, this.nSoundDeviceType );
 											}
 											else if ( str3.Equals( "WASAPIBufferSizeMs" ) )
 											{
@@ -2663,6 +2689,10 @@ namespace DTXMania
 											{
 												this.bUseOSTimer = C変換.bONorOFF( str4[ 0 ] );
 											}
+                                            else if ( str3.Equals( "EventDrivenWASAPI" ) )
+                                            {
+                                                this.bEventDrivenWASAPI = C変換.bONorOFF( str4[ 0 ] );
+                                            }
 											else if ( str3.Equals( "MasterVolume" ) )
 											{
 											    this.nMasterVolume = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 100, this.nMasterVolume );

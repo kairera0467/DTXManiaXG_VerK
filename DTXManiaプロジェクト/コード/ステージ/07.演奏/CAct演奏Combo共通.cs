@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 using System.Drawing;
-using SlimDX;
+using SharpDX;
 using FDK;
 
+using Rectangle = System.Drawing.Rectangle;
 namespace DTXMania
 {
 	internal class CAct演奏Combo共通 : CActivity
@@ -562,10 +563,10 @@ namespace DTXMania
                 // 2017.12.17 とりあえず版
                 if ( this.txCOMBOドラム != null )
                 {
-                    SlimDX.Matrix matSkillPanel = SlimDX.Matrix.Identity;
-                    matSkillPanel *= SlimDX.Matrix.RotationY( C変換.DegreeToRadian( 18 ) );
-                    matSkillPanel *= SlimDX.Matrix.Scaling( 0.42f, 0.95f, 1 );
-                    matSkillPanel *= SlimDX.Matrix.Translation( 488, 114 - y動作差分, 0 );
+                    Matrix matSkillPanel = Matrix.Identity;
+                    matSkillPanel *= Matrix.RotationY( C変換.DegreeToRadian( 18 ) );
+                    matSkillPanel *= Matrix.Scaling( 0.42f, 0.95f, 1 );
+                    matSkillPanel *= Matrix.Translation( 488, 114 - y動作差分, 0 );
                     this.txCOMBOドラム.t3D描画( CDTXMania.app.Device, matSkillPanel, new Rectangle( 0, 320, 250, 60 ) );
                 }
                 //-----------------
@@ -593,12 +594,12 @@ namespace DTXMania
 
                 if( this.txCOMBOドラム != null )
                 {
-                    SlimDX.Matrix matSkillPanel = SlimDX.Matrix.Identity;
+                    Matrix matSkillPanel = Matrix.Identity;
                     
-                    matSkillPanel *= SlimDX.Matrix.Scaling( 0.5f, 0.9f, 1 );
-                    matSkillPanel *= SlimDX.Matrix.RotationY( C変換.DegreeToRadian( 30 ) );
-                    //matSkillPanel *= SlimDX.Matrix.Translation( 537 - ( 6 * i ), 231 + ( 16 * i ) - y動作差分 + ( i == 0 ? this.nY1の位座標差分値 : 0 ), 0 + ( 80 * i ) );
-                    matSkillPanel *= SlimDX.Matrix.Translation( 537 - ( 6 * i ), 231 + ( 16 * i ) - y動作差分 + ( this.b桁の数値が変わった.Drums[ i ] ? this.nY1の位座標差分値 : 0 ), 0 + ( 80 * i ) );
+                    matSkillPanel *= Matrix.Scaling( 0.5f, 0.9f, 1 );
+                    matSkillPanel *= Matrix.RotationY( C変換.DegreeToRadian( 30 ) );
+                    //matSkillPanel *= Matrix.Translation( 537 - ( 6 * i ), 231 + ( 16 * i ) - y動作差分 + ( i == 0 ? this.nY1の位座標差分値 : 0 ), 0 + ( 80 * i ) );
+                    matSkillPanel *= Matrix.Translation( 537 - ( 6 * i ), 231 + ( 16 * i ) - y動作差分 + ( this.b桁の数値が変わった.Drums[ i ] ? this.nY1の位座標差分値 : 0 ), 0 + ( 80 * i ) );
 
                     this.txCOMBOドラム.t3D描画( CDTXMania.app.Device, matSkillPanel, new Rectangle( ( n位の数[ i ] % 5 ) * 120, ( n位の数[ i ] / 5 ) * 160, 120, 160 ) );
 
@@ -645,99 +646,99 @@ namespace DTXMania
 			#endregion
 
             /*
-            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.F1 ) )
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F1 ) )
             {
                 fX--;
             }
-            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.F2 ) )
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F2 ) )
             {
                 fX++;
             }
-            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.F3 ) )
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F3 ) )
             {
                 fY--;
             }
-            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.F4 ) )
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F4 ) )
             {
                 fY++;
             }
-            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.F6 ) )
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F6 ) )
             {
                 rot--;
             }
-            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.F7 ) )
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F7 ) )
             {
                 rot++;
             }
-            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.F8 ) )
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F8 ) )
             {
                 fScaleX -= 0.01f;
             }
-            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.F9 ) )
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F9 ) )
             {
                 fScaleX += 0.01f;
             }
-            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.F10 ) )
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F10 ) )
             {
                 fScaleX -= 0.1f;
             }
-            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.F11 ) )
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F11 ) )
             {
                 fScaleX += 0.1f;
             }
-            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.D1 ) )
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D1 ) )
             {
                 fScaleY -= 0.01f;
             }
-            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.D2 ) )
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D2 ) )
             {
                 fScaleY += 0.01f;
             }
-            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.D3 ) )
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D3 ) )
             {
                 fScaleY -= 0.1f;
             }
-            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.D4 ) )
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D4 ) )
             {
                 fScaleY += 0.1f;
             }
-            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.D5 ) )
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D5 ) )
             {
                 offset--;
             }
-            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.D6 ) )
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D6 ) )
             {
                 offset++;
             }
-            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.D7 ) )
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D7 ) )
             {
                 fX -= 10;
             }
-            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.D8 ) )
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D8 ) )
             {
                 fX += 10;
             }
-            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.D9 ) )
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D9 ) )
             {
                 fY -= 10;
             }
-            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.D0 ) )
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D0 ) )
             {
                 fY += 10;
             }
-            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.Q ) )
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.Q ) )
             {
                 fZ -= 1;
             }
-            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.W ) )
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.W ) )
             {
                 fZ += 1;
             }
-            if ( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.E ) )
+            if ( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.E ) )
             {
                 fZ -= 10;
             }
-            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.R ) )
+            if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.R ) )
             {
                 fZ += 10;
             }
@@ -923,8 +924,10 @@ namespace DTXMania
 			if( this.b活性化してない )
 				return;
 
-			CDTXMania.tテクスチャの解放( ref this.txCOMBOドラム );
-			CDTXMania.tテクスチャの解放( ref this.txCOMBOギター );
+			//CDTXMania.tテクスチャの解放( ref this.txCOMBOドラム );
+			//CDTXMania.tテクスチャの解放( ref this.txCOMBOギター );
+            this.txCOMBOドラム?.Dispose();
+            this.txCOMBOギター?.Dispose();
 
 			base.OnManagedリソースの解放();
 		}

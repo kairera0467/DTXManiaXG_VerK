@@ -10,9 +10,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>FDK</RootNamespace>
     <AssemblyName>FDK</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>slimdx_kairera0467.snk</AssemblyOriginatorKeyFile>
     <ApplicationIcon>
     </ApplicationIcon>
@@ -46,7 +46,7 @@
     </DocumentationFile>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <NoWarn>0219</NoWarn>
-    <DefineConstants>TRACE;TEST_CancelEnterCodeInAltEnter2 TEST_Direct3D9Ex_</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;TEST_CancelEnterCodeInAltEnter2 TEST_Direct3D9Ex_</DefineConstants>
     <Optimize>false</Optimize>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
@@ -69,13 +69,31 @@
     <Reference Include="DirectShowLib-2005">
       <HintPath>..\実行時フォルダ\dll\DirectShowLib-2005.dll</HintPath>
     </Reference>
-    <Reference Include="SlimDXc_net20x86_Jun2010, Version=1002.0.10.43, Culture=neutral, PublicKeyToken=53d0e4ef1f1579f5, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\実行時フォルダ\dll\SlimDXc_net20x86_Jun2010.dll</HintPath>
+    <Reference Include="SharpDX, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\DTXManiaプロジェクト\packages\SharpDX.4.0.1\lib\net45\SharpDX.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Animation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\DTXManiaプロジェクト\packages\SharpDX.Animation.4.0.1\lib\net45\SharpDX.Animation.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Direct3D9, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\DTXManiaプロジェクト\packages\SharpDX.Direct3D9.4.0.1\lib\net45\SharpDX.Direct3D9.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.DirectInput, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\DTXManiaプロジェクト\packages\SharpDX.DirectInput.4.0.1\lib\net45\SharpDX.DirectInput.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.DirectSound, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\DTXManiaプロジェクト\packages\SharpDX.DirectSound.4.0.1\lib\net45\SharpDX.DirectSound.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.DXGI, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\DTXManiaプロジェクト\packages\SharpDX.DXGI.4.0.1\lib\net45\SharpDX.DXGI.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Mathematics, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\DTXManiaプロジェクト\packages\SharpDX.Mathematics.4.0.1\lib\net45\SharpDX.Mathematics.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -118,9 +136,10 @@
     <Compile Include="コード\02.入力\DeviceConstantConverter.cs" />
     <Compile Include="コード\02.入力\E入力デバイス種別.cs" />
     <Compile Include="コード\02.入力\IInputDevice.cs" />
+    <Compile Include="コード\02.入力\SlimDX.DirectInput.Key.cs" />
     <Compile Include="コード\02.入力\STInputEvent.cs" />
-    <Compile Include="コード\03.サウンド\Cmp3.cs" />
-    <Compile Include="コード\03.サウンド\Cogg.cs" />
+    <Compile Include="コード\03.サウンド\BASSThreadedMixerWrapper.cs" />
+    <Compile Include="コード\03.サウンド\Cmp3ogg.cs" />
     <Compile Include="コード\03.サウンド\CSound.cs" />
     <Compile Include="コード\03.サウンド\CSoundDeviceASIO.cs" />
     <Compile Include="コード\03.サウンド\CSoundDeviceDirectSound.cs" />
@@ -178,7 +197,14 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="slimdx_kairera0467.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\libbjxa\libbjxa.csproj">
+      <Project>{41e67409-f5ec-4216-a790-2519a7b22e51}</Project>
+      <Name>libbjxa</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -190,9 +216,6 @@
   -->
   <PropertyGroup>
     <PostBuildEvent>copy /Y "$(TargetPath)" "$(SolutionDir)..\実行時フォルダ\dll\"
-copy /Y "$(TargetPath)" "$(SolutionDir)bin\x86\Debug\dll\"
-
-
-</PostBuildEvent>
+copy /Y "$(TargetPath)" "$(SolutionDir)bin\x86\Debug\dll\"</PostBuildEvent>
   </PropertyGroup>
 </Project>

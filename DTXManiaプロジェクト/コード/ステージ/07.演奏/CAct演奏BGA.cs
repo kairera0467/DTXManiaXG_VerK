@@ -4,8 +4,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.Drawing;
 using System.Diagnostics;
-using SlimDX.Direct3D9;
-using SlimDX;
+using SharpDX.Direct3D9;
 using FDK;
 
 namespace DTXMania
@@ -138,7 +137,7 @@ namespace DTXMania
 					{
 						this.sfBackBuffer = Surface.CreateOffscreenPlain( CDTXMania.app.Device, surface.Description.Width, surface.Description.Height, surface.Description.Format, Pool.SystemMemory );
 					}
-					catch ( Direct3D9Exception e )
+					catch ( Exception e )
 					{
 						Trace.TraceError( "CAct演奏BGA: Error: ( " + e.Message + " )" );
 					}
@@ -152,7 +151,7 @@ namespace DTXMania
 			{
 				if( this.sfBackBuffer != null )
 				{
-					this.sfBackBuffer.Dispose();
+                    CDTXMania.t安全にDisposeする( ref this.sfBackBuffer );
 					this.sfBackBuffer = null;
 				}
 				base.OnManagedリソースの解放();

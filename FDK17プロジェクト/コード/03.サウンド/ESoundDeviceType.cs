@@ -4,12 +4,12 @@ using System.Text;
 
 namespace FDK
 {
-	public enum ESoundDeviceType
+	public enum ESoundDeviceType : int
 	{
-		ExclusiveWASAPI,
-		SharedWASAPI,
-		ASIO,
-		DirectSound,
-		Unknown,
+		DirectSound = 0,
+		SharedWASAPI = 1,
+		ExclusiveWASAPI = 2,
+		ASIO = 3,
+		Unknown = 4,
 	}
 }

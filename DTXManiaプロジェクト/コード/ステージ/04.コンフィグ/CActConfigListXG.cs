@@ -5,9 +5,13 @@ using System.Globalization;
 using System.Text;
 using System.Drawing;
 using System.Threading;
-using SlimDX;
+using SharpDX;
 using FDK;
 
+using Color = System.Drawing.Color;
+using Rectangle = System.Drawing.Rectangle;
+using RectangleF = System.Drawing.RectangleF;
+using Point = System.Drawing.Point;
 namespace DTXMania
 {
 	internal class CActConfigListXG : CActConfigList共通

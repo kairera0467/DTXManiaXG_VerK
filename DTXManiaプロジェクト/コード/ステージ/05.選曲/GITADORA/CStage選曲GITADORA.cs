@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using SlimDX;
 using FDK;
 
+using SlimDXKey = SlimDX.DirectInput.Key;
+
 namespace DTXMania
 {
     internal class CStage選曲GITADORA : CStage選曲
@@ -180,7 +182,7 @@ namespace DTXMania
 					if ( !this.actSortSongs.bIsActivePopupMenu && !this.actQuickConfig.bIsActivePopupMenu )
 					{
 						#region [ ESC ]
-						if ( CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDX.DirectInput.Key.Escape ) || ( ( CDTXMania.Pad.b押された( E楽器パート.DRUMS, Eパッド.LC ) || CDTXMania.Pad.b押されたGB( Eパッド.Cancel ) || CDTXMania.Pad.b押されたGB( Eパッド.Pick ) ) && ( ( this.act曲リスト.r現在選択中の曲 != null ) && ( this.act曲リスト.r現在選択中の曲.r親ノード == null ) ) ) )
+						if ( CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDXKey.Escape ) || ( ( CDTXMania.Pad.b押された( E楽器パート.DRUMS, Eパッド.LC ) || CDTXMania.Pad.b押されたGB( Eパッド.Cancel ) || CDTXMania.Pad.b押されたGB( Eパッド.Pick ) ) && ( ( this.act曲リスト.r現在選択中の曲 != null ) && ( this.act曲リスト.r現在選択中の曲.r親ノード == null ) ) ) )
 						{	// [ESC]
 							CDTXMania.Skin.sound取消音.t再生する();
 							this.eフェードアウト完了時の戻り値 = E戻り値.タイトルに戻る;
@@ -190,8 +192,8 @@ namespace DTXMania
 						}
 						#endregion
 						#region [ Shift-F1: CONFIG画面 ]
-						if ( ( CDTXMania.Input管理.Keyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.RightShift ) || CDTXMania.Input管理.Keyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.LeftShift ) ) &&
-							CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDX.DirectInput.Key.F1 ) )
+						if ( ( CDTXMania.Input管理.Keyboard.bキーが押されている( (int) SlimDXKey.RightShift ) || CDTXMania.Input管理.Keyboard.bキーが押されている( (int) SlimDXKey.LeftShift ) ) &&
+							CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDXKey.F1 ) )
 						{	// [SHIFT] + [F1] CONFIG
 							this.actPresound.tサウンド停止();
 							this.eフェードアウト完了時の戻り値 = E戻り値.コンフィグ呼び出し;	// #24525 2011.3.16 yyagi: [SHIFT]-[F1]でCONFIG呼び出し
@@ -204,8 +206,8 @@ namespace DTXMania
 						#region [ Shift-F2: 未使用 ]
 						// #24525 2011.3.16 yyagi: [SHIFT]+[F2]は廃止(将来発生するかもしれない別用途のためにキープ)
 						/*
-											if ( ( CDTXMania.Input管理.Keyboard.bキーが押されている( (int)SlimDX.DirectInput.Key.RightShift ) || CDTXMania.Input管理.Keyboard.bキーが押されている( (int)SlimDX.DirectInput.Key.LeftShift ) ) &&
-												CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDX.DirectInput.Key.F2 ) )
+											if ( ( CDTXMania.Input管理.Keyboard.bキーが押されている( (int)SlimDXKey.RightShift ) || CDTXMania.Input管理.Keyboard.bキーが押されている( (int)SlimDXKey.LeftShift ) ) &&
+												CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F2 ) )
 											{	// [SHIFT] + [F2] CONFIGURATION
 												this.actPresound.tサウンド停止();
 												this.eフェードアウト完了時の戻り値 = E戻り値.コンフィグ呼び出し;
@@ -220,7 +222,7 @@ namespace DTXMania
 						{
 							#region [ Right ]
                             //2016.02.20 kairera0467 XG風の場合は使わない。
-							if ( CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDX.DirectInput.Key.RightArrow ) && !CDTXMania.bXGRelease )
+							if ( CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDXKey.RightArrow ) && !CDTXMania.bXGRelease )
 							{
 								if ( this.act曲リスト.r現在選択中の曲 != null )
 								{
@@ -243,7 +245,7 @@ namespace DTXMania
 							#endregion
 							#region [ Decide ]
 							if (( CDTXMania.Pad.b押されたDGB( Eパッド.Decide ) || CDTXMania.Pad.b押された( E楽器パート.DRUMS, Eパッド.RD ) ) ||
-								( ( CDTXMania.ConfigIni.bEnterがキー割り当てのどこにも使用されていない && CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDX.DirectInput.Key.Return ) ) ) )
+								( ( CDTXMania.ConfigIni.bEnterがキー割り当てのどこにも使用されていない && CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDXKey.Return ) ) ) )
 							{
 								if ( this.act曲リスト.r現在選択中の曲 != null )
 								{
@@ -291,7 +293,7 @@ namespace DTXMania
 							}
 							#endregion
 							#region [ Up ]
-							this.ctキー反復用.Up.tキー反復( CDTXMania.Input管理.Keyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.UpArrow ), new CCounter.DGキー処理( this.tカーソルを上へ移動する ) );
+							this.ctキー反復用.Up.tキー反復( CDTXMania.Input管理.Keyboard.bキーが押されている( (int) SlimDXKey.UpArrow ), new CCounter.DGキー処理( this.tカーソルを上へ移動する ) );
 							this.ctキー反復用.R.tキー反復( CDTXMania.Pad.b押されているGB( Eパッド.R ), new CCounter.DGキー処理( this.tカーソルを上へ移動する ) );
 							if ( CDTXMania.Pad.b押された( E楽器パート.DRUMS, Eパッド.SD ) )
 							{
@@ -299,7 +301,7 @@ namespace DTXMania
 							}
 							#endregion
 							#region [ Down ]
-							this.ctキー反復用.Down.tキー反復( CDTXMania.Input管理.Keyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.DownArrow ), new CCounter.DGキー処理( this.tカーソルを下へ移動する ) );
+							this.ctキー反復用.Down.tキー反復( CDTXMania.Input管理.Keyboard.bキーが押されている( (int) SlimDXKey.DownArrow ), new CCounter.DGキー処理( this.tカーソルを下へ移動する ) );
 							this.ctキー反復用.B.tキー反復( CDTXMania.Pad.b押されているGB( Eパッド.G ), new CCounter.DGキー処理( this.tカーソルを下へ移動する ) );
 							if ( CDTXMania.Pad.b押された( E楽器パート.DRUMS, Eパッド.FT ) )
 							{
@@ -447,7 +449,7 @@ namespace DTXMania
 
                     this.actSelectFO決定.On進行描画();
 					#region [ ESC ]
-					if( CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDX.DirectInput.Key.F7 ) )
+					if( CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDXKey.F7 ) )
 					{
                         this.actSelectFO決定.tフェードアウト開始();
 					}
@@ -455,19 +457,19 @@ namespace DTXMania
                     
                     {
                         //Debug
-                        //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDX.DirectInput.Key.F5 ) )
+                        //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDXKey.F5 ) )
                         //{
                         //        Debug.WriteLine( "ギターとベースの入れ替え1" );
                         //        CDTXMania.Skin.sound変更音.t再生する();
                         //        CDTXMania.ConfigIni.bIsSwappedGuitarBass = !CDTXMania.ConfigIni.bIsSwappedGuitarBass;
                         //}
-                        //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDX.DirectInput.Key.F8 ) )
+                        //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDXKey.F8 ) )
                         //{
                         //        Debug.WriteLine( "[Test]シャッター画像csvの読み込み" );
                         //        CDTXMania.Skin.sound変更音.t再生する();
                         //        CDTXMania.Skin.CreateShutterList();
                         //}
-                        //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDX.DirectInput.Key.F9 ) )
+                        //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDXKey.F9 ) )
                         //{
                         //        Debug.WriteLine( "[Test]シャッター画像のリスト生成＆呼び出し" );
                         //        CDTXMania.Skin.sound変更音.t再生する();
