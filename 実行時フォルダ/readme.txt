@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////
    
-          DTXManiaXG(Ver.K) 4.00
+          DTXManiaXG(Ver.K) 4.10RC
  
 ///////////////////////////////////////////////
 ○概要
@@ -100,8 +100,15 @@ Mail:gennsou76573@gmail.com
 Twitter:@kairera0467
 
 ○更新履歴
-2019------	4.10	DirectXを呼び出すためのライブラリをSharpDXに移行
+2019040400	4.10RC	DirectXを呼び出すためのライブラリをSharpDXに移行
 					FDKのSimpleFramework、入力、サウンド関連のコードを本家Rel.114 Rev.a7c21e08c54e71b89f3abf85a1fd32f7d77e60f9相当のものに更新。
+					GD風リザルト画面のレイアウトを調整
+					ドラム画面のみBPMバーの動作にWindowsAnimationManagerを使うようにした
+					xaのデコードをlibbjxaを使用するよう変更。同時にxadec.dllを削除。
+					mp3、oggのデコードをBASS.netで行うよう変更。同時にSoundDecoder.dllを削除。
+					SoundDeviceにWASAPI共有を追加、従来のWASAPIをWASAPI排他に変更
+					JudgeAnimeTypeC時の光の棒描画に問題があったため画像を改良。同時にSkinConfig.iniへの項目を数点追加した(詳しくはSkinConfig.iniを参照してください)
+					「Width」のスペルミスを全体的に修正
 2018010500	4.01	致命的な不具合の修正
 2017122500	4.00	正式リリース
 					XG風表示とGITADORA風表示を統合
