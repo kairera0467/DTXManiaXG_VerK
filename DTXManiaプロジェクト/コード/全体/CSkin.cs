@@ -884,11 +884,43 @@ namespace DTXMania
                             }
                             else if (str3.Equals("JudgeWidgh"))
                             {
-                                CDTXMania.ConfigIni.nJudgeWidgh = C変換.n値を文字列から取得して返す(str4, CDTXMania.ConfigIni.nJudgeWidgh);
+                                CDTXMania.ConfigIni.nJudgeWidth = C変換.n値を文字列から取得して返す(str4, CDTXMania.ConfigIni.nJudgeWidth);
                             }
                             else if (str3.Equals("JudgeHeight"))
                             {
                                 CDTXMania.ConfigIni.nJudgeHeight = C変換.n値を文字列から取得して返す(str4, CDTXMania.ConfigIni.nJudgeHeight);
+                            }
+                            else if (str3.Equals("JudgeStringBarX"))
+                            {
+                                string[] ar = str4.Split( ',' );
+                                for( int i = 0; i < 3; i++ )
+                                {
+                                    CDTXMania.ConfigIni.nJudgeStringBarX[ i ] = int.Parse( ar[ i ] );
+                                }
+                            }
+                            else if (str3.Equals("JudgeStringBarY"))
+                            {
+                                string[] ar = str4.Split( ',' );
+                                for( int i = 0; i < 3; i++ )
+                                {
+                                    CDTXMania.ConfigIni.nJudgeStringBarY[ i ] = int.Parse( ar[ i ] );
+                                }
+                            }
+                            else if (str3.Equals("JudgeStringBarWidth"))
+                            {
+                                string[] ar = str4.Split( ',' );
+                                for( int i = 0; i < 3; i++ )
+                                {
+                                    CDTXMania.ConfigIni.nJudgeStringBarWidth[ i ] = int.Parse( ar[ i ] );
+                                }
+                            }
+                            else if (str3.Equals("JudgeStringBarHeight"))
+                            {
+                                string[] ar = str4.Split( ',' );
+                                for( int i = 0; i < 3; i++ )
+                                {
+                                    CDTXMania.ConfigIni.nJudgeStringBarHeight[ i ] = int.Parse( ar[ i ] );
+                                }
                             }
                             else if (str3.Equals("ExplosionFrames"))
                             {
@@ -898,9 +930,9 @@ namespace DTXMania
                             {
                                 CDTXMania.ConfigIni.nExplosionInterval = C変換.n値を文字列から取得して範囲内に丸めて返す(str4, 0, int.MaxValue, (int)CDTXMania.ConfigIni.nExplosionInterval);
                             }
-                            else if (str3.Equals("ExplosionWidgh"))
+                            else if (str3.Equals("ExplosionWidth"))
                             {
-                                CDTXMania.ConfigIni.nExplosionWidgh = C変換.n値を文字列から取得して範囲内に丸めて返す(str4, 0, int.MaxValue, (int)CDTXMania.ConfigIni.nExplosionWidgh);
+                                CDTXMania.ConfigIni.nExplosionWidth = C変換.n値を文字列から取得して範囲内に丸めて返す(str4, 0, int.MaxValue, (int)CDTXMania.ConfigIni.nExplosionWidth);
                             }
                             else if (str3.Equals("ExplosionHeight"))
                             {

@@ -296,10 +296,12 @@ namespace DTXMania
                 if( this.ds背景動画 != null )
                 {
                     this.ds背景動画.t現時点における最新のスナップイメージをTextureに転写する(this.tx描画用);
-                    if (this.ds背景動画.b上下反転)
-                        this.tx描画用.t2D上下反転描画(CDTXMania.app.Device, 0, 0);
-                    else
-                        this.tx描画用.t2D描画(CDTXMania.app.Device, 0, 0);
+                    //if (this.ds背景動画.b上下反転)
+                    //    this.tx描画用.t2D上下反転描画(CDTXMania.app.Device, 0, 0);
+                    //else
+                    //    this.tx描画用.t2D描画(CDTXMania.app.Device, 0, 0);
+                    this.tx描画用.bFlipY = this.ds背景動画.b上下反転;
+                    this.tx描画用.t2D描画(CDTXMania.app.Device, 0, 0);
 
                     if( this.counter.n現在の値 != 400 || !this.ds背景動画.b再生が完了した() )
                     {

@@ -64,12 +64,30 @@ namespace DTXMania
                     //if( CDTXMania.ConfigIni.eBPMbar == Eタイプ.A || CDTXMania.ConfigIni.eBPMbar == Eタイプ.B )
                     {
                         base.txBPMバー.n透明度 = 255;
+#if BPMBar_WAM
+                        if( base._BPMバー[ 0 ] != null )
+                            base.txBPMバー.t2D描画( CDTXMania.app.Device, 239 - (float)base._BPMバー[ 0 ].左上位置X.Value, 54, new Rectangle( 28, 0, 10, 600 ) );
+                        else
+                            base.txBPMバー.t2D描画( CDTXMania.app.Device, 239 - (float)( 6 * Math.Sin( Math.PI * num1 / 14 ) ), 54, new Rectangle( 28, 0, 10, 600 ) );
+#else
                         base.txBPMバー.t2D描画( CDTXMania.app.Device, 240 - (float)( 6 * Math.Sin( Math.PI * num1 / 14 ) ), 54, new Rectangle( 28, 0, 10, 600 ) );
+#endif
 
                         if( base.bサビ区間 )
                         {
+#if BPMBar_WAM
+                            if( base._BPMバー[ 0 ] != null ) {
+                                base.txBPMバー.n透明度 = (int)this._BPMバー[ 0 ].不透明度.Value;
+                                base.txBPMバー.t2D描画( CDTXMania.app.Device, 219 - (float)base._BPMバー[ 0 ].左上位置X.Value, 54, new Rectangle( 48, 0, 32, 600 ) );
+                            }
+                            else {
+                                base.txBPMバー.n透明度 = 255 - (int)( 255 * num1 / 14 );
+                                base.txBPMバー.t2D描画( CDTXMania.app.Device, 219 - (float)( 6 * Math.Sin( Math.PI * num1 / 14 ) ), 54, new Rectangle( 48, 0, 32, 600 ) );
+                            }
+#else
                             base.txBPMバー.n透明度 = 255 - (int)( 255 * num1 / 14 );
                             base.txBPMバー.t2D描画( CDTXMania.app.Device, 220 - (float)( 6 * Math.Sin( Math.PI * num1 / 14 ) ), 54, new Rectangle( 48, 0, 32, 600 ) );
+#endif
                         }
                     }
                 }

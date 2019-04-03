@@ -272,17 +272,26 @@ namespace DTXMania
 					}
 					else
 					{
+#if BPMBar_WAM
+#else
                         this.actBPMBar.bサビ区間 = true;
-                        this.actBPMBar.tStoryboard消去();
                         this.actBPMBar.ctBPMバー = new CCounter( 1, 16, (int)( ( 60.0 / ( 300.0 ) / 16.0 ) * 1000.0 ), CDTXMania.Timer );
+#endif
 
-
-						this.eフェードアウト完了時の戻り値 = E演奏画面の戻り値.ステージクリア;
+                        this.eフェードアウト完了時の戻り値 = E演奏画面の戻り値.ステージクリア;
 						base.eフェーズID = CStage.Eフェーズ.演奏_STAGE_CLEAR_フェードアウト;
                         CDTXMania.Skin.soundステージクリア音.t再生する();
                         this.actFOClearXG.tフェードアウト開始();
 					}
 				}
+#if BPMBar_WAM
+                if( this.r指定時刻に一番近い指定チャンネルのChip( CSound管理.rc演奏用タイマ.n現在時刻, 0x50, 0, 0 ) == null && this.actBPMBar.eBPMバー状態 == CAct演奏BPMバー共通.EBPMバー状態.演奏中 )
+                {
+                    this.actBPMBar.bサビ区間 = true;
+                    this.actBPMBar.ctBPMバー = new CCounter( 1, 16, (int)( ( 60.0 / ( 300.0 ) / 16.0 ) * 1000.0 ), CDTXMania.Timer );
+                    this.actBPMBar.tStoryboard消去();
+                }
+#endif
 				if( this.eフェードアウト完了時の戻り値 == E演奏画面の戻り値.再読込_再演奏 )
 				{
 					bIsFinishedFadeout = true;
@@ -329,7 +338,7 @@ namespace DTXMania
 
 		// その他
 
-		#region [ private ]
+#region [ private ]
 		//-----------------
 
 		private CAct演奏DrumsチップファイアD actChipFireD;
@@ -370,14 +379,14 @@ namespace DTXMania
         /// <param name="eLaneType">レーンタイプ</param>
         private void tレーンタイプからレーン位置を設定する( Eタイプ eLaneType, ERDPosition eRDPosition )
         {
-            #region[ 共通 ]
+#region[ 共通 ]
             this.nチャンネルtoX座標XG[ 0 ] = 370; //HHC
             this.nチャンネルtoX座標XG[ 4 ] = 645; //LT
             this.nチャンネルtoX座標XG[ 6 ] = 694; //FT
             this.nチャンネルtoX座標XG[ 7 ] = 373; //HHO
             this.nチャンネルtoX座標XG[ 9 ] = 298; //LC
-            #endregion
-            #region[ レーンタイプ別 ]
+#endregion
+#region[ レーンタイプ別 ]
             switch( eLaneType )
             {
                 case Eタイプ.A:
@@ -417,8 +426,8 @@ namespace DTXMania
                     }
                     break;
             }
-            #endregion
-            #region [ RC RD ]
+#endregion
+#region [ RC RD ]
             if( eRDPosition == ERDPosition.RCRD )
             {
                 this.nチャンネルtoX座標XG[ 5 ] = 748; //RC
@@ -429,7 +438,7 @@ namespace DTXMania
                 this.nチャンネルtoX座標XG[ 5 ] = 786; //RC
                 this.nチャンネルtoX座標XG[ 8 ] = 746; //RD
             }
-            #endregion
+#endregion
         }
 
 		private bool bフィルイン区間の最後のChipである( CDTX.CChip pChip )
@@ -781,7 +790,7 @@ namespace DTXMania
 
 				this.t入力メソッド記憶( E楽器パート.DRUMS );
 
-				#region [ 打ち分けグループ調整 ]
+#region [ 打ち分けグループ調整 ]
 				//-----------------------------
 				EHHGroup eHHGroup = CDTXMania.ConfigIni.eHHGroup;
 				EFTGroup eFTGroup = CDTXMania.ConfigIni.eFTGroup;
@@ -809,7 +818,7 @@ namespace DTXMania
 					eHHGroup = EHHGroup.全部共通;
 				}
 				//-----------------------------
-				#endregion
+#endregion
 
 				foreach( STInputEvent inputEvent in listInputEvent )
 				{
@@ -822,12 +831,12 @@ namespace DTXMania
 
 					bool bHitted = false;
 
-					#region [ (A) ヒットしていればヒット処理して次の inputEvent へ ]
+#region [ (A) ヒットしていればヒット処理して次の inputEvent へ ]
 					//-----------------------------
 					switch( ( (Eパッド) nPad ) )
 					{
 						case Eパッド.HH:
-							#region [ HHとLC(groupingしている場合) のヒット処理 ]
+#region [ HHとLC(groupingしている場合) のヒット処理 ]
 							//-----------------------------
 							{
 								if( inputEvent.nVelocity <= CDTXMania.ConfigIni.nVelocityMin.HH )
@@ -842,7 +851,7 @@ namespace DTXMania
 								switch( eHHGroup )
 								{
 									case EHHGroup.ハイハットのみ打ち分ける:
-										#region [ HCとLCのヒット処理 ]
+#region [ HCとLCのヒット処理 ]
 										//-----------------------------
 										if( ( e判定HC != E判定.Miss ) && ( e判定LC != E判定.Miss ) )
 										{
@@ -875,10 +884,10 @@ namespace DTXMania
 											break;
 										continue;
 									//-----------------------------
-										#endregion
+#endregion
 
 									case EHHGroup.左シンバルのみ打ち分ける:
-										#region [ HCとHOのヒット処理 ]
+#region [ HCとHOのヒット処理 ]
 										//-----------------------------
 										if( ( e判定HC != E判定.Miss ) && ( e判定HO != E判定.Miss ) )
 										{
@@ -911,10 +920,10 @@ namespace DTXMania
 											break;
 										continue;
 									//-----------------------------
-										#endregion
+#endregion
 
 									case EHHGroup.全部共通:
-										#region [ HC,HO,LCのヒット処理 ]
+#region [ HC,HO,LCのヒット処理 ]
 										//-----------------------------
 										if( ( ( e判定HC != E判定.Miss ) && ( e判定HO != E判定.Miss ) ) && ( e判定LC != E判定.Miss ) )
 										{
@@ -1020,10 +1029,10 @@ namespace DTXMania
 											break;
 										continue;
 									//-----------------------------
-										#endregion
+#endregion
 
 									default:
-										#region [ 全部打ち分け時のヒット処理 ]
+#region [ 全部打ち分け時のヒット処理 ]
 										//-----------------------------
 										if( e判定HC != E判定.Miss )
 										{
@@ -1034,17 +1043,17 @@ namespace DTXMania
 											break;
 										continue;
 									//-----------------------------
-										#endregion
+#endregion
 								}
 								if( !bHitted )
 									break;
 								continue;
 							}
 						//-----------------------------
-							#endregion
+#endregion
 
 						case Eパッド.SD:
-							#region [ SDのヒット処理 ]
+#region [ SDのヒット処理 ]
 							//-----------------------------
 							if( inputEvent.nVelocity <= CDTXMania.ConfigIni.nVelocityMin.SD )	// #23857 2010.12.12 yyagi: to support VelocityMin
 								continue;	// 電子ドラムによる意図的なクロストークを無効にする
@@ -1052,10 +1061,10 @@ namespace DTXMania
 								break;
 							continue;
 						//-----------------------------
-							#endregion
+#endregion
 
 						case Eパッド.BD:
-                            #region [ BDとLPとLBD(ペアリングしている場合)のヒット処理 ]
+#region [ BDとLPとLBD(ペアリングしている場合)のヒット処理 ]
                             //-----------------------------
                             {
                                 if( inputEvent.nVelocity <= CDTXMania.ConfigIni.nVelocityMin.BD )	// #23857 2010.12.12 yyagi: to support VelocityMin
@@ -1070,7 +1079,7 @@ namespace DTXMania
                                 switch (eBDGroup)
                                 {
                                     case EBDGroup.BDとLPで打ち分ける:
-                                        #region[ BD & LBD | LP ]
+#region[ BD & LBD | LP ]
                                         if( e判定BD != E判定.Miss && e判定LBD != E判定.Miss )
                                         {
                                             if( chipBD.n発声位置 < chipLBD.n発声位置 )
@@ -1102,10 +1111,10 @@ namespace DTXMania
                                             continue;
                                         else
                                             break;
-                                        #endregion
+#endregion
 
                                     case EBDGroup.左右ペダルのみ打ち分ける:
-                                        #region[ BDのヒット処理]
+#region[ BDのヒット処理]
                                         if (e判定BD != E判定.Miss)
                                         {
                                             this.tドラムヒット処理(nTime, Eパッド.BD, chipBD, inputEvent.nVelocity);
@@ -1116,10 +1125,10 @@ namespace DTXMania
                                             continue;
                                         }
                                         break;
-                                        #endregion
+#endregion
 
                                     case EBDGroup.どっちもBD:
-                                        #region[ LP&LBD&BD ]
+#region[ LP&LBD&BD ]
                                         if (((e判定LP != E判定.Miss) && (e判定LBD != E判定.Miss)) && (e判定BD != E判定.Miss))
                                         {
                                             CDTX.CChip chip8;
@@ -1228,10 +1237,10 @@ namespace DTXMania
                                             continue;
                                         }
                                         break;
-                                        #endregion
+#endregion
 
                                     default:
-                                        #region [ 全部打ち分け時のヒット処理 ]
+#region [ 全部打ち分け時のヒット処理 ]
                                         //-----------------------------
                                         if (e判定BD != E判定.Miss)
                                         {
@@ -1242,17 +1251,17 @@ namespace DTXMania
                                             break;
                                         continue;
                                     //-----------------------------
-                                        #endregion
+#endregion
                                 }
                                 if (!bHitted)
                                     break;
                                 continue;
                             }
                         //-----------------------------
-                            #endregion
+#endregion
 
 						case Eパッド.HT:
-							#region [ HTのヒット処理 ]
+#region [ HTのヒット処理 ]
 							//-----------------------------
 							if( inputEvent.nVelocity <= CDTXMania.ConfigIni.nVelocityMin.HT )	// #23857 2010.12.12 yyagi: to support VelocityMin
 								continue;	// 電子ドラムによる意図的なクロストークを無効にする
@@ -1260,10 +1269,10 @@ namespace DTXMania
 								continue;
 							break;
 						//-----------------------------
-							#endregion
+#endregion
 
 						case Eパッド.LT:
-							#region [ LTとFT(groupingしている場合)のヒット処理 ]
+#region [ LTとFT(groupingしている場合)のヒット処理 ]
 							//-----------------------------
 							{
 								if( inputEvent.nVelocity <= CDTXMania.ConfigIni.nVelocityMin.LT )	// #23857 2010.12.12 yyagi: to support VelocityMin
@@ -1275,7 +1284,7 @@ namespace DTXMania
 								switch( eFTGroup )
 								{
 									case EFTGroup.打ち分ける:
-										#region [ LTのヒット処理 ]
+#region [ LTのヒット処理 ]
 										//-----------------------------
 										if( e判定LT != E判定.Miss )
 										{
@@ -1284,10 +1293,10 @@ namespace DTXMania
 										}
 										break;
 									//-----------------------------
-										#endregion
+#endregion
 
 									case EFTGroup.共通:
-										#region [ LTとFTのヒット処理 ]
+#region [ LTとFTのヒット処理 ]
 										//-----------------------------
 										if( ( e判定LT != E判定.Miss ) && ( e判定FT != E判定.Miss ) )
 										{
@@ -1318,17 +1327,17 @@ namespace DTXMania
 										}
 										break;
 									//-----------------------------
-										#endregion
+#endregion
 								}
 								if( !bHitted )
 									break;
 								continue;
 							}
 							//-----------------------------
-							#endregion
+#endregion
 
 						case Eパッド.FT:
-							#region [ FTとLT(groupingしている場合)のヒット処理 ]
+#region [ FTとLT(groupingしている場合)のヒット処理 ]
 							//-----------------------------
 							{
 								if( inputEvent.nVelocity <= CDTXMania.ConfigIni.nVelocityMin.FT )	// #23857 2010.12.12 yyagi: to support VelocityMin
@@ -1340,7 +1349,7 @@ namespace DTXMania
 								switch( eFTGroup )
 								{
 									case EFTGroup.打ち分ける:
-										#region [ FTのヒット処理 ]
+#region [ FTのヒット処理 ]
 										//-----------------------------
 										if( e判定FT != E判定.Miss )
 										{
@@ -1348,11 +1357,11 @@ namespace DTXMania
 											bHitted = true;
 										}
 										//-----------------------------
-										#endregion
+#endregion
 										break;
 
 									case EFTGroup.共通:
-										#region [ FTとLTのヒット処理 ]
+#region [ FTとLTのヒット処理 ]
 										//-----------------------------
 										if( ( e判定LT != E判定.Miss ) && ( e判定FT != E判定.Miss ) )
 										{
@@ -1382,7 +1391,7 @@ namespace DTXMania
 											bHitted = true;
 										}
 										//-----------------------------
-										#endregion
+#endregion
 										break;
 								}
 								if( !bHitted )
@@ -1390,10 +1399,10 @@ namespace DTXMania
 								continue;
 							}
 							//-----------------------------
-							#endregion
+#endregion
 
 						case Eパッド.CY:
-							#region [ CY(とLCとRD:groupingしている場合)のヒット処理 ]
+#region [ CY(とLCとRD:groupingしている場合)のヒット処理 ]
 							//-----------------------------
 							{
 								if( inputEvent.nVelocity <= CDTXMania.ConfigIni.nVelocityMin.CY )	// #23857 2010.12.12 yyagi: to support VelocityMin
@@ -1508,10 +1517,10 @@ namespace DTXMania
 								continue;
 							}
 							//-----------------------------
-							#endregion
+#endregion
 
 						case Eパッド.HHO:
-							#region [ HO(とHCとLC:groupingしている場合)のヒット処理 ]
+#region [ HO(とHCとLC:groupingしている場合)のヒット処理 ]
 							//-----------------------------
 							{
 								if( inputEvent.nVelocity <= CDTXMania.ConfigIni.nVelocityMin.HH )
@@ -1709,10 +1718,10 @@ namespace DTXMania
 								continue;
 							}
 							//-----------------------------
-							#endregion
+#endregion
 
 						case Eパッド.RD:
-							#region [ RD(とCYとLC:groupingしている場合)のヒット処理 ]
+#region [ RD(とCYとLC:groupingしている場合)のヒット処理 ]
 							//-----------------------------
 							{
 								if( inputEvent.nVelocity <= CDTXMania.ConfigIni.nVelocityMin.RD )	// #23857 2010.12.12 yyagi: to support VelocityMin
@@ -1799,10 +1808,10 @@ namespace DTXMania
 								break;
 							}
 							//-----------------------------
-							#endregion
+#endregion
 
 						case Eパッド.LC:
-							#region [ LC(とHC/HOとCYと:groupingしている場合)のヒット処理 ]
+#region [ LC(とHC/HOとCYと:groupingしている場合)のヒット処理 ]
 							//-----------------------------
 							{
 								if( inputEvent.nVelocity <= CDTXMania.ConfigIni.nVelocityMin.LC )	// #23857 2010.12.12 yyagi: to support VelocityMin
@@ -1919,10 +1928,10 @@ namespace DTXMania
 								break;
 							}
 							//-----------------------------
-							#endregion
+#endregion
 
                         case Eパッド.LP:
-                            #region [ LPのヒット処理 ]
+#region [ LPのヒット処理 ]
                             //-----------------
                             {
                                 if( inputEvent.nVelocity <= CDTXMania.ConfigIni.nVelocityMin.LP )
@@ -1936,7 +1945,7 @@ namespace DTXMania
                                 switch (eBDGroup)
                                 {
                                     case EBDGroup.左右ペダルのみ打ち分ける:
-                                        #region[ LPのヒット処理]
+#region[ LPのヒット処理]
                                         if (e判定LP != E判定.Miss && e判定LBD != E判定.Miss)
                                         {
                                             if (chipLP.n発声位置 < chipLBD.n発声位置)
@@ -1972,10 +1981,10 @@ namespace DTXMania
                                             continue;
                                         }
                                         break;
-                                        #endregion
+#endregion
 
                                     case EBDGroup.どっちもBD:
-                                        #region[ LP&LBD&BD ]
+#region[ LP&LBD&BD ]
                                         if (((e判定LP != E判定.Miss) && (e判定LBD != E判定.Miss)) && (e判定BD != E判定.Miss))
                                         {
                                             CDTX.CChip chip;
@@ -2079,12 +2088,12 @@ namespace DTXMania
                                         {
                                             continue;
                                         }
-                                        #endregion
+#endregion
                                         break;
 
                                     case EBDGroup.BDとLPで打ち分ける:
                                     default:
-                                        #region [ 全部打ち分け時のヒット処理 ]
+#region [ 全部打ち分け時のヒット処理 ]
                                         //-----------------------------
                                         if (e判定LP != E判定.Miss)
                                         {
@@ -2095,17 +2104,17 @@ namespace DTXMania
                                             break;
                                         continue;
                                     //-----------------------------
-                                        #endregion
+#endregion
                                 }
                                 if (!bHitted)
                                     break;
                                 continue;
                             }
                         //-----------------
-                            #endregion
+#endregion
 
                         case Eパッド.LBD:
-                            #region [ LBDのヒット処理 ]
+#region [ LBDのヒット処理 ]
                             //-----------------
                             {
                                 if (inputEvent.nVelocity <= CDTXMania.ConfigIni.nVelocityMin.LBD)
@@ -2119,7 +2128,7 @@ namespace DTXMania
                                 switch (eBDGroup)
                                 {
                                     case EBDGroup.BDとLPで打ち分ける:
-                                        #region[ BD & LBD | LP ]
+#region[ BD & LBD | LP ]
                                         if( e判定BD != E判定.Miss && e判定LBD != E判定.Miss )
                                         {
                                             if( chipBD.n発声位置 < chipLBD.n発声位置 )
@@ -2151,10 +2160,10 @@ namespace DTXMania
                                             continue;
                                         else
                                             break;
-                                        #endregion
+#endregion
 
                                     case EBDGroup.左右ペダルのみ打ち分ける:
-                                        #region[ LPのヒット処理]
+#region[ LPのヒット処理]
                                         if (e判定LP != E判定.Miss && e判定LBD != E判定.Miss)
                                         {
                                             if (chipLP.n発声位置 < chipLBD.n発声位置)
@@ -2196,10 +2205,10 @@ namespace DTXMania
                                             continue;
                                         }
                                         break;
-                                        #endregion
+#endregion
 
                                     case EBDGroup.どっちもBD:
-                                        #region[ LP&LBD&BD ]
+#region[ LP&LBD&BD ]
                                         if (((e判定LP != E判定.Miss) && (e判定LBD != E判定.Miss)) && (e判定BD != E判定.Miss))
                                         {
                                             CDTX.CChip chip;
@@ -2303,11 +2312,11 @@ namespace DTXMania
                                         {
                                             continue;
                                         }
-                                        #endregion
+#endregion
                                         break;
 
                                     default:
-                                        #region [ 全部打ち分け時のヒット処理 ]
+#region [ 全部打ち分け時のヒット処理 ]
                                         //-----------------------------
                                         if (e判定LBD != E判定.Miss)
                                         {
@@ -2318,18 +2327,18 @@ namespace DTXMania
                                             break;
                                         continue;
                                     //-----------------------------
-                                        #endregion
+#endregion
                                 }
                                 if (!bHitted)
                                     break;
                                 continue;
                             }
                         //-----------------
-                            #endregion
+#endregion
 					}
 					//-----------------------------
-					#endregion
-					#region [ (B) ヒットしてなかった場合は、レーンフラッシュ、パッドアニメ、空打ち音再生を実行 ]
+#endregion
+#region [ (B) ヒットしてなかった場合は、レーンフラッシュ、パッドアニメ、空打ち音再生を実行 ]
 					//-----------------------------
 					int pad = nPad;	// 以下、nPad の代わりに pad を用いる。（成りすまし用）
 
@@ -2351,20 +2360,20 @@ namespace DTXMania
 						CDTX.CChip rChip = this.r空うちChip( E楽器パート.DRUMS, (Eパッド) pad );
 						if( rChip != null )
 						{
-							#region [ (B1) 空打ち音が譜面で指定されているのでそれを再生する。]
+#region [ (B1) 空打ち音が譜面で指定されているのでそれを再生する。]
 							//-----------------
 							this.tサウンド再生( rChip, CSound管理.rc演奏用タイマ.nシステム時刻, E楽器パート.DRUMS, CDTXMania.ConfigIni.n手動再生音量, CDTXMania.ConfigIni.b演奏音を強調する.Drums );
 							//-----------------
-							#endregion
+#endregion
 						}
 						else
 						{
-							#region [ (B2) 空打ち音が指定されていないので一番近いチップを探して再生する。]
+#region [ (B2) 空打ち音が指定されていないので一番近いチップを探して再生する。]
 							//-----------------
 							switch( ( (Eパッド) pad ) )
 							{
 								case Eパッド.HH:
-									#region [ *** ]
+#region [ *** ]
 									//-----------------------------
 									{
 										CDTX.CChip chipHC = this.r指定時刻に一番近いChip_ヒット未済問わず不可視考慮( nTime, this.nパッド0Atoチャンネル0A[ 0 ], nInputAdjustTime );
@@ -2409,11 +2418,11 @@ namespace DTXMania
 										}
 									}
 									//-----------------------------
-									#endregion
+#endregion
 									break;
 
 								case Eパッド.LT:
-									#region [ *** ]
+#region [ *** ]
 									//-----------------------------
 									{
 										CDTX.CChip chipLT = this.r指定時刻に一番近いChip_ヒット未済問わず不可視考慮( nTime, this.nパッド0Atoチャンネル0A[ 4 ], nInputAdjustTime );
@@ -2424,11 +2433,11 @@ namespace DTXMania
 											rChip = chipLT;
 									}
 									//-----------------------------
-									#endregion
+#endregion
 									break;
 
 								case Eパッド.FT:
-									#region [ *** ]
+#region [ *** ]
 									//-----------------------------
 									{
 										CDTX.CChip chipLT = this.r指定時刻に一番近いChip_ヒット未済問わず不可視考慮( nTime, this.nパッド0Atoチャンネル0A[ 4 ], nInputAdjustTime );
@@ -2439,11 +2448,11 @@ namespace DTXMania
 											rChip = chipFT;
 									}
 									//-----------------------------
-									#endregion
+#endregion
 									break;
 
 								case Eパッド.CY:
-									#region [ *** ]
+#region [ *** ]
 									//-----------------------------
 									{
 										CDTX.CChip chipCY = this.r指定時刻に一番近いChip_ヒット未済問わず不可視考慮( nTime, this.nパッド0Atoチャンネル0A[ 6 ], nInputAdjustTime );
@@ -2454,11 +2463,11 @@ namespace DTXMania
 											rChip = chipCY;
 									}
 									//-----------------------------
-									#endregion
+#endregion
 									break;
 
 								case Eパッド.HHO:
-									#region [ *** ]
+#region [ *** ]
 									//-----------------------------
 									{
 										CDTX.CChip chipHC = this.r指定時刻に一番近いChip_ヒット未済問わず不可視考慮( nTime, this.nパッド0Atoチャンネル0A[ 0 ], nInputAdjustTime );
@@ -2503,11 +2512,11 @@ namespace DTXMania
 										}
 									}
 									//-----------------------------
-									#endregion
+#endregion
 									break;
 
 								case Eパッド.RD:
-									#region [ *** ]
+#region [ *** ]
 									//-----------------------------
 									{
 										CDTX.CChip chipCY = this.r指定時刻に一番近いChip_ヒット未済問わず不可視考慮( nTime, this.nパッド0Atoチャンネル0A[ 6 ], nInputAdjustTime );
@@ -2518,11 +2527,11 @@ namespace DTXMania
 											rChip = chipRD;
 									}
 									//-----------------------------
-									#endregion
+#endregion
 									break;
 
 								case Eパッド.LC:
-									#region [ *** ]
+#region [ *** ]
 									//-----------------------------
 									{
 										CDTX.CChip chipHC = this.r指定時刻に一番近いChip_ヒット未済問わず不可視考慮( nTime, this.nパッド0Atoチャンネル0A[ 0 ], nInputAdjustTime );
@@ -2561,11 +2570,11 @@ namespace DTXMania
 										}
 									}
 									//-----------------------------
-									#endregion
+#endregion
 									break;
 
                                 case Eパッド.BD:
-                                    #region [ *** ]
+#region [ *** ]
                                     //-----------------------------
                                     {
                                         CDTX.CChip chipBD = this.r指定時刻に一番近いChip_ヒット未済問わず不可視考慮(nTime, this.nパッド0Atoチャンネル0A[2], nInputAdjustTime );
@@ -2600,7 +2609,7 @@ namespace DTXMania
                                                 break;
 
                                             case EBDGroup.どっちもBD:
-                                                #region [ *** ]
+#region [ *** ]
                                                 if (chipBD != null)
                                                 {
                                                     rChip = chipBD;
@@ -2621,16 +2630,16 @@ namespace DTXMania
                                                 {
                                                     rChip = chipLBD;
                                                 }
-                                                #endregion
+#endregion
                                                 break;
                                         }
                                     }
                                     //-----------------------------
-                                    #endregion
+#endregion
                                     break;
 
                                 case Eパッド.LP:
-                                    #region [ *** ]
+#region [ *** ]
                                     //-----------------------------
                                     {
                                         CDTX.CChip chipBD = this.r指定時刻に一番近いChip_ヒット未済問わず不可視考慮(nTime, this.nパッド0Atoチャンネル0A[2], nInputAdjustTime );
@@ -2642,7 +2651,7 @@ namespace DTXMania
                                                 rChip = chipLP;
                                                 break;
                                             case EBDGroup.左右ペダルのみ打ち分ける:
-                                                #region[ 左右ペダル ]
+#region[ 左右ペダル ]
                                                 if( chipLP != null && chipLBD != null )
                                                 {
                                                     if( chipLP.n発声時刻ms > chipLBD.n発声時刻ms )
@@ -2658,15 +2667,15 @@ namespace DTXMania
                                                 {
                                                     rChip = chipLP;
                                                 }
-                                                #endregion
+#endregion
                                                 break;
                                             case EBDGroup.BDとLPで打ち分ける:
-                                                #region[ BDとLP ]
+#region[ BDとLP ]
                                                 if( chipLP != null ){ rChip = chipLP; }
-                                                #endregion
+#endregion
                                                 break;
                                             case EBDGroup.どっちもBD:
-                                                #region[共通]
+#region[共通]
                                                 if( chipLP != null )
                                                 {
                                                     rChip = chipLP;
@@ -2687,16 +2696,16 @@ namespace DTXMania
                                                 {
                                                     rChip = chipBD;
                                                 }
-                                                #endregion
+#endregion
                                                 break;
                                         }
                                     }
                                     //-----------------------------
-                                    #endregion
+#endregion
                                     break;
 
                                 case Eパッド.LBD:
-                                    #region [ *** ]
+#region [ *** ]
                                     {
                                         CDTX.CChip chipBD = this.r指定時刻に一番近いChip_ヒット未済問わず不可視考慮(nTime, this.nパッド0Atoチャンネル0A[2], nInputAdjustTime );
                                         CDTX.CChip chipLP = this.r指定時刻に一番近いChip_ヒット未済問わず不可視考慮(nTime, this.nパッド0Atoチャンネル0A[10], nInputAdjustTime );
@@ -2708,7 +2717,7 @@ namespace DTXMania
                                                 break;
 
                                             case EBDGroup.左右ペダルのみ打ち分ける:
-                                                #region [ 左右ペダル ]
+#region [ 左右ペダル ]
                                                 if( chipLP != null && chipLBD != null )
                                                 {
                                                     if( chipLP.n発声時刻ms > chipLBD.n発声時刻ms )
@@ -2724,11 +2733,11 @@ namespace DTXMania
                                                 {
                                                     rChip = chipLP;
                                                 }
-                                                #endregion
+#endregion
                                                 break;
 
                                             case EBDGroup.BDとLPで打ち分ける:
-                                                #region[ BDとLBD ]
+#region[ BDとLBD ]
                                                 if( chipBD != null && chipLBD != null )
                                                 {
                                                     if( chipBD.n発声時刻ms <= chipLBD.n発声時刻ms )
@@ -2744,11 +2753,11 @@ namespace DTXMania
                                                 {
                                                     rChip = chipBD;
                                                 }
-                                                #endregion
+#endregion
                                                 break;
 
                                             case EBDGroup.どっちもBD:
-                                                #region[ *** ]
+#region[ *** ]
                                                 if (chipLBD != null)
                                                 {
                                                     rChip = chipLBD;
@@ -2769,19 +2778,19 @@ namespace DTXMania
                                                 {
                                                     rChip = chipBD;
                                                 }
-                                                #endregion
+#endregion
                                                 break;
                                         }
                                     }
-                                    #endregion
+#endregion
                                     break;
 
 								default:
-									#region [ *** ]
+#region [ *** ]
 									//-----------------------------
 									rChip = this.r指定時刻に一番近いChip_ヒット未済問わず不可視考慮( nTime, this.nパッド0Atoチャンネル0A[ pad ], nInputAdjustTime );
 									//-----------------------------
-									#endregion
+#endregion
 									break;
 							}
 							if( rChip != null )
@@ -2790,7 +2799,7 @@ namespace DTXMania
 								this.tサウンド再生( rChip, CSound管理.rc演奏用タイマ.nシステム時刻, E楽器パート.DRUMS, CDTXMania.ConfigIni.n手動再生音量, CDTXMania.ConfigIni.b演奏音を強調する.Drums );
 							}
 							//-----------------
-							#endregion
+#endregion
 						}
 					}
 					
@@ -2798,7 +2807,7 @@ namespace DTXMania
 					if( CDTXMania.ConfigIni.bTight )
 						this.tチップのヒット処理_BadならびにTight時のMiss( E楽器パート.DRUMS, this.nパッド0Atoレーン07[ pad ] );
 					//-----------------------------
-					#endregion
+#endregion
 				}
 			}
 		}
@@ -2850,15 +2859,15 @@ namespace DTXMania
 		{
 			if ( configIni.bDrums有効 )
 			{
-				#region [ Invisible処理 ]
+#region [ Invisible処理 ]
 				if ( configIni.eInvisible.Drums != EInvisible.OFF )
 				{
 					cInvisibleChip.SetInvisibleStatus( ref pChip );
 				}
-				#endregion
+#endregion
 				else
 				{
-					#region [ Sudden処理 ]
+#region [ Sudden処理 ]
 					if ( configIni.bSudden.Drums )
 					{
 						if ( pChip.nバーからの距離dot.Drums < 200 * Scale.Y )
@@ -2877,8 +2886,8 @@ namespace DTXMania
 							pChip.n透明度 = 0;
 						}
 					}
-					#endregion
-					#region [ Hidden処理 ]
+#endregion
+#region [ Hidden処理 ]
 					if ( configIni.bHidden.Drums )
 					{
 						if ( pChip.nバーからの距離dot.Drums < 100 * Scale.Y )
@@ -2891,7 +2900,7 @@ namespace DTXMania
 							pChip.n透明度 = (int) ( ( ( (double) ( pChip.nバーからの距離dot.Drums - 100 * Scale.Y ) ) * 255.0 ) / 50.0 );
 						}
 					}
-					#endregion
+#endregion
 				}
 				if ( !pChip.bHit && pChip.b可視 )
 				{
@@ -3185,15 +3194,15 @@ namespace DTXMania
         {
 			if ( configIni.bDrums有効 )
 			{
-				#region [ Invisible処理 ]
+#region [ Invisible処理 ]
 				if ( configIni.eInvisible.Drums != EInvisible.OFF )
 				{
 					cInvisibleChip.SetInvisibleStatus( ref pChip );
 				}
-				#endregion
+#endregion
 				else
 				{
-					#region [ Sudden処理 ]
+#region [ Sudden処理 ]
 					if ( configIni.bSudden.Drums )
 					{
 						if ( pChip.nバーからの距離dot.Drums < 200 * Scale.Y )
@@ -3212,8 +3221,8 @@ namespace DTXMania
 							pChip.n透明度 = 0;
 						}
 					}
-					#endregion
-					#region [ Hidden処理 ]
+#endregion
+#region [ Hidden処理 ]
 					if ( configIni.bHidden.Drums )
 					{
 						if ( pChip.nバーからの距離dot.Drums < 100 * Scale.Y )
@@ -3226,7 +3235,7 @@ namespace DTXMania
 							pChip.n透明度 = (int) ( ( ( (double) ( pChip.nバーからの距離dot.Drums - 100 * Scale.Y ) ) * 255.0 ) / 50.0 );
 						}
 					}
-					#endregion
+#endregion
 				}
 				if ( !pChip.bHit && pChip.b可視 )
 				{
@@ -3636,7 +3645,7 @@ namespace DTXMania
                     case 0x04:
                         this.actBPMBar.bサビ区間 = false;
                         break;
-#if TEST_NOTEOFFMODE	// 2011.1.1 yyagi TEST
+#if TEST_NOTEOFFMODE    // 2011.1.1 yyagi TEST
 								case 0x04:	// HH消音あり(従来同等)
 									CDTXMania.DTX.b演奏で直前の音を消音する.HH = true;
 									break;
@@ -3829,7 +3838,7 @@ namespace DTXMania
 					dTX.tWave再生位置自動補正();
 				}
 			}
-			#region [ Drumsの小節線と、小節番号 ]
+#region [ Drumsの小節線と、小節番号 ]
 			if ( configIni.bDrums有効 )
 			{
 				if ( configIni.b演奏情報を表示する && ( configIni.eDark == Eダークモード.OFF ) )
@@ -3849,11 +3858,11 @@ namespace DTXMania
 					);
 				}
 			}
-			#endregion
+#endregion
 			//if ( ( pChip.b可視 && configIni.bGuitar有効 ) && ( configIni.eDark != Eダークモード.FULL ) && ( this.txチップ != null ) )
 			{
 				//this.txチップ.n透明度 = 255;
-				#region [ Guitarの小節線 ]
+#region [ Guitarの小節線 ]
 				//int y = configIni.bReverse.Guitar ? ( ( 0x176 - pChip.nバーからの距離dot.Guitar ) - 1 ) : ( ( 0x5f + pChip.nバーからの距離dot.Guitar ) - 1 );
 				int y = 演奏判定ライン座標.n判定ラインY座標( E楽器パート.GUITAR, false, configIni.bReverse.Guitar );
 				if ( configIni.bReverse.Guitar )
@@ -3888,8 +3897,8 @@ namespace DTXMania
                 //        )
                 //    );
                 //}
-				#endregion
-				#region [ Bassの小節線 ]
+#endregion
+#region [ Bassの小節線 ]
 				//y = configIni.bReverse.Bass ? ( ( 0x176 - pChip.nバーからの距離dot.Bass ) - 1 ) : ( ( 0x5f + pChip.nバーからの距離dot.Bass ) - 1 );
 				y = 演奏判定ライン座標.n判定ラインY座標( E楽器パート.BASS, false, configIni.bReverse.Bass );
 				if ( configIni.bReverse.Bass )
@@ -3921,9 +3930,9 @@ namespace DTXMania
                 //        )
                 //    );
                 //}
-				#endregion
+#endregion
 			}
 		}
-		#endregion
+#endregion
 	}
 }

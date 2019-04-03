@@ -101,6 +101,7 @@ namespace DTXMania
 			if( !base.b活性化してない )
 			{
                 #region[ 座標など定義 ]
+                // ToDo:TypeCの処理はif文が多すぎるので減らす
                 if( CDTXMania.ConfigIni.eJudgeAnimeType == Eタイプ.B )
                 {
                     #region[ コマ方式 ]
@@ -153,12 +154,11 @@ namespace DTXMania
                                 {
                                     base.st状態[i].fX方向拡大率 = 1.67f;
                                     base.st状態[i].fY方向拡大率 = 1.67f;
-
                                     base.st状態[i].fZ軸回転度 = 0;
-                                    //base.st状態[i].fX方向拡大率 = 1f;
-                                    //base.st状態[i].fY方向拡大率 = 1f;
                                     base.st状態[i].n相対X座標 = 28;
                                     base.st状態[i].n相対Y座標 = 0;
+                                    base.st状態[i].n相対X座標B = 0;
+                                    base.st状態[i].n相対Y座標B = 0;
                                     base.st状態[i].n透明度 = 0;
                                     
                                     base.st状態[i].fX方向拡大率_棒 = 0f;
@@ -172,7 +172,6 @@ namespace DTXMania
                                     base.st状態[i].fZ軸回転度 = C変換.DegreeToRadian( 7f );
                                     base.st状態[i].n相対X座標 = 26;
                                     base.st状態[i].n相対Y座標 = 4;
-                                    base.st状態[i].n透明度 = 0;
 
                                     base.st状態[i].fX方向拡大率_棒 = 0.63f;
                                     base.st状態[i].fY方向拡大率_棒 = 1f;
@@ -1324,33 +1323,33 @@ namespace DTXMania
                 for( int j = 0; j < 12; j++ )
                 {
                     //CDTXMania.act文字コンソール.tPrint( this.stレーンサイズ[ j ].x, 0, C文字コンソール.Eフォント種別.白, j.ToString() );
-                    if (!base.st状態[j].ct進行.b停止中)
+                    if( !base.st状態[ j ].ct進行.b停止中 )
                     {
+                        if ( CDTXMania.ConfigIni.判定文字表示位置.Drums == E判定文字表示位置.表示OFF ) continue;
+                        #region[ 共通 ]
+                        int num4 = 0;
+                        int num5 = 0;
+                        int num6 = 0;
+
+                        int nJudgePosY = CDTXMania.stage演奏ドラム画面.演奏判定ライン座標.n判定ラインY座標( E楽器パート.DRUMS, false, CDTXMania.ConfigIni.bReverse.Drums, false, true );
+                        base.iP_A = nJudgePosY - 211;
+                        base.iP_B = nJudgePosY + 23; //これは固定値にしてもいいのではないか?
+                        #endregion
                         #region[ 以前まで ]
                         // 2016.02.16 kairera0467 104の仕様にあわせて従来のコードに加筆修正。
                         //                        現時点ではドラム画面でのギタープレイはできないため、この辺は適当。
-                        if( CDTXMania.ConfigIni.eJudgeAnimeType != Eタイプ.C )
+                        if ( CDTXMania.ConfigIni.eJudgeAnimeType != Eタイプ.C )
                         {
-                            int num4 = CDTXMania.ConfigIni.nJudgeFrames > 1 ? 0 : base.st判定文字列[(int)base.st状態[j].judge].n画像番号;
-                            int num5 = 0;
-                            int num6 = 0;
-                            int nJudgePosY = CDTXMania.stage演奏ドラム画面.演奏判定ライン座標.n判定ラインY座標( E楽器パート.DRUMS, false, CDTXMania.ConfigIni.bReverse.Drums, false, true );
-                            base.iP_A = nJudgePosY - 211;
-                            base.iP_B = nJudgePosY + 23; //これは固定値にしてもいいのではないか?
-                            if( j < 10 )
-                            {
-                                //縦は5pxずつを1ブロックとして分割。これでだいぶ本家に近づいたはず。
-                                if( CDTXMania.ConfigIni.判定文字表示位置.Drums == E判定文字表示位置.表示OFF )
-                                    continue;
+                            num4 = CDTXMania.ConfigIni.nJudgeFrames > 1 ? 0 : base.st判定文字列[(int)base.st状態[j].judge].n画像番号;
 
-                                num5 = this.stレーンサイズ[ j ].x;
-                                if( CDTXMania.ConfigIni.判定文字表示位置.Drums == E判定文字表示位置.レーン上 )
-                                    num6 = CDTXMania.ConfigIni.bReverse.Drums ? ( ( nJudgePosY + 211 ) - this.n文字の縦表示位置[ j ] * 5 ) : ( ( nJudgePosY - 211 ) + this.n文字の縦表示位置[ j ] * 5 );
-                                else if( CDTXMania.ConfigIni.判定文字表示位置.Drums == E判定文字表示位置.判定ライン上 )
-                                    num6 = 0;
-                            }
+                            //縦は5pxずつを1ブロックとして分割。これでだいぶ本家に近づいたはず。
+                            num5 = this.stレーンサイズ[ j ].x;
+                            if( CDTXMania.ConfigIni.判定文字表示位置.Drums == E判定文字表示位置.レーン上 )
+                                num6 = CDTXMania.ConfigIni.bReverse.Drums ? ( ( nJudgePosY + 211 ) - this.n文字の縦表示位置[ j ] * 5 ) : ( ( nJudgePosY - 211 ) + this.n文字の縦表示位置[ j ] * 5 );
+                            else if( CDTXMania.ConfigIni.判定文字表示位置.Drums == E判定文字表示位置.判定ライン上 )
+                                num6 = 0;
 
-                            int nRectX = CDTXMania.ConfigIni.nJudgeWidgh;
+                            int nRectX = CDTXMania.ConfigIni.nJudgeWidth;
                             int nRectY = CDTXMania.ConfigIni.nJudgeHeight;
 
                             int xc = (num5 + base.st状態[j].n相対X座標) + (this.stレーンサイズ[j].w / 2);
@@ -1435,24 +1434,12 @@ namespace DTXMania
                         #region[ さいしんばん ]
                         else if( CDTXMania.ConfigIni.eJudgeAnimeType == Eタイプ.C )
                         {
-                            int num4 = 0;
-                            int num5 = 0;
-                            int num6 = 0;
-                            int nJudgePosY = CDTXMania.stage演奏ドラム画面.演奏判定ライン座標.n判定ラインY座標( E楽器パート.DRUMS, false, CDTXMania.ConfigIni.bReverse.Drums, false, true );
-                            base.iP_A = nJudgePosY - 211;
-                            base.iP_B = nJudgePosY + 23; //これは固定値にしてもいいのではないか?
-                            if( j < 10 )
-                            {
-                                //縦は5pxずつを1ブロックとして分割。これでだいぶ本家に近づいたはず。
-                                if( CDTXMania.ConfigIni.判定文字表示位置.Drums == E判定文字表示位置.表示OFF )
-                                    continue;
-
-                                num5 = this.stレーンサイズ[ j ].x;
-                                if( CDTXMania.ConfigIni.判定文字表示位置.Drums == E判定文字表示位置.レーン上 )
-                                    num6 = CDTXMania.ConfigIni.bReverse.Drums ? ( ( nJudgePosY + 211 ) - this.n文字の縦表示位置[ j ] * 5 ) : ( ( nJudgePosY - 211 ) + this.n文字の縦表示位置[ j ] * 5 );
-                                else if( CDTXMania.ConfigIni.判定文字表示位置.Drums == E判定文字表示位置.判定ライン上 )
-                                    num6 = CDTXMania.ConfigIni.bReverse.Drums ? ( 80 + this.n文字の縦表示位置[ j ] * 2 ) : ( 583 + this.n文字の縦表示位置[ j ] * 2 );
-                            }
+                            //縦は5pxずつを1ブロックとして分割。これでだいぶ本家に近づいたはず。
+                            num5 = this.stレーンサイズ[ j ].x;
+                            if( CDTXMania.ConfigIni.判定文字表示位置.Drums == E判定文字表示位置.レーン上 )
+                                num6 = CDTXMania.ConfigIni.bReverse.Drums ? ( ( nJudgePosY + 211 ) - this.n文字の縦表示位置[ j ] * 5 ) : ( ( nJudgePosY - 211 ) + this.n文字の縦表示位置[ j ] * 5 );
+                            else if( CDTXMania.ConfigIni.判定文字表示位置.Drums == E判定文字表示位置.判定ライン上 )
+                                num6 = CDTXMania.ConfigIni.bReverse.Drums ? ( 80 + this.n文字の縦表示位置[ j ] * 2 ) : ( 583 + this.n文字の縦表示位置[ j ] * 2 );
 
                             int nRectX = 85;
                             int nRectY = 35;
@@ -1472,7 +1459,6 @@ namespace DTXMania
                             //2016.06.09 kairera0467 棒の高さを30pxにするテスト
                             int n棒高さ = 20;
 
-
                             //CDTXMania.act文字コンソール.tPrint( 0, j * 16, C文字コンソール.Eフォント種別.白, x.ToString() );
                             if( base.tx判定文字列[ 0 ] != null )
                             {
@@ -1483,7 +1469,7 @@ namespace DTXMania
                                             base.tx判定文字列[ 1 ].vc拡大縮小倍率 = new Vector3( base.st状態[ j ].fX方向拡大率_棒, base.st状態[ j ].fY方向拡大率_棒, 1f );
                                             base.tx判定文字列[ 1 ].fZ軸中心回転 = base.st状態[ j ].fZ軸回転度_棒;
                                             //base.tx判定文字列[ 1 ].t2D描画( CDTXMania.app.Device, x_棒, y_棒, new Rectangle( 0, 140, 210, 15 ) );
-                                            base.tx判定文字列[ 1 ].t2D描画( CDTXMania.app.Device, x_棒, y_棒, new Rectangle( 0, 110 + n棒高さ * 2, 210, n棒高さ ) );
+                                            base.tx判定文字列[ 1 ].t2D描画( CDTXMania.app.Device, x_棒, y_棒, new Rectangle( CDTXMania.ConfigIni.nJudgeStringBarX[ 2 ], CDTXMania.ConfigIni.nJudgeStringBarY[ 2 ], CDTXMania.ConfigIni.nJudgeStringBarWidth[ 2 ], CDTXMania.ConfigIni.nJudgeStringBarHeight[ 2 ] ) );
 
                                             base.tx判定文字列[ 0 ].vc拡大縮小倍率 = new Vector3(base.st状態[ j ].fX方向拡大率, base.st状態[ j ].fY方向拡大率, 1f );
                                             base.tx判定文字列[ 0 ].fZ軸中心回転 = base.st状態[ j ].fZ軸回転度;
@@ -1502,7 +1488,7 @@ namespace DTXMania
                                             base.tx判定文字列[ 1 ].vc拡大縮小倍率 = new Vector3( base.st状態[ j ].fX方向拡大率_棒, base.st状態[ j ].fY方向拡大率_棒, 1f );
                                             base.tx判定文字列[ 1 ].fZ軸中心回転 = base.st状態[ j ].fZ軸回転度_棒;
                                             //base.tx判定文字列[ 1 ].t2D描画( CDTXMania.app.Device, x_棒, y_棒, new Rectangle( 0, 110, 210, 15 ) );
-                                            base.tx判定文字列[ 1 ].t2D描画( CDTXMania.app.Device, x_棒, y_棒, new Rectangle( 0, 110 + n棒高さ * 0, 210, n棒高さ ) );
+                                            base.tx判定文字列[ 1 ].t2D描画( CDTXMania.app.Device, x_棒, y_棒, new Rectangle( CDTXMania.ConfigIni.nJudgeStringBarX[ 0 ], CDTXMania.ConfigIni.nJudgeStringBarY[ 0 ], CDTXMania.ConfigIni.nJudgeStringBarWidth[ 0 ], CDTXMania.ConfigIni.nJudgeStringBarHeight[ 0 ] ) );
 
                                             base.tx判定文字列[ 0 ].vc拡大縮小倍率 = new Vector3(base.st状態[ j ].fX方向拡大率, base.st状態[ j ].fY方向拡大率, 1f );
                                             base.tx判定文字列[ 0 ].fZ軸中心回転 = base.st状態[ j ].fZ軸回転度;
@@ -1521,7 +1507,7 @@ namespace DTXMania
                                             base.tx判定文字列[ 1 ].vc拡大縮小倍率 = new Vector3( base.st状態[ j ].fX方向拡大率_棒, base.st状態[ j ].fY方向拡大率_棒, 1f );
                                             base.tx判定文字列[ 1 ].fZ軸中心回転 = base.st状態[ j ].fZ軸回転度_棒;
                                             //base.tx判定文字列[ 1 ].t2D描画( CDTXMania.app.Device, x_棒, y_棒, new Rectangle( 0, 125, 210, 15 ) );
-                                            base.tx判定文字列[ 1 ].t2D描画( CDTXMania.app.Device, x_棒, y_棒, new Rectangle( 0, 110 + n棒高さ * 1, 210, n棒高さ ) );
+                                            base.tx判定文字列[ 1 ].t2D描画( CDTXMania.app.Device, x_棒, y_棒, new Rectangle( CDTXMania.ConfigIni.nJudgeStringBarX[ 1 ], CDTXMania.ConfigIni.nJudgeStringBarY[ 1 ], CDTXMania.ConfigIni.nJudgeStringBarWidth[ 1 ], CDTXMania.ConfigIni.nJudgeStringBarHeight[ 1 ] ) );
 
                                             base.tx判定文字列[ 0 ].vc拡大縮小倍率 = new Vector3( base.st状態[ j ].fX方向拡大率, base.st状態[ j ].fY方向拡大率, 1f );
                                             base.tx判定文字列[ 0 ].fZ軸中心回転 = base.st状態[ j ].fZ軸回転度;

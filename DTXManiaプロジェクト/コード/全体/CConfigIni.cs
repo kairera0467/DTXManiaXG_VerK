@@ -550,11 +550,15 @@ namespace DTXMania
         public Eタイプ eNamePlateType;
         public int nJudgeFrames;
         public int nJudgeInterval;
-        public int nJudgeWidgh;
+        public int nJudgeWidth;
         public int nJudgeHeight;
+        public int[] nJudgeStringBarX;
+        public int[] nJudgeStringBarY;
+        public int[] nJudgeStringBarWidth;
+        public int[] nJudgeStringBarHeight;
         public int nExplosionFrames;
         public int nExplosionInterval;
-        public int nExplosionWidgh;
+        public int nExplosionWidth;
         public int nExplosionHeight;
         public STDGBVALUE<bool> bJudgeLineDisp;
         public STDGBVALUE<bool> bLaneFlush;
@@ -1355,12 +1359,16 @@ namespace DTXMania
 
             this.nExplosionFrames = 1;
             this.nExplosionInterval = 50;
-            this.nExplosionWidgh = 0;
+            this.nExplosionWidth = 0;
             this.nExplosionHeight = 0;
             this.nJudgeFrames = 24;
             this.nJudgeInterval = 14;
-            this.nJudgeWidgh = 250;
+            this.nJudgeWidth = 250;
             this.nJudgeHeight = 170;
+            this.nJudgeStringBarX = new int[] { 0, 0, 0 };
+            this.nJudgeStringBarY = new int[] { 112, 134, 156 };
+            this.nJudgeStringBarWidth = new int[] { 210, 210, 210 };
+            this.nJudgeStringBarHeight = new int[] { 20, 20, 20 };
             this.nNameColor = new STDGBVALUE<int>();
             this.nShutterInSide = new STDGBVALUE<int>();
             this.nShutterOutSide = new STDGBVALUE<int>();

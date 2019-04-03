@@ -35,6 +35,7 @@ namespace DTXMania
             this.ctBPMバー = null;
             this.UnitTime = 0.0;
             this.bサビ区間 = false;
+            this.eBPMバー状態 = EBPMバー状態.演奏中;
 
             this._BPMバー = new BPMバー[] { new BPMバー() };
 			base.On活性化();
@@ -122,6 +123,14 @@ namespace DTXMania
         public void tStoryboard消去()
         {
             this._BPMバー[ 0 ] = null;
+            this.eBPMバー状態 = EBPMバー状態.演奏終了時;
+        }
+
+        public EBPMバー状態 eBPMバー状態;
+        public enum EBPMバー状態
+        {
+            演奏中,
+            演奏終了時
         }
 
         protected class BPMバー : IDisposable

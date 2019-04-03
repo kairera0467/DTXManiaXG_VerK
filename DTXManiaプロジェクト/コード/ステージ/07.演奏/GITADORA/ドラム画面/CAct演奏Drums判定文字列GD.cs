@@ -1350,7 +1350,7 @@ namespace DTXMania
                                     num6 = 0;
                             }
 
-                            int nRectX = CDTXMania.ConfigIni.nJudgeWidgh;
+                            int nRectX = CDTXMania.ConfigIni.nJudgeWidth;
                             int nRectY = CDTXMania.ConfigIni.nJudgeHeight;
 
                             int xc = (num5 + base.st状態[j].n相対X座標) + (this.stレーンサイズ[j].w / 2);
