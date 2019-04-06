@@ -236,6 +236,7 @@ namespace FDK
 				#endregion
 			}
 
+            strDefaultSoundDeviceBusType = "";		// ASIOは低遅延前提のはずなので、deafult sound device(のバスタイプ)を気に掛けないことにする
 
 			// ASIO 出力チャンネルの初期化。
 

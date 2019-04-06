@@ -110,7 +110,7 @@ namespace FDK
 			protected set;
 		}
 
-
+		
 		// メソッド
 
 		/// <summary>
@@ -274,13 +274,32 @@ Trace.TraceInformation("WASAPI Device #{0}: {1}: IsDefault={2}, defPeriod={3}s, 
 			}
 			#endregion
 
+			#region [ デバッグ用: WASAPIデバイスのenumerateと、ログ出力 ]
+			//(デバッグ用)
+			Trace.TraceInformation("WASAPIデバイス一覧:");
+			//int a, count = 0;
+			BASS_WASAPI_DEVICEINFO wasapiDevInfo;
+			for (a = 0; (wasapiDevInfo = BassWasapi.BASS_WASAPI_GetDeviceInfo(a)) != null; a++)
+			{
+				if ((wasapiDevInfo.flags & BASSWASAPIDeviceInfo.BASS_DEVICE_INPUT) == 0 // device is an output device (not input)
+						&& (wasapiDevInfo.flags & BASSWASAPIDeviceInfo.BASS_DEVICE_ENABLED) != 0) // and it is enabled
+				{
+					Trace.TraceInformation("WASAPI Device #{0}: {1}: IsDefault={2}, defPeriod={3}s, minperiod={4}s, mixchans={5}, mixfreq={6}",
+						a,
+						wasapiDevInfo.name,
+						wasapiDevInfo.IsDefault, wasapiDevInfo.defperiod, wasapiDevInfo.minperiod, wasapiDevInfo.mixchans, wasapiDevInfo.mixfreq);
+				}
+			}
+		#endregion
+
 		Retry:
 			var flags = (mode == Eデバイスモード.排他) ? BASSWASAPIInit.BASS_WASAPI_AUTOFORMAT | BASSWASAPIInit.BASS_WASAPI_EXCLUSIVE : BASSWASAPIInit.BASS_WASAPI_AUTOFORMAT;
 			//var flags = ( mode == Eデバイスモード.排他 ) ? BASSWASAPIInit.BASS_WASAPI_AUTOFORMAT | BASSWASAPIInit.BASS_WASAPI_EVENT | BASSWASAPIInit.BASS_WASAPI_EXCLUSIVE : BASSWASAPIInit.BASS_WASAPI_AUTOFORMAT | BASSWASAPIInit.BASS_WASAPI_EVENT;
-			if ( COS.bIsWin7OrLater() && CSound管理.bSoundUpdateByEventWASAPI )
-			{
-				flags |= BASSWASAPIInit.BASS_WASAPI_EVENT;	// Win7以降の場合は、WASAPIをevent drivenで動作させてCPU負荷減、レイテインシ改善
-			}
+			//if ( COS.bIsWin7OrLater() && CSound管理.bSoundUpdateByEventWASAPI )
+   //         if ( CSound管理.bSoundUpdateByEventWASAPI )
+			//{
+			//	flags |= BASSWASAPIInit.BASS_WASAPI_EVENT;	// Win7以降の場合は、WASAPIをevent drivenで動作させてCPU負荷減、レイテインシ改善
+			//}
 			n周波数 = deviceInfo.mixfreq;
 			nチャンネル数 = deviceInfo.mixchans;
 
@@ -319,20 +338,24 @@ Trace.TraceInformation("WASAPI Device #{0}: {1}: IsDefault={2}, defPeriod={3}s, 
 					f希望バッファサイズsec = f更新間隔sec * 2;
 				}
 			}
-			else
-			if (COS.bIsWin10OrLater() && (mode == Eデバイスモード.共有))		// Win10 low latency shared mode support
-			{
-				// バッファ自動設定をユーザーが望む場合は、periodを最小値にする。さもなくば、バッファサイズとしてユーザーが指定した値を、periodとして用いる。
-				if (n希望バッファサイズms == 0)
-				{
-					f更新間隔sec = deviceInfo.minperiod;
-				}
-				else
-				{
-					f更新間隔sec = n希望バッファサイズms / 1000.0f;
-				}
-				f希望バッファサイズsec = 0.0f;
-			}
+			//else
+			//if (COS.bIsWin10OrLater() && (mode == Eデバイスモード.共有))		// Win10 low latency shared mode support
+			//{
+			//	// バッファ自動設定をユーザーが望む場合は、periodを最小値にする。さもなくば、バッファサイズとしてユーザーが指定した値を、periodとして用いる。
+			//	if (n希望バッファサイズms == 0)
+			//	{
+			//		f更新間隔sec = deviceInfo.minperiod;
+			//	}
+			//	else
+			//	{
+			//		f更新間隔sec = n希望バッファサイズms / 1000.0f;
+			//		if (f更新間隔sec < deviceInfo.minperiod)
+			//		{
+			//			f更新間隔sec = deviceInfo.minperiod;
+			//		}
+			//	}
+			//	f希望バッファサイズsec = 0.0f;
+			//}
 
 			Trace.TraceInformation("f希望バッファサイズsec=" + f希望バッファサイズsec + ", f更新間隔sec=" + f更新間隔sec + ": Win10 low latency audio 考慮後");
 

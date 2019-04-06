@@ -91,7 +91,8 @@ DTXManiaXG(Ver.K)をDTXMania Release104を元に作り直したものです。
 ・libogg_libvorbis
 ・SharpDX
 (以下Ver4.01まで)
-
+・SlimDX
+・xadec
 
 ○連絡先
 Project:https://ja.osdn.net/projects/dtxmaniaxg-verk/
