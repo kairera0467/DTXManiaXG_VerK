@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////
    
-          DTXManiaXG(Ver.K) 4.10RC
+          DTXManiaXG(Ver.K) 4.10RC2
  
 ///////////////////////////////////////////////
 ○概要
@@ -101,6 +101,8 @@ Mail:gennsou76573@gmail.com
 Twitter:@kairera0467
 
 ○更新履歴
+2019040600	4.10RC2	WASAPI/ASIO使用時に起動できなくなる問題に対する緊急対応。ただし、OSバージョン依存の機能が一部使用できなくなっています。(WASAPIが使用可能であるかのチェック、Windows10WASAPI共有使用時に低遅延になる機能)
+					エンド画面の「Thank you for Playing」の文字が描画できなくなっていたので作り直し。
 2019040400	4.10RC	DirectXを呼び出すためのライブラリをSharpDXに移行
 					FDKのSimpleFramework、入力、サウンド関連のコードを本家Rel.114 Rev.a7c21e08c54e71b89f3abf85a1fd32f7d77e60f9相当のものに更新。
 					GD風リザルト画面のレイアウトを調整
