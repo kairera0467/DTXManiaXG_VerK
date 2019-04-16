@@ -829,6 +829,7 @@ namespace DTXMania
 		public int n目標のスクロールカウンタ;
 		private CTexture txSongNotFound, txEnumeratingSongs;
         protected CTexture[] txTumbnail = new CTexture[ 15 ];
+        protected CTexture txクリアランプ;
         private CTexture tx選曲パネル;
         private CTexture tx選択されている曲の曲名;
         private CTexture tx選択されている曲のアーティスト名;

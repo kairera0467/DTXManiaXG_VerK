@@ -954,7 +954,6 @@ namespace DTXMania
         
 		private CTexture txSongNotFound, txEnumeratingSongs;
         //private CTexture[] txTumbnail = new CTexture[ 15 ];
-        private CTexture txクリアランプ;
         private CTexture tx選曲パネル;
         private CTexture tx選択されている曲の曲名;
         private CTexture tx選択されている曲のアーティスト名;

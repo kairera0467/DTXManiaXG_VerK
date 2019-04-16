@@ -115,6 +115,8 @@ namespace DTXMania
                 this.tx青色 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\FIFO Tile blue.png" ) );
                 this.tx群青 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\FIFO Tile darkblue.png" ) );
 
+                this.txクリアランプ = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_Clearlamp.png" ) );
+
 			    //this.tx曲名バー.Score = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar score.png" ), false );
 			    //this.tx曲名バー.Box = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar box.png" ), false );
 			    //this.tx曲名バー.Other = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar other.png" ), false );
@@ -189,6 +191,8 @@ namespace DTXMania
             CDTXMania.tテクスチャの解放( ref this.tx黒 );
             CDTXMania.tテクスチャの解放( ref this.tx青色 );
             CDTXMania.tテクスチャの解放( ref this.tx群青 );
+
+            CDTXMania.tテクスチャの解放( ref this.txクリアランプ );
 
             #region[ ジャケット、曲名テクスチャ画像の解放 ]
             // ジャケット
@@ -592,7 +596,7 @@ namespace DTXMania
                             }
                             //-----------------
                             #endregion
-                            #region[ ジャケット画像を描画 ]
+                            #region[ ジャケット画像とクリアマークを描画 ]
                             if( this.txTumbnail[ nパネル番号 ] != null && ( this.stバー情報[ nパネル番号 ].eバー種別 == Eバー種別.Score || this.stバー情報[ nパネル番号 ].eバー種別 == Eバー種別.Random ) )
                             {
                                 //縮小 64x64
@@ -602,6 +606,11 @@ namespace DTXMania
 
                                 this.txTumbnail[ nパネル番号 ].vc拡大縮小倍率 = new Vector3( fRet, fRet, 1.0f );
                                 this.txTumbnail[ nパネル番号 ].t2D描画( CDTXMania.app.Device, 712, 329 );
+                            }
+                            //クリアマーク
+                            if( this.stバー情報[ nパネル番号 ].nスキル値.Drums > 0 )
+                            {
+                                this.txクリアランプ?.t2D描画( CDTXMania.app.Device, 707, 324, new Rectangle( 0, this.n現在選択中の曲の現在の難易度レベル * 36, 36, 36 ) );
                             }
                             #endregion
                             #region[ 左側ジャケット画像描画 ]
@@ -656,7 +665,7 @@ namespace DTXMania
                             //クリアマーク
                             if( this.stバー情報[ nパネル番号 ].nスキル値.Drums > 0 )
                             {
-                                CDTXMania.act文字コンソール.tPrint( 746, y + 3, C文字コンソール.Eフォント種別.白, "CLEAR" );
+                                this.txクリアランプ?.t2D描画( CDTXMania.app.Device, 707, y + 2, new Rectangle( 0, this.n現在選択中の曲の現在の難易度レベル * 36, 36, 36 ) );
                             }
                             #endregion
 							#region [ タイトル名テクスチャを描画。]
@@ -733,7 +742,7 @@ namespace DTXMania
                             //クリアマーク
                             if( this.stバー情報[ nパネル番号 ].nスキル値.Drums > 0 )
                             {
-                                CDTXMania.act文字コンソール.tPrint( 708, y + 3, C文字コンソール.Eフォント種別.白, "CLEAR" );
+                                this.txクリアランプ?.t2D描画( CDTXMania.app.Device, 707, y + 2, new Rectangle( 0, this.n現在選択中の曲の現在の難易度レベル * 36, 36, 36 ) );
                             }
                             #endregion
                             #region [ タイトル名テクスチャを描画。]
@@ -810,7 +819,7 @@ namespace DTXMania
                         //クリアマーク
                         if( this.stバー情報[ nパネル番号 ].nスキル値.Drums > 0 )
                         {
-                            CDTXMania.act文字コンソール.tPrint( 746, y + 3, C文字コンソール.Eフォント種別.白, "CLEAR" );
+                            this.txクリアランプ?.t2D描画( CDTXMania.app.Device, 745, y + 2, new Rectangle( 0, this.n現在選択中の曲の現在の難易度レベル * 36, 36, 36 ) );
                         }
                         #endregion
 						#region [ タイトル名テクスチャを描画。]

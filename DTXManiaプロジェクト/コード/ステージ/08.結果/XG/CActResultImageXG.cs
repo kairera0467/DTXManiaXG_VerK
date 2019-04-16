@@ -232,11 +232,8 @@ namespace DTXMania
         private int nAlbumHeight;
         private int nAlbumWidth;
 		//private IntPtr pAVIBmp;
-		private CTexture r表示するリザルト画像;
 		//private Surface sfリザルトAVI画像;
         private CTexture tx中央パネル;
-		private CTexture txリザルト画像;
-		private CTexture txリザルト画像がないときの画像;
         private CTexture tx曲名;
         private CPrivateFastFont prvFont;
         private string strSongName;
