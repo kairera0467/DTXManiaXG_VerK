@@ -3145,19 +3145,21 @@ for (int i = 0; i < 3; i++) {
 			}
 			else
 			{
-				for ( int i = 0; i < 0x10; i++ )
+				//for ( int i = 0; i < 0x10; i++ )
 				{
-					//var captureCode = (SlimDX.DirectInput.Key) ConfigIni.KeyAssign[ (int)EKeyConfigPad.Capture ][ i ];
+                    // 2019.04.21 kairera0467 作業部屋##50802 とりあえず問題解決できるまでキャプチャはF12固定とする
+                    //var captureCode = (SlimDX.DirectInput.Key) ConfigIni.KeyAssign[ (int)EKeyConfigPad.Capture ][ i ];
+                    var captureCode = SlimDX.DirectInput.Key.F12;
 
-					//if( (int) captureCode > 0 &&
-					//	e.KeyCode == DeviceConstantConverter.KeyToKeys( captureCode ) )
-					//{
-					//	// Debug.WriteLine( "capture: " + string.Format( "{0:2x}", (int) e.KeyCode ) + " " + (int) e.KeyCode );
-					//	string strFullPath =
-					//	   Path.Combine( CDTXMania.strEXEのあるフォルダ, "Capture_img" );
-					//	strFullPath = Path.Combine( strFullPath, DateTime.Now.ToString( "yyyyMMddHHmmss" ) + ".png" );
-					//	SaveResultScreen( strFullPath );
-					//}
+					if( (int) captureCode > 0 &&
+						e.KeyCode == DeviceConstantConverter.KeyToKeys( captureCode ) )
+					{
+						// Debug.WriteLine( "capture: " + string.Format( "{0:2x}", (int) e.KeyCode ) + " " + (int) e.KeyCode );
+						string strFullPath =
+						   Path.Combine( CDTXMania.strEXEのあるフォルダ, "Capture_img" );
+						strFullPath = Path.Combine( strFullPath, DateTime.Now.ToString( "yyyyMMddHHmmss" ) + ".png" );
+						SaveResultScreen( strFullPath );
+					}
 				}
 			}
 		}
