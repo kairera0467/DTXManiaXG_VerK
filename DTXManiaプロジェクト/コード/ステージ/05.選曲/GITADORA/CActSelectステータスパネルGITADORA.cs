@@ -48,6 +48,7 @@ namespace DTXMania
                             this.n現在選択中の曲のレベル難易度毎DGB[j][i] = 0;
                             this.n現在選択中の曲のレベル小数点難易度毎DGB[j][i] = 0;
                             this.n現在選択中の曲の最高ランク難易度毎[j][i] = 99;
+                            this.db現在選択中の曲の最高スキル値難易度毎[j][i] = 0; // 2019.04.24 kairera0467 #39152
                             this.b現在選択中の曲がフルコンボ難易度毎[j][i] = false;
                             this.b現在選択中の曲に譜面がある[j][i] = false;
                         }
