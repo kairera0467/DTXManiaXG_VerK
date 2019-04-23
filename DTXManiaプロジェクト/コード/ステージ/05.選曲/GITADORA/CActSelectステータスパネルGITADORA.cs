@@ -15,6 +15,7 @@ namespace DTXMania
 
 		public CActSelectステータスパネルGITADORA()
 		{
+            this.tレベル数値フォント初期化();
 			base.b活性化してない = true;
 		}
 		public override void t選択曲が変更された()
@@ -117,6 +118,10 @@ namespace DTXMania
                 this.txNotesDataゲージ = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_NotesData gauge.png" ) );
                 this.txTotalNotes数字 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_TotalNotes_Number.png" ) );
 
+                this.txレベル数字_中_整数部 = CDTXMania.tテクスチャの生成( CSkin.Path(@"Graphics\5_LevelNumber Medium Int.png") );
+                this.txレベル数字_中_少数部 = CDTXMania.tテクスチャの生成( CSkin.Path(@"Graphics\5_LevelNumber Medium Decimal.png") );
+                this.txレベル数字_中_小数点 = CDTXMania.tテクスチャの生成( CSkin.Path(@"Graphics\5_LevelNumber Medium Dot.png") );
+
 				base.OnManagedリソースの作成();
 			}
 		}
@@ -133,6 +138,10 @@ namespace DTXMania
                 CDTXMania.tテクスチャの解放( ref this.txNotesData背景 );
                 CDTXMania.tテクスチャの解放( ref this.txNotesDataゲージ );
                 CDTXMania.tテクスチャの解放( ref this.txTotalNotes数字 );
+
+                CDTXMania.tテクスチャの解放( ref this.txレベル数字_中_整数部 );
+                CDTXMania.tテクスチャの解放( ref this.txレベル数字_中_少数部 );
+                CDTXMania.tテクスチャの解放( ref this.txレベル数字_中_小数点 );
 
 				base.OnManagedリソースの解放();
 			}
@@ -196,12 +205,13 @@ namespace DTXMania
                             n難易度小数[ i ] = ( this.n現在選択中の曲のレベル難易度毎DGB[ i ].Drums - (n難易度整数[ i ] * 10 ) ) * 10;
                             n難易度小数[ i ] += this.n現在選択中の曲のレベル小数点難易度毎DGB[ i ].Drums;
 
-                            //if( this.str難易度ラベル[ i ] != null && this.b現在選択中の曲に譜面がある[ i ][ j ])
-                            //{
-                            //    this.t大文字表示(73 + this.n本体X[ j ] + (i * 143), 19 + this.n本体Y[j] - y差分[i], string.Format("{0:0}", n難易度整数[i]));
-                            //    this.t小文字表示(102 + this.n本体X[ j ] + (i * 143), 37 + this.n本体Y[j] - y差分[i], string.Format("{0,2:00}", n難易度小数[i]));
-                            //    this.tx難易度数字XG.t2D描画(CDTXMania.app.Device, 94 + this.n本体X[j] + (i * 143), 51 + this.n本体Y[j] - y差分[i], new Rectangle(145, 54, 7, 8));
-                            //}
+                            if( /* this.str難易度ラベル[ i ] != null && */ this.b現在選択中の曲に譜面がある[ i ].Drums )
+                            {
+                                //this.t大文字表示(73 + this.n本体X[ j ] + (i * 143), 19 + this.n本体Y[j] - y差分[i], string.Format("{0:0}", n難易度整数[i]));
+                                //this.t小文字表示(102 + this.n本体X[ j ] + (i * 143), 37 + this.n本体Y[j] - y差分[i], string.Format("{0,2:00}", n難易度小数[i]));
+                                //this.tx難易度数字XG.t2D描画(CDTXMania.app.Device, 94 + this.n本体X[j] + (i * 143), 51 + this.n本体Y[j] - y差分[i], new Rectangle(145, 54, 7, 8));
+                                this.tレベル値の描画_中( 547, 626 - ( i * 60 ), string.Format("{0:0}", n難易度整数[i]) + "." + string.Format("{0,2:00}", n難易度小数[i]) );
+                            }
                             //else if ((this.str難易度ラベル[i] != null && !this.b現在選択中の曲に譜面がある[i][j]) || CDTXMania.stage選曲XG.r現在選択中の曲.eノード種別 == C曲リストノード.Eノード種別.RANDOM)
                             //{
                             //    this.t大文字表示(73 + this.n本体X[j] + (i * 143), 19 + this.n本体Y[j] - y差分[i], ("-"));
@@ -209,11 +219,30 @@ namespace DTXMania
                             //    this.tx難易度数字XG.t2D描画(CDTXMania.app.Device, 94 + this.n本体X[j] + (i * 143), 51 + this.n本体Y[j] - y差分[i], new Rectangle(145, 54, 7, 8));
                             //}
 
-                            if( this.b現在選択中の曲に譜面がある[ i ].Drums )
+                            //if( this.b現在選択中の曲に譜面がある[ i ].Drums )
+                            //{
+                            //    CDTXMania.act文字コンソール.tPrint( 570, 634 - ( 60 * i ), C文字コンソール.Eフォント種別.白, string.Format( "{0:0}", n難易度整数[i] ) + "." + string.Format("{0,2:00}", n難易度小数[i]) );
+                            //}
+                        }
+
+                        #region [ 選択曲の 最高スキル値の描画 ]
+                        //-----------------
+                        for (int j = 0; j < 3; j++)
+                        {
+                            for (int i = 0; i < 5; i++)
                             {
-                                CDTXMania.act文字コンソール.tPrint( 570, 634 - ( 60 * i ), C文字コンソール.Eフォント種別.白, string.Format( "{0:0}", n難易度整数[i] ) + "." + string.Format("{0,2:00}", n難易度小数[i]) );
+                                if( j == 0 )
+                                {
+                                    if( this.db現在選択中の曲の最高スキル値難易度毎[i][j] != 0.00 )
+                                    {
+                                        // ToDo:エクセはどう表示される?
+                                        CDTXMania.act文字コンソール.tPrint( 450, 645 - ( i * 60 ), C文字コンソール.Eフォント種別.白, string.Format( "{0,6:##0.00}%", this.db現在選択中の曲の最高スキル値難易度毎[ i ][ j ] ) );
+                                    }
+                                }
                             }
                         }
+                        //-----------------
+                        #endregion
 
                         this.t難易度カーソル描画( 426, base.n現在選択中の曲の難易度 );
 
@@ -311,6 +340,98 @@ namespace DTXMania
         private CTexture txNotesData背景;
         private CTexture txNotesDataゲージ; //クリアバーだけはソフトウェア側で生成する
         private CTexture txTotalNotes数字;
+
+        private CTexture txレベル数字_中_整数部;
+        private CTexture txレベル数字_中_少数部;
+        private CTexture txレベル数字_中_小数点;
+
+        private struct ST数字フォント
+        {
+            public char ch文字;
+            public Rectangle rect;
+        }
+
+        private ST数字フォント[] STレベル数字_中_整数;
+        private ST数字フォント[] STレベル数字_中_少数;
+
+        private void tレベル数値フォント初期化()
+        {
+            this.STレベル数字_中_整数 = new ST数字フォント[]{
+                new ST数字フォント(){ ch文字 = '0', rect = new Rectangle( 0, 0, 28, 38 ) },
+                new ST数字フォント(){ ch文字 = '1', rect = new Rectangle( 28, 0, 28, 38 ) },
+                new ST数字フォント(){ ch文字 = '2', rect = new Rectangle( 56, 0, 28, 38 ) },
+                new ST数字フォント(){ ch文字 = '3', rect = new Rectangle( 84, 0, 28, 38 ) },
+                new ST数字フォント(){ ch文字 = '4', rect = new Rectangle( 112, 0, 28, 38 ) },
+                new ST数字フォント(){ ch文字 = '5', rect = new Rectangle( 0, 38, 28, 38 ) },
+                new ST数字フォント(){ ch文字 = '6', rect = new Rectangle( 28, 38, 28, 38 ) },
+                new ST数字フォント(){ ch文字 = '7', rect = new Rectangle( 56, 38, 28, 38 ) },
+                new ST数字フォント(){ ch文字 = '8', rect = new Rectangle( 84, 38, 28, 38 ) },
+                new ST数字フォント(){ ch文字 = '9', rect = new Rectangle( 112, 38, 28, 38 ) },
+                new ST数字フォント(){ ch文字 = '-', rect = new Rectangle( 140, 0, 28, 38 ) }
+            };
+            this.STレベル数字_中_少数 = new ST数字フォント[]{
+                new ST数字フォント(){ ch文字 = '0', rect = new Rectangle( 0, 0, 20, 28 ) },
+                new ST数字フォント(){ ch文字 = '1', rect = new Rectangle( 20, 0, 20, 28 ) },
+                new ST数字フォント(){ ch文字 = '2', rect = new Rectangle( 40, 0, 20, 28 ) },
+                new ST数字フォント(){ ch文字 = '3', rect = new Rectangle( 60, 0, 20, 28 ) },
+                new ST数字フォント(){ ch文字 = '4', rect = new Rectangle( 80, 0, 20, 28 ) },
+                new ST数字フォント(){ ch文字 = '5', rect = new Rectangle( 0, 28, 20, 28 ) },
+                new ST数字フォント(){ ch文字 = '6', rect = new Rectangle( 20, 28, 20, 28 ) },
+                new ST数字フォント(){ ch文字 = '7', rect = new Rectangle( 40, 28, 20, 28 ) },
+                new ST数字フォント(){ ch文字 = '8', rect = new Rectangle( 60, 28, 20, 28 ) },
+                new ST数字フォント(){ ch文字 = '9', rect = new Rectangle( 80, 28, 20, 28 ) },
+                new ST数字フォント(){ ch文字 = '-', rect = new Rectangle( 100, 0, 20, 28 ) }
+            };
+        }
+
+        // 2019.04.21 kairera0467
+        private void tレベル値の描画_中( int x, int y, string strレベル値 )
+        {
+            //if( dbレベル値 < 0 || dbレベル値 > 10 )
+            //    return;
+
+            // 1文字あたりのマージン
+            int n文字間隔_整数部 = 28;
+            int n文字間隔_小数部 = 17;
+            bool b整数部処理中 = true;
+            string formatText = strレベル値;
+
+            for( int i = 0; i < formatText.Length; i++ )
+            {
+                char c = formatText[ i ];
+
+                if( c.Equals( '.' ) )
+                {
+                    // 小数点だったら小数点を描画してフラグ切り替えてcontinue
+                    this.txレベル数字_中_小数点.t2D描画( CDTXMania.app.Device, x, y + 28 );
+                    b整数部処理中 = false;
+                    x += 7;
+                    continue;
+                }
+                else if( c.Equals( ' ' ) )
+                {
+                    // 空白ならなにもせずcontinue
+                    continue;
+                }
+
+                for( int j = 0; j < 11; j++ )
+                {
+                    if( c.Equals( this.STレベル数字_中_整数[ j ].ch文字 ) )
+                    {
+                        if( b整数部処理中 )
+                        {
+                            this.txレベル数字_中_整数部.t2D描画( CDTXMania.app.Device, x, y, this.STレベル数字_中_整数[ j ].rect );
+                            x += n文字間隔_整数部;
+                        }
+                        else
+                        {
+                            this.txレベル数字_中_少数部.t2D描画( CDTXMania.app.Device, x, y + 9, this.STレベル数字_中_少数[ j ].rect );
+                            x += n文字間隔_小数部;
+                        }
+                    }
+                }
+            }
+        }
 
         [StructLayout(LayoutKind.Sequential)]
         private struct ST文字位置

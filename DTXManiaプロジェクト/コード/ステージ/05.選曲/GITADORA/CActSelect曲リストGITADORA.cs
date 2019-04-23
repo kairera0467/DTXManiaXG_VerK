@@ -21,6 +21,7 @@ namespace DTXMania
     {
         public CActSelect曲リストGITADORA()
         {
+            this.tスキル数値フォント初期化();
         }
 
         public override void tバーの初期化()
@@ -117,17 +118,21 @@ namespace DTXMania
 
                 this.txクリアランプ = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_Clearlamp.png" ) );
 
-			    //this.tx曲名バー.Score = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar score.png" ), false );
-			    //this.tx曲名バー.Box = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar box.png" ), false );
-			    //this.tx曲名バー.Other = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar other.png" ), false );
-       //         this.tx曲名バー.Random = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar other.png" ), false );
-       //         this.tx曲名バー.BackBox = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar other.png" ), false );
-			    //this.tx選曲バー.Score = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar score selected.png" ), false );
-			    //this.tx選曲バー.Box = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar box selected.png" ), false );
-			    //this.tx選曲バー.Other = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar other selected.png" ), false );
-			    //this.tx選曲バー.Random = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar other selected.png" ), false );
-       //         this.tx選曲バー.BackBox = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar other selected.png" ), false );
+                //this.tx曲名バー.Score = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar score.png" ), false );
+                //this.tx曲名バー.Box = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar box.png" ), false );
+                //this.tx曲名バー.Other = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar other.png" ), false );
+                //this.tx曲名バー.Random = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar other.png" ), false );
+                //this.tx曲名バー.BackBox = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar other.png" ), false );
+                //this.tx選曲バー.Score = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar score selected.png" ), false );
+                //this.tx選曲バー.Box = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar box selected.png" ), false );
+                //this.tx選曲バー.Other = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar other selected.png" ), false );
+                //this.tx選曲バー.Random = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar other selected.png" ), false );
+                //this.tx選曲バー.BackBox = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar other selected.png" ), false );
                 //this.txスキル数字 = CDTXMania.tテクスチャの生成(CSkin.Path(@"Graphics\ScreenSelect skill number on list.png"), false);
+
+                this.txスキル数字_大_整数部 = CDTXMania.tテクスチャの生成( CSkin.Path(@"Graphics\5_Skill number Large Int.png") );
+                this.txスキル数字_大_少数部 = CDTXMania.tテクスチャの生成( CSkin.Path(@"Graphics\5_Skill number Large Decimal.png") );
+                this.txスキル数字_大_小数点 = CDTXMania.tテクスチャの生成( CSkin.Path(@"Graphics\5_Skill number Large Dot.png") );
 
 			    for( int i = 0; i < 15; i++ )
 				    this.t曲名バーの生成( i, this.stバー情報[ i ].strタイトル文字列, this.stバー情報[ i ].col文字色 );
@@ -193,6 +198,10 @@ namespace DTXMania
             CDTXMania.tテクスチャの解放( ref this.tx群青 );
 
             CDTXMania.tテクスチャの解放( ref this.txクリアランプ );
+
+            CDTXMania.tテクスチャの解放( ref this.txスキル数字_大_整数部 );
+            CDTXMania.tテクスチャの解放( ref this.txスキル数字_大_少数部 );
+            CDTXMania.tテクスチャの解放( ref this.txスキル数字_大_小数点 );
 
             #region[ ジャケット、曲名テクスチャ画像の解放 ]
             // ジャケット
@@ -393,6 +402,7 @@ namespace DTXMania
 						{
 							int n = ( ( ( this.n現在の選択行 - 7 ) + i ) + 15 ) % 15;
 							this.stバー情報[ n ].eバー種別 = this.e曲のバー種別を返す( song2 );
+                            this.stバー情報[ n ].ar譜面情報 = song2.arスコア[ this.n現在のアンカ難易度レベルに最も近い難易度レベルを返す( song2 ) ].譜面情報;
                             CDTXMania.t安全にDisposeする( ref this.stバー情報[ n ].txタイトル名 );
                             CDTXMania.t安全にDisposeする( ref this.stバー情報[ n ].txアーティスト名 );
 							song2 = this.r次の曲( song2 );
@@ -469,6 +479,7 @@ namespace DTXMania
 						{
 							int n = ( ( ( this.n現在の選択行 - 7 ) + i ) + 15 ) % 15;
 							this.stバー情報[ n ].eバー種別 = this.e曲のバー種別を返す( song2 );
+                            this.stバー情報[ n ].ar譜面情報 = song2.arスコア[ this.n現在のアンカ難易度レベルに最も近い難易度レベルを返す( song2 ) ].譜面情報;
                             CDTXMania.t安全にDisposeする( ref this.stバー情報[ n ].txタイトル名 );
                             CDTXMania.t安全にDisposeする( ref this.stバー情報[ n ].txアーティスト名 );
 							song2 = this.r次の曲( song2 );
@@ -665,7 +676,7 @@ namespace DTXMania
                             //クリアマーク
                             if( this.stバー情報[ nパネル番号 ].nスキル値.Drums > 0 )
                             {
-                                this.txクリアランプ?.t2D描画( CDTXMania.app.Device, 707, y + 2, new Rectangle( 0, this.n現在選択中の曲の現在の難易度レベル * 36, 36, 36 ) );
+                                this.txクリアランプ?.t2D描画( CDTXMania.app.Device, 745, y + 2, new Rectangle( 0, this.n現在選択中の曲の現在の難易度レベル * 36, 36, 36 ) );
                             }
                             #endregion
 							#region [ タイトル名テクスチャを描画。]
@@ -788,6 +799,10 @@ namespace DTXMania
                             this.txTumbnail[ nパネル番号 ].t2D描画( CDTXMania.app.Device, 314, 38 );
                         }
                         #endregion
+                        #region[ 曲別スキル値(左側)を描画 ]
+                        this.tスキル値の描画_大( 79, 216, this.r現在選択中の曲.arスコア[ this.n現在選択中の曲の現在の難易度レベル ].譜面情報.最大曲別スキル.Drums );
+
+                        #endregion
                     }
 					else
 					{
@@ -817,7 +832,7 @@ namespace DTXMania
                             this.txTumbnail[ nパネル番号 ].t2D描画( CDTXMania.app.Device, 750, y + 7 );
                         }
                         //クリアマーク
-                        if( this.stバー情報[ nパネル番号 ].nスキル値.Drums > 0 )
+                        if( this.stバー情報[ nパネル番号 ].ar譜面情報.最大スキル.Drums > 0 )
                         {
                             this.txクリアランプ?.t2D描画( CDTXMania.app.Device, 745, y + 2, new Rectangle( 0, this.n現在選択中の曲の現在の難易度レベル * 36, 36, 36 ) );
                         }
@@ -913,6 +928,9 @@ namespace DTXMania
         private CTexture txバー選択中;
         private CTexture txバー選択中枠;
         private CTexture txバー_フォルダ;
+        private CTexture txスキル数字_大_整数部;
+        private CTexture txスキル数字_大_少数部;
+        private CTexture txスキル数字_大_小数点;
         public STバー tx曲名バー;
         public ST選曲バー tx選曲バー;
         //private CTexture[] txTumbnail = new CTexture[ 15 ];
@@ -1038,6 +1056,95 @@ namespace DTXMania
 				if( this.txSongNotFound != null )
 					this.txSongNotFound.t2D描画( CDTXMania.app.Device, 440, 300 );
 			}
+        }
+
+
+        private ST数字フォント[] STスキル数字_大_整数;
+        private ST数字フォント[] STスキル数字_大_少数;
+        private struct ST数字フォント
+        {
+            public char ch文字;
+            public Rectangle rect;
+        }
+
+        // デバッグなどを考えてコンストラクタベタ配置ではなくメソッドに分離しておく
+
+        private void tスキル数値フォント初期化()
+        {
+            this.STスキル数字_大_整数 = new ST数字フォント[ 10 ];
+            this.STスキル数字_大_整数[ 0 ] = new ST数字フォント() { ch文字 = '0', rect = new Rectangle( 0, 0, 64, 64 ) };
+            this.STスキル数字_大_整数[ 1 ] = new ST数字フォント() { ch文字 = '1', rect = new Rectangle( 64, 0, 64, 64 ) };
+            this.STスキル数字_大_整数[ 2 ] = new ST数字フォント() { ch文字 = '2', rect = new Rectangle( 128, 0, 64, 64 ) };
+            this.STスキル数字_大_整数[ 3 ] = new ST数字フォント() { ch文字 = '3', rect = new Rectangle( 192, 0, 64, 64 ) };
+            this.STスキル数字_大_整数[ 4 ] = new ST数字フォント() { ch文字 = '4', rect = new Rectangle( 256, 0, 64, 64 ) };
+            this.STスキル数字_大_整数[ 5 ] = new ST数字フォント() { ch文字 = '5', rect = new Rectangle( 0, 64, 64, 64 ) };
+            this.STスキル数字_大_整数[ 6 ] = new ST数字フォント() { ch文字 = '6', rect = new Rectangle( 64, 64, 64, 64 ) };
+            this.STスキル数字_大_整数[ 7 ] = new ST数字フォント() { ch文字 = '7', rect = new Rectangle( 128, 64, 64, 64 ) };
+            this.STスキル数字_大_整数[ 8 ] = new ST数字フォント() { ch文字 = '8', rect = new Rectangle( 192, 64, 64, 64 ) };
+            this.STスキル数字_大_整数[ 9 ] = new ST数字フォント() { ch文字 = '9', rect = new Rectangle( 256, 64, 64, 64 ) };
+            this.STスキル数字_大_少数 = new ST数字フォント[ 10 ];
+            this.STスキル数字_大_少数[ 0 ] = new ST数字フォント() { ch文字 = '0', rect = new Rectangle( 0, 0, 46, 46 ) };
+            this.STスキル数字_大_少数[ 1 ] = new ST数字フォント() { ch文字 = '1', rect = new Rectangle( 0, 0, 46, 46 ) };
+            this.STスキル数字_大_少数[ 2 ] = new ST数字フォント() { ch文字 = '2', rect = new Rectangle( 0, 0, 46, 46 ) };
+            this.STスキル数字_大_少数[ 3 ] = new ST数字フォント() { ch文字 = '3', rect = new Rectangle( 0, 0, 46, 46 ) };
+            this.STスキル数字_大_少数[ 4 ] = new ST数字フォント() { ch文字 = '4', rect = new Rectangle( 0, 0, 46, 46 ) };
+            this.STスキル数字_大_少数[ 5 ] = new ST数字フォント() { ch文字 = '5', rect = new Rectangle( 0, 46, 46, 46 ) };
+            this.STスキル数字_大_少数[ 6 ] = new ST数字フォント() { ch文字 = '6', rect = new Rectangle( 0, 46, 46, 46 ) };
+            this.STスキル数字_大_少数[ 7 ] = new ST数字フォント() { ch文字 = '7', rect = new Rectangle( 0, 46, 46, 46 ) };
+            this.STスキル数字_大_少数[ 8 ] = new ST数字フォント() { ch文字 = '8', rect = new Rectangle( 0, 46, 46, 46 ) };
+            this.STスキル数字_大_少数[ 9 ] = new ST数字フォント() { ch文字 = '9', rect = new Rectangle( 0, 46, 46, 46 ) };
+        }
+
+        // 2019.04.20 kairera0467
+        private void tスキル値の描画_大( int x, int y, double dbスキル値 )
+        {
+            if( dbスキル値 <= 0 || dbスキル値 > 200 )
+                return;
+
+            // 1文字あたりのマージン
+            int n文字間隔_整数部 = 41;
+            int n文字間隔_小数部 = 30;
+            bool b整数部処理中 = true;
+            dbスキル値 = dbスキル値 * 100.0;
+            dbスキル値 = Math.Floor( dbスキル値 );
+            dbスキル値 = dbスキル値 / 100.0;
+            string formatText = string.Format( "{0,6:##0.00}", dbスキル値.ToString() );
+
+            for( int i = 0; i < formatText.Length; i++ )
+            {
+                char c = formatText[ i ];
+
+                if( c.Equals( '.' ) )
+                {
+                    // 小数点だったら小数点を描画してフラグ切り替えてcontinue
+                    this.txスキル数字_大_小数点.t2D描画( CDTXMania.app.Device, x, y + 54 );
+                    b整数部処理中 = false;
+                    x += 10;
+                    continue;
+                }
+                else if( c.Equals( ' ' ) )
+                {
+                    // 空白ならなにもせずcontinue
+                    continue;
+                }
+
+                for( int j = 0; j < 10; j++ )
+                {
+                    if( c.Equals( this.STスキル数字_大_整数[ j ].ch文字 ) )
+                    {
+                        if( b整数部処理中 )
+                        {
+                            this.txスキル数字_大_整数部.t2D描画( CDTXMania.app.Device, x, y, this.STスキル数字_大_整数[ j ].rect );
+                            x += n文字間隔_整数部;
+                        }
+                        else
+                        {
+                            this.txスキル数字_大_少数部.t2D描画( CDTXMania.app.Device, x, y + 18, this.STスキル数字_大_少数[ j ].rect );
+                            x += n文字間隔_小数部;
+                        }
+                    }
+                }
+            }
         }
 
 		//private void tスキル値の描画( int x, int y, int nスキル値 )
