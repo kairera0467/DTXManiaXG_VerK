@@ -1089,7 +1089,7 @@ namespace DTXMania
 			{
 				if( this.txEnumeratingSongs != null )
 				{
-					this.txEnumeratingSongs.t2D描画( CDTXMania.app.Device, 460, 300 );
+					this.txEnumeratingSongs.t2D描画( CDTXMania.app.Device, 720, 300 );
 				}
 			}
 			else
