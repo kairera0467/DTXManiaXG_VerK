@@ -795,7 +795,7 @@ namespace DTXMania
 								r現在のステージ.On非活性化();
 								Trace.TraceInformation( "----------------------" );
 								Trace.TraceInformation( "■ 選曲" );
-                                stage選曲.On活性化(); //2017.10.01 kairera0467 完全移行まで
+                                //stage選曲.On活性化(); //2017.10.01 kairera0467 完全移行まで
                                 if( bXGRelease )
                                 {
 								    stage選曲XG.On活性化();
@@ -2976,12 +2976,25 @@ for (int i = 0; i < 3; i++) {
 				ini.tヒストリを追加する( str新ヒストリ行 );
 				if( !bコンパクトモード )
 				{
-					stage選曲.r現在選択中のスコア.譜面情報.演奏回数.Drums = ini.stファイル.PlayCountDrums;
-					stage選曲.r現在選択中のスコア.譜面情報.演奏回数.Guitar = ini.stファイル.PlayCountGuitar;
-					stage選曲.r現在選択中のスコア.譜面情報.演奏回数.Bass = ini.stファイル.PlayCountBass;
+                    if( CDTXMania.bXGRelease ) {
+					    stage選曲XG.r現在選択中のスコア.譜面情報.演奏回数.Drums = ini.stファイル.PlayCountDrums;
+					    stage選曲XG.r現在選択中のスコア.譜面情報.演奏回数.Guitar = ini.stファイル.PlayCountGuitar;
+					    stage選曲XG.r現在選択中のスコア.譜面情報.演奏回数.Bass = ini.stファイル.PlayCountBass;
+                    } else {
+					    stage選曲GITADORA.r現在選択中のスコア.譜面情報.演奏回数.Drums = ini.stファイル.PlayCountDrums;
+					    stage選曲GITADORA.r現在選択中のスコア.譜面情報.演奏回数.Guitar = ini.stファイル.PlayCountGuitar;
+					    stage選曲GITADORA.r現在選択中のスコア.譜面情報.演奏回数.Bass = ini.stファイル.PlayCountBass;
+                    }
+
+
 					for( int j = 0; j < ini.stファイル.History.Length; j++ )
 					{
-						stage選曲.r現在選択中のスコア.譜面情報.演奏履歴[ j ] = ini.stファイル.History[ j ];
+                        if( CDTXMania.bXGRelease ) {
+						    stage選曲XG.r現在選択中のスコア.譜面情報.演奏履歴[ j ] = ini.stファイル.History[ j ];
+                        } else {
+						    stage選曲GITADORA.r現在選択中のスコア.譜面情報.演奏履歴[ j ] = ini.stファイル.History[ j ];
+                        }
+
 					}
 				}
 			}

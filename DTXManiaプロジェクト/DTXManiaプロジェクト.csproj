@@ -43,7 +43,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;_TEST_ENGLISH TEST_Direct3D9Ex_ WindowedFullscreen animetest BPMBar_WAM</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;_TEST_ENGLISH TEST_Direct3D9Ex_ WindowedFullscreen animetest BPMBar_WAM</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
@@ -340,8 +340,8 @@ copy /Y "$(TargetPath)".config "$(SolutionDir)..\実行時フォルダ"
 move /Y "$(TargetDir)Bass.Net.dll" "$(TargetDir)dll"
 move /Y "$(TargetDir)DirectShowLib-2005.dll" "$(TargetDir)dll"
 move /Y "$(TargetDir)FDK.dll" "$(TargetDir)dll"
-move /Y $(TargetDir)SharpDX.dll $(TargetDir)dll
-move /Y $(TargetDir)SharpDX.*.dll $(TargetDir)dll
-move /Y $(TargetDir)libbjxa.dll $(TargetDir)dll</PostBuildEvent>
+move /Y "$(TargetDir)SharpDX.dll" "$(TargetDir)dll"
+move /Y "$(TargetDir)SharpDX.*.dll" "$(TargetDir)\dll"
+move /Y "$(TargetDir)libbjxa.dll" "$(TargetDir)\dll"</PostBuildEvent>
   </PropertyGroup>
 </Project>

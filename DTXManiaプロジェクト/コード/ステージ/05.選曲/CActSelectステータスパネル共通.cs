@@ -90,6 +90,7 @@ namespace DTXMania
         protected STDGBVALUE<int>[] n現在選択中の曲の最高ランク難易度毎 = new STDGBVALUE<int>[5];
         protected CDTX.STLANEINT[] n選択中の曲のノート数_難易度毎 = new CDTX.STLANEINT[5];
         protected double[] db現在選択中の曲の曲別スキル値難易度毎 = new double[5];
+        protected STDGBVALUE<double> db現在選択中の曲の曲別スキル値 = new STDGBVALUE<double>();
         private int[] n選択中の曲のレベル難易度毎 = new int[5];
 
 		protected int n現在選択中の曲の難易度;

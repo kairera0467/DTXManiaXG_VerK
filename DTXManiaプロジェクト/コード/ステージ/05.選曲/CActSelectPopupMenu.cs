@@ -224,6 +224,14 @@ namespace DTXMania
 				//}
 				//CDTXMania.tテクスチャの解放( ref txMenuTitle );
 
+                if( this.lciMenuItems != null )
+                {
+                    for( int i = 0; i < this.lciMenuItems.Length; i++ )
+                    {
+                        CDTXMania.tテクスチャの解放( ref this.lciMenuItems[ i ].txName );
+                    }
+                }
+
 				base.On非活性化();
 			}
 		}
@@ -231,16 +239,6 @@ namespace DTXMania
 		{
 			if ( !base.b活性化してない )
 			{
-				string pathCursor = CSkin.Path( @"Graphics\ScreenConfig menu cursor.png" );;
-				string pathPopupMenuBackground = CSkin.Path( @"Graphics\ScreenSelect sort menu background.png" );
-				if ( File.Exists ( pathCursor ) )
-				{
-					this.txCursor = CDTXMania.tテクスチャの生成( pathCursor, false );
-				}
-				if ( File.Exists( pathPopupMenuBackground ) )
-				{
-					this.txPopupMenuBackground = CDTXMania.tテクスチャの生成( pathPopupMenuBackground, false );
-				}
 				base.OnManagedリソースの作成();
 			}
 		}
@@ -248,8 +246,8 @@ namespace DTXMania
 		{
 			if ( !base.b活性化してない )
 			{
-				CDTXMania.tテクスチャの解放( ref this.txPopupMenuBackground );
-				CDTXMania.tテクスチャの解放( ref this.txCursor );
+				//CDTXMania.tテクスチャの解放( ref this.txPopupMenuBackground );
+				//CDTXMania.tテクスチャの解放( ref this.txCursor );
 			}
             CDTXMania.t安全にDisposeする( ref this.prvFont );
             CDTXMania.t安全にDisposeする( ref this.stqMenuTitle.txName );
@@ -418,8 +416,8 @@ namespace DTXMania
 		internal int n現在の選択行;
 		internal E楽器パート eInst = E楽器パート.UNKNOWN;
 
-		private CTexture txPopupMenuBackground;
-		private CTexture txCursor;
+		protected CTexture txPopupMenuBackground;
+		protected CTexture txCursor;
 		//private CActDFPFont font;
 
 		internal struct stQuickMenuItem

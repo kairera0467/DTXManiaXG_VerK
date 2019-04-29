@@ -40,7 +40,10 @@ namespace DTXMania
                 this.tx背景パネル = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\8_back panel.png" ) );
                 this.txジャケットパネル = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\8_jacket panel.png" ) );
                 this.tx曲名パネル = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\8_Songpanel.png" ) );
-                
+
+                this.tx難易度 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\8_Difficulty.png" ) );
+                this.tx楽器パート = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\8_Part.png" ) );
+
                 this.pfSongTitleFont = new CPrivateFastFont( new FontFamily( CDTXMania.ConfigIni.str選曲リストフォント ), 20, FontStyle.Regular );
                 this.pfSongArtistFont = new CPrivateFastFont( new FontFamily( CDTXMania.ConfigIni.str選曲リストフォント ), 14, FontStyle.Regular );
 
@@ -60,6 +63,9 @@ namespace DTXMania
 
                 CDTXMania.tテクスチャの解放( ref this.tx曲名 );
                 CDTXMania.tテクスチャの解放( ref this.txアーティスト名 );
+
+                CDTXMania.tテクスチャの解放( ref this.tx難易度 );
+                CDTXMania.tテクスチャの解放( ref this.tx楽器パート );
 				base.OnManagedリソースの解放();
 			}
 		}
@@ -78,7 +84,6 @@ namespace DTXMania
                 }
 				base.b初めての進行描画 = false;
 			}
-
 
 
             if( this.tx背景パネル != null )
@@ -111,6 +116,19 @@ namespace DTXMania
                 this.txアーティスト名.t2D描画( CDTXMania.app.Device, 450, 584 );
             }
 
+            if( this.tx難易度 != null )
+            {
+                this.tx難易度.t2D描画( CDTXMania.app.Device, 659, 634, new System.Drawing.Rectangle( 0, 24 * CDTXMania.stage選曲GITADORA.n現在選択中の曲の難易度, 160, 24 ) );
+            }
+            if( this.tx楽器パート != null )
+            {
+                // ドラムのみ
+                if( CDTXMania.ConfigIni.bDrums有効 )
+                    this.tx楽器パート.t2D描画( CDTXMania.app.Device, 659, 634, new System.Drawing.Rectangle( 0, 0, 160, 24 ) );
+
+                // ギターは後日
+            }
+
 			return 1;
 		}
 
@@ -124,6 +142,8 @@ namespace DTXMania
         private CTexture tx曲名パネル;
         private CTexture tx曲名;
         private CTexture txアーティスト名;
+        private CTexture tx楽器パート;
+        private CTexture tx難易度;
         private CPrivateFastFont pfSongArtistFont;
         private CPrivateFastFont pfSongTitleFont;
 

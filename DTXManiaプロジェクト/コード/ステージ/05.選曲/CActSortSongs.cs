@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using System.IO;
 
 namespace DTXMania
 {
@@ -12,20 +13,20 @@ namespace DTXMania
 
 		public CActSortSongs()
 		{
-			List<CItemBase> lci = new List<CItemBase>();
-			lci.Add( new CItemList( "Title",		CItemBase.Eパネル種別.通常, 0, "", "", new string[] { "Z,Y,X,...",		"A,B,C,..." } ) );
-			lci.Add( new CItemList( "Level",		CItemBase.Eパネル種別.通常, 0, "", "", new string[] { "99,98,97,...",	"1,2,3,..." } ) );
-			lci.Add( new CItemList( "Best Rank",	CItemBase.Eパネル種別.通常, 0, "", "", new string[] { "E,D,C,...",		"SS,S,A,..." } ) );
-			lci.Add( new CItemList( "PlayCount",	CItemBase.Eパネル種別.通常, 0, "", "", new string[] { "10,9,8,...",		"1,2,3,..." } ) );
-			lci.Add( new CItemList( "Author",		CItemBase.Eパネル種別.通常, 0, "", "", new string[] { "Z,Y,X,...",		"A,B,C,..." } ) );
-			lci.Add( new CItemList( "SkillPoint",	CItemBase.Eパネル種別.通常, 0, "", "", new string[] { "100,99,98,...",	"1,2,3,..." } ) );
-#if TEST_SORTBGM
-			lci.Add( new CItemList( "BPM",			CItemBase.Eパネル種別.通常, 0, "", "", new string[] { "300,200,...",	"70,80,90,..." } ) );
-#endif
-			lci.Add( new CItemList( "Date",			CItemBase.Eパネル種別.通常, 0, "", "", new string[] { "Dec.31,30,...",	"Jan.1,2,..." } ) );
-			lci.Add( new CItemList( "Return",		CItemBase.Eパネル種別.通常, 0, "", "", new string[] { "", 				"" } ) );
+//			List<CItemBase> lci = new List<CItemBase>();
+//			lci.Add( new CItemList( "Title",		CItemBase.Eパネル種別.通常, 0, "", "", new string[] { "Z,Y,X,...",		"A,B,C,..." } ) );
+//			lci.Add( new CItemList( "Level",		CItemBase.Eパネル種別.通常, 0, "", "", new string[] { "99,98,97,...",	"1,2,3,..." } ) );
+//			lci.Add( new CItemList( "Best Rank",	CItemBase.Eパネル種別.通常, 0, "", "", new string[] { "E,D,C,...",		"SS,S,A,..." } ) );
+//			lci.Add( new CItemList( "PlayCount",	CItemBase.Eパネル種別.通常, 0, "", "", new string[] { "10,9,8,...",		"1,2,3,..." } ) );
+//			lci.Add( new CItemList( "Author",		CItemBase.Eパネル種別.通常, 0, "", "", new string[] { "Z,Y,X,...",		"A,B,C,..." } ) );
+//			lci.Add( new CItemList( "SkillPoint",	CItemBase.Eパネル種別.通常, 0, "", "", new string[] { "100,99,98,...",	"1,2,3,..." } ) );
+//#if TEST_SORTBGM
+//			lci.Add( new CItemList( "BPM",			CItemBase.Eパネル種別.通常, 0, "", "", new string[] { "300,200,...",	"70,80,90,..." } ) );
+//#endif
+//			lci.Add( new CItemList( "Date",			CItemBase.Eパネル種別.通常, 0, "", "", new string[] { "Dec.31,30,...",	"Jan.1,2,..." } ) );
+//			lci.Add( new CItemList( "Return",		CItemBase.Eパネル種別.通常, 0, "", "", new string[] { "", 				"" } ) );
 			
-			base.Initialize( lci, false, "SORT MENU" );
+//			base.Initialize( lci, false, "SORT MENU" );
 		}
 
 
@@ -116,7 +117,21 @@ namespace DTXMania
 
 		public override void On活性化()
 		{
-			base.On活性化();
+			List<CItemBase> lci = new List<CItemBase>();
+			lci.Add( new CItemList( "Title",		CItemBase.Eパネル種別.通常, 0, "", "", new string[] { "Z,Y,X,...",		"A,B,C,..." } ) );
+			lci.Add( new CItemList( "Level",		CItemBase.Eパネル種別.通常, 0, "", "", new string[] { "99,98,97,...",	"1,2,3,..." } ) );
+			lci.Add( new CItemList( "Best Rank",	CItemBase.Eパネル種別.通常, 0, "", "", new string[] { "E,D,C,...",		"SS,S,A,..." } ) );
+			lci.Add( new CItemList( "PlayCount",	CItemBase.Eパネル種別.通常, 0, "", "", new string[] { "10,9,8,...",		"1,2,3,..." } ) );
+			lci.Add( new CItemList( "Author",		CItemBase.Eパネル種別.通常, 0, "", "", new string[] { "Z,Y,X,...",		"A,B,C,..." } ) );
+			lci.Add( new CItemList( "SkillPoint",	CItemBase.Eパネル種別.通常, 0, "", "", new string[] { "100,99,98,...",	"1,2,3,..." } ) );
+#if TEST_SORTBGM
+			lci.Add( new CItemList( "BPM",			CItemBase.Eパネル種別.通常, 0, "", "", new string[] { "300,200,...",	"70,80,90,..." } ) );
+#endif
+			lci.Add( new CItemList( "Date",			CItemBase.Eパネル種別.通常, 0, "", "", new string[] { "Dec.31,30,...",	"Jan.1,2,..." } ) );
+			lci.Add( new CItemList( "Return",		CItemBase.Eパネル種別.通常, 0, "", "", new string[] { "", 				"" } ) );
+
+            base.Initialize(lci, false, "SORT MENU");
+            base.On活性化();
 		}
 		public override void On非活性化()
 		{
@@ -129,12 +144,27 @@ namespace DTXMania
 		{
 			if( !base.b活性化してない )
 			{
+				string pathCursor = CSkin.Path( @"Graphics\ScreenConfig menu cursor.png" );
+				string pathPopupMenuBackground = CSkin.Path( @"Graphics\ScreenSelect sort menu background.png" );
+				if ( File.Exists ( pathCursor ) )
+				{
+					this.txCursor = CDTXMania.tテクスチャの生成( pathCursor, false );
+				}
+				if ( File.Exists( pathPopupMenuBackground ) )
+				{
+					this.txPopupMenuBackground = CDTXMania.tテクスチャの生成( pathPopupMenuBackground, false );
+				}
 				base.OnManagedリソースの作成();
 			}
 		}
 		public override void OnManagedリソースの解放()
 		{
-			base.OnManagedリソースの解放();
+            if( !base.b活性化してない )
+            {
+                CDTXMania.tテクスチャの解放( ref this.txCursor );
+                CDTXMania.tテクスチャの解放( ref this.txPopupMenuBackground );
+                base.OnManagedリソースの解放();
+            }
 		}
 
 		#region [ private ]

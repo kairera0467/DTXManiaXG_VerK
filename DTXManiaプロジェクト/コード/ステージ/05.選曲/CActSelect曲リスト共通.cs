@@ -454,7 +454,45 @@ namespace DTXMania
 			}
 			this.On非活性化();
 			this.r現在選択中の曲 = null;
-			this.On活性化();
+			//this.On活性化();
+			this.e楽器パート = E楽器パート.DRUMS;
+			this.b登場アニメ全部完了 = false;
+			this.n目標のスクロールカウンタ = 0;
+			this.n現在のスクロールカウンタ = 0;
+			this.nスクロールタイマ = -1;
+
+			// フォント作成。
+			// 曲リスト文字は２倍（面積４倍）でテクスチャに描画してから縮小表示するので、フォントサイズは２倍とする。
+
+            if( this.ft曲リスト用フォント == null )
+            {
+			    FontStyle regular = FontStyle.Regular;
+			    if( CDTXMania.ConfigIni.b選曲リストフォントを斜体にする ) regular |= FontStyle.Italic;
+			    if( CDTXMania.ConfigIni.b選曲リストフォントを太字にする ) regular |= FontStyle.Bold;
+			    this.ft曲リスト用フォント = new Font(
+				    CDTXMania.ConfigIni.str選曲リストフォント,
+				    (float) ( CDTXMania.ConfigIni.n選曲リストフォントのサイズdot * 2 * Scale.Y ),		// 後でScale.Yを掛けないように直すこと(Config.ini初期値変更)
+				    regular,
+				    GraphicsUnit.Pixel
+			    );
+            }
+
+            //FontStyle fStyle = CDTXMania.ConfigIni.b選曲リストフォントを太字にする ? FontStyle.Bold : FontStyle.Regular;
+            //this.prvPanelFont = new CPrivateFastFont( new FontFamily( CDTXMania.ConfigIni.str選曲リストフォント ), 18, fStyle );
+
+			// 現在選択中の曲がない（＝はじめての活性化）なら、現在選択中の曲をルートの先頭ノードに設定する。
+
+			if( ( this.r現在選択中の曲 == null ) && ( CDTXMania.Songs管理.list曲ルート.Count > 0 ) )
+				this.r現在選択中の曲 = CDTXMania.Songs管理.list曲ルート[ 0 ];
+
+
+			// バー情報を初期化する。
+
+			this.tバーの初期化();
+
+			//base.On活性化();
+
+			this.t選択曲が変更された(true);		// #27648 2012.3.31 yyagi 選曲画面に入った直後の 現在位置/全アイテム数 の表示を正しく行うため
 		}
 
 
@@ -903,6 +941,10 @@ namespace DTXMania
 			return list[ index - 1 ];
 		}
         public virtual void tバーの初期化()
+        {
+
+        }
+        public virtual void tバーテクスチャの初期化()
         {
 
         }

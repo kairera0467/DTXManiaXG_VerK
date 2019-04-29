@@ -1000,9 +1000,35 @@ namespace DTXMania
                 this.stバー情報[ i ].strDTXフォルダのパス = song.arスコア[ this.n現在のアンカ難易度レベルに最も近い難易度レベルを返す( song ) ].ファイル情報.フォルダの絶対パス;
                 this.stバー情報[ i ].strPreimageのパス = song.arスコア[ this.n現在のアンカ難易度レベルに最も近い難易度レベルを返す( song ) ].ファイル情報.フォルダの絶対パス + song.arスコア[ this.n現在のアンカ難易度レベルに最も近い難易度レベルを返す( song ) ].譜面情報.Preimage;
 
+            //    if( CDTXMania.r現在のステージ.eステージID == CStage.Eステージ.選曲 )
+            //    {
+                    this.tパネルの生成(i, song.strタイトル, this.stバー情報[ i ].strアーティスト名, song.col文字色);
+                
+            //        if( this.stバー情報[ i ].strPreimageのパス != null )
+            //        {
+            //            if( !this.dicThumbnail.ContainsKey( this.stバー情報[ i ].strPreimageのパス ) )
+				        //{
+            //                this.tパスを指定してサムネイル画像を生成する( i, this.stバー情報[ i ].strPreimageのパス, this.stバー情報[ i ].eバー種別  );
+		          //          this.dicThumbnail.Add( this.stバー情報[ i ].strPreimageのパス, this.txTumbnail[ i ] );
+				        //}
+            //            this.txTumbnail[ i ] = this.dicThumbnail[ this.stバー情報[ i ].strPreimageのパス ];
+            //        }
+            //    }
+				for( int j = 0; j < 3; j++ )
+					this.stバー情報[ i ].nスキル値[ j ] = (int) song.arスコア[ this.n現在のアンカ難易度レベルに最も近い難易度レベルを返す( song ) ].譜面情報.最大スキル[ j ];
+
+				song = this.r次の曲( song );
+			}
+
+            this.n現在の選択行 = 7;
+		}
+        public override void tバーテクスチャの初期化()
+        {
+			for( int i = 0; i < 15; i++ )
+			{
                 if( CDTXMania.r現在のステージ.eステージID == CStage.Eステージ.選曲 )
                 {
-                    this.tパネルの生成(i, song.strタイトル, this.stバー情報[ i ].strアーティスト名, song.col文字色);
+                    //this.tパネルの生成(i, song.strタイトル, this.stバー情報[ i ].strアーティスト名, song.col文字色);
                 
                     if( this.stバー情報[ i ].strPreimageのパス != null )
                     {
@@ -1014,14 +1040,8 @@ namespace DTXMania
                         this.txTumbnail[ i ] = this.dicThumbnail[ this.stバー情報[ i ].strPreimageのパス ];
                     }
                 }
-				for( int j = 0; j < 3; j++ )
-					this.stバー情報[ i ].nスキル値[ j ] = (int) song.arスコア[ this.n現在のアンカ難易度レベルに最も近い難易度レベルを返す( song ) ].譜面情報.最大スキル[ j ];
-
-				song = this.r次の曲( song );
 			}
-
-            this.n現在の選択行 = 7;
-		}
+        }
         private void tパスを指定してサムネイル画像を生成する( int nバー番号, string strDTXPath, Eバー種別 eType )
         {
             if( nバー番号 < 0 || nバー番号 > 15 )
