@@ -73,6 +73,8 @@ namespace DTXMania
             public STDGBVALUE<bool> b完全にCLASSIC譜面である;
             public STDGBVALUE<bool> b譜面がある;
             public CDTX.STLANEINT n可視チップ数;
+            public double 最低Bpm;
+            public double 最大Bpm;
 
 			[Serializable]
 			[StructLayout( LayoutKind.Sequential )]
@@ -355,6 +357,8 @@ namespace DTXMania
             this.譜面情報.b譜面がある.Guitar = false;
             this.譜面情報.b譜面がある.Bass = false;
             this.譜面情報.n可視チップ数 = new CDTX.STLANEINT();
+            this.譜面情報.最低Bpm = 120.0;
+            this.譜面情報.最大Bpm = 120.0;
 		}
 	}
 }

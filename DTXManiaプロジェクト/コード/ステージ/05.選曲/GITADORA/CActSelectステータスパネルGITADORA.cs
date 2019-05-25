@@ -18,6 +18,7 @@ namespace DTXMania
 		{
             this.tレベル数値フォント初期化();
             this.tスキル数値フォント初期化();
+            this.tBPM数値フォント初期化();
             base.b活性化してない = true;
 		}
 		public override void t選択曲が変更された()
@@ -130,6 +131,8 @@ namespace DTXMania
                 this.txスキル数字_大_少数部 = CDTXMania.tテクスチャの生成( CSkin.Path(@"Graphics\5_Skill number Large Decimal.png") );
                 this.txスキル数字_大_小数点 = CDTXMania.tテクスチャの生成( CSkin.Path(@"Graphics\5_Skill number Large Dot.png") );
 
+                this.txBPM数字 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_BPM Number.png") );
+
 				base.OnManagedリソースの作成();
 			}
 		}
@@ -154,6 +157,8 @@ namespace DTXMania
                 CDTXMania.tテクスチャの解放( ref this.txスキル数字_大_整数部 );
                 CDTXMania.tテクスチャの解放( ref this.txスキル数字_大_少数部 );
                 CDTXMania.tテクスチャの解放( ref this.txスキル数字_大_小数点 );
+
+                CDTXMania.tテクスチャの解放( ref this.txBPM数字 );
 
 				base.OnManagedリソースの解放();
 			}
@@ -257,12 +262,18 @@ namespace DTXMania
                         }
                         //-----------------
                         #endregion
-
-                        #region[ 曲別スキル値(左側)を描画 ]
-                        this.tスキル値の描画_大( 79, 216, this.db現在選択中の曲の曲別スキル値.Drums );
-                        #endregion
-
                         this.t難易度カーソル描画( 426, base.n現在選択中の曲の難易度 );
+
+                        if( CDTXMania.stage選曲GITADORA.r現在選択中の曲.eノード種別 == C曲リストノード.Eノード種別.SCORE )
+                        {
+                            #region[ 曲別スキル値(左側)を描画 ]
+                            this.tスキル値の描画_大( 79, 216, this.db現在選択中の曲の曲別スキル値.Drums );
+                            #endregion
+                            #region[ BPM値を描画 ]
+                            // ToDo:速度変化への対応(DB側もいじらないとダメ)
+                            this.tBPM値の描画( 120, 302, CDTXMania.stage選曲GITADORA.r現在選択中のスコア.譜面情報.最低Bpm, CDTXMania.stage選曲GITADORA.r現在選択中のスコア.譜面情報.最大Bpm );
+                            #endregion
+                        }
                     }
                     #endregion
                 }
@@ -366,6 +377,7 @@ namespace DTXMania
         private CTexture txスキル数字_大_整数部;
         private CTexture txスキル数字_大_少数部;
         private CTexture txスキル数字_大_小数点;
+        private CTexture txBPM数字; // 2019.04.30 kairera0467
 
         private struct ST数字フォント
         {
@@ -377,6 +389,7 @@ namespace DTXMania
         private ST数字フォント[] STレベル数字_中_少数;
         private ST数字フォント[] STスキル数字_大_整数;
         private ST数字フォント[] STスキル数字_大_少数;
+        private ST数字フォント[] STBPM数字;
 
         private void tレベル数値フォント初期化()
         {
@@ -432,6 +445,24 @@ namespace DTXMania
             this.STスキル数字_大_少数[ 7 ] = new ST数字フォント() { ch文字 = '7', rect = new Rectangle( 0, 46, 46, 46 ) };
             this.STスキル数字_大_少数[ 8 ] = new ST数字フォント() { ch文字 = '8', rect = new Rectangle( 0, 46, 46, 46 ) };
             this.STスキル数字_大_少数[ 9 ] = new ST数字フォント() { ch文字 = '9', rect = new Rectangle( 0, 46, 46, 46 ) };
+        }
+
+        private void tBPM数値フォント初期化()
+        {
+            this.STBPM数字 = new ST数字フォント[] {
+                new ST数字フォント(){ ch文字 = '0', rect = new Rectangle( 0, 0, 28, 28 ) },
+                new ST数字フォント(){ ch文字 = '1', rect = new Rectangle( 28, 0, 28, 28 ) },
+                new ST数字フォント(){ ch文字 = '2', rect = new Rectangle( 56, 0, 28, 28 ) },
+                new ST数字フォント(){ ch文字 = '3', rect = new Rectangle( 84, 0, 28, 28 ) },
+                new ST数字フォント(){ ch文字 = '4', rect = new Rectangle( 112, 0, 28, 28 ) },
+                new ST数字フォント(){ ch文字 = '5', rect = new Rectangle( 0, 28, 28, 28 ) },
+                new ST数字フォント(){ ch文字 = '6', rect = new Rectangle( 28, 28, 28, 28 ) },
+                new ST数字フォント(){ ch文字 = '7', rect = new Rectangle( 56, 28, 28, 28 ) },
+                new ST数字フォント(){ ch文字 = '8', rect = new Rectangle( 84, 28, 28, 28 ) },
+                new ST数字フォント(){ ch文字 = '9', rect = new Rectangle( 112, 28, 28, 28 ) },
+                new ST数字フォント(){ ch文字 = '~', rect = new Rectangle( 0, 56, 28, 28 ) }
+            };
+
         }
 
         // 2019.04.21 kairera0467
@@ -534,6 +565,45 @@ namespace DTXMania
                 }
             }
         }
+
+        // 2019.04.20 kairera0467
+        /// <summary>
+        /// BPM値を画像フォントを用いて描画する
+        /// ※速度変化しない場合は最小、最大のどちらか片方を-1にすること。
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="dbBPM最小">最小速度</param>
+        /// <param name="dbBPM最大">最大速度</param>
+        private void tBPM値の描画( int x, int y, double dbBPM最小, double dbBPM最大 )
+        {
+            if( dbBPM最小 <= 0 || dbBPM最小 > 9999 )
+                return;
+
+            // 1文字あたりのマージン
+            int n文字間隔 = 18;
+            string formatText = string.Format( "{0,4:###0}", dbBPM最小.ToString() );
+            if( ( dbBPM最小 != -1 && dbBPM最大 != -1 ) && ( dbBPM最小 == dbBPM最大 ) ) {
+                formatText = string.Format( "{0,4:###0}", dbBPM最大.ToString() );
+                x += 34;
+            }
+            else if( dbBPM最小 != -1 && dbBPM最大 != -1 )
+                formatText = string.Format( "{0,4:###0}" + "~" + "{1,4:###0}", dbBPM最小.ToString(), dbBPM最大.ToString() );
+
+            for( int i = 0; i < formatText.Length; i++ )
+            {
+                char c = formatText[ i ];
+                for( int j = 0; j < 11; j++ )
+                {
+                    if( c.Equals( this.STBPM数字[ j ].ch文字 ) )
+                    {
+                        this.txBPM数字.t2D描画( CDTXMania.app.Device, x, y, this.STBPM数字[ j ].rect );
+                        x += n文字間隔;
+                    }
+                }
+            }
+        }
+
 
         [StructLayout(LayoutKind.Sequential)]
         private struct ST文字位置

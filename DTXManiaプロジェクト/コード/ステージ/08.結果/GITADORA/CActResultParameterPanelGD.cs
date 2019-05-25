@@ -4,9 +4,12 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.Drawing;
 using System.IO;
-using SlimDX;
+using SharpDX;
 using FDK;
 
+using Rectangle = System.Drawing.Rectangle;
+using Point = SharpDX.Point;
+using Size = System.Drawing.Size;
 namespace DTXMania
 {
 	internal class CActResultParameterPanelGD : CActResultParameterPanel共通
@@ -15,7 +18,9 @@ namespace DTXMania
 
 		public CActResultParameterPanelGD()
 		{
-			base.b活性化してない = true;
+            this.tスキル数字フォント初期化();
+            this.t達成率数字フォント初期化();
+            base.b活性化してない = true;
 		}
 
 
@@ -90,7 +95,25 @@ namespace DTXMania
                 this.txゲージ = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\8_Gauge.png" ) );
                 this.txゲージ2 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\8_Gauge2.png" ) );
 				this.txWhite = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\Tile white 64x64.png" ) );
-				base.OnManagedリソースの作成();
+                
+                this.txスキル数字_整数 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\8_Skill Number Big.png" ) );
+                this.txスキル数字_少数 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\8_Skill Number Small.png" ) );
+                this.txスキル数字_点 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\8_Skill Number dot.png" ) );
+
+                this.tx達成率数字_整数 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\8_Rate Number Big.png" ) );
+                this.tx達成率数字_少数 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\8_Rate Number Small.png" ) );
+
+
+                #region[ 難易度、達成率、スキル値の下の白線の生成 ]
+                Bitmap b白線 = new Bitmap( 340, 2 );
+                Graphics g白線 = Graphics.FromImage( b白線 );
+                g白線.FillRectangle( Brushes.White, 0, 0, 340, 2 );
+
+                this.tx白線 = CDTXMania.tテクスチャの生成( b白線, false );
+                CDTXMania.t安全にDisposeする( ref b白線 );
+                CDTXMania.t安全にDisposeする( ref g白線 );
+                #endregion
+                base.OnManagedリソースの作成();
 			}
 		}
 		public override void OnManagedリソースの解放()
@@ -106,6 +129,15 @@ namespace DTXMania
                 CDTXMania.tテクスチャの解放( ref this.txゲージ );
                 CDTXMania.tテクスチャの解放( ref this.txゲージ2 );
 				CDTXMania.tテクスチャの解放( ref this.txWhite );
+
+                CDTXMania.tテクスチャの解放( ref this.txスキル数字_整数 );
+                CDTXMania.tテクスチャの解放( ref this.txスキル数字_少数 );
+                CDTXMania.tテクスチャの解放( ref this.txスキル数字_点 );
+
+                CDTXMania.tテクスチャの解放( ref this.tx達成率数字_整数 );
+                CDTXMania.tテクスチャの解放( ref this.tx達成率数字_少数 );
+
+                CDTXMania.tテクスチャの解放( ref this.tx白線 );
 				base.OnManagedリソースの解放();
 			}
 		}
@@ -132,8 +164,16 @@ namespace DTXMania
 			{
                 if( this.n本体X[ i ] != 0 )
                 {
-                    this.t特大文字表示( 1080, 260, string.Format("{0,-6:##0.00%}", CDTXMania.stage結果.st演奏記録[ i ].db演奏型スキル値 / 100.0 ) );
-                    this.t特大文字表示( 1020, 370, string.Format("{0,6:##0.00}", CDTXMania.stage結果.st演奏記録[i].dbゲーム型スキル値));
+                    this.tレベル値の描画( 1078, 159, CDTXMania.DTX.LEVEL.Drums, CDTXMania.DTX.LEVELDEC.Drums );
+                    this.tx白線?.t2D描画( CDTXMania.app.Device, 916, 215 );
+
+                    //this.t特大文字表示( 1080, 260, string.Format("{0,-6:##0.00%}", CDTXMania.stage結果.st演奏記録[ i ].db演奏型スキル値 / 100.0 ) );
+                    this.t達成率値の描画( 1040, 232, CDTXMania.stage結果.st演奏記録[ i ].db演奏型スキル値 );
+                    this.tx白線?.t2D描画( CDTXMania.app.Device, 890, 288 );
+
+                    //this.t特大文字表示( 1020, 370, string.Format("{0,6:##0.00}", CDTXMania.stage結果.st演奏記録[i].dbゲーム型スキル値));
+                    this.tスキル値の描画(976, 328, CDTXMania.stage結果.st演奏記録[ i ].dbゲーム型スキル値 );
+                    this.tx白線?.t2D描画( CDTXMania.app.Device, 842, 416 );
                 }
 			}
 
@@ -141,48 +181,7 @@ namespace DTXMania
             int num5 = this.ct表示用.n現在の値 / 100;
             double num6 = 1.0 - (((double)(this.ct表示用.n現在の値 % 100)) / 100.0);
             int height = 20;
-
-            for( int i = 0; i < 3; i++ )
-            {
-                this.n白X[i] = this.n本体X[i] + 393;
-                this.n白Y[i] = this.n本体Y[i] + 35 + (num5 * 24);
-
-                if( this.n本体X[i] != 0 )
-                {
-                    STDGBVALUE<double> n表記するLEVEL = new STDGBVALUE<double>();
-                    n表記するLEVEL[i] = CDTXMania.DTX.LEVEL[i] / 10.0;
-                    n表記するLEVEL[i] += (CDTXMania.DTX.LEVELDEC[i] != 0 ? CDTXMania.DTX.LEVELDEC[i] / 100.0 : 0);
-                    int DTXLevel = CDTXMania.DTX.LEVEL[i];
-                    double DTXLevelDeci = (DTXLevel * 10 - CDTXMania.DTX.LEVEL[i]);
-
-                    Cスコア CScore = CDTXMania.bXGRelease ? CDTXMania.stage選曲XG.r確定されたスコア : CDTXMania.stage選曲GITADORA.r確定されたスコア;
-                    C曲リストノード CSongNode = CDTXMania.bXGRelease ? CDTXMania.stage選曲XG.r確定された曲 : CDTXMania.stage選曲GITADORA.r確定された曲;
-                    int n表示Level = 0;
-                    string n表示LevelDec = "0";
-
-                    if( CDTXMania.ConfigIni.bCLASSIC譜面判別を有効にする && CDTXMania.DTX.bCLASSIC譜面である[ i ] )
-                    {
-                        n表示Level = CScore.譜面情報.レベル[i];
-                    }
-                    else
-                    {
-                        n表示Level = CScore.譜面情報.レベル[ i ] / 10;
-                        if( CScore.譜面情報.レベル[ i ].ToString().Length > 1 )
-                            n表示LevelDec = CScore.譜面情報.レベル[ i ].ToString().Substring( 1, 1 );
-                        else
-                            n表示LevelDec = CScore.譜面情報.レベル[ i ].ToString();
-
-                        if( CScore.譜面情報.レベルDec[ i ] != 0 )
-                            n表示LevelDec += CScore.譜面情報.レベルDec[i].ToString();
-                        else
-                            n表示LevelDec += "0";
-                    }
-
-                    if (this.ct表示用.n現在の値 < 700)
-                    {
-                    }
-                }
-            }
+            
             //文字
             CDTXMania.act文字コンソール.tPrint( 877, 484, C文字コンソール.Eフォント種別.白, "PERFECT" );
             CDTXMania.act文字コンソール.tPrint( 877, 508, C文字コンソール.Eフォント種別.白, "GREAT" );
@@ -234,6 +233,17 @@ namespace DTXMania
             }
         }
 
+        private struct ST数字フォント
+        {
+            public char ch文字;
+            public Rectangle rect;
+        }
+
+        private ST数字フォント[] STスキル数字_整数;
+        private ST数字フォント[] STスキル数字_少数;
+        private ST数字フォント[] ST達成率数字_整数;
+        private ST数字フォント[] ST達成率数字_少数;
+
 		private CCounter ct表示用;
         private STDGBVALUE<int> n本体X;
         private STDGBVALUE<int> n本体Y;
@@ -248,6 +258,12 @@ namespace DTXMania
         private CTexture txゲージ;
         private CTexture txゲージ2;
 		private CTexture[] tx文字 = new CTexture[ 3 ];
+        private CTexture txスキル数字_整数;
+        private CTexture txスキル数字_少数;
+        private CTexture txスキル数字_点;
+        private CTexture tx達成率数字_整数;
+        private CTexture tx達成率数字_少数;
+        private CTexture tx白線;
 
         private ST文字位置[] st小文字位置 = new ST文字位置[]{
             new ST文字位置( '0', new Point( 0, 36 ) ),
@@ -318,6 +334,64 @@ namespace DTXMania
             new ST文字位置( '8', new Point( 160, 0 ) ),
             new ST文字位置( '9', new Point( 180, 0 ) ),
         };
+
+        private void tスキル数字フォント初期化()
+        {
+            this.STスキル数字_整数 = new ST数字フォント[] {
+                new ST数字フォント{ ch文字 = '0', rect = new Rectangle( 0, 0, 70, 70 ) },
+                new ST数字フォント{ ch文字 = '1', rect = new Rectangle( 70, 0, 70, 70 ) },
+                new ST数字フォント{ ch文字 = '2', rect = new Rectangle( 140, 0, 70, 70 ) },
+                new ST数字フォント{ ch文字 = '3', rect = new Rectangle( 210, 0, 70, 70 ) },
+                new ST数字フォント{ ch文字 = '4', rect = new Rectangle( 280, 0, 70, 70 ) },
+                new ST数字フォント{ ch文字 = '5', rect = new Rectangle( 0, 70, 70, 70 ) },
+                new ST数字フォント{ ch文字 = '6', rect = new Rectangle( 70, 70, 70, 70 ) },
+                new ST数字フォント{ ch文字 = '7', rect = new Rectangle( 140, 70, 70, 70 ) },
+                new ST数字フォント{ ch文字 = '8', rect = new Rectangle( 210, 70, 70, 70 ) },
+                new ST数字フォント{ ch文字 = '9', rect = new Rectangle( 280, 70, 70, 70 ) },
+            };
+            this.STスキル数字_少数 = new ST数字フォント[] {
+                new ST数字フォント{ ch文字 = '0', rect = new Rectangle( 0, 0, 50, 50 ) },
+                new ST数字フォント{ ch文字 = '1', rect = new Rectangle( 50, 0, 50, 50 ) },
+                new ST数字フォント{ ch文字 = '2', rect = new Rectangle( 100, 0, 50, 50 ) },
+                new ST数字フォント{ ch文字 = '3', rect = new Rectangle( 150, 0, 50, 50 ) },
+                new ST数字フォント{ ch文字 = '4', rect = new Rectangle( 200, 0, 50, 50 ) },
+                new ST数字フォント{ ch文字 = '5', rect = new Rectangle( 0, 50, 50, 50 ) },
+                new ST数字フォント{ ch文字 = '6', rect = new Rectangle( 50, 50, 50, 50 ) },
+                new ST数字フォント{ ch文字 = '7', rect = new Rectangle( 100, 50, 50, 50 ) },
+                new ST数字フォント{ ch文字 = '8', rect = new Rectangle( 150, 50, 50, 50 ) },
+                new ST数字フォント{ ch文字 = '9', rect = new Rectangle( 200, 50, 50, 50 ) },
+            };
+        }
+
+        private void t達成率数字フォント初期化()
+        {
+            this.ST達成率数字_整数 = new ST数字フォント[] {
+                new ST数字フォント{ ch文字 = '0', rect = new Rectangle( 0, 0, 38, 50 ) },
+                new ST数字フォント{ ch文字 = '1', rect = new Rectangle( 38, 0, 38, 50 ) },
+                new ST数字フォント{ ch文字 = '2', rect = new Rectangle( 76, 0, 38, 50 ) },
+                new ST数字フォント{ ch文字 = '3', rect = new Rectangle( 114, 0, 38, 50 ) },
+                new ST数字フォント{ ch文字 = '4', rect = new Rectangle( 152, 0, 38, 50 ) },
+                new ST数字フォント{ ch文字 = '5', rect = new Rectangle( 0, 50, 38, 50 ) },
+                new ST数字フォント{ ch文字 = '6', rect = new Rectangle( 38, 50, 38, 50 ) },
+                new ST数字フォント{ ch文字 = '7', rect = new Rectangle( 76, 50, 38, 50 ) },
+                new ST数字フォント{ ch文字 = '8', rect = new Rectangle( 114, 50, 38, 50 ) },
+                new ST数字フォント{ ch文字 = '9', rect = new Rectangle( 152, 50, 38, 50 ) }
+            };
+            this.ST達成率数字_少数 = new ST数字フォント[] {
+                new ST数字フォント{ ch文字 = '0', rect = new Rectangle( 0, 0, 32, 42 ) },
+                new ST数字フォント{ ch文字 = '1', rect = new Rectangle( 32, 0, 32, 42 ) },
+                new ST数字フォント{ ch文字 = '2', rect = new Rectangle( 64, 0, 32, 42 ) },
+                new ST数字フォント{ ch文字 = '3', rect = new Rectangle( 96, 0, 32, 42 ) },
+                new ST数字フォント{ ch文字 = '4', rect = new Rectangle( 128, 0, 32, 42 ) },
+                new ST数字フォント{ ch文字 = '5', rect = new Rectangle( 0, 42, 32, 42 ) },
+                new ST数字フォント{ ch文字 = '6', rect = new Rectangle( 32, 42, 32, 42 ) },
+                new ST数字フォント{ ch文字 = '7', rect = new Rectangle( 64, 42, 32, 42 ) },
+                new ST数字フォント{ ch文字 = '8', rect = new Rectangle( 96, 42, 32, 42 ) },
+                new ST数字フォント{ ch文字 = '9', rect = new Rectangle( 128, 42, 32, 42 ) },
+                new ST数字フォント{ ch文字 = '%', rect = new Rectangle( 0, 84, 42, 42 ) },
+                new ST数字フォント{ ch文字 = '.', rect = new Rectangle( 42, 84, 32, 42 ) }
+            };
+        }
 
 		private void t小文字表示( int x, int y, string str )
 		{
@@ -470,6 +544,154 @@ namespace DTXMania
                 x += 16;
 			}
 		}
+        private void tスキル値の描画( int x, int y, double dbスキル値 )
+        {
+            if( dbスキル値 <= 0 || dbスキル値 > 200 )
+                return;
+
+            // 1文字あたりのマージン
+            int n文字間隔_整数部 = 46;
+            int n文字間隔_小数部 = 32;
+            bool b整数部処理中 = true;
+            dbスキル値 = dbスキル値 * 100.0;
+            dbスキル値 = Math.Floor( dbスキル値 );
+            dbスキル値 = dbスキル値 / 100.0;
+            string formatText = string.Format( "{0,6:000.00}", dbスキル値.ToString() );
+
+            for( int i = 0; i < formatText.Length; i++ )
+            {
+                char c = formatText[ i ];
+
+                if( c.Equals( '.' ) )
+                {
+                    // 小数点だったら小数点を描画してフラグ切り替えてcontinue
+                    this.txスキル数字_点.t2D描画( CDTXMania.app.Device, x - 14, y );
+                    b整数部処理中 = false;
+                    x += 18;
+                    continue;
+                }
+                else if( c.Equals( ' ' ) )
+                {
+                    // 空白ならなにもせずcontinue
+                    continue;
+                }
+
+                for( int j = 0; j < 10; j++ )
+                {
+                    if( c.Equals( this.STスキル数字_整数[ j ].ch文字 ) )
+                    {
+                        if( b整数部処理中 )
+                        {
+                            this.txスキル数字_整数.t2D描画( CDTXMania.app.Device, x, y, this.STスキル数字_整数[ j ].rect );
+                            x += n文字間隔_整数部;
+                        }
+                        else
+                        {
+                            this.txスキル数字_少数.t2D描画( CDTXMania.app.Device, x, y + 20, this.STスキル数字_少数[ j ].rect );
+                            x += n文字間隔_小数部;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void t達成率値の描画( int x, int y, double dbスキル値 )
+        {
+            // 1文字あたりのマージン
+            int n文字間隔_整数部 = 38;
+            int n文字間隔_小数部 = 30;
+            bool b整数部処理中 = true;
+            string formatText = string.Format( "{0,5:00.00}%", dbスキル値.ToString() );
+
+            for( int i = 0; i < formatText.Length; i++ )
+            {
+                char c = formatText[ i ];
+
+                if( c.Equals( '.' ) )
+                {
+                    // 小数点だったら小数点を描画してフラグ切り替えてcontinue
+                    this.tx達成率数字_少数?.t2D描画( CDTXMania.app.Device, x - 12, y + 8, this.ST達成率数字_少数[ 11 ].rect );
+                    b整数部処理中 = false;
+                    x += 8;
+                    continue;
+                }
+                else if( c.Equals( '%' ) )
+                {
+                    this.tx達成率数字_少数?.t2D描画( CDTXMania.app.Device, x, y + 8, this.ST達成率数字_少数[ 10 ].rect );
+                    continue;
+                }
+                else if( c.Equals( ' ' ) )
+                {
+                    // 空白ならなにもせずcontinue
+                    continue;
+                }
+
+                for( int j = 0; j < 10; j++ )
+                {
+                    if( c.Equals( this.ST達成率数字_整数[ j ].ch文字 ) )
+                    {
+                        if( b整数部処理中 )
+                        {
+                            this.tx達成率数字_整数?.t2D描画( CDTXMania.app.Device, x, y, this.ST達成率数字_整数[ j ].rect );
+                            x += n文字間隔_整数部;
+                        }
+                        else
+                        {
+                            this.tx達成率数字_少数?.t2D描画( CDTXMania.app.Device, x, y + 9, this.ST達成率数字_少数[ j ].rect );
+                            x += n文字間隔_小数部;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void tレベル値の描画( int x, int y, int nレベル, int nレベルDec )
+        {
+            // 1文字あたりのマージン
+            int n文字間隔_整数部 = 38;
+            int n文字間隔_小数部 = 30;
+            bool b整数部処理中 = true;
+            decimal decLevel = 0.00M;
+            decLevel += nレベル / 10.0M;
+            decLevel += nレベルDec / 100.0M;
+            string formatText = string.Format( "{0,4:0.00}", decLevel.ToString() );
+
+            for( int i = 0; i < formatText.Length; i++ )
+            {
+                char c = formatText[ i ];
+
+                if( c.Equals( '.' ) )
+                {
+                    // 小数点だったら小数点を描画してフラグ切り替えてcontinue
+                    this.tx達成率数字_少数?.t2D描画( CDTXMania.app.Device, x - 12, y + 8, this.ST達成率数字_少数[ 11 ].rect );
+                    b整数部処理中 = false;
+                    x += 8;
+                    continue;
+                }
+                else if( c.Equals( ' ' ) )
+                {
+                    // 空白ならなにもせずcontinue
+                    continue;
+                }
+
+                for( int j = 0; j < 10; j++ )
+                {
+                    if( c.Equals( this.ST達成率数字_整数[ j ].ch文字 ) )
+                    {
+                        if( b整数部処理中 )
+                        {
+                            this.tx達成率数字_整数?.t2D描画( CDTXMania.app.Device, x, y, this.ST達成率数字_整数[ j ].rect );
+                            x += n文字間隔_整数部;
+                        }
+                        else
+                        {
+                            this.tx達成率数字_少数?.t2D描画( CDTXMania.app.Device, x, y + 9, this.ST達成率数字_少数[ j ].rect );
+                            x += n文字間隔_小数部;
+                        }
+                    }
+                }
+            }
+        }
 		//-----------------
 		#endregion
 	}

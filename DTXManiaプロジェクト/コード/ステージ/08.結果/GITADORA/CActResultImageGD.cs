@@ -8,6 +8,7 @@ using SharpDX;
 using FDK;
 
 using Color = System.Drawing.Color;
+using Rectangle = System.Drawing.Rectangle;
 namespace DTXMania
 {
 	internal class CActResultImageGD : CActResultImage共通
@@ -61,11 +62,15 @@ namespace DTXMania
                 CDTXMania.tテクスチャの解放( ref this.txジャケットパネル );
                 CDTXMania.tテクスチャの解放( ref this.tx曲名パネル );
 
-                CDTXMania.tテクスチャの解放( ref this.tx曲名 );
-                CDTXMania.tテクスチャの解放( ref this.txアーティスト名 );
-
                 CDTXMania.tテクスチャの解放( ref this.tx難易度 );
                 CDTXMania.tテクスチャの解放( ref this.tx楽器パート );
+
+                CDTXMania.t安全にDisposeする( ref this.pfSongTitleFont );
+                CDTXMania.t安全にDisposeする( ref this.pfSongArtistFont );
+
+                CDTXMania.tテクスチャの解放( ref this.tx曲名 );
+                CDTXMania.tテクスチャの解放( ref this.txアーティスト名 );
+                
 				base.OnManagedリソースの解放();
 			}
 		}
@@ -144,9 +149,10 @@ namespace DTXMania
         private CTexture txアーティスト名;
         private CTexture tx楽器パート;
         private CTexture tx難易度;
+
         private CPrivateFastFont pfSongArtistFont;
         private CPrivateFastFont pfSongTitleFont;
-
+        
         private CTexture t指定された文字テクスチャを生成する( string str文字 )
         {
             if( this.pfSongTitleFont == null ) return null;

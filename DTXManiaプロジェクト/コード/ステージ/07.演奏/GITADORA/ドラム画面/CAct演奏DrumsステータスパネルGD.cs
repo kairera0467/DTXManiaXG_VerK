@@ -166,6 +166,9 @@ namespace DTXMania
                 this.txSongNamePlate = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_Drums Songpanel.png" ) );
                 this.txScore = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_score numbersGD.png" ) );
 
+                this.tx判定数数字 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_Ratenumber_s.png" ) );
+                this.tx達成率数字_整数 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_Ratenumber_l.png" ) );
+
                 CDTXMania.t安全にDisposeする( ref bmpCardName );
 
                 base.OnManagedリソースの作成();
@@ -188,6 +191,9 @@ namespace DTXMania
                 CDTXMania.tテクスチャの解放( ref this.txJacket );
                 CDTXMania.tテクスチャの解放( ref this.txスキルパネル );
 
+                CDTXMania.tテクスチャの解放( ref this.tx達成率数字_整数 );
+                CDTXMania.tテクスチャの解放( ref this.tx判定数数字 );
+
                 CDTXMania.tテクスチャの解放( ref this.txPlayerName );
 
                 base.OnManagedリソースの解放();
@@ -202,12 +208,12 @@ namespace DTXMania
                 //    return 0;
                 if( this.b初めての進行描画 )
                 {
-                    //fX = -527;
-                    //fY = 161;
-                    //fZ = 0;
-                    //rot = -38;
-                    //fScaleX = 0.3f;
-                    //fScaleY = 0.62f;
+                    fX = -465;
+                    fY = -25;
+                    fZ = 0;
+                    rot = -38;
+                    fScaleX = 0.6f;
+                    fScaleY = 1f;
                     //offset = 0;
 
                     this.b初めての進行描画 = false;
@@ -220,7 +226,7 @@ namespace DTXMania
                 if( this.txスキルパネル != null )
                 {
                     Matrix matSkillPanel = Matrix.Identity;
-                    matSkillPanel *= Matrix.Scaling( 0.6f, 1, 1 );
+                    matSkillPanel *= Matrix.Scaling( 0.6f, 1.0f, 1 );
                     matSkillPanel *= Matrix.RotationY( C変換.DegreeToRadian( -38 ) );
                     matSkillPanel *= Matrix.Translation( -465, -25, 0 );
                     this.txスキルパネル.t3D描画( CDTXMania.app.Device, matSkillPanel );
@@ -234,114 +240,178 @@ namespace DTXMania
                     this.txPlayerName.t3D描画( CDTXMania.app.Device, matPlayerName );
                 }
 
-                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F1 ) )
-                //{
-                //    fX--;
-                //}
-                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F2 ) )
-                //{
-                //    fX++;
-                //}
-                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F3 ) )
-                //{
-                //    fY--;
-                //}
-                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F4 ) )
-                //{
-                //    fY++;
-                //}
-                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F6 ) )
-                //{
-                //    rot--;
-                //}
-                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F7 ) )
-                //{
-                //    rot++;
-                //}
-                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F8 ) )
-                //{
-                //    fScaleX -= 0.01f;
-                //}
-                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F9 ) )
-                //{
-                //    fScaleX += 0.01f;
-                //}
-                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F10 ) )
-                //{
-                //    fScaleX -= 0.1f;
-                //}
-                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F11 ) )
-                //{
-                //    fScaleX += 0.1f;
-                //}
-                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D1 ) )
-                //{
-                //    fScaleY -= 0.01f;
-                //}
-                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D2 ) )
-                //{
-                //    fScaleY += 0.01f;
-                //}
-                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D3 ) )
-                //{
-                //    fScaleY -= 0.1f;
-                //}
-                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D4 ) )
-                //{
-                //    fScaleY += 0.1f;
-                //}
-                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D5 ) )
-                //{
-                //    offset--;
-                //}
-                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D6 ) )
-                //{
-                //    offset++;
-                //}
-                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D7 ) )
-                //{
-                //    fX -= 10;
-                //}
-                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D8 ) )
-                //{
-                //    fX += 10;
-                //}
-                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D9 ) )
-                //{
-                //    fY -= 10;
-                //}
-                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D0 ) )
-                //{
-                //    fY += 10;
-                //}
-                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.Q ) )
-                //{
-                //    fZ -= 1;
-                //}
-                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.W ) )
-                //{
-                //    fZ += 1;
-                //}
-                //if ( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.E ) )
-                //{
-                //    fZ -= 10;
-                //}
-                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.R ) )
-                //{
-                //    fZ += 10;
-                //}
+                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F1 ) )
+                {
+                    fX--;
+                }
+                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F2 ) )
+                {
+                    fX++;
+                }
+                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F3 ) )
+                {
+                    fY--;
+                }
+                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F4 ) )
+                {
+                    fY++;
+                }
+                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F6 ) )
+                {
+                    rot--;
+                }
+                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F7 ) )
+                {
+                    rot++;
+                }
+                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F8 ) )
+                {
+                    fScaleX -= 0.01f;
+                }
+                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F9 ) )
+                {
+                    fScaleX += 0.01f;
+                }
+                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F10 ) )
+                {
+                    fScaleX -= 0.1f;
+                }
+                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F11 ) )
+                {
+                    fScaleX += 0.1f;
+                }
+                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D1 ) )
+                {
+                    fScaleY -= 0.01f;
+                }
+                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D2 ) )
+                {
+                    fScaleY += 0.01f;
+                }
+                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D3 ) )
+                {
+                    fScaleY -= 0.1f;
+                }
+                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D4 ) )
+                {
+                    fScaleY += 0.1f;
+                }
+                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D5 ) )
+                {
+                    fOffsetX--;
+                }
+                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D6 ) )
+                {
+                    fOffsetX++;
+                }
+                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D7 ) )
+                {
+                    fX -= 10;
+                }
+                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D8 ) )
+                {
+                    fX += 10;
+                }
+                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D9 ) )
+                {
+                    fY -= 10;
+                }
+                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D0 ) )
+                {
+                    fY += 10;
+                }
+                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.Q ) )
+                {
+                    fZ -= 1;
+                }
+                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.W ) )
+                {
+                    fZ += 1;
+                }
+                if ( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.E ) )
+                {
+                    fZ -= 10;
+                }
+                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.R ) )
+                {
+                    fZ += 10;
+                }
+                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.T ) )
+                {
+                    fOffsetY--;
+                }
+                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.Y ) )
+                {
+                    fOffsetY++;
+                }
+                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.U ) )
+                {
+                    fOffsetZ--;
+                }
+                if(CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.I ))
+                {
+                    fOffsetZ++;
+                }
 
                 #region[ ステータスパネルの文字 ]
+                if( this.tx判定数数字 != null )
+                {
+                    int nowtotal = CDTXMania.stage演奏ドラム画面GITADORA.nヒット数_Auto含む.Drums.Perfect +
+                        CDTXMania.stage演奏ドラム画面GITADORA.nヒット数_Auto含む.Drums.Great +
+                        CDTXMania.stage演奏ドラム画面GITADORA.nヒット数_Auto含む.Drums.Good +
+                        CDTXMania.stage演奏ドラム画面GITADORA.nヒット数_Auto含む.Drums.Poor +
+                        CDTXMania.stage演奏ドラム画面GITADORA.nヒット数_Auto含む.Drums.Miss;
+                    
+                    //string str = nowtotal == 0 ? "   0" : string.Format("{0,3:##0}%", (CDTXMania.stage演奏ドラム画面GITADORA.nヒット数_Auto含む.Drums.Perfect / (float)nowtotal) * 100.0f );
+                    //for( int i = 0; i < 4; i++ )
+                    //{
+                    //    Rectangle rectangle;
+                    //    char ch = str[i];
+                    //    if (ch.Equals(' '))
+                    //    {
+                    //        rectangle = new Rectangle(0, 0, 0, 0);
+                    //    }
+                    //    else if( ch.Equals('%') )
+                    //    {
+                    //        rectangle = new Rectangle( 200, 0, 20, 26 );
+                    //    }
+                    //    else
+                    //    {
+                    //        int num3 = int.Parse(str.Substring(i, 1));
+                    //        rectangle = new Rectangle((num3 * 20), 0, 20, 26);
+                    //    }
+                    //    Matrix matScoreXG = Matrix.Identity;
+                    //    matScoreXG *= Matrix.Scaling(0.45f, 0.8f, 1f);
+                    //    matScoreXG *= Matrix.RotationY(C変換.DegreeToRadian(-40));
+                    //    matScoreXG *= Matrix.Translation( -435 + (i * 6), 107, 28 + i * 6);
+                    //    this.tx判定数数字.t3D描画(CDTXMania.app.Device, matScoreXG, rectangle);
+                    //}
 
+                    this.t判定数文字描画( -476, 107, CDTXMania.stage演奏ドラム画面GITADORA.nヒット数_Auto含む.Drums.Perfect );
+                    this.t判定数文字描画( -476, 77, CDTXMania.stage演奏ドラム画面GITADORA.nヒット数_Auto含む.Drums.Great );
+                    this.t判定数文字描画( -476, 47, CDTXMania.stage演奏ドラム画面GITADORA.nヒット数_Auto含む.Drums.Good );
+                    this.t判定数文字描画( -476, 17, CDTXMania.stage演奏ドラム画面GITADORA.nヒット数_Auto含む.Drums.Poor );
+                    this.t判定数文字描画( -476, -13, CDTXMania.stage演奏ドラム画面GITADORA.nヒット数_Auto含む.Drums.Miss );
+                    this.t判定数文字描画( -476, -43, CDTXMania.stage演奏ドラム画面GITADORA.actCombo.n現在のコンボ数.Drums最高値 );
+
+                    this.t判定率文字描画( -435, 107, nowtotal == 0 ? "  0%" : string.Format("{0,3:##0}%", (CDTXMania.stage演奏ドラム画面GITADORA.nヒット数_Auto含む.Drums.Perfect / (float)nowtotal) * 100.0f )  );
+                    this.t判定率文字描画( -435, 77,  nowtotal == 0 ? "  0%" : string.Format("{0,3:##0}%", (CDTXMania.stage演奏ドラム画面GITADORA.nヒット数_Auto含む.Drums.Great / (float)nowtotal) * 100.0f )  );
+                    this.t判定率文字描画( -435, 47,  nowtotal == 0 ? "  0%" : string.Format("{0,3:##0}%", (CDTXMania.stage演奏ドラム画面GITADORA.nヒット数_Auto含む.Drums.Good / (float)nowtotal) * 100.0f )  );
+                    this.t判定率文字描画( -435, 17,  nowtotal == 0 ? "  0%" : string.Format("{0,3:##0}%", (CDTXMania.stage演奏ドラム画面GITADORA.nヒット数_Auto含む.Drums.Poor / (float)nowtotal) * 100.0f )  );
+                    this.t判定率文字描画( -435, -13, nowtotal == 0 ? "  0%" : string.Format("{0,3:##0}%", (CDTXMania.stage演奏ドラム画面GITADORA.nヒット数_Auto含む.Drums.Miss / (float)nowtotal) * 100.0f )  );
+                    this.t判定率文字描画( -435, -43, nowtotal == 0 ? "  0%" : string.Format("{0,3:##0}%", (CDTXMania.stage演奏ドラム画面GITADORA.actCombo.n現在のコンボ数.Drums最高値 / (float)nowtotal) * 100.0f )  );
+                }
                 #endregion
 
-                //CDTXMania.act文字コンソール.tPrint( 0, 0, C文字コンソール.Eフォント種別.白, "RotY:" + rot.ToString() );
-                //CDTXMania.act文字コンソール.tPrint( 0, 16, C文字コンソール.Eフォント種別.白, "PanelX:" + fX.ToString() );
-                //CDTXMania.act文字コンソール.tPrint( 0, 32, C文字コンソール.Eフォント種別.白, "PanelY:" + fY.ToString() );
-                //CDTXMania.act文字コンソール.tPrint( 0, 48, C文字コンソール.Eフォント種別.白, "ScaleX:" + fScaleX.ToString() );
-                //CDTXMania.act文字コンソール.tPrint( 0, 64, C文字コンソール.Eフォント種別.白, "ScaleY:" + fScaleY.ToString() );
-                //CDTXMania.act文字コンソール.tPrint( 0, 80, C文字コンソール.Eフォント種別.白, "OFFSET:" + offset.ToString() );
-                //CDTXMania.act文字コンソール.tPrint( 0, 96, C文字コンソール.Eフォント種別.白, "PanelZ:" + fZ.ToString() );
+                CDTXMania.act文字コンソール.tPrint( 0, 0, C文字コンソール.Eフォント種別.白, "RotY:" + rot.ToString() );
+                CDTXMania.act文字コンソール.tPrint( 0, 16, C文字コンソール.Eフォント種別.白, "PanelX:" + fX.ToString() );
+                CDTXMania.act文字コンソール.tPrint( 0, 32, C文字コンソール.Eフォント種別.白, "PanelY:" + fY.ToString() );
+                CDTXMania.act文字コンソール.tPrint( 0, 48, C文字コンソール.Eフォント種別.白, "PanelZ:" + fZ.ToString() );
+                CDTXMania.act文字コンソール.tPrint( 0, 64, C文字コンソール.Eフォント種別.白, "ScaleX:" + fScaleX.ToString() );
+                CDTXMania.act文字コンソール.tPrint( 0, 80, C文字コンソール.Eフォント種別.白, "ScaleY:" + fScaleY.ToString() );
+                CDTXMania.act文字コンソール.tPrint( 0, 96, C文字コンソール.Eフォント種別.白, "OffsetX:" + fOffsetX.ToString() );
+                CDTXMania.act文字コンソール.tPrint( 0, 112, C文字コンソール.Eフォント種別.白, "OffsetY:" + fOffsetY.ToString() );
+                CDTXMania.act文字コンソール.tPrint( 0, 128, C文字コンソール.Eフォント種別.白, "OffsetZ:" + fOffsetZ.ToString() );
                 
                 if ( this.txSongNamePlate != null )
                 {
@@ -479,6 +549,8 @@ namespace DTXMania
         private CTexture txJacket;
         private CTexture txPlayerName;
         private CTexture txTitleName;
+        private CTexture tx判定数数字;
+        private CTexture tx達成率数字_整数;
 
 #if DEBUG
         private float fX;
@@ -487,7 +559,9 @@ namespace DTXMania
         private int rot;
         private float fScaleX;
         private float fScaleY;
-        private int offset;
+        private float fOffsetX;
+        private float fOffsetY;
+        private float fOffsetZ;
 #endif
         //-----------------
         private CTexture t指定された文字テクスチャを生成する( string str文字 )
@@ -509,6 +583,56 @@ namespace DTXMania
             return tx文字テクスチャ;
         }
 
+        private void t判定数文字描画( float x, float y, int value )
+        {
+            string str = string.Format("{0,4:###0}", value );
+            for( int i = 0; i < 4; i++ )
+            {
+                Rectangle rectangle;
+                char ch = str[i];
+                if (ch.Equals(' '))
+                {
+                    rectangle = new Rectangle(0, 0, 0, 0);
+                }
+                else
+                {
+                    int num3 = int.Parse(str.Substring(i, 1));
+                    rectangle = new Rectangle((num3 * 20), 0, 20, 26);
+                }
+                Matrix matScoreXG = Matrix.Identity;
+                matScoreXG *= Matrix.Scaling(0.45f, 0.8f, 1f);
+                matScoreXG *= Matrix.RotationY(C変換.DegreeToRadian(-40));
+                matScoreXG *= Matrix.Translation( x + (i * 6), y, i * 6);
+                this.tx判定数数字.t3D描画(CDTXMania.app.Device, matScoreXG, rectangle);
+            }
+        }
+
+        private void t判定率文字描画( float x, float y, string str )
+        {
+            for( int i = 0; i < 4; i++ )
+            {
+                Rectangle rectangle;
+                char ch = str[i];
+                if (ch.Equals(' '))
+                {
+                    rectangle = new Rectangle(0, 0, 0, 0);
+                }
+                else if( ch.Equals('%') )
+                {
+                    rectangle = new Rectangle( 200, 0, 20, 26 );
+                }
+                else
+                {
+                    int num3 = int.Parse(str.Substring(i, 1));
+                    rectangle = new Rectangle((num3 * 20), 0, 20, 26);
+                }
+                Matrix matScoreXG = Matrix.Identity;
+                matScoreXG *= Matrix.Scaling(0.45f, 0.8f, 1f);
+                matScoreXG *= Matrix.RotationY(C変換.DegreeToRadian(-40));
+                matScoreXG *= Matrix.Translation( x + (i * 6), y, 28 + i * 6);
+                this.tx判定数数字.t3D描画(CDTXMania.app.Device, matScoreXG, rectangle);
+            }
+        }
         #endregion
     }
 }

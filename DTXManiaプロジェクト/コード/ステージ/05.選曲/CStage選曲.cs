@@ -438,7 +438,7 @@ namespace DTXMania
 				}
 				if( CDTXMania.ConfigIni.bLogDTX詳細ログ出力 )
 				{
-					StringBuilder builder = new StringBuilder( 0x400 );
+					StringBuilder builder = new StringBuilder( 1024 );
 					builder.Append( string.Format( "ランダムインデックスリストを作成しました: {0}曲: ", song.stackランダム演奏番号.Count ) );
 					for( int m = 0; m < count; m++ )
 					{

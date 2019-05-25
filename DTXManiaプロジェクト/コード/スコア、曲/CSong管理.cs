@@ -819,6 +819,8 @@ namespace DTXMania
             cスコア.譜面情報.n可視チップ数.FT = br.ReadInt32();
             cスコア.譜面情報.n可視チップ数.CY = br.ReadInt32();
             cスコア.譜面情報.n可視チップ数.RD = br.ReadInt32();
+            cスコア.譜面情報.最低Bpm = br.ReadDouble();
+            cスコア.譜面情報.最大Bpm = br.ReadDouble();
 
 //Debug.WriteLine( "songs.db: " + cスコア.ファイル情報.ファイルの絶対パス );
 			return cスコア;
@@ -883,6 +885,9 @@ namespace DTXMania
 									c曲リストノード.arスコア[ i ].譜面情報.Bpm = cdtx.BPM;
 									c曲リストノード.arスコア[ i ].譜面情報.Duration = 0;	//  (cdtx.listChip == null)? 0 : cdtx.listChip[ cdtx.listChip.Count - 1 ].n発声時刻ms;
                                     c曲リストノード.arスコア[ i ].譜面情報.n可視チップ数 = cdtx.n可視チップ数;
+                                    c曲リストノード.arスコア[ i ].譜面情報.最低Bpm = cdtx.db最低BPM;
+                                    c曲リストノード.arスコア[ i ].譜面情報.最大Bpm = cdtx.db最高BPM;
+
 									this.nファイルから反映できたスコア数++;
 									cdtx.On非活性化();
 //Debug.WriteLine( "★" + this.nファイルから反映できたスコア数 + " " + c曲リストノード.arスコア[ i ].譜面情報.タイトル );
@@ -1202,6 +1207,8 @@ namespace DTXMania
                     bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数.FT );
                     bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数.CY );
                     bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数.RD );
+                    bw.Write( node.arスコア[ i ].譜面情報.最低Bpm );
+                    bw.Write( node.arスコア[ i ].譜面情報.最大Bpm );
 					this.nSongsDBへ出力できたスコア数++;
 				}
 			}
@@ -1766,7 +1773,7 @@ Debug.WriteLine( dBPM + ":" + c曲リストノード.strタイトル );
 
 		#region [ private ]
 		//-----------------
-        private const string SONGSDB_VERSION = "SongsDB3(ver.K)rev4";
+        private const string SONGSDB_VERSION = "SongsDB3(ver.K)rev5";
 		private List<string> listStrBoxDefSkinSubfolderFullName;
 
 		private int t比較0_共通( C曲リストノード n1, C曲リストノード n2 )

@@ -1355,6 +1355,8 @@ namespace DTXMania
 		public bool bUse556x710BGAAVI;
         public STDGBVALUE<bool> bCLASSIC譜面である;
         public bool b強制的にXG譜面にする;
+        public double db最低BPM;
+        public double db最高BPM;
 
 #if TEST_NOTEOFFMODE
 		public STLANEVALUE<bool> b演奏で直前の音を消音する;
@@ -1460,6 +1462,9 @@ namespace DTXMania
             this.bCLASSIC譜面である.Guitar = false;
             this.bCLASSIC譜面である.Bass = false;
             this.b強制的にXG譜面にする = false;
+
+            this.db最低BPM = 9999.9;
+            this.db最高BPM = 0.0;
 
 #if TEST_NOTEOFFMODE
 			this.bHH演奏で直前のHHを消音する = true;
@@ -2920,6 +2925,9 @@ namespace DTXMania
 							chip.n整数値 = 0;
 							chip.n整数値_内部番号 = cbpm.n内部番号;
 							this.listChip.Insert( 0, chip );
+
+                            this.db最低BPM = Math.Min( this.db最低BPM, cbpm.dbBPM値 );
+                            this.db最高BPM = Math.Max( this.db最高BPM, cbpm.dbBPM値 );
 						}
 						else
 						{
@@ -2929,6 +2937,9 @@ namespace DTXMania
 							chip.n整数値 = 0;
 							chip.n整数値_内部番号 = cbpm.n内部番号;
 							this.listChip.Insert( 0, chip );
+
+                            this.db最低BPM = Math.Min( this.db最低BPM, cbpm.dbBPM値 );
+                            this.db最高BPM = Math.Max( this.db最高BPM, cbpm.dbBPM値 );
 						}
 						if ( this.listBMP.ContainsKey( 0 ) )
 						{

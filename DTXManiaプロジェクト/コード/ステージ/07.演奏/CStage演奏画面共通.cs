@@ -657,7 +657,7 @@ namespace DTXMania
 		protected CAct演奏BGA actBGA;
 
 		protected CAct演奏チップファイアGB actChipFireGB;
-		protected CAct演奏Combo共通 actCombo;
+		public CAct演奏Combo共通 actCombo;
 		protected CAct演奏Danger共通 actDANGER;
 		protected CActFIFOBlack actFI;
 		protected CActFIFOBlack actFO;
