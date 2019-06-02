@@ -1296,6 +1296,8 @@ namespace DTXMania
 			this.nVelocityMin.FT = 0;
 			this.nVelocityMin.CY = 0;
 			this.nVelocityMin.RD = 0;
+            this.nVelocityMin.LP = 0;
+            this.nVelocityMin.LBD = 0;
 			#endregion
 			this.nRisky = 0;							// #23539 2011.7.26 yyagi RISKYモード
 			this.nShowLagType = (int) EShowLagType.OFF;	// #25370 2011.6.3 yyagi ズレ時間表示
@@ -1858,6 +1860,8 @@ namespace DTXMania
 			sw.WriteLine( "FTVelocityMin={0}", this.nVelocityMin.FT );						//
 			sw.WriteLine( "CYVelocityMin={0}", this.nVelocityMin.CY );						//
 			sw.WriteLine( "RDVelocityMin={0}", this.nVelocityMin.RD );						//
+            sw.WriteLine( "LPVelocityMin={0}", this.nVelocityMin.LP );						//
+			sw.WriteLine( "LBDVelocityMin={0}", this.nVelocityMin.LBD);						//
 			sw.WriteLine();																	//
 			#endregion
 
@@ -2998,6 +3002,14 @@ namespace DTXMania
 											else if ( str3.Equals( "RDVelocityMin" ) )			// #23857 2011.1.31 yyagi
 											{
 												this.nVelocityMin.RD = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 127, this.nVelocityMin.RD );
+											}
+                                            else if ( str3.Equals( "LPVelocityMin" ) )			// #23857 2011.1.31 yyagi
+											{
+												this.nVelocityMin.LP = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 127, this.nVelocityMin.LP );
+											}
+											else if ( str3.Equals( "LBDVelocityMin" ) )			// #23857 2011.1.31 yyagi
+											{
+												this.nVelocityMin.LBD = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 127, this.nVelocityMin.LBD );
 											}
 											#endregion
 											//else if ( str3.Equals( "NoMP3Streaming" ) )
