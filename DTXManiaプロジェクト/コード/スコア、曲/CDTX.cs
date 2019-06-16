@@ -784,7 +784,7 @@ namespace DTXMania
 					case (int) Ech定義.Bass_RGx:
 					case (int) Ech定義.Bass_RGB:
 					case (int) Ech定義.Bass_Wailing:
-					case (int) Ech定義.Bass_WailingSound:
+					//case (int) Ech定義.Bass_WailingSound:
 					case (int) Ech定義.Bass_NoChip:
 						return ESoundChipType.Bass;
 					#endregion

@@ -50,7 +50,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /y $(TargetPath) $(SolutionDir)..\実行時フォルダ\dll
-copy /y $(TargetPath) $(SolutionDir)bin\x86\Debug\dll</PostBuildEvent>
+    <PostBuildEvent>copy /y $(TargetPath) $(SolutionDir)\実行時フォルダ\dll
+copy /y $(TargetPath) $(SolutionDir)\DTXManiaプロジェクト\bin\x86\Debug\dll</PostBuildEvent>
   </PropertyGroup>
 </Project>

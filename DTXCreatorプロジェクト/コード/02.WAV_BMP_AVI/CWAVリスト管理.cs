@@ -233,7 +233,7 @@ namespace DTXCreator.WAV_BMP_AVI
 						{
 							this.tプレビュー音を停止する();
 						}
-						catch ( SlimDX.DirectSound.DirectSoundException )	// DTXMania終了後はDirectSoundの再初期化が必要
+						catch ( Exception )	// DTXMania終了後はDirectSoundの再初期化が必要
 						{
 							tDirectSoundの解放();
 							tDirectSoundの初期化();

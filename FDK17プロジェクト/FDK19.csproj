@@ -47,7 +47,7 @@
     </DocumentationFile>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <NoWarn>0219</NoWarn>
-    <DefineConstants>TRACE;TEST_CancelEnterCodeInAltEnter2 TEST_Direct3D9Ex_ TEST_MultiThreadedMixer_</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;TEST_CancelEnterCodeInAltEnter2 TEST_Direct3D9Ex_ TEST_MultiThreadedMixer_</DefineConstants>
     <Optimize>false</Optimize>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
@@ -215,7 +215,7 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>copy /Y "$(TargetPath)" "$(SolutionDir)..\実行時フォルダ\dll\"
-copy /Y "$(TargetPath)" "$(SolutionDir)bin\x86\Debug\dll\"</PostBuildEvent>
+    <PostBuildEvent>copy /Y "$(TargetPath)" "$(SolutionDir)\実行時フォルダ\dll\"
+copy /Y "$(TargetPath)" "$(SolutionDir)\DTXManiaプロジェクト\bin\x86\Debug\dll\"</PostBuildEvent>
   </PropertyGroup>
 </Project>

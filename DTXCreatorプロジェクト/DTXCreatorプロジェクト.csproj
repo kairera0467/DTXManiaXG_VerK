@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DTXCreator</RootNamespace>
     <AssemblyName>DTXCreator</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ApplicationIcon>コード\99.リソース\DTXC.ico</ApplicationIcon>
     <ApplicationManifest>DTXCreator.exe.x86.manifest</ApplicationManifest>
@@ -57,9 +57,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="SlimDXc_net20x86_Jun2010">
-      <HintPath>..\実行時フォルダ\dll\SlimDXc_net20x86_Jun2010.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -196,6 +193,7 @@
     <None Include="DTXCreator.exe.x86.manifest">
       <SubType>Designer</SubType>
     </None>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -366,15 +364,13 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>copy /Y "$(TargetPath)" "$(SolutionDir)..\実行時フォルダ"
-copy /Y "$(TargetPath)".config "$(SolutionDir)..\実行時フォルダ"
-mkdir "$(SolutionDir)..\実行時フォルダ\ja-JP"
-copy /Y "$(TargetDir)ja-JP" "$(SolutionDir)..\実行時フォルダ\ja-JP"
-mkdir "$(SolutionDir)..\実行時フォルダ\dll"
+    <PostBuildEvent>copy /Y "$(TargetPath)" "$(SolutionDir)\実行時フォルダ"
+copy /Y "$(TargetPath)".config "$(SolutionDir)\実行時フォルダ"
+mkdir "$(SolutionDir)\実行時フォルダ\ja-JP"
+copy /Y "$(TargetDir)ja-JP" "$(SolutionDir)\実行時フォルダ\ja-JP"
+mkdir "$(SolutionDir)\実行時フォルダ\dll"
 move /Y "$(TargetDir)\Bass.Net.dll" "$(TargetDir)dll"
 move /Y "$(TargetDir)\DirectShowLib-2005.dll" "$(TargetDir)dll"
-move /Y "$(TargetDir)\FDK.dll" "$(TargetDir)dll"
-move /Y "$(TargetDir)\SlimDXc_net20x86_Jun2010.dll" "$(TargetDir)dll"
-</PostBuildEvent>
+move /Y "$(TargetDir)\FDK.dll" "$(TargetDir)dll"</PostBuildEvent>
   </PropertyGroup>
 </Project>

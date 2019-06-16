@@ -74,7 +74,7 @@ namespace DTXCreator.オプション関連
 				this.formメインフォーム.appアプリ設定.ViewerInfo.bViewerIsDTXV = cオプションダイアログ.radioButton_UseDTXViewer.Checked;
 
 				//AppSetting.ViewerSoundType vst = ( FDK.COS.bIsVistaOrLater ) ? AppSetting.ViewerSoundType.WASAPI : AppSetting.ViewerSoundType.DirectSound;
-				FDK.ESoundDeviceType vst = ( FDK.COS.bIsVistaOrLater ) ? FDK.ESoundDeviceType.ExclusiveWASAPI :  FDK.ESoundDeviceType.DirectSound;
+				FDK.ESoundDeviceType vst = ( FDK.COS.bIsVistaOrLater() ) ? FDK.ESoundDeviceType.ExclusiveWASAPI :  FDK.ESoundDeviceType.DirectSound;
 				if ( cオプションダイアログ.radioButton_DirectSound.Checked )
 				{
 					//vst = AppSetting.ViewerSoundType.DirectSound;

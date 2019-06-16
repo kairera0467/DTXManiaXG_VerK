@@ -3,17 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2046
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTXManiaプロジェクト", "DTXManiaプロジェクト.csproj", "{81BEC512-8074-4BD1-8A3C-AC73BC7BF846}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTXManiaプロジェクト", "DTXManiaプロジェクト\DTXManiaプロジェクト.csproj", "{81BEC512-8074-4BD1-8A3C-AC73BC7BF846}"
 	ProjectSection(ProjectDependencies) = postProject
 		{BCD40908-F3E2-4707-BFAA-1DD99DF6357D} = {BCD40908-F3E2-4707-BFAA-1DD99DF6357D}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FDK19", "..\FDK17プロジェクト\FDK19.csproj", "{BCD40908-F3E2-4707-BFAA-1DD99DF6357D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTXCreatorプロジェクト", "DTXCreatorプロジェクト\DTXCreatorプロジェクト.csproj", "{BAC81BCC-5689-4600-91A0-7427667500D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FDK19", "FDK17プロジェクト\FDK19.csproj", "{BCD40908-F3E2-4707-BFAA-1DD99DF6357D}"
 	ProjectSection(ProjectDependencies) = postProject
 		{41E67409-F5EC-4216-A790-2519A7B22E51} = {41E67409-F5EC-4216-A790-2519A7B22E51}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libbjxa", "..\libbjxa\libbjxa.csproj", "{41E67409-F5EC-4216-A790-2519A7B22E51}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libbjxa", "libbjxa\libbjxa.csproj", "{41E67409-F5EC-4216-A790-2519A7B22E51}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +31,12 @@ Global
 		{81BEC512-8074-4BD1-8A3C-AC73BC7BF846}.Release|Any CPU.ActiveCfg = Release|x86
 		{81BEC512-8074-4BD1-8A3C-AC73BC7BF846}.Release|x86.ActiveCfg = Release|x86
 		{81BEC512-8074-4BD1-8A3C-AC73BC7BF846}.Release|x86.Build.0 = Release|x86
+		{BAC81BCC-5689-4600-91A0-7427667500D6}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{BAC81BCC-5689-4600-91A0-7427667500D6}.Debug|x86.ActiveCfg = Debug|x86
+		{BAC81BCC-5689-4600-91A0-7427667500D6}.Debug|x86.Build.0 = Debug|x86
+		{BAC81BCC-5689-4600-91A0-7427667500D6}.Release|Any CPU.ActiveCfg = Release|x86
+		{BAC81BCC-5689-4600-91A0-7427667500D6}.Release|x86.ActiveCfg = Release|x86
+		{BAC81BCC-5689-4600-91A0-7427667500D6}.Release|x86.Build.0 = Release|x86
 		{BCD40908-F3E2-4707-BFAA-1DD99DF6357D}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{BCD40908-F3E2-4707-BFAA-1DD99DF6357D}.Debug|x86.ActiveCfg = Debug|x86
 		{BCD40908-F3E2-4707-BFAA-1DD99DF6357D}.Debug|x86.Build.0 = Debug|x86
