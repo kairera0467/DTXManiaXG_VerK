@@ -208,12 +208,12 @@ namespace DTXMania
                 //    return 0;
                 if( this.b初めての進行描画 )
                 {
-                    fX = -465;
-                    fY = -25;
-                    fZ = 0;
-                    rot = -38;
-                    fScaleX = 0.6f;
-                    fScaleY = 1f;
+                    //fX = -465;
+                    //fY = -25;
+                    //fZ = 0;
+                    //rot = -38;
+                    //fScaleX = 0.6f;
+                    //fScaleY = 1f;
                     //offset = 0;
 
                     this.b初めての進行描画 = false;
@@ -240,118 +240,118 @@ namespace DTXMania
                     this.txPlayerName.t3D描画( CDTXMania.app.Device, matPlayerName );
                 }
 
-                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F1 ) )
-                {
-                    fX--;
-                }
-                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F2 ) )
-                {
-                    fX++;
-                }
-                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F3 ) )
-                {
-                    fY--;
-                }
-                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F4 ) )
-                {
-                    fY++;
-                }
-                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F6 ) )
-                {
-                    rot--;
-                }
-                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F7 ) )
-                {
-                    rot++;
-                }
-                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F8 ) )
-                {
-                    fScaleX -= 0.01f;
-                }
-                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F9 ) )
-                {
-                    fScaleX += 0.01f;
-                }
-                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F10 ) )
-                {
-                    fScaleX -= 0.1f;
-                }
-                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F11 ) )
-                {
-                    fScaleX += 0.1f;
-                }
-                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D1 ) )
-                {
-                    fScaleY -= 0.01f;
-                }
-                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D2 ) )
-                {
-                    fScaleY += 0.01f;
-                }
-                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D3 ) )
-                {
-                    fScaleY -= 0.1f;
-                }
-                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D4 ) )
-                {
-                    fScaleY += 0.1f;
-                }
-                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D5 ) )
-                {
-                    fOffsetX--;
-                }
-                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D6 ) )
-                {
-                    fOffsetX++;
-                }
-                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D7 ) )
-                {
-                    fX -= 10;
-                }
-                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D8 ) )
-                {
-                    fX += 10;
-                }
-                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D9 ) )
-                {
-                    fY -= 10;
-                }
-                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D0 ) )
-                {
-                    fY += 10;
-                }
-                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.Q ) )
-                {
-                    fZ -= 1;
-                }
-                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.W ) )
-                {
-                    fZ += 1;
-                }
-                if ( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.E ) )
-                {
-                    fZ -= 10;
-                }
-                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.R ) )
-                {
-                    fZ += 10;
-                }
-                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.T ) )
-                {
-                    fOffsetY--;
-                }
-                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.Y ) )
-                {
-                    fOffsetY++;
-                }
-                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.U ) )
-                {
-                    fOffsetZ--;
-                }
-                if(CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.I ))
-                {
-                    fOffsetZ++;
-                }
+                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F1 ) )
+                //{
+                //    fX--;
+                //}
+                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F2 ) )
+                //{
+                //    fX++;
+                //}
+                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F3 ) )
+                //{
+                //    fY--;
+                //}
+                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F4 ) )
+                //{
+                //    fY++;
+                //}
+                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F6 ) )
+                //{
+                //    rot--;
+                //}
+                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F7 ) )
+                //{
+                //    rot++;
+                //}
+                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F8 ) )
+                //{
+                //    fScaleX -= 0.01f;
+                //}
+                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F9 ) )
+                //{
+                //    fScaleX += 0.01f;
+                //}
+                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F10 ) )
+                //{
+                //    fScaleX -= 0.1f;
+                //}
+                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F11 ) )
+                //{
+                //    fScaleX += 0.1f;
+                //}
+                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D1 ) )
+                //{
+                //    fScaleY -= 0.01f;
+                //}
+                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D2 ) )
+                //{
+                //    fScaleY += 0.01f;
+                //}
+                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D3 ) )
+                //{
+                //    fScaleY -= 0.1f;
+                //}
+                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D4 ) )
+                //{
+                //    fScaleY += 0.1f;
+                //}
+                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D5 ) )
+                //{
+                //    fOffsetX--;
+                //}
+                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D6 ) )
+                //{
+                //    fOffsetX++;
+                //}
+                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D7 ) )
+                //{
+                //    fX -= 10;
+                //}
+                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D8 ) )
+                //{
+                //    fX += 10;
+                //}
+                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D9 ) )
+                //{
+                //    fY -= 10;
+                //}
+                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.D0 ) )
+                //{
+                //    fY += 10;
+                //}
+                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.Q ) )
+                //{
+                //    fZ -= 1;
+                //}
+                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.W ) )
+                //{
+                //    fZ += 1;
+                //}
+                //if ( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.E ) )
+                //{
+                //    fZ -= 10;
+                //}
+                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.R ) )
+                //{
+                //    fZ += 10;
+                //}
+                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.T ) )
+                //{
+                //    fOffsetY--;
+                //}
+                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.Y ) )
+                //{
+                //    fOffsetY++;
+                //}
+                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.U ) )
+                //{
+                //    fOffsetZ--;
+                //}
+                //if(CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.I ))
+                //{
+                //    fOffsetZ++;
+                //}
 
                 #region[ ステータスパネルの文字 ]
                 if( this.tx判定数数字 != null )
@@ -403,15 +403,15 @@ namespace DTXMania
                 }
                 #endregion
 
-                CDTXMania.act文字コンソール.tPrint( 0, 0, C文字コンソール.Eフォント種別.白, "RotY:" + rot.ToString() );
-                CDTXMania.act文字コンソール.tPrint( 0, 16, C文字コンソール.Eフォント種別.白, "PanelX:" + fX.ToString() );
-                CDTXMania.act文字コンソール.tPrint( 0, 32, C文字コンソール.Eフォント種別.白, "PanelY:" + fY.ToString() );
-                CDTXMania.act文字コンソール.tPrint( 0, 48, C文字コンソール.Eフォント種別.白, "PanelZ:" + fZ.ToString() );
-                CDTXMania.act文字コンソール.tPrint( 0, 64, C文字コンソール.Eフォント種別.白, "ScaleX:" + fScaleX.ToString() );
-                CDTXMania.act文字コンソール.tPrint( 0, 80, C文字コンソール.Eフォント種別.白, "ScaleY:" + fScaleY.ToString() );
-                CDTXMania.act文字コンソール.tPrint( 0, 96, C文字コンソール.Eフォント種別.白, "OffsetX:" + fOffsetX.ToString() );
-                CDTXMania.act文字コンソール.tPrint( 0, 112, C文字コンソール.Eフォント種別.白, "OffsetY:" + fOffsetY.ToString() );
-                CDTXMania.act文字コンソール.tPrint( 0, 128, C文字コンソール.Eフォント種別.白, "OffsetZ:" + fOffsetZ.ToString() );
+                //CDTXMania.act文字コンソール.tPrint( 0, 0, C文字コンソール.Eフォント種別.白, "RotY:" + rot.ToString() );
+                //CDTXMania.act文字コンソール.tPrint( 0, 16, C文字コンソール.Eフォント種別.白, "PanelX:" + fX.ToString() );
+                //CDTXMania.act文字コンソール.tPrint( 0, 32, C文字コンソール.Eフォント種別.白, "PanelY:" + fY.ToString() );
+                //CDTXMania.act文字コンソール.tPrint( 0, 48, C文字コンソール.Eフォント種別.白, "PanelZ:" + fZ.ToString() );
+                //CDTXMania.act文字コンソール.tPrint( 0, 64, C文字コンソール.Eフォント種別.白, "ScaleX:" + fScaleX.ToString() );
+                //CDTXMania.act文字コンソール.tPrint( 0, 80, C文字コンソール.Eフォント種別.白, "ScaleY:" + fScaleY.ToString() );
+                //CDTXMania.act文字コンソール.tPrint( 0, 96, C文字コンソール.Eフォント種別.白, "OffsetX:" + fOffsetX.ToString() );
+                //CDTXMania.act文字コンソール.tPrint( 0, 112, C文字コンソール.Eフォント種別.白, "OffsetY:" + fOffsetY.ToString() );
+                //CDTXMania.act文字コンソール.tPrint( 0, 128, C文字コンソール.Eフォント種別.白, "OffsetZ:" + fOffsetZ.ToString() );
                 
                 if ( this.txSongNamePlate != null )
                 {

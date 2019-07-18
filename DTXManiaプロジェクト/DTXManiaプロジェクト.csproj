@@ -276,7 +276,6 @@
     <Compile Include="コード\全体\CActFlushGPU.cs" />
     <Compile Include="コード\全体\CAnimationManager.cs" />
     <Compile Include="コード\全体\CConfigIni.cs" />
-    <Compile Include="コード\全体\CDebugUtil.cs" />
     <Compile Include="コード\全体\CDTXMania.cs" />
     <Compile Include="コード\全体\CDTXVersion.cs" />
     <Compile Include="コード\全体\CPad.cs" />

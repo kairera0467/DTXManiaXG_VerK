@@ -242,7 +242,8 @@ namespace DTXMania
 			{
 				this.r現在選択中の曲 = this.r現在選択中の曲.list子リスト[ 0 ];
                 this.tバーの初期化();
-				this.t選択曲が変更された(false);									// #27648 項目数変更を反映させる
+                this.tバーテクスチャの初期化();
+                this.t選択曲が変更された(false);									// #27648 項目数変更を反映させる
 			}
 			return ret;
 		}
@@ -275,7 +276,8 @@ namespace DTXMania
 			{
 				this.r現在選択中の曲 = this.r現在選択中の曲.r親ノード;
                 this.tバーの初期化();
-				this.t選択曲が変更された(false);									// #27648 項目数変更を反映させる
+                this.tバーテクスチャの初期化();
+                this.t選択曲が変更された(false);									// #27648 項目数変更を反映させる
 			}
 			return ret;
 		}
@@ -436,7 +438,7 @@ namespace DTXMania
 					this.r現在選択中の曲 = searchCurrentBreadcrumbsPosition( CDTXMania.Songs管理.list曲ルート, this.r現在選択中の曲.strBreadcrumbs );
 					if ( bRemakeSongTitleBar )					// 選曲画面以外に居るときには再構成しない (非活性化しているときに実行すると例外となる)
 					{
-						this.tバーの初期化();
+						//this.tバーの初期化();
 					}
 #if false			// list子リストの中まではmatchしてくれないので、検索ロジックは手書きで実装 (searchCurrentBreadcrumbs())
 					string bc = this.r現在選択中の曲.strBreadcrumbs;
@@ -452,7 +454,7 @@ namespace DTXMania
 					return;
 				}
 			}
-			this.On非活性化();
+			//this.On非活性化();
 			this.r現在選択中の曲 = null;
 			//this.On活性化();
 			this.e楽器パート = E楽器パート.DRUMS;
@@ -489,6 +491,10 @@ namespace DTXMania
 			// バー情報を初期化する。
 
 			this.tバーの初期化();
+            if( bRemakeSongTitleBar ) {
+                this.tバーテクスチャの初期化();
+            }
+
 
 			//base.On活性化();
 

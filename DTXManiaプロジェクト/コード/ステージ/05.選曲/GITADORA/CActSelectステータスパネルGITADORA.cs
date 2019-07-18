@@ -124,11 +124,11 @@ namespace DTXMania
                 this.txTotalNotes数字 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_TotalNotes_Number.png" ) );
 
                 this.txレベル数字_中_整数部 = CDTXMania.tテクスチャの生成( CSkin.Path(@"Graphics\5_LevelNumber Medium Int.png") );
-                this.txレベル数字_中_少数部 = CDTXMania.tテクスチャの生成( CSkin.Path(@"Graphics\5_LevelNumber Medium Decimal.png") );
+                this.txレベル数字_中_小数部 = CDTXMania.tテクスチャの生成( CSkin.Path(@"Graphics\5_LevelNumber Medium Decimal.png") );
                 this.txレベル数字_中_小数点 = CDTXMania.tテクスチャの生成( CSkin.Path(@"Graphics\5_LevelNumber Medium Dot.png") );
 
                 this.txスキル数字_大_整数部 = CDTXMania.tテクスチャの生成( CSkin.Path(@"Graphics\5_Skill number Large Int.png") );
-                this.txスキル数字_大_少数部 = CDTXMania.tテクスチャの生成( CSkin.Path(@"Graphics\5_Skill number Large Decimal.png") );
+                this.txスキル数字_大_小数部 = CDTXMania.tテクスチャの生成( CSkin.Path(@"Graphics\5_Skill number Large Decimal.png") );
                 this.txスキル数字_大_小数点 = CDTXMania.tテクスチャの生成( CSkin.Path(@"Graphics\5_Skill number Large Dot.png") );
 
                 this.txBPM数字 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_BPM Number.png") );
@@ -151,11 +151,11 @@ namespace DTXMania
                 CDTXMania.tテクスチャの解放( ref this.txTotalNotes数字 );
 
                 CDTXMania.tテクスチャの解放( ref this.txレベル数字_中_整数部 );
-                CDTXMania.tテクスチャの解放( ref this.txレベル数字_中_少数部 );
+                CDTXMania.tテクスチャの解放( ref this.txレベル数字_中_小数部 );
                 CDTXMania.tテクスチャの解放( ref this.txレベル数字_中_小数点 );
 
                 CDTXMania.tテクスチャの解放( ref this.txスキル数字_大_整数部 );
-                CDTXMania.tテクスチャの解放( ref this.txスキル数字_大_少数部 );
+                CDTXMania.tテクスチャの解放( ref this.txスキル数字_大_小数部 );
                 CDTXMania.tテクスチャの解放( ref this.txスキル数字_大_小数点 );
 
                 CDTXMania.tテクスチャの解放( ref this.txBPM数字 );
@@ -372,10 +372,10 @@ namespace DTXMania
         private CTexture txTotalNotes数字;
 
         private CTexture txレベル数字_中_整数部;
-        private CTexture txレベル数字_中_少数部;
+        private CTexture txレベル数字_中_小数部;
         private CTexture txレベル数字_中_小数点;
         private CTexture txスキル数字_大_整数部;
-        private CTexture txスキル数字_大_少数部;
+        private CTexture txスキル数字_大_小数部;
         private CTexture txスキル数字_大_小数点;
         private CTexture txBPM数字; // 2019.04.30 kairera0467
 
@@ -484,7 +484,7 @@ namespace DTXMania
                 if( c.Equals( '.' ) )
                 {
                     // 小数点だったら小数点を描画してフラグ切り替えてcontinue
-                    this.txレベル数字_中_小数点.t2D描画( CDTXMania.app.Device, x, y + 28 );
+                    this.txレベル数字_中_小数点?.t2D描画( CDTXMania.app.Device, x, y + 28 );
                     b整数部処理中 = false;
                     x += 7;
                     continue;
@@ -501,12 +501,12 @@ namespace DTXMania
                     {
                         if( b整数部処理中 )
                         {
-                            this.txレベル数字_中_整数部.t2D描画( CDTXMania.app.Device, x, y, this.STレベル数字_中_整数[ j ].rect );
+                            this.txレベル数字_中_整数部?.t2D描画( CDTXMania.app.Device, x, y, this.STレベル数字_中_整数[ j ].rect );
                             x += n文字間隔_整数部;
                         }
                         else
                         {
-                            this.txレベル数字_中_少数部.t2D描画( CDTXMania.app.Device, x, y + 9, this.STレベル数字_中_少数[ j ].rect );
+                            this.txレベル数字_中_小数部?.t2D描画( CDTXMania.app.Device, x, y + 9, this.STレベル数字_中_少数[ j ].rect );
                             x += n文字間隔_小数部;
                         }
                     }
@@ -536,7 +536,7 @@ namespace DTXMania
                 if( c.Equals( '.' ) )
                 {
                     // 小数点だったら小数点を描画してフラグ切り替えてcontinue
-                    this.txスキル数字_大_小数点.t2D描画( CDTXMania.app.Device, x, y + 54 );
+                    this.txスキル数字_大_小数点?.t2D描画( CDTXMania.app.Device, x, y + 54 );
                     b整数部処理中 = false;
                     x += 10;
                     continue;
@@ -553,12 +553,12 @@ namespace DTXMania
                     {
                         if( b整数部処理中 )
                         {
-                            this.txスキル数字_大_整数部.t2D描画( CDTXMania.app.Device, x, y, this.STスキル数字_大_整数[ j ].rect );
+                            this.txスキル数字_大_整数部?.t2D描画( CDTXMania.app.Device, x, y, this.STスキル数字_大_整数[ j ].rect );
                             x += n文字間隔_整数部;
                         }
                         else
                         {
-                            this.txスキル数字_大_少数部.t2D描画( CDTXMania.app.Device, x, y + 18, this.STスキル数字_大_少数[ j ].rect );
+                            this.txスキル数字_大_小数部?.t2D描画( CDTXMania.app.Device, x, y + 18, this.STスキル数字_大_少数[ j ].rect );
                             x += n文字間隔_小数部;
                         }
                     }
@@ -597,7 +597,7 @@ namespace DTXMania
                 {
                     if( c.Equals( this.STBPM数字[ j ].ch文字 ) )
                     {
-                        this.txBPM数字.t2D描画( CDTXMania.app.Device, x, y, this.STBPM数字[ j ].rect );
+                        this.txBPM数字?.t2D描画( CDTXMania.app.Device, x, y, this.STBPM数字[ j ].rect );
                         x += n文字間隔;
                     }
                 }

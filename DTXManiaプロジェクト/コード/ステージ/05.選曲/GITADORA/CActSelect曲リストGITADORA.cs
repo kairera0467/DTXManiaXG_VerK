@@ -51,27 +51,7 @@ namespace DTXMania
 				
                 this.stバー情報[ i ].strDTXフォルダのパス = song.arスコア[ this.n現在のアンカ難易度レベルに最も近い難易度レベルを返す( song ) ].ファイル情報.フォルダの絶対パス;
                 this.stバー情報[ i ].strPreimageのパス = song.arスコア[ this.n現在のアンカ難易度レベルに最も近い難易度レベルを返す( song ) ].ファイル情報.フォルダの絶対パス + song.arスコア[ this.n現在のアンカ難易度レベルに最も近い難易度レベルを返す( song ) ].譜面情報.Preimage;
-                //this.tパネルの生成(i, song.strタイトル, this.stバー情報[ i ].strアーティスト名, song.col文字色);
-                
-        //        if( this.stバー情報[ i ].strPreimageのパス != null )
-        //        {
-        //            if( !this.dicThumbnail.ContainsKey( this.stバー情報[ i ].strPreimageのパス ) )
-				    //{
-        //                this.tパスを指定してサムネイル画像を生成する( i, this.stバー情報[ i ].strPreimageのパス, this.stバー情報[ i ].eバー種別  );
-		      //          this.dicThumbnail.Add( this.stバー情報[ i ].strPreimageのパス, this.txTumbnail[ i ] );
-				    //}
-        //            this.txTumbnail[ i ] = this.dicThumbnail[ this.stバー情報[ i ].strPreimageのパス ];
-        //        }
 
-        //        if( this.stバー情報[ i ].strタイトル文字列 != null )
-        //        {
-        //            if( !this.dicMusicName.ContainsKey( this.stバー情報[ i ].strタイトル文字列 ) )
-        //            {
-        //                this.t指定された文字テクスチャを生成してバーに格納する( i, this.stバー情報[ i ].strタイトル文字列, this.stバー情報[ i ].eバー種別  );
-        //                this.dicMusicName.Add( this.stバー情報[ i ].strタイトル文字列, this.txMusicName[ i ] );
-        //            }
-        //            this.txMusicName[ i ] = this.dicMusicName[ this.stバー情報[ i ].strタイトル文字列 ];
-        //        }
 
 				for( int j = 0; j < 3; j++ )
 					this.stバー情報[ i ].nスキル値[ j ] = (int) song.arスコア[ this.n現在のアンカ難易度レベルに最も近い難易度レベルを返す( song ) ].譜面情報.最大スキル[ j ];
@@ -99,10 +79,15 @@ namespace DTXMania
                 {
                     if( !this.dicMusicName.ContainsKey( this.stバー情報[ i ].strタイトル文字列 ) )
                     {
+                        // Dictionaryに無いなら生成
                         this.t指定された文字テクスチャを生成してバーに格納する( i, this.stバー情報[ i ].strタイトル文字列, this.stバー情報[ i ].eバー種別  );
                         this.dicMusicName.Add( this.stバー情報[ i ].strタイトル文字列, this.txMusicName[ i ] );
                     }
-                    this.txMusicName[ i ] = this.dicMusicName[ this.stバー情報[ i ].strタイトル文字列 ];
+                    else
+                    {
+                        // DictionaryにあったらDictionaryから読み出す
+                        this.txMusicName[ i ] = this.dicMusicName[ this.stバー情報[ i ].strタイトル文字列 ];
+                    }
                 }
 			}
         }
@@ -154,8 +139,8 @@ namespace DTXMania
                 //this.tx選曲バー.BackBox = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar other selected.png" ), false );
                 //this.txスキル数字 = CDTXMania.tテクスチャの生成(CSkin.Path(@"Graphics\ScreenSelect skill number on list.png"), false);
 
-			    for( int i = 0; i < 15; i++ )
-				    this.t曲名バーの生成( i, this.stバー情報[ i ].strタイトル文字列, this.stバー情報[ i ].col文字色 );
+			    //for( int i = 0; i < 15; i++ )
+				   // this.t曲名バーの生成( i, this.stバー情報[ i ].strタイトル文字列, this.stバー情報[ i ].col文字色 );
 
                 #region[ テクスチャの復元 ]
                 int nKeys = this.dicThumbnail.Count;
@@ -164,7 +149,7 @@ namespace DTXMania
                 foreach( var key in keys )
                     this.dicThumbnail[ key ] = this.tパスを指定してサムネイル画像を生成して返す( 0, key, this.stバー情報[ 0 ].eバー種別  );
 
-                nKeys = this.dicThumbnail.Count;
+                nKeys = this.dicMusicName.Count;
                 keys = new string[ nKeys ];
                 this.dicMusicName.Keys.CopyTo( keys, 0 );
                 foreach( var key in keys )
@@ -438,7 +423,10 @@ namespace DTXMania
                             this.t指定された文字テクスチャを生成してバーに格納する( index, this.stバー情報[ index ].strタイトル文字列, this.stバー情報[ index ].eバー種別  );
                             this.dicMusicName.Add( this.stバー情報[ index ].strタイトル文字列, this.txMusicName[ index ] );
                         }
-                        this.txMusicName[ index ] = this.dicMusicName[ this.stバー情報[ index ].strタイトル文字列 ];
+                        else
+                        {
+                            this.txMusicName[ index ] = this.dicMusicName[ this.stバー情報[ index ].strタイトル文字列 ];
+                        }
                         
 						// stバー情報[] の内容を1行ずつずらす。
 						
@@ -515,7 +503,10 @@ namespace DTXMania
                             this.t指定された文字テクスチャを生成してバーに格納する( index, this.stバー情報[ index ].strタイトル文字列, this.stバー情報[ index ].eバー種別  );
                             this.dicMusicName.Add( this.stバー情報[ index ].strタイトル文字列, this.txMusicName[ index ] );
                         }
-                        this.txMusicName[ index ] = this.dicMusicName[ this.stバー情報[ index ].strタイトル文字列 ];
+                        else
+                        {
+                            this.txMusicName[ index ] = this.dicMusicName[ this.stバー情報[ index ].strタイトル文字列 ];
+                        }
 
 						// stバー情報[] の内容を1行ずつずらす。
 						
@@ -1008,7 +999,7 @@ namespace DTXMania
         public Color clGITADORAgradationBottomColor = Color.FromArgb( 255, 250, 40 );
 
         //辞書はジャケット画像と曲名テクスチャの2種類。一応保持制限として80枚ずつにする。
-        protected Dictionary<string, CTexture> dicThumbnail = new Dictionary<string, CTexture>();
+        //protected Dictionary<string, CTexture> dicThumbnail = new Dictionary<string, CTexture>();
         protected Dictionary<string, CTexture> dicMusicName = new Dictionary<string, CTexture>();
         #endregion
 
@@ -1239,54 +1230,54 @@ namespace DTXMania
 			if( nバー番号 < 0 || nバー番号 > 15 )
 				return;
 
-			try
-			{
-				SizeF sz曲名;
+			//try
+			//{
+			//	SizeF sz曲名;
                 
-				#region [ 曲名表示に必要となるサイズを取得する。]
-				//-----------------
-				using( var bmpDummy = new Bitmap( 1, 1 ) )
-				{
-					var g = Graphics.FromImage( bmpDummy );
-					g.PageUnit = GraphicsUnit.Pixel;
-					sz曲名 = g.MeasureString( str曲名, this.ft曲リスト用フォント );
+			//	#region [ 曲名表示に必要となるサイズを取得する。]
+			//	//-----------------
+			//	using( var bmpDummy = new Bitmap( 1, 1 ) )
+			//	{
+			//		var g = Graphics.FromImage( bmpDummy );
+			//		g.PageUnit = GraphicsUnit.Pixel;
+			//		sz曲名 = g.MeasureString( str曲名, this.ft曲リスト用フォント );
 
-                    g.Dispose();
-                    bmpDummy.Dispose();
-				}
-				//-----------------
-				#endregion
+   //                 g.Dispose();
+   //                 bmpDummy.Dispose();
+			//	}
+			//	//-----------------
+			//	#endregion
 
-				int n最大幅px = 0x310;
-				int height = 0x25;
-				int width = (int) ( ( sz曲名.Width + 2 ) * 0.5f );
-				if( width > ( CDTXMania.app.Device.Capabilities.MaxTextureWidth / 2 ) )
-					width = CDTXMania.app.Device.Capabilities.MaxTextureWidth / 2;	// 右端断ち切れ仕方ないよね
+			//	int n最大幅px = 0x310;
+			//	int height = 0x25;
+			//	int width = (int) ( ( sz曲名.Width + 2 ) * 0.5f );
+			//	if( width > ( CDTXMania.app.Device.Capabilities.MaxTextureWidth / 2 ) )
+			//		width = CDTXMania.app.Device.Capabilities.MaxTextureWidth / 2;	// 右端断ち切れ仕方ないよね
 
-				float f拡大率X = ( width <= n最大幅px ) ? 0.5f : ( ( (float) n最大幅px / (float) width ) * 0.5f );	// 長い文字列は横方向に圧縮。
+			//	float f拡大率X = ( width <= n最大幅px ) ? 0.5f : ( ( (float) n最大幅px / (float) width ) * 0.5f );	// 長い文字列は横方向に圧縮。
 
-				using( var bmp = new Bitmap( width * 2, height * 2, PixelFormat.Format32bppArgb ) )		// 2倍（面積4倍）のBitmapを確保。（0.5倍で表示する前提。）
-				using( var g = Graphics.FromImage( bmp ) )
-				{
-					g.TextRenderingHint = TextRenderingHint.AntiAlias;
-					float y = ( ( ( float ) bmp.Height ) / 2f ) - ( ( CDTXMania.ConfigIni.n選曲リストフォントのサイズdot * 2f ) / 2f );
-					g.DrawString( str曲名, this.ft曲リスト用フォント, new SolidBrush( this.color文字影 ), (float) 2f, (float) ( y + 2f ) );
-					g.DrawString( str曲名, this.ft曲リスト用フォント, new SolidBrush( color ), 0f, y );
+			//	using( var bmp = new Bitmap( width * 2, height * 2, PixelFormat.Format32bppArgb ) )		// 2倍（面積4倍）のBitmapを確保。（0.5倍で表示する前提。）
+			//	using( var g = Graphics.FromImage( bmp ) )
+			//	{
+			//		g.TextRenderingHint = TextRenderingHint.AntiAlias;
+			//		float y = ( ( ( float ) bmp.Height ) / 2f ) - ( ( CDTXMania.ConfigIni.n選曲リストフォントのサイズdot * 2f ) / 2f );
+			//		g.DrawString( str曲名, this.ft曲リスト用フォント, new SolidBrush( this.color文字影 ), (float) 2f, (float) ( y + 2f ) );
+			//		g.DrawString( str曲名, this.ft曲リスト用フォント, new SolidBrush( color ), 0f, y );
 
-					CDTXMania.tテクスチャの解放( ref this.stバー情報[ nバー番号 ].txタイトル名 );
+			//		CDTXMania.tテクスチャの解放( ref this.stバー情報[ nバー番号 ].txタイトル名 );
 
-					this.stバー情報[ nバー番号 ].txタイトル名 = new CTexture( CDTXMania.app.Device, bmp, CDTXMania.TextureFormat );
-					this.stバー情報[ nバー番号 ].txタイトル名.vc拡大縮小倍率 = new Vector3( f拡大率X, 0.5f, 1f );
+			//		this.stバー情報[ nバー番号 ].txタイトル名 = new CTexture( CDTXMania.app.Device, bmp, CDTXMania.TextureFormat );
+			//		this.stバー情報[ nバー番号 ].txタイトル名.vc拡大縮小倍率 = new Vector3( f拡大率X, 0.5f, 1f );
 
-                    g.Dispose();
-				}
+   //                 g.Dispose();
+			//	}
                 
-			}
-			catch( CTextureCreateFailedException )
-			{
-				Trace.TraceError( "曲名テクスチャの作成に失敗しました。[{0}]", str曲名 );
-				this.stバー情報[ nバー番号 ].txタイトル名 = null;
-			}
+			//}
+			//catch( CTextureCreateFailedException )
+			//{
+			//	Trace.TraceError( "曲名テクスチャの作成に失敗しました。[{0}]", str曲名 );
+			//	this.stバー情報[ nバー番号 ].txタイトル名 = null;
+			//}
 		}
         private void tバーの描画( int x, int y, Eバー種別 type, bool b選択曲 )
 		{
