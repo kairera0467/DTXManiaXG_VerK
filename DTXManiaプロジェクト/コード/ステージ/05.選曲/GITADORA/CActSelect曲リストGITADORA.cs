@@ -420,7 +420,7 @@ namespace DTXMania
 
                         if( !this.dicMusicName.ContainsKey( this.stバー情報[ index ].strタイトル文字列 ) )
                         {
-                            this.t指定された文字テクスチャを生成してバーに格納する( index, this.stバー情報[ index ].strタイトル文字列, this.stバー情報[ index ].eバー種別  );
+                            this.t指定された文字テクスチャを生成してバーに格納する( index, this.stバー情報[ index ].strタイトル文字列, this.e曲のバー種別を返す( song ) );
                             this.dicMusicName.Add( this.stバー情報[ index ].strタイトル文字列, this.txMusicName[ index ] );
                         }
                         else
@@ -1191,10 +1191,12 @@ namespace DTXMania
         }
         private CTexture t指定された文字テクスチャを生成してバーに格納する( int nバー番号, string str文字, Eバー種別 eType )
         {
-            if( eType == Eバー種別.Random ) // 2017.12.24 ランダムの場合、固有の文字列を付与する
-            {
-                str文字 = "ランダムカテゴリー内";
-            }
+            // 2017.12.24 kairera0467 ランダムの場合、固有の文字列を付与する
+            // 2019.07.20 kairera0467 どうも引数で渡されるEバー種別の値が正確なものでないようなので一旦封印。
+            //if( eType == Eバー種別.Random )
+            //{
+            //    str文字 = "ランダムカテゴリー内";
+            //}
 
             Bitmap bmp = prvFont.DrawPrivateFont( str文字, CPrivateFont.DrawMode.Edge, Color.Black, Color.White, Color.White, Color.White );
             CTexture tx文字テクスチャ = CDTXMania.tテクスチャの生成( bmp, false );

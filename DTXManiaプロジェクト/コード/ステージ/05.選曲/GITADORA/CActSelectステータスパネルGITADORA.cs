@@ -386,9 +386,9 @@ namespace DTXMania
         }
 
         private ST数字フォント[] STレベル数字_中_整数;
-        private ST数字フォント[] STレベル数字_中_少数;
+        private ST数字フォント[] STレベル数字_中_小数;
         private ST数字フォント[] STスキル数字_大_整数;
-        private ST数字フォント[] STスキル数字_大_少数;
+        private ST数字フォント[] STスキル数字_大_小数;
         private ST数字フォント[] STBPM数字;
 
         private void tレベル数値フォント初期化()
@@ -406,7 +406,7 @@ namespace DTXMania
                 new ST数字フォント(){ ch文字 = '9', rect = new Rectangle( 112, 38, 28, 38 ) },
                 new ST数字フォント(){ ch文字 = '-', rect = new Rectangle( 140, 0, 28, 38 ) }
             };
-            this.STレベル数字_中_少数 = new ST数字フォント[]{
+            this.STレベル数字_中_小数 = new ST数字フォント[]{
                 new ST数字フォント(){ ch文字 = '0', rect = new Rectangle( 0, 0, 20, 28 ) },
                 new ST数字フォント(){ ch文字 = '1', rect = new Rectangle( 20, 0, 20, 28 ) },
                 new ST数字フォント(){ ch文字 = '2', rect = new Rectangle( 40, 0, 20, 28 ) },
@@ -434,17 +434,17 @@ namespace DTXMania
             this.STスキル数字_大_整数[ 7 ] = new ST数字フォント() { ch文字 = '7', rect = new Rectangle( 128, 64, 64, 64 ) };
             this.STスキル数字_大_整数[ 8 ] = new ST数字フォント() { ch文字 = '8', rect = new Rectangle( 192, 64, 64, 64 ) };
             this.STスキル数字_大_整数[ 9 ] = new ST数字フォント() { ch文字 = '9', rect = new Rectangle( 256, 64, 64, 64 ) };
-            this.STスキル数字_大_少数 = new ST数字フォント[ 10 ];
-            this.STスキル数字_大_少数[ 0 ] = new ST数字フォント() { ch文字 = '0', rect = new Rectangle( 0, 0, 46, 46 ) };
-            this.STスキル数字_大_少数[ 1 ] = new ST数字フォント() { ch文字 = '1', rect = new Rectangle( 0, 0, 46, 46 ) };
-            this.STスキル数字_大_少数[ 2 ] = new ST数字フォント() { ch文字 = '2', rect = new Rectangle( 0, 0, 46, 46 ) };
-            this.STスキル数字_大_少数[ 3 ] = new ST数字フォント() { ch文字 = '3', rect = new Rectangle( 0, 0, 46, 46 ) };
-            this.STスキル数字_大_少数[ 4 ] = new ST数字フォント() { ch文字 = '4', rect = new Rectangle( 0, 0, 46, 46 ) };
-            this.STスキル数字_大_少数[ 5 ] = new ST数字フォント() { ch文字 = '5', rect = new Rectangle( 0, 46, 46, 46 ) };
-            this.STスキル数字_大_少数[ 6 ] = new ST数字フォント() { ch文字 = '6', rect = new Rectangle( 0, 46, 46, 46 ) };
-            this.STスキル数字_大_少数[ 7 ] = new ST数字フォント() { ch文字 = '7', rect = new Rectangle( 0, 46, 46, 46 ) };
-            this.STスキル数字_大_少数[ 8 ] = new ST数字フォント() { ch文字 = '8', rect = new Rectangle( 0, 46, 46, 46 ) };
-            this.STスキル数字_大_少数[ 9 ] = new ST数字フォント() { ch文字 = '9', rect = new Rectangle( 0, 46, 46, 46 ) };
+            this.STスキル数字_大_小数 = new ST数字フォント[ 10 ];
+            this.STスキル数字_大_小数[ 0 ] = new ST数字フォント() { ch文字 = '0', rect = new Rectangle( 0, 0, 46, 46 ) };
+            this.STスキル数字_大_小数[ 1 ] = new ST数字フォント() { ch文字 = '1', rect = new Rectangle( 46, 0, 46, 46 ) };
+            this.STスキル数字_大_小数[ 2 ] = new ST数字フォント() { ch文字 = '2', rect = new Rectangle( 92, 0, 46, 46 ) };
+            this.STスキル数字_大_小数[ 3 ] = new ST数字フォント() { ch文字 = '3', rect = new Rectangle( 138, 0, 46, 46 ) };
+            this.STスキル数字_大_小数[ 4 ] = new ST数字フォント() { ch文字 = '4', rect = new Rectangle( 184, 0, 46, 46 ) };
+            this.STスキル数字_大_小数[ 5 ] = new ST数字フォント() { ch文字 = '5', rect = new Rectangle( 0, 46, 46, 46 ) };
+            this.STスキル数字_大_小数[ 6 ] = new ST数字フォント() { ch文字 = '6', rect = new Rectangle( 46, 46, 46, 46 ) };
+            this.STスキル数字_大_小数[ 7 ] = new ST数字フォント() { ch文字 = '7', rect = new Rectangle( 92, 46, 46, 46 ) };
+            this.STスキル数字_大_小数[ 8 ] = new ST数字フォント() { ch文字 = '8', rect = new Rectangle( 138, 46, 46, 46 ) };
+            this.STスキル数字_大_小数[ 9 ] = new ST数字フォント() { ch文字 = '9', rect = new Rectangle( 184, 46, 46, 46 ) };
         }
 
         private void tBPM数値フォント初期化()
@@ -506,7 +506,7 @@ namespace DTXMania
                         }
                         else
                         {
-                            this.txレベル数字_中_小数部?.t2D描画( CDTXMania.app.Device, x, y + 9, this.STレベル数字_中_少数[ j ].rect );
+                            this.txレベル数字_中_小数部?.t2D描画( CDTXMania.app.Device, x, y + 9, this.STレベル数字_中_小数[ j ].rect );
                             x += n文字間隔_小数部;
                         }
                     }
@@ -527,7 +527,8 @@ namespace DTXMania
             dbスキル値 = dbスキル値 * 100.0;
             dbスキル値 = Math.Floor( dbスキル値 );
             dbスキル値 = dbスキル値 / 100.0;
-            string formatText = string.Format( "{0,6:##0.00}", dbスキル値.ToString() );
+            //string formatText = string.Format( "{0,6:##0.00}", dbスキル値.ToString() );
+            string formatText = dbスキル値.ToString( "##0.00" ); //string.Format( "{0,6:##0.00}", dbスキル値.ToString() );
 
             for( int i = 0; i < formatText.Length; i++ )
             {
@@ -558,7 +559,7 @@ namespace DTXMania
                         }
                         else
                         {
-                            this.txスキル数字_大_小数部?.t2D描画( CDTXMania.app.Device, x, y + 18, this.STスキル数字_大_少数[ j ].rect );
+                            this.txスキル数字_大_小数部?.t2D描画( CDTXMania.app.Device, x, y + 18, this.STスキル数字_大_小数[ j ].rect );
                             x += n文字間隔_小数部;
                         }
                     }

@@ -840,24 +840,26 @@ namespace DTXMania
                 // #35411 modify end
 
 				int nDeltaTime = Math.Abs( lag );
+                int nPedalDelta = ( pChip.nチャンネル番号 == 0x13 || pChip.nチャンネル番号 == 0x1b || pChip.nチャンネル番号 == 0x1c ) ?
+                    CDTXMania.ConfigIni.nPedalJudgeRangeDelta : 0;
 				//Debug.WriteLine("nAbsTime=" + (nTime - pChip.n発声時刻ms) + ", nDeltaTime=" + (nTime + nInputAdjustTime - pChip.n発声時刻ms));
-                if( ( nDeltaTime <= CDTXMania.nPerfect範囲ms / 2 ) && CDTXMania.ConfigIni.bXPerfect判定を有効にする )
+                if ( ( nDeltaTime <= ( CDTXMania.nPerfect範囲ms + nPedalDelta ) / 2 ) && CDTXMania.ConfigIni.bXPerfect判定を有効にする )
                 {
                     return E判定.XPerfect;
                 }
-				if ( nDeltaTime <= CDTXMania.nPerfect範囲ms )
+				if ( nDeltaTime <= CDTXMania.nPerfect範囲ms + nPedalDelta )
 				{
 					return E判定.Perfect;
 				}
-				if ( nDeltaTime <= CDTXMania.nGreat範囲ms )
+				if ( nDeltaTime <= CDTXMania.nGreat範囲ms + nPedalDelta )
 				{
 					return E判定.Great;
 				}
-				if ( nDeltaTime <= CDTXMania.nGood範囲ms )
+				if ( nDeltaTime <= CDTXMania.nGood範囲ms + nPedalDelta )
 				{
 					return E判定.Good;
 				}
-				if ( nDeltaTime <= CDTXMania.nPoor範囲ms )
+				if ( nDeltaTime <= CDTXMania.nPoor範囲ms + nPedalDelta )
 				{
 					return E判定.Poor;
 				}

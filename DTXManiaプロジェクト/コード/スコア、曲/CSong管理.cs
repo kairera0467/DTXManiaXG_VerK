@@ -1402,7 +1402,7 @@ namespace DTXMania
 			if ( part != E楽器パート.UNKNOWN )
 			{
                 Trace.WriteLine( "----------ソート開始------------" );
-				ノードリスト.Sort( delegate( C曲リストノード n1, C曲リストノード n2 ) //2016.03.12 kairera0467 少数第2位も考慮するようにするテスト。
+				ノードリスト.Sort( delegate( C曲リストノード n1, C曲リストノード n2 ) //2016.03.12 kairera0467 小数第2位も考慮するようにするテスト。
 				{
 					#region [ 共通処理 ]
 					if ( n1 == n2 )

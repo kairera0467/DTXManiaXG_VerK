@@ -1045,10 +1045,17 @@ namespace DTXMania
 				"To decrease input lag, set minus value." );
 			this.list項目リスト.Add( this.iDrumsInputAdjustTimeMs );
 
+            // #39397 2019.07.19 kairera0467
+            this.iDrumsPedalJudgeRangeDelta = new CItemInteger( "PedalRangeAdj", 0, 200, CDTXMania.ConfigIni.nPedalJudgeRangeDelta,
+                "ペダルレーンの判定範囲の微調整を行います。\n" +
+                "0 ～ 200ms(暫定仕様)まで指定可能です。\n" + 
+                "この数値は通常の判定範囲に加算されます。");
+            this.list項目リスト.Add( this.iDrumsPedalJudgeRangeDelta );
+
             this.iDrumsAssignToLBD = new CItemToggle( "AssignToLBD", CDTXMania.ConfigIni.bAssignToLBD.Drums,
                 "旧仕様のドコドコチップをLBDレーンに\n"+
                 "適当に振り分けます。\n"+
-                "LP、LBDがある譜面では効きません。",
+                "LP、LBDがある譜面では無効になります。",
                 "To move some of BassDrum chips to\n"+
                 "LBD lane moderately.\n"+
                 "(for old-style 2-bass DTX scores\n"+
@@ -3128,6 +3135,7 @@ namespace DTXMania
 		private CItemList iBassSudHid;						// #32072 2013.9.20 yyagi
 		private CItemBase iSystemReloadDTX;					// #32081 2013.10.21 yyagi
 		private CItemInteger iSystemMasterVolume;			// #33700 2014.4.26 yyagi
+        private CItemInteger iDrumsPedalJudgeRangeDelta;    // #39397 2019.07.19 kairera0467
 
 		protected int t前の項目( int nItem )
 		{
@@ -3352,6 +3360,8 @@ namespace DTXMania
             CDTXMania.ConfigIni.eRandom.Drums = (Eランダムモード)this.iDrumsRandomPad.n現在選択されている項目番号;
             CDTXMania.ConfigIni.eRandomPedal.Drums = (Eランダムモード)this.iDrumsRandomPedal.n現在選択されている項目番号;
             CDTXMania.ConfigIni.eNumOfLanes.Drums = (Eタイプ)this.iDrumsNumOfLanes.n現在選択されている項目番号;
+
+            CDTXMania.ConfigIni.nPedalJudgeRangeDelta = this.iDrumsPedalJudgeRangeDelta.n現在の値;
 		}
 		private void tConfigIniへ記録する_Guitar()
 		{

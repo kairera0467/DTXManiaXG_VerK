@@ -24,6 +24,7 @@ DTXManiaXG(Ver.K)をDTXMania Release104を元に作り直したものです。
 ・シャッター位置の計算式をだいたい本家準拠に変更
 ・VisualStudio2015以降でのビルドに対応、推奨コンパイラをVisualStudio2017に変更
 ・XG風表示とGITADORA風表示を1つの本体に統合(スキンごとに変更可能)
+・DirectXに使用するライブラリをSharpDXに変更
 
 ○動画再生について
 ・従来のVideo for Windowsでの動画再生は廃止となりました。これによってDirectShowの環境構築が必須となっています。
@@ -101,6 +102,7 @@ Mail:gennsou76573@gmail.com
 Twitter:@kairera0467
 
 ○更新履歴
+2019071900	4.10RC3
 2019040600	4.10RC2	WASAPI/ASIO使用時に起動できなくなる問題に対する緊急対応。ただし、OSバージョン依存の機能が一部使用できなくなっています。(WASAPIが使用可能であるかのチェック、Windows10WASAPI共有使用時に低遅延になる機能)
 					エンド画面の「Thank you for Playing」の文字が描画できなくなっていたので作り直し。
 2019040400	4.10RC	DirectXを呼び出すためのライブラリをSharpDXに移行

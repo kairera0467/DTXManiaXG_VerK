@@ -575,6 +575,7 @@ namespace DTXMania
         public STDGBVALUE<Eタイプ> eDkdkType;
         public STDGBVALUE<Eランダムモード> eRandomPedal;
         public STDGBVALUE<bool> bAssignToLBD;
+        public int nPedalJudgeRangeDelta;                   // #39397 2019.07.19 kairera0467 ペダルレーンの補正値(通常の判定範囲に加算)
 
         #endregion
         #region[ Ver.K 追加取得処理 ]
@@ -1387,6 +1388,8 @@ namespace DTXMania
                 this.nShutterOutSide[ i ] = 0;
                 this.strShutterImageName[ i ] = "";
             }
+
+            this.nPedalJudgeRangeDelta = 20;
             #endregion
 
             //this.bNoMP3Streaming = false;
@@ -2135,7 +2138,8 @@ namespace DTXMania
             sw.WriteLine( "BassLaneFlush={0}", this.bLaneFlush.Bass ? 1 : 0 );
             sw.WriteLine();
             sw.WriteLine( "; 判定画像のアニメーション方式" );
-            sw.WriteLine( ";(0:旧DTXMania方式 1:コマ方式 2:擬似XG方式)" );
+            //sw.WriteLine( ";(0:旧DTXMania方式 1:コマ方式 2:擬似XG方式)" );
+            sw.WriteLine( ";(0:旧DTXMania方式 1:コマ方式)" );
             sw.WriteLine( "JudgeAnimeType={0}", (int)this.eJudgeAnimeType );
             sw.WriteLine();
             sw.WriteLine( "; 判定数の表示(0:表示しない, 1:表示する)");
@@ -2262,6 +2266,9 @@ namespace DTXMania
 			sw.WriteLine( "Good={0}", this.nヒット範囲ms.Good );
 			sw.WriteLine( "Poor={0}", this.nヒット範囲ms.Poor );
 			sw.WriteLine();
+            sw.WriteLine( "; ペダルレーンの判定補正値[ms]" );
+            sw.WriteLine( "; 各判定のヒット範囲に加算されます。0～200msで指定できます。(暫定仕様)" );
+            sw.WriteLine( "PedalJudgeRangeDelta={0}", this.nPedalJudgeRangeDelta );
 			sw.WriteLine( ";-------------------" );
 			#endregion
 			#region [ GUID ]
@@ -3323,7 +3330,8 @@ namespace DTXMania
                                             }
                                             else if( str3.Equals( "JudgeAnimeType" ) )
                                             {
-                                                this.eJudgeAnimeType = ( Eタイプ )C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 2, (int)this.eJudgeAnimeType );
+                                                //this.eJudgeAnimeType = ( Eタイプ )C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 2, (int)this.eJudgeAnimeType );
+                                                this.eJudgeAnimeType = ( Eタイプ )C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 1, (int)this.eJudgeAnimeType );
                                             }
                                             else if( str3.Equals( "XPerfectJudgeMode" ) )
                                             {
@@ -3520,7 +3528,7 @@ namespace DTXMania
 										if( str3.Equals( "Perfect" ) )
 										{
 											this.nヒット範囲ms.Perfect = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 0x3e7, this.nヒット範囲ms.Perfect );
-											}
+										}
 										else if( str3.Equals( "Great" ) )
 										{
 											this.nヒット範囲ms.Great = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 0x3e7, this.nヒット範囲ms.Great );
@@ -3533,6 +3541,10 @@ namespace DTXMania
 										{
 											this.nヒット範囲ms.Poor = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 0x3e7, this.nヒット範囲ms.Poor );
 										}
+                                        else if( str3.Equals( "PedalHitRangeDelta" ) )
+                                        {
+                                            this.nPedalJudgeRangeDelta = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 200, this.nPedalJudgeRangeDelta );
+                                        }
 										continue;
 									//-----------------------------
 									#endregion
