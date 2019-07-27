@@ -115,6 +115,7 @@ namespace DTXMania
 			{
 				this.txパネル本体 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_difficulty background.png" ) );
 				this.txゲージ用数字他 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_skill icon.png" ), false );
+                this.txRank = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_Rank icon.png" ) );
                 this.tx難易度パネル = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_difficulty panel.png" ) );
                 this.tx難易度数字XG = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_LevelNumber.png" ) );
                 this.tx難易度カーソル = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_difficulty sensor.png" ) );
@@ -142,6 +143,7 @@ namespace DTXMania
 			{
 				CDTXMania.tテクスチャの解放( ref this.txパネル本体 );
 				CDTXMania.tテクスチャの解放( ref this.txゲージ用数字他 );
+                CDTXMania.tテクスチャの解放( ref this.txRank );
                 CDTXMania.tテクスチャの解放( ref this.tx難易度パネル );
                 CDTXMania.tテクスチャの解放( ref this.tx難易度数字XG );
                 CDTXMania.tテクスチャの解放( ref this.tx難易度カーソル );
@@ -242,24 +244,44 @@ namespace DTXMania
                             //{
                             //    CDTXMania.act文字コンソール.tPrint( 570, 634 - ( 60 * i ), C文字コンソール.Eフォント種別.白, string.Format( "{0:0}", n難易度整数[i] ) + "." + string.Format("{0,2:00}", n難易度小数[i]) );
                             //}
+                            #region[ ランク画像 ]
+                            int rank = this.n現在選択中の曲の最高ランク難易度毎[ i ].Drums;
+                            if( rank != 99 )
+                            {
+                                if( rank < 0 ) rank = 0;
+                                else if( rank > 6 ) rank = 6;
+
+                                this.txRank?.t2D描画( CDTXMania.app.Device, 453, 612 - ( i * 60 ), this.rectRank文字[ rank ] );
+                            }
+                            #endregion
+                            #region[ FC/EXC ]
+                            if( this.db現在選択中の曲の最高スキル値難易度毎[ i ].Drums >= 100.0 )
+                            {
+                                this.txRank?.t2D描画( CDTXMania.app.Device, 487, 612 - ( i * 60 ), new Rectangle( 0, 56, 28, 28 ) );
+                            }
+                            else if( this.b現在選択中の曲がフルコンボ難易度毎[ i ].Drums )
+                            {
+                                this.txRank?.t2D描画( CDTXMania.app.Device, 487, 612 - ( i * 60 ), new Rectangle( 28, 56, 28, 28 ) );
+                            }
+                            #endregion
                         }
 
                         #region [ 選択曲の 最高スキル値の描画 ]
                         //-----------------
-                        for (int j = 0; j < 3; j++)
-                        {
+                        //for (int j = 0; j < 3; j++)
+                        //{
                             for (int i = 0; i < 5; i++)
                             {
-                                if( j == 0 )
+                                //if( j == 0 )
                                 {
-                                    if( this.db現在選択中の曲の最高スキル値難易度毎[i][j] != 0.00 )
+                                    if( this.db現在選択中の曲の最高スキル値難易度毎[ i ].Drums != 0.00 )
                                     {
                                         // ToDo:エクセはどう表示される?
-                                        CDTXMania.act文字コンソール.tPrint( 450, 645 - ( i * 60 ), C文字コンソール.Eフォント種別.白, string.Format( "{0,6:##0.00}%", this.db現在選択中の曲の最高スキル値難易度毎[ i ][ j ] ) );
+                                        CDTXMania.act文字コンソール.tPrint( 450, 645 - ( i * 60 ), C文字コンソール.Eフォント種別.白, string.Format( "{0,6:##0.00}%", this.db現在選択中の曲の最高スキル値難易度毎[ i ].Drums ) );
                                     }
                                 }
                             }
-                        }
+                        //}
                         //-----------------
                         #endregion
                         this.t難易度カーソル描画( 426, base.n現在選択中の曲の難易度 );
@@ -378,6 +400,8 @@ namespace DTXMania
         private CTexture txスキル数字_大_小数部;
         private CTexture txスキル数字_大_小数点;
         private CTexture txBPM数字; // 2019.04.30 kairera0467
+
+        private CTexture txRank;
 
         private struct ST数字フォント
         {
@@ -684,6 +708,18 @@ namespace DTXMania
             new ST文字位置( '7', new Point( 32, 24 ) ),
             new ST文字位置( '8', new Point( 48, 24 ) ),
             new ST文字位置( '9', new Point( 64, 24 ) )
+        };
+
+        private Rectangle[] rectRank文字 = new Rectangle[]
+        {
+            new Rectangle( 0, 0, 28, 28 ),
+            new Rectangle( 28, 0, 28, 28 ),
+            new Rectangle( 56, 0, 28, 28 ),
+            new Rectangle( 84, 0, 28, 28 ),
+            new Rectangle( 112, 0, 28, 28 ),
+            new Rectangle( 140, 0, 28, 28 ),
+            new Rectangle( 168, 0, 28, 28 ),
+            new Rectangle( 0, 28, 28, 28 )
         };
 
         private void t小文字表示(int x, int y, string str)

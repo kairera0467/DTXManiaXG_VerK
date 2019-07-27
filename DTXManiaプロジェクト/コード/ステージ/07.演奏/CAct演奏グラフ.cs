@@ -119,8 +119,8 @@ namespace DTXMania
 		{
 			if( !base.b活性化してない )
 			{
-				this.txグラフ.Dispose();
-                this.txグラフ_ゲージ.Dispose();
+				this.txグラフ?.Dispose();
+                this.txグラフ_ゲージ?.Dispose();
                 this.txグラフ値自己ベストライン?.Dispose();
 				base.OnManagedリソースの解放();
 			}

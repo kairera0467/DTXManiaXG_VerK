@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 using System.Drawing;
+using SharpDX.Animation;
 using FDK;
 
 namespace DTXMania
@@ -80,6 +81,61 @@ namespace DTXMania
 
 		}
 
+        protected class C判定文字 : IDisposable
+        {
+            public Variable var文字中心位置X;
+            public Variable var文字中心位置Y;
+            public Variable var文字拡大率X;
+            public Variable var文字拡大率Y;
+            public Variable var文字不透明度;
+            public Variable var文字Z軸回転度;
+            public Variable var文字オーバーレイ中心位置X;
+            public Variable var文字オーバーレイ中心位置Y;
+            public Variable var棒拡大率X;
+            public Variable var棒拡大率Y;
+            public Variable var棒Z軸回転度;
+            public Storyboard ストーリーボード;
+
+            public void Dispose()
+            {
+                this.ストーリーボード?.Abandon();
+                this.ストーリーボード = null;
+
+                this.var文字中心位置X?.Dispose();
+                this.var文字中心位置X = null;
+
+                this.var文字中心位置Y?.Dispose();
+                this.var文字中心位置Y = null;
+
+                this.var文字拡大率X?.Dispose();
+                this.var文字拡大率X = null;
+
+                this.var文字拡大率Y?.Dispose();
+                this.var文字拡大率Y = null;
+
+                this.var文字不透明度?.Dispose();
+                this.var文字不透明度 = null;
+
+                this.var文字Z軸回転度?.Dispose();
+                this.var文字Z軸回転度 = null;
+
+                this.var文字オーバーレイ中心位置X?.Dispose();
+                this.var文字オーバーレイ中心位置X = null;
+
+                this.var文字オーバーレイ中心位置Y?.Dispose();
+                this.var文字オーバーレイ中心位置Y = null;
+
+                this.var棒拡大率X?.Dispose();
+                this.var棒拡大率X = null;
+
+                this.var棒拡大率Y?.Dispose();
+                this.var棒拡大率Y = null;
+
+                this.var棒Z軸回転度?.Dispose();
+                this.var棒Z軸回転度 = null;
+            }
+        }
+
         protected bool bShow;
 
 		// コンストラクタ
@@ -107,9 +163,10 @@ namespace DTXMania
 			}
             int iP_A = 390;
             int iP_B = 584;
-			this.stLag数値 = new STlag数値[ 12 * 2 ];		// #25370 2011.2.1 yyagi
+			this.stLag数値 = new STlag数値[ 12 * 3 ];       // #25370 2011.2.1 yyagi
+            // #32093 2019.7.20 kairera0467 12 * 2 → 12 * 3
 
-			for ( int i = 0; i < 12; i++ )
+            for ( int i = 0; i < 12; i++ )
 			{
 				this.stLag数値[ i      ].rc = new Rectangle( ( i % 4 ) * 15     , ( i / 4 ) * 19     , 15, 19 );	// plus numbers
 				this.stLag数値[ i + 12 ].rc = new Rectangle( ( i % 4 ) * 15 + 64, ( i / 4 ) * 19 + 64, 15, 19 );	// minus numbers
