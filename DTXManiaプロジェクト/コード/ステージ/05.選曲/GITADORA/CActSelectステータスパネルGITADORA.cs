@@ -607,13 +607,13 @@ namespace DTXMania
 
             // 1文字あたりのマージン
             int n文字間隔 = 18;
-            string formatText = string.Format( "{0,4:###0}", dbBPM最小.ToString() );
+            string formatText = string.Format( "{0,4:###0}", ((int)dbBPM最小).ToString() );
             if( ( dbBPM最小 != -1 && dbBPM最大 != -1 ) && ( dbBPM最小 == dbBPM最大 ) ) {
-                formatText = string.Format( "{0,4:###0}", dbBPM最大.ToString() );
+                formatText = string.Format( "{0,4:###0}", ((int)dbBPM最大).ToString() );
                 x += 34;
             }
             else if( dbBPM最小 != -1 && dbBPM最大 != -1 )
-                formatText = string.Format( "{0,4:###0}" + "~" + "{1,4:###0}", dbBPM最小.ToString(), dbBPM最大.ToString() );
+                formatText = string.Format( "{0,4:###0}" + "~" + "{1,4:###0}", ((int)dbBPM最小).ToString(), ((int)dbBPM最大).ToString() );
 
             for( int i = 0; i < formatText.Length; i++ )
             {

@@ -90,6 +90,7 @@ namespace DTXMania
                     }
                 }
 			}
+            this.tx選択中のアーティスト名テクスチャ?.Dispose(); // 2019.07.27 作業部屋#50808 kairera0467
         }
 
         public override void On活性化()
