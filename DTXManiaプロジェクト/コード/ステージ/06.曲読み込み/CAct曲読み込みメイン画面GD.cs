@@ -94,7 +94,14 @@ namespace DTXMania
         {
             if( this.txJacket == null )
             {
-                this.txJacket = CDTXMania.tテクスチャの生成( path );
+                if( File.Exists(path) )
+                {
+                    this.txJacket = CDTXMania.tテクスチャの生成( path );
+                }
+                else
+                {
+                    this.txJacket = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_preimage default.png" ) );
+                }
             }
         }
 

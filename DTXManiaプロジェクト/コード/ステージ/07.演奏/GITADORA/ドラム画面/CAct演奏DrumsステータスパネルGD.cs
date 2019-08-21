@@ -161,7 +161,14 @@ namespace DTXMania
                 #endregion
                 
                 this.txスキルパネル = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_SkillPanel.png" ) );
-                this.txJacket = CDTXMania.tテクスチャの生成( path );
+                if( File.Exists( path ) )
+                {
+                    this.txJacket = CDTXMania.tテクスチャの生成( path );
+                }
+                else
+                {
+                    this.txJacket = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_preimage default.png" ) );
+                }
 
                 this.txSongNamePlate = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_Drums Songpanel.png" ) );
                 this.txScore = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_score numbersGD.png" ) );
