@@ -1966,13 +1966,15 @@ for (int i = 0; i < 3; i++) {
 		{
 			get
 			{
+                string strCPUmode = ( Environment.Is64BitProcess ) ? " [x64]" : " [x86]";
+
 				if ( DTXVmode.Enabled )
 				{
-					return "DTXViewer release " + VERSION;
+					return "DTXViewer release " + VERSION + strCPUmode;
 				}
 				else
 				{
-					return "DTXMania .NET style release " + VERSION;
+					return "DTXMania .NET style release " + VERSION + strCPUmode;
 				}
 			}
 		}
@@ -2035,7 +2037,7 @@ for (int i = 0; i < 3; i++) {
 			}
 			Trace.WriteLine("");
 			Trace.WriteLine("DTXMania powered by YAMAHA Silent Session Drums");
-			Trace.WriteLine(string.Format("Release: {0}", VERSION));
+			Trace.WriteLine(string.Format("Release: {0} {1} mode.", VERSION, (Environment.Is64BitProcess)? "x64":"x86" ));
 			Trace.WriteLine("");
 			Trace.TraceInformation("----------------------");
 			Trace.TraceInformation("■ アプリケーションの初期化");
@@ -3158,11 +3160,9 @@ for (int i = 0; i < 3; i++) {
 			}
 			else
 			{
-				//for ( int i = 0; i < 0x10; i++ )
+				for ( int i = 0; i < 0x10; i++ )
 				{
-                    // 2019.04.21 kairera0467 作業部屋##50802 とりあえず問題解決できるまでキャプチャはF12固定とする
-                    //var captureCode = (SlimDX.DirectInput.Key) ConfigIni.KeyAssign[ (int)EKeyConfigPad.Capture ][ i ];
-                    var captureCode = SlimDX.DirectInput.Key.F12;
+                    var captureCode = (SlimDX.DirectInput.Key)ConfigIni.KeyAssign.System[ (int)EKeyConfigPad.Capture ][ i ].コード;
 
 					if( (int) captureCode > 0 &&
 						e.KeyCode == DeviceConstantConverter.KeyToKeys( captureCode ) )
