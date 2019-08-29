@@ -83,6 +83,7 @@ namespace DTXMania
                 this.txゲージ = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\8_Gauge.png" ) );
                 this.txゲージ2 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\8_Gauge2.png" ) );
 				this.txWhite = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\Tile white 64x64.png" ) );
+                this.tx演奏パート = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\8_Part.png" ) );
 				base.OnManagedリソースの作成();
 			}
 		}
@@ -99,6 +100,7 @@ namespace DTXMania
                 CDTXMania.tテクスチャの解放( ref this.txゲージ );
                 CDTXMania.tテクスチャの解放( ref this.txゲージ2 );
 				CDTXMania.tテクスチャの解放( ref this.txWhite );
+                CDTXMania.tテクスチャの解放( ref this.tx演奏パート );
 				base.OnManagedリソースの解放();
 			}
 		}
@@ -282,8 +284,11 @@ namespace DTXMania
                         this.txWhite.t2D描画( CDTXMania.app.Device, this.n白X[ i ], this.n白Y[ i ], rectangle );
                     }
                     this.t難易度パネルを描画する( CSongNode.ar難易度ラベル[ CDTXMania.stage選曲XG.n確定された曲の難易度 ], 941, 19 );
-                    this.tレベル大文字表示( 1104, 22, n表示Level.ToString() );
-                    this.tレベル小文字表示( 1126, 23, "." + n表示LevelDec );
+                    this.tレベル大文字表示( this.n本体X[ i ] + 651, this.n本体Y[ i ] + 11, n表示Level.ToString() );
+                    this.tレベル小文字表示( this.n本体X[ i ] + 673, this.n本体Y[ i ] + 12, "." + n表示LevelDec );
+
+                    if( this.tx演奏パート != null )
+                        this.tx演奏パート.t2D描画( CDTXMania.app.Device, this.n本体X[ i ] + 388, this.n本体Y[ i ] + 8, new Rectangle( 0, 0 + ( 20 * i ), 120, 20 ) );
                 }
             }
 
@@ -320,6 +325,7 @@ namespace DTXMania
         private CTexture txレベル数字;
         private CTexture txゲージ;
         private CTexture txゲージ2;
+        private CTexture tx演奏パート;
 		private CTexture[] tx文字 = new CTexture[ 3 ];
 
         private ST文字位置[] st小文字位置 = new ST文字位置[]{
