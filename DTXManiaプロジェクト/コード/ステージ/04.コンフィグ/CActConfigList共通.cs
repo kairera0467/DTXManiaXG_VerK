@@ -198,7 +198,7 @@ namespace DTXMania
 			this.iSystemAVI = new CItemToggle( "AVI", CDTXMania.ConfigIni.bAVI有効,
 				"AVIの使用：\n" +
 				"演奏中に動画(AVI)を再生する場合にON にします。\n" +
-				"AVI の再生には、それなりのマシンパワーが\n" +
+				"解像度が高い動画の場合、それなりのマシンパワーが\n" +
                 "必要とされます。",
 				"To use AVI playback or not." );
 			this.list項目リスト.Add( this.iSystemAVI );
@@ -963,10 +963,8 @@ namespace DTXMania
 
 			this.iSystemFillIn = new CItemToggle( "FillIn", CDTXMania.ConfigIni.bフィルイン有効,
 				"フィルインエフェクトの使用：\n" +
-				"フィルイン区間の爆発パターンに特別のエフェクトを\n" +
-                "使用します。\n" +
-				"フィルインエフェクトの描画には\n" +
-                "それなりのマシンパワーが必要とされます。",
+				"フィルイン区間の爆発パターンに特別なエフェクトを\n" +
+                "使用します。",
 				"To show bursting effects at the fill-in zone." );
 			this.list項目リスト.Add( this.iSystemFillIn );
 

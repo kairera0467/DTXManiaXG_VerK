@@ -72,7 +72,7 @@ namespace DTXMania
                 }
 
 				
-				CDTX cdtx = new CDTX( strDTXファイルパス, true );
+				CDTX cdtx = new CDTX( strDTXファイルパス, true, true );
 				this.str曲タイトル = cdtx.TITLE;
 				if( ( ( cdtx.STAGEFILE != null ) && ( cdtx.STAGEFILE.Length > 0 ) ) && ( File.Exists( cdtx.strフォルダ名 + cdtx.STAGEFILE ) && !CDTXMania.ConfigIni.bストイックモード ) )
 				{

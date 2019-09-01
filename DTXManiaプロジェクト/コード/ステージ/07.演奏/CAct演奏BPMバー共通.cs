@@ -116,7 +116,7 @@ namespace DTXMania
                 var basetime = animation.Timer.Time;
                 var start = basetime;
 
-                this._BPMバー[ 0 ].ストーリーボード.Schedule( start );
+                this._BPMバー[ 0 ].ストーリーボード?.Schedule( start );
             }
         }
 

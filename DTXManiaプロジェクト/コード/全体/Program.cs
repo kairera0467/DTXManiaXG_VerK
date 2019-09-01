@@ -54,11 +54,14 @@ namespace DTXMania
 
 		[DllImport( "kernel32", CharSet = CharSet.Unicode, SetLastError = true )]
 		internal static extern IntPtr LoadLibrary( string lpFileName );
-		#endregion
-		//-----------------------------
-		#endregion
 
-		[STAThread] 
+        [DllImport( "kernel32", CharSet = CharSet.Unicode, SetLastError = true )]
+        internal static extern bool SetDllDirectory( string lpPathName );
+        #endregion
+        //-----------------------------
+        #endregion
+
+        [STAThread] 
 		private static void Main()
 		{
 			mutex二重起動防止用 = new Mutex( false, "DTXManiaMutex" );
@@ -117,9 +120,9 @@ namespace DTXMania
 					"bass_fx.dll を読み込めません。bass_fx.dll か bass.dll が存在しません。" + newLine + "DTXManiaをダウンロードしなおしてください。",
 					"bass_fx.dll is not loaded. bass_fx.dll or bass.dll must not exist." + newLine + "Please download DTXMania again."
 					) ) bDLLnotfound = true;
-				if ( !tDLLの存在チェック( "dll\\DirectShowLib-2005.dll",
-					"DirectShowLib-2005.dll が存在しません。" + newLine + "DTXManiaをダウンロードしなおしてください。",
-					"DirectShowLib-2005.dll is not found." + newLine + "Please download DTXMania again."
+				if ( !tDLLの存在チェック( "dll\\DirectShowLib.dll",
+					"DirectShowLib.dll が存在しません。" + newLine + "DTXManiaをダウンロードしなおしてください。",
+					"DirectShowLib.dll is not found." + newLine + "Please download DTXMania again."
 					) ) bDLLnotfound = true;
 				#endregion
 				if ( !bDLLnotfound )
@@ -128,14 +131,24 @@ namespace DTXMania
 					Thread.CurrentThread.CurrentCulture = new CultureInfo( "en-US" );
 #endif
 
-					DWM.EnableComposition( false );	// Disable AeroGrass temporally
+					DWM.EnableComposition( false ); // Disable AeroGrass temporally
 
-					// BEGIN #23670 2010.11.13 from: キャッチされない例外は放出せずに、ログに詳細を出力する。
-					// BEGIM #24606 2011.03.08 from: DEBUG 時は例外発生箇所を直接デバッグできるようにするため、例外をキャッチしないようにする。
+                    string path = Path.GetDirectoryName( Application.ExecutablePath );
+                    SetDllDirectory( null );
+                    if( Environment.Is64BitProcess )
+                    {
+                        SetDllDirectory( Path.Combine( path, @"dll\x64" ) );
+                    }
+                    else
+                    {
+                        SetDllDirectory( Path.Combine( path, @"dll" ) );
+                    }
+                    // BEGIN #23670 2010.11.13 from: キャッチされない例外は放出せずに、ログに詳細を出力する。
+                    // BEGIM #24606 2011.03.08 from: DEBUG 時は例外発生箇所を直接デバッグできるようにするため、例外をキャッチしないようにする。
 #if !DEBUG
 					try
 #endif
-					{
+                    {
 						using ( var mania = new CDTXMania() )
 							mania.Run();
 

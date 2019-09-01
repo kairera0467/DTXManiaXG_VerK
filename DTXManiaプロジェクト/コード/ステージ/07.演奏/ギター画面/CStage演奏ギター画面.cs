@@ -43,6 +43,7 @@ namespace DTXMania
 			base.list子Activities.Add( this.actFO = new CActFIFOBlack() );
 			base.list子Activities.Add( this.actFOClear = new CActFIFOWhite() );
             base.list子Activities.Add( this.actGraph = new CAct演奏グラフ() );
+            base.list子Activities.Add( this.actFOClearXG = new CActFIFOWhiteClear() );
 		}
 
 
@@ -81,8 +82,8 @@ namespace DTXMania
 			}
 			else
 			{
-				this.actGraph.dbグラフ値目標_渡 = CDTXMania.stage選曲.r確定されたスコア.譜面情報.最大スキル[ nGraphUsePart ];	// #24074 2011.01.23 add ikanick
-                this.actGraph.dbグラフ値自己ベスト = CDTXMania.stage選曲.r確定されたスコア.譜面情報.最大スキル[ nGraphUsePart ];
+				this.actGraph.dbグラフ値目標_渡 = CDTXMania.stage選曲XG.r確定されたスコア.譜面情報.最大スキル[ nGraphUsePart ];	// #24074 2011.01.23 add ikanick
+                this.actGraph.dbグラフ値自己ベスト = CDTXMania.stage選曲XG.r確定されたスコア.譜面情報.最大スキル[ nGraphUsePart ];
 
                 // #35411 2015.08.21 chnmr0 add
                 // ゴースト利用可のなとき、0で初期化

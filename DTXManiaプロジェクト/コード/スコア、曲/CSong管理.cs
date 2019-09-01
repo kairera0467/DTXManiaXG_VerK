@@ -807,18 +807,32 @@ namespace DTXMania
 			cスコア.譜面情報.Bpm = br.ReadDouble();
 			cスコア.譜面情報.Duration = br.ReadInt32();
             //作業部屋#50730
-            cスコア.譜面情報.n可視チップ数.LC = br.ReadInt32();
-            cスコア.譜面情報.n可視チップ数.HH = br.ReadInt32();
-            cスコア.譜面情報.n可視チップ数.HHO = br.ReadInt32();
-            cスコア.譜面情報.n可視チップ数.LP = br.ReadInt32();
-            cスコア.譜面情報.n可視チップ数.LBD = br.ReadInt32();
-            cスコア.譜面情報.n可視チップ数.SD = br.ReadInt32();
-            cスコア.譜面情報.n可視チップ数.HT = br.ReadInt32();
-            cスコア.譜面情報.n可視チップ数.BD = br.ReadInt32();
-            cスコア.譜面情報.n可視チップ数.LT = br.ReadInt32();
-            cスコア.譜面情報.n可視チップ数.FT = br.ReadInt32();
-            cスコア.譜面情報.n可視チップ数.CY = br.ReadInt32();
-            cスコア.譜面情報.n可視チップ数.RD = br.ReadInt32();
+            cスコア.譜面情報.n可視チップ数_HH = br.ReadInt32();
+            cスコア.譜面情報.n可視チップ数_SD = br.ReadInt32();
+            cスコア.譜面情報.n可視チップ数_BD = br.ReadInt32();
+            cスコア.譜面情報.n可視チップ数_HT = br.ReadInt32();
+            cスコア.譜面情報.n可視チップ数_LT = br.ReadInt32();
+            cスコア.譜面情報.n可視チップ数_CY = br.ReadInt32();
+            cスコア.譜面情報.n可視チップ数_FT = br.ReadInt32();
+            cスコア.譜面情報.n可視チップ数_HHO = br.ReadInt32();
+            cスコア.譜面情報.n可視チップ数_RD = br.ReadInt32();
+            cスコア.譜面情報.n可視チップ数_LC = br.ReadInt32();
+            cスコア.譜面情報.n可視チップ数_LP = br.ReadInt32();
+            cスコア.譜面情報.n可視チップ数_LBD = br.ReadInt32();
+            cスコア.譜面情報.n可視チップ数_Guitar = br.ReadInt32();
+            cスコア.譜面情報.n可視チップ数_Guitar_R = br.ReadInt32();
+            cスコア.譜面情報.n可視チップ数_Guitar_G = br.ReadInt32();
+            cスコア.譜面情報.n可視チップ数_Guitar_B = br.ReadInt32();
+            cスコア.譜面情報.n可視チップ数_Guitar_Y = br.ReadInt32();
+            cスコア.譜面情報.n可視チップ数_Guitar_P = br.ReadInt32();
+            cスコア.譜面情報.n可視チップ数_Guitar_OP = br.ReadInt32();
+            cスコア.譜面情報.n可視チップ数_Bass = br.ReadInt32();
+            cスコア.譜面情報.n可視チップ数_Bass_R = br.ReadInt32();
+            cスコア.譜面情報.n可視チップ数_Bass_G = br.ReadInt32();
+            cスコア.譜面情報.n可視チップ数_Bass_B = br.ReadInt32();
+            cスコア.譜面情報.n可視チップ数_Bass_Y = br.ReadInt32();
+            cスコア.譜面情報.n可視チップ数_Bass_P = br.ReadInt32();
+            cスコア.譜面情報.n可視チップ数_Bass_OP = br.ReadInt32();
             cスコア.譜面情報.最低Bpm = br.ReadDouble();
             cスコア.譜面情報.最大Bpm = br.ReadDouble();
 
@@ -858,7 +872,7 @@ namespace DTXMania
 							{
 								try
 								{
-									CDTX cdtx = new CDTX( c曲リストノード.arスコア[ i ].ファイル情報.ファイルの絶対パス, false ); //2016.02.19 kairera0467 以前の処理だと2回読むから効率が悪いかもということで、ここでヘッダ以外も読み込ませる。
+									CDTX cdtx = new CDTX( c曲リストノード.arスコア[ i ].ファイル情報.ファイルの絶対パス, false, false ); //2016.02.19 kairera0467 以前の処理だと2回読むから効率が悪いかもということで、ここでヘッダ以外も読み込ませる。
 									c曲リストノード.arスコア[ i ].譜面情報.タイトル = cdtx.TITLE;
 									c曲リストノード.arスコア[ i ].譜面情報.アーティスト名 = cdtx.ARTIST;
 									c曲リストノード.arスコア[ i ].譜面情報.コメント = cdtx.COMMENT;
@@ -884,7 +898,20 @@ namespace DTXMania
 									c曲リストノード.arスコア[ i ].譜面情報.曲種別 = cdtx.e種別;
 									c曲リストノード.arスコア[ i ].譜面情報.Bpm = cdtx.BPM;
 									c曲リストノード.arスコア[ i ].譜面情報.Duration = 0;	//  (cdtx.listChip == null)? 0 : cdtx.listChip[ cdtx.listChip.Count - 1 ].n発声時刻ms;
-                                    c曲リストノード.arスコア[ i ].譜面情報.n可視チップ数 = cdtx.n可視チップ数;
+                                    c曲リストノード.arスコア[ i ].譜面情報.n可視チップ数_HH = cdtx.n可視チップ数.HH;
+                                    c曲リストノード.arスコア[ i ].譜面情報.n可視チップ数_SD = cdtx.n可視チップ数.SD;
+                                    c曲リストノード.arスコア[ i ].譜面情報.n可視チップ数_BD = cdtx.n可視チップ数.BD;
+                                    c曲リストノード.arスコア[ i ].譜面情報.n可視チップ数_HT = cdtx.n可視チップ数.HT;
+                                    c曲リストノード.arスコア[ i ].譜面情報.n可視チップ数_LT = cdtx.n可視チップ数.LT;
+                                    c曲リストノード.arスコア[ i ].譜面情報.n可視チップ数_CY = cdtx.n可視チップ数.CY;
+                                    c曲リストノード.arスコア[ i ].譜面情報.n可視チップ数_FT = cdtx.n可視チップ数.FT;
+                                    c曲リストノード.arスコア[ i ].譜面情報.n可視チップ数_HHO = cdtx.n可視チップ数.HHO;
+                                    c曲リストノード.arスコア[ i ].譜面情報.n可視チップ数_RD = cdtx.n可視チップ数.RD;
+                                    c曲リストノード.arスコア[ i ].譜面情報.n可視チップ数_LC = cdtx.n可視チップ数.LC;
+                                    c曲リストノード.arスコア[ i ].譜面情報.n可視チップ数_LP = cdtx.n可視チップ数.LP;
+                                    c曲リストノード.arスコア[ i ].譜面情報.n可視チップ数_LBD = cdtx.n可視チップ数.LBD;
+                                    c曲リストノード.arスコア[ i ].譜面情報.n可視チップ数_Guitar = cdtx.n可視チップ数.Guitar;
+                                    c曲リストノード.arスコア[ i ].譜面情報.n可視チップ数_Bass = cdtx.n可視チップ数.Bass;
                                     c曲リストノード.arスコア[ i ].譜面情報.最低Bpm = cdtx.db最低BPM;
                                     c曲リストノード.arスコア[ i ].譜面情報.最大Bpm = cdtx.db最高BPM;
 
@@ -1195,18 +1222,32 @@ namespace DTXMania
 					bw.Write( node.arスコア[ i ].譜面情報.Bpm );
 					bw.Write( node.arスコア[ i ].譜面情報.Duration );
                     //作業部屋#50730 ノーツグラフ用。後日GuitarBassも追加する。
-                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数.LC );
-                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数.HH );
-                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数.HHO );
-                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数.LP );
-                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数.LBD );
-                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数.SD );
-                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数.HT );
-                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数.BD );
-                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数.LT );
-                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数.FT );
-                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数.CY );
-                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数.RD );
+                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数_HH );
+                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数_SD );
+                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数_BD );
+                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数_HT );
+                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数_LT );
+                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数_CY );
+                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数_FT );
+                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数_HHO );
+                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数_RD );
+                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数_LC );
+                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数_LP );
+                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数_LBD );
+                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数_Guitar );
+                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数_Guitar_R );
+                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数_Guitar_G );
+                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数_Guitar_B );
+                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数_Guitar_Y );
+                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数_Guitar_P );
+                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数_Guitar_OP );
+                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数_Bass );
+                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数_Bass_R );
+                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数_Bass_G );
+                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数_Bass_B );
+                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数_Bass_Y );
+                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数_Bass_P );
+                    bw.Write( node.arスコア[ i ].譜面情報.n可視チップ数_Bass_OP );
                     bw.Write( node.arスコア[ i ].譜面情報.最低Bpm );
                     bw.Write( node.arスコア[ i ].譜面情報.最大Bpm );
 					this.nSongsDBへ出力できたスコア数++;

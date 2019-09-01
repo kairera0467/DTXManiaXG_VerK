@@ -1293,6 +1293,18 @@ namespace DTXMania
 			}
 		}
 
+        public struct STLANEGB
+        {
+            public int R;
+            public int G;
+            public int B;
+            public int Y;
+            public int P;
+            public int OP;
+            public int WU;
+            public int WR;
+            public int WD;
+        }
 
 		// プロパティ
 
@@ -1479,11 +1491,11 @@ namespace DTXMania
 			this.On活性化();
 			this.t入力_全入力文字列から( str全入力文字列 );
 		}
-		public CDTX( string strファイル名, bool bヘッダのみ )
+		public CDTX( string strファイル名, bool bヘッダのみ, bool bリソースを読み込む )
 			: this()
 		{
 			this.On活性化();
-			this.t入力( strファイル名, bヘッダのみ );
+			this.t入力( strファイル名, bヘッダのみ, bリソースを読み込む );
 		}
 		public CDTX( string str全入力文字列, double db再生速度, int nBGMAdjust )
 			: this()
@@ -2749,11 +2761,15 @@ namespace DTXMania
 		}
 		#endregion
 
-		public void t入力( string strファイル名, bool bヘッダのみ )
+		public void t入力( string strファイル名, bool bヘッダのみ, bool bリソースを読み込む )
 		{
-			this.t入力( strファイル名, bヘッダのみ, 1.0, 0 );
+			this.t入力( strファイル名, bヘッダのみ, bリソースを読み込む, 1.0, 0 );
+        }
+        public void t入力( string strファイル名, bool bヘッダのみ, double db再生速度, int nBGMAdjust )
+        {
+			this.t入力( strファイル名, bヘッダのみ, true, 1.0, 0 );
 		}
-		public void t入力( string strファイル名, bool bヘッダのみ, double db再生速度, int nBGMAdjust )
+		public void t入力( string strファイル名, bool bヘッダのみ, bool bリソースを読み込む, double db再生速度, int nBGMAdjust )
 		{
 			this.bヘッダのみ = bヘッダのみ;
 			this.strファイル名の絶対パス = Path.GetFullPath( strファイル名 );
@@ -3817,7 +3833,7 @@ namespace DTXMania
 		}
 		public override void OnManagedリソースの作成()
 		{
-			if( !base.b活性化してない )
+			if( !base.b活性化してない && this.bリソースを読み込む )
 			{
 				this.tBMP_BMPTEXの読み込み();
 				this.tAVIの読み込み();
@@ -3876,6 +3892,7 @@ namespace DTXMania
 
 		private readonly STGDAPARAM[] stGDAParam;
 		private bool bヘッダのみ;
+        private bool bリソースを読み込む; // 2019.9.1 kairera0467
 		private Stack<bool> bstackIFからENDIFをスキップする;
 	
 		private int n現在の行数;

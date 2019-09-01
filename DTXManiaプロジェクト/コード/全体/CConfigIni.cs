@@ -1348,7 +1348,7 @@ namespace DTXMania
             this.bWindowClipMode = false;
             this.b曲名表示をdefのものにする = true;
             this.eHHOGraphics = Eタイプ.A;
-            this.eJudgeAnimeType = Eタイプ.B;
+            this.eJudgeAnimeType = Eタイプ.C;
             this.eLaneType = Eタイプ.A;
             this.eLBDGraphics = Eタイプ.A;
             this.eMovieClipMode = EMovieClipMode.FullScreen;
@@ -2138,8 +2138,7 @@ namespace DTXMania
             sw.WriteLine( "BassLaneFlush={0}", this.bLaneFlush.Bass ? 1 : 0 );
             sw.WriteLine();
             sw.WriteLine( "; 判定画像のアニメーション方式" );
-            //sw.WriteLine( ";(0:旧DTXMania方式 1:コマ方式 2:擬似XG方式)" );
-            sw.WriteLine( ";(0:旧DTXMania方式 1:コマ方式)" );
+            sw.WriteLine( ";(0:旧DTXMania方式 1:コマ方式 2:擬似XG方式)" );
             sw.WriteLine( "JudgeAnimeType={0}", (int)this.eJudgeAnimeType );
             sw.WriteLine();
             sw.WriteLine( "; 判定数の表示(0:表示しない, 1:表示する)");
@@ -3330,8 +3329,7 @@ namespace DTXMania
                                             }
                                             else if( str3.Equals( "JudgeAnimeType" ) )
                                             {
-                                                //this.eJudgeAnimeType = ( Eタイプ )C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 2, (int)this.eJudgeAnimeType );
-                                                this.eJudgeAnimeType = ( Eタイプ )C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 1, (int)this.eJudgeAnimeType );
+                                                this.eJudgeAnimeType = ( Eタイプ )C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 2, (int)this.eJudgeAnimeType );
                                             }
                                             else if( str3.Equals( "XPerfectJudgeMode" ) )
                                             {

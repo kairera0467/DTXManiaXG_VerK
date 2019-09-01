@@ -486,7 +486,7 @@ namespace DTXMania
 							return this.Miss;
 
                         case 6:
-                            if( false )
+                            if( CDTXMania.ConfigIni.bXPerfect判定を有効にする )
                                 return this.XPerfect;
                             return this.Perfect;
 					}
@@ -517,7 +517,7 @@ namespace DTXMania
 							return;
 
 						case 6:
-                            if( false )
+                            if( CDTXMania.ConfigIni.bXPerfect判定を有効にする )
 							    this.XPerfect = value;
                             else
                                 this.Perfect = value;
@@ -2135,6 +2135,27 @@ namespace DTXMania
             if( keyboard.bキーが押された( (int) SlimDXKey.F5 ) ) // 2017.12.29 kairera0467 #37846
             {
                 CDTXMania.ConfigIni.bWindowClipMode = !CDTXMania.ConfigIni.bWindowClipMode;
+            }
+            else if( keyboard.bキーが押された( (int)SlimDXKey.F6 ) )
+            {
+                //this.actJudgeString.tStartTest( 0, E判定.Perfect, 0 );
+                //this.actJudgeString.tStartTest( 2, E判定.Great, 0 );
+                //this.actJudgeString.tStartTest( 4, E判定.Good, 0 );
+                //this.actJudgeString.tStartTest( 6, E判定.Poor, 0 );
+                //this.actJudgeString.tStartTest( 8, E判定.Miss, 0 );
+                //this.actJudgeString.tStartTest( 9, E判定.Auto, 0 );
+
+                //this.actJudgeString.tStartTest( 0, E判定.Perfect, 0 );
+                //this.actJudgeString.tStartTest( 1, E判定.Perfect, 0 );
+                //this.actJudgeString.tStartTest( 2, E判定.Perfect, 0 );
+                //this.actJudgeString.tStartTest( 3, E判定.Perfect, 0 );
+                //this.actJudgeString.tStartTest( 4, E判定.Perfect, 0 );
+                //this.actJudgeString.tStartTest( 5, E判定.Perfect, 0 );
+                //this.actJudgeString.tStartTest( 6, E判定.Perfect, 0 );
+                //this.actJudgeString.tStartTest( 7, E判定.Perfect, 0 );
+                //this.actJudgeString.tStartTest( 8, E判定.Perfect, 0 );
+                //this.actJudgeString.tStartTest( 9, E判定.Perfect, 0 );
+
             }
 
             if( CDTXMania.ConfigIni.bDrums有効 ) //2017.08.06 kairera0467 ギターは未実装

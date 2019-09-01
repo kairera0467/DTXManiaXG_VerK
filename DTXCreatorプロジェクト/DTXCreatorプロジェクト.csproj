@@ -56,6 +56,48 @@
     <NoWarn>0219</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>TRACE;USE_ENGLISHRESOURCE_ USE_GERMANRESOURCE_</DefineConstants>
+    <NoWarn>0219</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>0219</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;USE_ENGLISHRESOURCE_ USE_GERMANRESOURCE_</DefineConstants>
+    <NoWarn>0219</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>0219</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -364,13 +406,39 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>copy /Y "$(TargetPath)" "$(SolutionDir)\実行時フォルダ"
-copy /Y "$(TargetPath)".config "$(SolutionDir)\実行時フォルダ"
-mkdir "$(SolutionDir)\実行時フォルダ\ja-JP"
-copy /Y "$(TargetDir)ja-JP" "$(SolutionDir)\実行時フォルダ\ja-JP"
-mkdir "$(SolutionDir)\実行時フォルダ\dll"
-move /Y "$(TargetDir)\Bass.Net.dll" "$(TargetDir)dll"
-move /Y "$(TargetDir)\DirectShowLib-2005.dll" "$(TargetDir)dll"
-move /Y "$(TargetDir)\FDK.dll" "$(TargetDir)dll"</PostBuildEvent>
+    <PostBuildEvent>echo.
+echo ビルド後イベントを開始します。
+
+set RUNTIMEDIR="$(SolutionDir)実行時フォルダ"
+
+echo.
+echo (1) 出力フォルダ内のdllファイルを出力フォルダ/dllフォルダへ移動します。
+set DESTDIR="$(TargetDir)dll"
+if not exist %25DESTDIR%25 mkdir %25DESTDIR%25
+move /Y "$(TargetDir)*.dll" %25DESTDIR%25
+
+echo.
+echo (2) 出力フォルダから 実行時リソースフォルダ にコピーします。 (dllは、日付の新しいファイルのみ)
+set DESTDIR=%25RUNTIMEDIR%25
+xcopy "$(TargetDir)$(TargetFileName)" %25DESTDIR%25 /Y
+xcopy "$(TargetDir)$(TargetFileName).config" %25DESTDIR%25 /Y
+set DESTDIR=%25RUNTIMEDIR%25\ja-JP
+if not exist %25DESTDIR%25 mkdir %25DESTDIR%25
+xcopy "$(TargetDir)ja-JP" %25DESTDIR%25
+set DESTDIR=%25RUNTIMEDIR%25\dll
+if not exist %25DESTDIR%25 mkdir %25DESTDIR%25
+xcopy "$(TargetDir)dll" %25DESTDIR%25 /Y /D /S
+
+echo.
+echo (3) 実行時リソースフォルダ から 出力フォルダ にコピーします。 (日付の新しいファイルのみ)
+set DESTDIR="$(TargetDir)dll"
+if not exist %25DESTDIR%25 mkdir %25DESTDIR%25
+xcopy %25RUNTIMEDIR%25\dll %25DESTDIR%25 /Y /D /S
+set DESTDIR="$(TargetDir)System"
+if not exist %25DESTDIR%25 mkdir %25DESTDIR%25
+xcopy %25RUNTIMEDIR%25\System %25DESTDIR%25 /Y /D /S /E
+
+echo.
+echo ビルド後イベントを終了しました。</PostBuildEvent>
   </PropertyGroup>
 </Project>

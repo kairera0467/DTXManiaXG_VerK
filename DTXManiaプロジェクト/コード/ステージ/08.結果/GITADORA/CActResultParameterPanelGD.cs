@@ -26,12 +26,6 @@ namespace DTXMania
 
 		// メソッド
 
-		public void tアニメを完了させる()
-		{
-			this.ct表示用.n現在の値 = this.ct表示用.n終了値;
-		}
-
-
 		// CActivity 実装
 
 		public override void On活性化()
@@ -546,7 +540,7 @@ namespace DTXMania
 		}
         private void tスキル値の描画( int x, int y, double dbスキル値 )
         {
-            if( dbスキル値 <= 0 || dbスキル値 > 200 )
+            if( dbスキル値 < 0 || dbスキル値 > 200 )
                 return;
 
             // 1文字あたりのマージン
@@ -556,7 +550,7 @@ namespace DTXMania
             dbスキル値 = dbスキル値 * 100.0;
             dbスキル値 = Math.Floor( dbスキル値 );
             dbスキル値 = dbスキル値 / 100.0;
-            string formatText = string.Format( "{0,6:000.00}", dbスキル値.ToString() );
+            string formatText = string.Format( "{0,6:##0.00}", dbスキル値 );
 
             for( int i = 0; i < formatText.Length; i++ )
             {
@@ -601,7 +595,7 @@ namespace DTXMania
             int n文字間隔_整数部 = 38;
             int n文字間隔_小数部 = 30;
             bool b整数部処理中 = true;
-            string formatText = string.Format( "{0,5:00.00}%", dbスキル値.ToString() );
+            string formatText = string.Format( "{0,5:#0.00}%", dbスキル値 );
 
             for( int i = 0; i < formatText.Length; i++ )
             {

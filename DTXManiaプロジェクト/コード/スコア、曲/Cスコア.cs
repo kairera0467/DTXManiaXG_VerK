@@ -72,7 +72,32 @@ namespace DTXMania
 			public int Duration;
             public STDGBVALUE<bool> b完全にCLASSIC譜面である;
             public STDGBVALUE<bool> b譜面がある;
-            public CDTX.STLANEINT n可視チップ数;
+            public int n可視チップ数_HH;
+            public int n可視チップ数_SD;
+            public int n可視チップ数_BD;
+            public int n可視チップ数_HT;
+            public int n可視チップ数_LT;
+            public int n可視チップ数_CY;
+            public int n可視チップ数_FT;
+            public int n可視チップ数_HHO;
+            public int n可視チップ数_RD;
+            public int n可視チップ数_LC;
+            public int n可視チップ数_LP;
+            public int n可視チップ数_LBD;
+            public int n可視チップ数_Guitar;
+            public int n可視チップ数_Guitar_R;
+            public int n可視チップ数_Guitar_G;
+            public int n可視チップ数_Guitar_B;
+            public int n可視チップ数_Guitar_Y;
+            public int n可視チップ数_Guitar_P;
+            public int n可視チップ数_Guitar_OP;
+            public int n可視チップ数_Bass;
+            public int n可視チップ数_Bass_R;
+            public int n可視チップ数_Bass_G;
+            public int n可視チップ数_Bass_B;
+            public int n可視チップ数_Bass_Y;
+            public int n可視チップ数_Bass_P;
+            public int n可視チップ数_Bass_OP;
             public double 最低Bpm;
             public double 最大Bpm;
 
@@ -356,7 +381,9 @@ namespace DTXMania
             this.譜面情報.b譜面がある.Drums = false;
             this.譜面情報.b譜面がある.Guitar = false;
             this.譜面情報.b譜面がある.Bass = false;
-            this.譜面情報.n可視チップ数 = new CDTX.STLANEINT();
+            this.譜面情報.n可視チップ数_HH = 0;
+            this.譜面情報.n可視チップ数_SD = 0;
+            this.譜面情報.n可視チップ数_BD = 0;
             this.譜面情報.最低Bpm = 120.0;
             this.譜面情報.最大Bpm = 120.0;
 		}
