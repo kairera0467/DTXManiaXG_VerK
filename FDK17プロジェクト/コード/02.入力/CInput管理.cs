@@ -61,13 +61,9 @@ namespace FDK
 		}
 
 
-		// コンストラクタ
-		public CInput管理( IntPtr hWnd )
-		{
-			CInput管理初期化( hWnd, true );
-		}
-		public CInput管理( IntPtr hWnd, bool bUseMidiIn )
-		{
+        // コンストラクタ
+        public CInput管理( IntPtr hWnd, bool bUseMidiIn = true )
+        {
 			CInput管理初期化( hWnd, bUseMidiIn );
 		}
 
@@ -117,8 +113,8 @@ namespace FDK
 					{
 						Trace.TraceError( "MIDI In: Device{0}: midiInDevCaps(): {1:X2}: ", i, num3 );
 					}
-					else if ( ( CWin32.midiInOpen( ref item.hMidiIn, i, this.proc, 0, 0x30000 ) == 0 ) && ( item.hMidiIn != 0 ) )
-					{
+                    else if( ( CWin32.midiInOpen( ref item.hMidiIn, i, this.proc, IntPtr.Zero, 0x30000 ) == 0 ) && ( item.hMidiIn != IntPtr.Zero ) )
+                    {
 						CWin32.midiInStart( item.hMidiIn );
 						Trace.TraceInformation( "MIDI In: [{0}] \"{1}\" の入力受付を開始しました。", i, lpMidiInCaps.szPname );
 					}
@@ -265,10 +261,10 @@ namespace FDK
 		private List<uint> listHMIDIIN = new List<uint>( 8 );
 		private object objMidiIn排他用 = new object();
 		private CWin32.MidiInProc proc;
-//		private CTimer timer;
+        //		private CTimer timer;
 
-		private void MidiInCallback( uint hMidiIn, uint wMsg, int dwInstance, int dwParam1, int dwParam2 )
-		{
+        private void MidiInCallback( IntPtr hMidiIn, uint wMsg, int dwInstance, int dwParam1, int dwParam2 )
+        {
 			int p = dwParam1 & 0xF0;
 			if( wMsg != CWin32.MIM_DATA || ( p != 0x80 && p != 0x90 && p != 0xB0 ) )
 				return;
