@@ -1653,8 +1653,8 @@ namespace DTXMania
 		{
 			#region [ CPUコア数の取得 ]
 			CWin32.SYSTEM_INFO sysInfo = new CWin32.SYSTEM_INFO();
-			CWin32.GetSystemInfo( ref sysInfo );
-			int nCPUCores = (int) sysInfo.dwNumberOfProcessors;
+            CWin32.GetSystemInfo( out sysInfo );
+            int nCPUCores = (int) sysInfo.dwNumberOfProcessors;
 			#endregion
 			#region [ BMP読み込み ]
 			if ( this.listBMP != null )

@@ -360,7 +360,7 @@ namespace FDK
 			{
 				#region [ CPU論理コア数の取得 (HT含む) ]
 				CWin32.SYSTEM_INFO sysInfo = new CWin32.SYSTEM_INFO();
-				CWin32.GetSystemInfo(ref sysInfo);
+				CWin32.GetSystemInfo(out sysInfo);
 				int nCPUCores = (int)sysInfo.dwNumberOfProcessors;
 				#endregion
 
