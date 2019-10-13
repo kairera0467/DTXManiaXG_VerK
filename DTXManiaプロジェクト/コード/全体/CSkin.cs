@@ -1075,4 +1075,50 @@ namespace DTXMania
             strFilePathGB = "";
         }
     }
+
+    public class CAttackEffectImage
+    {
+        public bool bFileFound;
+        public string strName;
+        public string strFilePathD;
+        public string strFilePathGB;
+
+        public CAttackEffectImage()
+        {
+            bFileFound = false;
+            strName = "";
+            strFilePathD = "";
+            strFilePathGB = "";
+        }
+    }
+
+    public class CComboImage
+    {
+        public bool bFileFound;
+        public string strName;
+        public string strFilePathD;
+        public string strFilePathGB;
+
+        public CComboImage()
+        {
+            bFileFound = false;
+            strName = "";
+            strFilePathD = "";
+            strFilePathGB = "";
+        }
+    }
+
+    public class CJudgeStringImage
+    {
+        public bool bFileFound;
+        public string strName;
+        public string strFilePath;
+
+        public CJudgeStringImage()
+        {
+            bFileFound = false;
+            strName = "";
+            strFilePath = "";
+        }
+    }
 }

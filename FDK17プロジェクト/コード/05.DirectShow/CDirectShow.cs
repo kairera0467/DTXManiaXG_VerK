@@ -765,8 +765,6 @@ namespace FDK
 				DsError.ThrowExceptionForHR( hr );
 				try
 				{
-					wfx = new WaveFormat();
-
 					#region [ type.formatPtr から wfx に、拡張領域を除くデータをコピーする。]
 					//-----------------
 					var wfxTemp = new WaveFormatEx();	// SlimDX.Multimedia.WaveFormat は Marshal.PtrToStructure() で使えないので、それが使える DirectShowLib.WaveFormatEx を介して取得する。（面倒…）
@@ -863,7 +861,7 @@ namespace FDK
 			{
 				// videoRenderer を探す。
 				CDirectShow.SearchMMRenderers(graphBuilder, out videoRenderer, out videoRendererInputPin, out audioRenderer, out audioRendererInputPin);
-				if (videoRenderer != null && audioRendererInputPin != null)
+				if (videoRenderer != null && videoRendererInputPin != null)
 				{
 					// 既存のレンダラにつながっているピン対を取得
 					hr = videoRendererInputPin.ConnectedTo(out connectedOutputPin);
@@ -892,16 +890,24 @@ namespace FDK
 					hr = sampleGrabber.FindPin("Out", out grabberOutputPin);
 					DsError.ThrowExceptionForHR(hr);
 					hr = grabberOutputPin.ConnectedTo(out grabberOutputConnectedPin);
-					DsError.ThrowExceptionForHR(hr);
-					hr = grabberOutputConnectedPin.Disconnect();
-					DsError.ThrowExceptionForHR(hr);
-					hr = grabberOutputPin.Disconnect();
-					DsError.ThrowExceptionForHR(hr);
+					// grabberのoutに何もつながっていない場合(つまり、grabberのoutとrendererのinが直結している場合)は、
+					// grabberのoutと、別のフィルタのinの間の切断処理を行わない。
+					if (hr != CWin32.S_OK)
+					{
+						//Debug.WriteLine("grabber out: 未接続:");
+					}
+					else
+					{
+						hr = grabberOutputConnectedPin.Disconnect();
+						DsError.ThrowExceptionForHR(hr);
+						hr = grabberOutputPin.Disconnect();
+						DsError.ThrowExceptionForHR(hr);
+					}
 					hr = grabberOutputPin.Connect(nullRendererInputPin, null);
 					DsError.ThrowExceptionForHR(hr);
 				}
 
-				if( audioRenderer != null && audioRendererInputPin != null )
+				if ( audioRenderer != null && audioRendererInputPin != null )
 				{
 					C共通.tCOMオブジェクトを解放する(ref connectedOutputPin);
 

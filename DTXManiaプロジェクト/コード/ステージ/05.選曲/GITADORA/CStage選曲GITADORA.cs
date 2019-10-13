@@ -95,7 +95,7 @@ namespace DTXMania
 
 				this.act曲リスト.On進行描画();
 				int y = 0;
-				if( this.ct登場時アニメ用共通.b進行中 )
+				if( this.ct登場時アニメ用共通.b進行中 && this.tx上部パネル != null )
 				{
 					double db登場割合 = ( (double) this.ct登場時アニメ用共通.n現在の値 ) / 100.0;	// 100が最終値
 					double dbY表示割合 = Math.Sin( Math.PI / 2 * db登場割合 );

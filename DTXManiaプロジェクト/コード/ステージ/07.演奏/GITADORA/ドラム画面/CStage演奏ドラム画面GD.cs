@@ -228,13 +228,13 @@ namespace DTXMania
 				bIsFinishedPlaying = this.t進行描画_チップ(E楽器パート.DRUMS);
                 this.actShutter.On進行描画();
                 this.t進行描画_ドラムパッド();
-                if( this.txフレーム != null ) this.txフレーム.t2D描画( CDTXMania.app.Device, 0, 0 );
-                if( this.txフレーム外側 != null ) this.txフレーム外側.t2D描画( CDTXMania.app.Device, 0, 0 );
+                if( this.txフレーム != null && CDTXMania.ConfigIni.bフレームを表示する ) this.txフレーム.t2D描画( CDTXMania.app.Device, 0, 0 );
+                if( this.txフレーム外側 != null && CDTXMania.ConfigIni.bフレームを表示する ) this.txフレーム外側.t2D描画( CDTXMania.app.Device, 0, 0 );
                 this.t進行描画_ゲージ();
 
                 this.t進行描画_ステータスパネル();
 
-                this.actClearBar.On進行描画();
+                if( CDTXMania.ConfigIni.bフレームを表示する ) this.actClearBar.On進行描画();
                 this.actAVI.tウィンドウクリップを3D表示する();
                 this.t進行描画_判定ライン();
 
@@ -2853,10 +2853,20 @@ namespace DTXMania
                         演奏判定ライン座標.n判定ラインY座標( E楽器パート.DRUMS, false, CDTXMania.ConfigIni.bReverse.Drums ) + pChip.nバーからの距離dot.Drums :
                         演奏判定ライン座標.n判定ラインY座標( E楽器パート.DRUMS, false, CDTXMania.ConfigIni.bReverse.Drums ) - pChip.nバーからの距離dot.Drums;
 					//x = (int) ( x * Scale.X );
-					if ( this.txチップ != null )
-					{
-						base.txチップ.vc拡大縮小倍率 = new Vector3( ( float )pChip.dbチップサイズ倍率, ( float )pChip.dbチップサイズ倍率, 1f );
-					}
+                    if( this.txチップ != null )
+                    {
+                        // 19.9.10 kairera0467
+                        //float fチップサイズ = 10.0f;
+                        //float nチップ縦幅px = 10.0f;
+                        //if( configIni.n譜面スクロール速度.Drums < C定数.nチップ幅テーブルDB.Length )
+                        //{
+                        //    fチップサイズ = ( C定数.nチップ幅テーブルDB[ configIni.n譜面スクロール速度.Drums ] / nチップ縦幅px );
+                        //}
+
+                        //base.txチップ.vc拡大縮小倍率 = new Vector3( (float)pChip.dbチップサイズ倍率, fチップサイズ, 1f );
+
+                        base.txチップ.vc拡大縮小倍率 = new Vector3( (float)pChip.dbチップサイズ倍率, (float)pChip.dbチップサイズ倍率, 1f );
+                    }
                     int num9 = this.ctチップ模様アニメ.Drums.n現在の値;
 
                     switch( pChip.nチャンネル番号 )

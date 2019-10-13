@@ -349,7 +349,7 @@ namespace DTXMania
                     float fResizeRatio = 1.0f;
                     if( CDTXMania.ConfigIni.bDrums有効 )
                     {
-                        if( CDTXMania.ConfigIni.bGraph.Drums )
+                        if( !CDTXMania.ConfigIni.bドラムが全部オートプレイである && CDTXMania.ConfigIni.bGraph.Drums )
                         {
                             nClipPos = new int[] { 2, 402, 0, 0 };
                             nPanelPos = new int[] { 2, 402, 0, 0 };
@@ -529,7 +529,7 @@ namespace DTXMania
 
                 if( CDTXMania.ConfigIni.bDrums有効 )
                 {
-                    if( CDTXMania.ConfigIni.bGraph.Drums )
+                    if( !CDTXMania.ConfigIni.bドラムが全部オートプレイである && CDTXMania.ConfigIni.bGraph.Drums )
                         this.txクリップパネル = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_ClipPanelB.png" ) );
                     else
                         this.txクリップパネル = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_ClipPanel.png" ) );

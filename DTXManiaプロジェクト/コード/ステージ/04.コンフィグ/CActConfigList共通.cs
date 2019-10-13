@@ -744,6 +744,15 @@ namespace DTXMania
                 "Toggle LaneFlush");
             this.list項目リスト.Add(this.iDrumsLaneFlush);
 
+            if( !CDTXMania.bXGRelease )
+            {
+                this.iDrumsMatixxFrameDisp = new CItemToggle( "FrameDisp", CDTXMania.ConfigIni.bフレームを表示する,
+                    "フレームの表示 / 非表示を\n" +
+                     "切り替えます。",
+                    "Toggle FrameDisp" );
+                this.list項目リスト.Add( this.iDrumsMatixxFrameDisp );
+            }
+
 			this.iDrumsReverse = new CItemToggle( "Reverse", CDTXMania.ConfigIni.bReverse.Drums,
 				"ドラムチップが譜面の下から上に流れるようになります。",
 				"The scroll way is reversed. Drums chips flow from the bottom to the top." );
@@ -3134,6 +3143,7 @@ namespace DTXMania
 		private CItemBase iSystemReloadDTX;					// #32081 2013.10.21 yyagi
 		private CItemInteger iSystemMasterVolume;			// #33700 2014.4.26 yyagi
         private CItemInteger iDrumsPedalJudgeRangeDelta;    // #39397 2019.07.19 kairera0467
+		private CItemToggle iDrumsMatixxFrameDisp;			// 2019.09.07 kairera0467
 
 		protected int t前の項目( int nItem )
 		{
@@ -3360,6 +3370,16 @@ namespace DTXMania
             CDTXMania.ConfigIni.eNumOfLanes.Drums = (Eタイプ)this.iDrumsNumOfLanes.n現在選択されている項目番号;
 
             CDTXMania.ConfigIni.nPedalJudgeRangeDelta = this.iDrumsPedalJudgeRangeDelta.n現在の値;
+
+            // 2019.9.7 kairera0467 試験的に設置。XGまたはmatixxで設定項目を制限するテスト。そのうちメソッドごとに分離するかもしれない。
+            if( CDTXMania.bXGRelease )
+            {
+
+            }
+            else
+            {
+                CDTXMania.ConfigIni.bフレームを表示する = this.iDrumsMatixxFrameDisp.bON;
+            }
 		}
 		private void tConfigIniへ記録する_Guitar()
 		{

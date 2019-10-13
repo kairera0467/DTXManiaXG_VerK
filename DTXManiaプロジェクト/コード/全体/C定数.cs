@@ -1090,10 +1090,9 @@ namespace DTXMania
 				throw new IndexOutOfRangeException();
 			}
 		}
-	}
+    }
 
-
-	internal class C定数
+    internal class C定数
 	{
 		public const int BGA_H = 0x163;
 		public const int BGA_W = 0x116;
@@ -1108,7 +1107,9 @@ namespace DTXMania
 		public const int SCORE_W = 12;
 		public const int SUDDEN_POS = 200;
 
-		public class Drums
+        public static int[] nチップ幅テーブルDB = new int[] { 6, 6, 6, 6, 6, 7, 7, 9, 10, 12, 16, 19, 24 }; // 2019.9.10 kairera0467
+
+        public class Drums
 		{
 			public const int BAR_Y = 0x1a6;
 			public const int BAR_Y_REV = 0x38;

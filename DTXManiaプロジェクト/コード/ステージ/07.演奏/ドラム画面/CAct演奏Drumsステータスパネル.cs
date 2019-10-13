@@ -110,8 +110,9 @@ namespace DTXMania
                 Color clNameColorLower = Color.White;
                 switch( CDTXMania.ConfigIni.nNameColor[ 0 ] )
                 {
-                    case 0:
+                    default:
                         clNameColor = Color.White;
+                        clNameColorLower = Color.White;
                         break;
                     case 1:
                         clNameColor = Color.LightYellow;
@@ -132,18 +133,18 @@ namespace DTXMania
                         clNameColor = Color.Red;
                         break;
                     case 7:
-                        clNameColor = Color.Brown;
+                        clNameColor = Color.FromArgb( 255, 232, 182, 149 );
+                        clNameColorLower = Color.FromArgb( 255, 122, 69, 26 );
                         break;
                     case 8:
-                        clNameColor = Color.Silver;
+                        clNameColor = Color.FromArgb( 246, 245, 255 );
+                        clNameColorLower = Color.FromArgb( 125, 128, 137 );
                         break;
                     case 9:
-                        clNameColor = Color.Gold;
+                        clNameColor = Color.FromArgb( 255, 238, 196, 85 );
+                        clNameColorLower = Color.FromArgb( 255, 255, 241, 200 );
                         break;
 
-                    case 10:
-                        clNameColor = Color.White;
-                        break;
                     case 11:
                         clNameColor = Color.LightYellow;
                         clNameColorLower = Color.White;
@@ -184,7 +185,7 @@ namespace DTXMania
 
                 Bitmap bmpCardName = new Bitmap( 1, 1 );
 
-                if (CDTXMania.ConfigIni.nNameColor.Drums >= 11)
+                if (CDTXMania.ConfigIni.nNameColor.Drums >= 7)
                 {
                     bmpCardName = this.pfNameFont.DrawPrivateFont(this.strPlayerName, clNameColor, Color.Transparent, clNameColor, clNameColorLower);
                 }

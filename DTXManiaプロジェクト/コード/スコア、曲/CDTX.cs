@@ -412,15 +412,18 @@ namespace DTXMania
 			public EBGA種別 eBGA種別;
 			public E楽器パート e楽器パート = E楽器パート.UNKNOWN;
 			public int nチャンネル番号;
-			public STDGBVALUE<int> nバーからの距離dot;
+			public STDGBVALUE<int> nバーからの距離dot;       // 2019.9.7 kairera0467
+            public STDGBVALUE<int> nバーからの終端距離dot;   // 2019.9.7 kairera0467
 			public int n整数値;
 			public int n整数値_内部番号;
 			public int n総移動時間;
 			public int n透明度 = 0xff;
 			public int n発声位置;
 			public int n発声時刻ms;
-			public int nLag;				// 2011.2.1 yyagi
-			public int nCurrentComboForGhost; // 2015.9.29 chnmr0
+			public int n発声終了位置;             // 2019.9.7 kairera0467
+			public int n発声終了時刻ms;           // 2019.9.7 kairera0467
+			public int nLag;				      // 2011.2.1 yyagi
+			public int nCurrentComboForGhost;     // 2015.9.29 chnmr0
 			public CDTX.CAVI rAVI;
 			public CDTX.CAVIPAN rAVIPan;
 			public CDTX.CBGA rBGA;
@@ -609,10 +612,10 @@ namespace DTXMania
 					"SE10", "SE11", "SE12", "SE13", "SE14", "SE15", "SE16", "SE17",
 					"SE18", "SE19", "??", "??", "??", "??", "??", "??", 
 					"SE20", "SE21", "SE22", "SE23", "SE24", "SE25", "SE26", "SE27",
-					"SE28", "SE29", "??", "??", "??", "??", "??", "??", 
-					"SE30", "SE31", "SE32", "??", "??", "??", "??", "??", 
-					"??", "??", "??", "??", "??", "??", "??", "??", 
-					"ベースOPEN", "ベース - - B", "ベース - G -", "ベース - G B", "ベース R - -", "ベース R - B", "ベース R G -", "ベース R G B",
+					"SE28", "SE29", "??", "??", "??", "??", "??", "??",
+                    "SE30", "SE31", "SE32", "ギター - - - Y -", "ギター - - B Y -", "ギター - G - Y -", "ギター - G B Y -", "ギター R - - Y -",
+                    "ギター R - B Y -", "ギター R G - Y -", "ギター R G B Y -", "ギター - - - - P", "ギター - - B - P", "ギター - G - - P", "ギター - G B - P", "ギター R - - - P",
+                    "ベースOPEN", "ベース - - B", "ベース - G -", "ベース - G B", "ベース R - -", "ベース R - B", "ベース R G -", "ベース R G B",
 					"ベースWailing", "??", "??", "??", "??", "??", "??", "ベースWailing音切替",
 					"??", "HHClose(空うち)", "Snare(空うち)", "Kick(空うち)", "HiTom(空うち)", "LowTom(空うち)", "Cymbal(空うち)", "FloorTom(空うち)",
 					"HHOpen(空うち)", "RideCymbal(空うち)", "ギター(空打ち)", "ベース(空打ち)", "LeftCymbal(空うち)", "??", "??", "??", 
@@ -654,7 +657,7 @@ namespace DTXMania
 						nDuration = ( wc.rSound[ 0 ] == null ) ? 0 : wc.rSound[ 0 ].n総演奏時間ms;
 					}
 				}
-				else if ( this.nチャンネル番号 == 0x54 )	// AVI
+				else if ( this.nチャンネル番号 == 0x54 || this.nチャンネル番号 == 0x5A )	// AVI
 				{
 					if ( this.rAVI != null && this.rAVI.avi != null )
 					{
@@ -1216,8 +1219,10 @@ namespace DTXMania
             public bool LBD;
 			public bool OpenGuitar;
 			public bool OpenBass;
+            public bool YPGuitar;
+            public bool YPBass;
 
-			public bool BGA;
+            public bool BGA;
 			public bool Movie;
 			
 			public bool this[ int index ]
@@ -3277,14 +3282,14 @@ namespace DTXMania
 							{
 								this.n可視チップ数[ c - 0x11 ]++;
 							}
-							if ( ( 0x20 <= c ) && ( c <= 0x27 ) )
-							{
-								this.n可視チップ数.Guitar++;
-							}
-							if ( ( 0xA0 <= c ) && ( c <= 0xa7 ) )
-							{
-								this.n可視チップ数.Bass++;
-							}
+                            if( ( 0x20 <= c ) && ( c <= 0x27 ) || ( 0x93 <= c ) && ( c <= 0x9F ) || ( 0xA9 <= c ) && ( c <= 0xAF ) || ( 0xD0 <= c ) && ( c <= 0xD3 ) )
+                            {
+                                this.n可視チップ数.Guitar++;
+                            }
+                            if( ( 0xA0 <= c ) && ( c <= 0xA7 ) || ( 0xC5 <= c ) && ( c <= 0xC6 ) || ( 0xC8 <= c ) && ( c <= 0xCF ) || ( 0xDA <= c ) && ( c <= 0xDF ) || ( 0xE1 <= c ) && ( c <= 0xE8 ) )
+                            {
+                                this.n可視チップ数.Bass++;
+                            }
                             if ( ( c >= 0x4C ) && ( c <= 0x4F ) )
                             {
                                 this.nボーナスチップ数++;
@@ -3445,16 +3450,22 @@ namespace DTXMania
 					case 0x11:	case 0x12:	case 0x13:	case 0x14:	case 0x15:	case 0x16:	case 0x17:	case 0x18:	case 0x19:	case 0x1A:  case 0x1B:  case 0x1C:
 					// Gt演奏チャネル
 					case 0x20:	case 0x21:	case 0x22:	case 0x23:	case 0x24:	case 0x25:	case 0x26:	case 0x27:	case 0x28:
+                    case 0x93:　case 0x94:　case 0x95:　case 0x96:　case 0x97:　case 0x98:　case 0x99:　case 0x9A:　case 0x9B:  case 0x9C:　case 0x9D:　case 0x9E:　case 0x9F:
+                    case 0xA9:  case 0xAA:　case 0xAB:　case 0xAC:　case 0xAD:　case 0xAE:　case 0xAF:
+                    case 0xD0:  case 0xD1:  case 0xD2:  case 0xD3:
 					// Bs演奏チャネル
 					case 0xA0:	case 0xA1:	case 0xA2:	case 0xA3:	case 0xA4:	case 0xA5:	case 0xA6:	case 0xA7:	case 0xA8:
+                    case 0xC5:  case 0xC6:  case 0xC8:  case 0xC9:  case 0xCA:  case 0xCB:  case 0xCC:  case 0xCD:  case 0xCE:  case 0xCF:
+                    case 0xDA:  case 0xDB:  case 0xDC:  case 0xDD:  case 0xDE:  case 0xDF:
+                    case 0xE1:  case 0xE2:  case 0xE3:  case 0xE4:  case 0xE5:  case 0xE6:  case 0xE7:  case 0xE8:
 					// Dr不可視チップ
 					case 0x31:	case 0x32:	case 0x33:	case 0x34:	case 0x35:	case 0x36:	case 0x37:
-					case 0x38:	case 0x39:	case 0x3A:
+					case 0x38:	case 0x39:	case 0x3A:  case 0x3B:　case 0x3C:
 					// Dr/Gt/Bs空打ち
 					case 0xB1:	case 0xB2:	case 0xB3:	case 0xB4:	case 0xB5:	case 0xB6:	case 0xB7:	case 0xB8:
-					case 0xB9:	case 0xBA:	case 0xBB:	case 0xBC:
+					case 0xB9:	case 0xBA:	case 0xBB:	case 0xBC:　case 0xBD:　case 0xBE:
 					// フィルインサウンド
-					case 0x1F:	case 0x2F:	case 0xAF:
+					case 0x1F:	case 0x2F:	//case 0xAF:
 					// 自動演奏チップ
 					case 0x61:	case 0x62:	case 0x63:	case 0x64:	case 0x65:	case 0x66:	case 0x67:	case 0x68:	case 0x69:
 					case 0x70:	case 0x71:	case 0x72:	case 0x73:	case 0x74:	case 0x75:	case 0x76:	case 0x77:	case 0x78:	case 0x79:
@@ -3720,45 +3731,76 @@ namespace DTXMania
 		/// </summary>
 		public void SwapGuitarBassInfos()						// #24063 2011.1.24 yyagi ギターとベースの譜面情報入替
 		{
-			for (int i = this.listChip.Count - 1; i >= 0; i--) {
-				if (listChip[i].e楽器パート == E楽器パート.BASS) {
-					listChip[i].e楽器パート = E楽器パート.GUITAR;
-					listChip[i].nチャンネル番号 -= ( 0xA0 - 0x20 );
-				}
-				else if ( listChip[i].e楽器パート == E楽器パート.GUITAR )
-				{
-					listChip[i].e楽器パート = E楽器パート.BASS;
-					listChip[i].nチャンネル番号 += ( 0xA0 - 0x20 );
-				}
-				else if ( listChip[ i ].nチャンネル番号 == 0x28 )		// #25215 2011.5.21 yyagi wailingはE楽器パート.UNKNOWNが割り当てられているので個別に対応
-				{
-					listChip[ i ].nチャンネル番号 += ( 0xA0 - 0x20 );
-				}
-				else if ( listChip[ i ].nチャンネル番号 == 0xA8 )		// #25215 2011.5.21 yyagi wailingはE楽器パート.UNKNOWNが割り当てられているので個別に対応
-				{
-					listChip[ i ].nチャンネル番号 -= ( 0xA0 - 0x20 );
-				}
-			}
-			int t = this.LEVEL.Bass;
-			this.LEVEL.Bass = this.LEVEL.Guitar;
-			this.LEVEL.Guitar = t;
+            for( int i = this.listChip.Count - 1; i >= 0; i-- )
+            {
+                if( listChip[ i ].e楽器パート == E楽器パート.BASS )
+                {
+                    listChip[ i ].e楽器パート = E楽器パート.GUITAR;
+                    if( listChip[ i ].nチャンネル番号 >= 0xA0 && listChip[ i ].nチャンネル番号 <= 0xA8 )
+                        listChip[ i ].nチャンネル番号 -= ( 0xA0 - 0x20 );
+                    else if( listChip[ i ].nチャンネル番号 == 0xC5 || listChip[ i ].nチャンネル番号 == 0xC6 )
+                        listChip[ i ].nチャンネル番号 -= 0x32;
+                    else if( listChip[ i ].nチャンネル番号 >= 0xC8 && listChip[ i ].nチャンネル番号 <= 0xCF )
+                        listChip[ i ].nチャンネル番号 -= 0x33;
+                    else if( listChip[ i ].nチャンネル番号 >= 0xDA && listChip[ i ].nチャンネル番号 <= 0xDC )
+                        listChip[ i ].nチャンネル番号 -= 0x3D;
+                    else if( listChip[ i ].nチャンネル番号 >= 0xDD && listChip[ i ].nチャンネル番号 <= 0xDF )
+                        listChip[ i ].nチャンネル番号 -= 0x34;
+                    else if( listChip[ i ].nチャンネル番号 >= 0xE1 && listChip[ i ].nチャンネル番号 <= 0xE8 )
+                        listChip[ i ].nチャンネル番号 -= 0x35;
+                }
+                else if( listChip[ i ].e楽器パート == E楽器パート.GUITAR )
+                {
+                    listChip[ i ].e楽器パート = E楽器パート.BASS;
 
-			t = this.n可視チップ数.Bass;
-			this.n可視チップ数.Bass = this.n可視チップ数.Guitar;
-			this.n可視チップ数.Guitar = t;
+                    if( listChip[ i ].nチャンネル番号 >= 0x20 && listChip[ i ].nチャンネル番号 <= 0x28 )
+                        listChip[ i ].nチャンネル番号 += ( 0xA0 - 0x20 );
+                    else if( listChip[ i ].nチャンネル番号 == 0x93 || listChip[ i ].nチャンネル番号 == 0x94 )
+                        listChip[ i ].nチャンネル番号 += 0x32;
+                    else if( listChip[ i ].nチャンネル番号 >= 0x95 && listChip[ i ].nチャンネル番号 <= 0x9C )
+                        listChip[ i ].nチャンネル番号 += 0x33;
+                    else if( listChip[ i ].nチャンネル番号 >= 0x9D && listChip[ i ].nチャンネル番号 <= 0x9F )
+                        listChip[ i ].nチャンネル番号 += 0x3D;
+                    else if( listChip[ i ].nチャンネル番号 >= 0xA9 && listChip[ i ].nチャンネル番号 <= 0xAB )
+                        listChip[ i ].nチャンネル番号 += 0x34;
+                    else if( listChip[ i ].nチャンネル番号 >= 0xAC && listChip[ i ].nチャンネル番号 <= 0xD3 )
+                        listChip[ i ].nチャンネル番号 += 0x35;
+                }
 
-			bool ts = this.bチップがある.Bass;
-			this.bチップがある.Bass = this.bチップがある.Guitar;
-			this.bチップがある.Guitar = ts;
+                //Wailing
+                else if( listChip[ i ].nチャンネル番号 == 0x28 )       // #25215 2011.5.21 yyagi wailingはE楽器パート.UNKNOWNが割り当てられているので個別に対応
+                {
+                    listChip[ i ].nチャンネル番号 += ( 0xA0 - 0x20 );
+                }
+                else if( listChip[ i ].nチャンネル番号 == 0xA8 )       // #25215 2011.5.21 yyagi wailingはE楽器パート.UNKNOWNが割り当てられているので個別に対応
+                {
+                    listChip[ i ].nチャンネル番号 -= ( 0xA0 - 0x20 );
+                }
+            }
+            int t = this.LEVEL.Bass;
+            this.LEVEL.Bass = this.LEVEL.Guitar;
+            this.LEVEL.Guitar = t;
 
-//			SwapGuitarBassInfos_AutoFlags();
-		}
+            t = this.LEVELDEC.Bass;
+            this.LEVELDEC.Bass = this.LEVELDEC.Guitar;
+            this.LEVELDEC.Guitar = t;
 
-		// SwapGuitarBassInfos_AutoFlags()は、CDTXからCConfigIniに移動。
+            t = this.n可視チップ数.Bass;
+            this.n可視チップ数.Bass = this.n可視チップ数.Guitar;
+            this.n可視チップ数.Guitar = t;
 
-		// CActivity 実装
+            bool ts = this.bチップがある.Bass;
+            this.bチップがある.Bass = this.bチップがある.Guitar;
+            this.bチップがある.Guitar = ts;
 
-		public override void On活性化()
+            //			SwapGuitarBassInfos_AutoFlags();
+        }
+
+        // SwapGuitarBassInfos_AutoFlags()は、CDTXからCConfigIniに移動。
+
+        // CActivity 実装
+
+        public override void On活性化()
 		{
 			this.listWAV = new Dictionary<int, CWAV>();
 			this.listBMP = new Dictionary<int, CBMP>();
@@ -3869,15 +3911,311 @@ namespace DTXMania
 			}
 		}
 
+        public void tギターレーンのチップパターンを取得する( int nチャンネル番号, ref bool bR, ref bool bG, ref bool bB, ref bool bY, ref bool bP )
+        {
+            switch( nチャンネル番号 )
+            {
+                case 0x21:
+                    bB = true;
+                    break;
+                case 0x22:
+                    bG = true;
+                    break;
+                case 0x23:
+                    bG = true;
+                    bB = true;
+                    break;
+                case 0x24:
+                    bR = true;
+                    break;
+                case 0x25:
+                    bR = true;
+                    bB = true;
+                    break;
+                case 0x26:
+                    bR = true;
+                    bG = true;
+                    break;
+                case 0x27:
+                    bR = true;
+                    bG = true;
+                    bB = true;
+                    break;
+                case 0x93:
+                    bY = true;
+                    break;
+                case 0x94:
+                    bB = true;
+                    bY = true;
+                    break;
+                case 0x95:
+                    bG = true;
+                    bY = true;
+                    break;
+                case 0x96:
+                    bG = true;
+                    bB = true;
+                    bY = true;
+                    break;
+                case 0x97:
+                    bR = true;
+                    bY = true;
+                    break;
+                case 0x98:
+                    bR = true;
+                    bB = true;
+                    bY = true;
+                    break;
+                case 0x99:
+                    bR = true;
+                    bG = true;
+                    bY = true;
+                    break;
+                case 0x9A:
+                    bR = true;
+                    bG = true;
+                    bB = true;
+                    bY = true;
+                    break;
+                case 0x9B:
+                    bP = true;
+                    break;
+                case 0x9C:
+                    bB = true;
+                    bP = true;
+                    break;
+                case 0x9D:
+                    bG = true;
+                    bP = true;
+                    break;
+                case 0x9E:
+                    bG = true;
+                    bB = true;
+                    bP = true;
+                    break;
+                case 0x9F:
+                    bR = true;
+                    bP = true;
+                    break;
 
-		// その他
-		
-		#region [ private ]
-		//-----------------
-		/// <summary>
-		/// <para>GDAチャンネル番号に対応するDTXチャンネル番号。</para>
-		/// </summary>
-		[StructLayout( LayoutKind.Sequential )]
+                case 0xA1:
+                    bB = true;
+                    break;
+                case 0xA2:
+                    bG = true;
+                    break;
+                case 0xA3:
+                    bG = true;
+                    bB = true;
+                    break;
+                case 0xA4:
+                    bR = true;
+                    break;
+                case 0xA5:
+                    bR = true;
+                    bB = true;
+                    break;
+                case 0xA6:
+                    bR = true;
+                    bG = true;
+                    break;
+                case 0xA7:
+                    bR = true;
+                    bG = true;
+                    bB = true;
+                    break;
+
+                case 0xA9:
+                    bR = true;
+                    bB = true;
+                    bP = true;
+                    break;
+                case 0xAA:
+                    bR = true;
+                    bG = true;
+                    bP = true;
+                    break;
+                case 0xAB:
+                    bR = true;
+                    bG = true;
+                    bB = true;
+                    bP = true;
+                    break;
+                case 0xAC:
+                    bY = true;
+                    bP = true;
+                    break;
+                case 0xAD:
+                    bB = true;
+                    bY = true;
+                    bP = true;
+                    break;
+                case 0xAE:
+                    bG = true;
+                    bY = true;
+                    bP = true;
+                    break;
+                case 0xAF:
+                    bG = true;
+                    bB = true;
+                    bY = true;
+                    bP = true;
+                    break;
+
+                case 0xC5:
+                    bY = true;
+                    break;
+                case 0xC6:
+                    bB = true;
+                    bY = true;
+                    break;
+
+                case 0xC8:
+                    bG = true;
+                    bY = true;
+                    break;
+                case 0xC9:
+                    bG = true;
+                    bB = true;
+                    bY = true;
+                    break;
+                case 0xCA:
+                    bR = true;
+                    bY = true;
+                    break;
+                case 0xCB:
+                    bR = true;
+                    bB = true;
+                    bY = true;
+                    break;
+                case 0xCC:
+                    bR = true;
+                    bG = true;
+                    bY = true;
+                    break;
+                case 0xCD:
+                    bR = true;
+                    bG = true;
+                    bB = true;
+                    bY = true;
+                    break;
+                case 0xCE:
+                    bP = true;
+                    break;
+                case 0xCF:
+                    bB = true;
+                    bP = true;
+                    break;
+                case 0xD0:
+                    bR = true;
+                    bY = true;
+                    bP = true;
+                    break;
+                case 0xD1:
+                    bR = true;
+                    bB = true;
+                    bY = true;
+                    bP = true;
+                    break;
+                case 0xD2:
+                    bR = true;
+                    bG = true;
+                    bY = true;
+                    bP = true;
+                    break;
+                case 0xD3:
+                    bR = true;
+                    bG = true;
+                    bB = true;
+                    bY = true;
+                    bP = true;
+                    break;
+
+
+                case 0xDA:
+                    bG = true;
+                    bP = true;
+                    break;
+                case 0xDB:
+                    bG = true;
+                    bB = true;
+                    bP = true;
+                    break;
+                case 0xDC:
+                    bR = true;
+                    bP = true;
+                    break;
+                case 0xDD:
+                    bR = true;
+                    bB = true;
+                    bP = true;
+                    break;
+                case 0xDE:
+                    bR = true;
+                    bG = true;
+                    bP = true;
+                    break;
+                case 0xDF:
+                    bR = true;
+                    bG = true;
+                    bB = true;
+                    bP = true;
+                    break;
+                case 0xE1:
+                    bY = true;
+                    bP = true;
+                    break;
+                case 0xE2:
+                    bB = true;
+                    bY = true;
+                    bP = true;
+                    break;
+                case 0xE3:
+                    bG = true;
+                    bY = true;
+                    bP = true;
+                    break;
+                case 0xE4:
+                    bG = true;
+                    bB = true;
+                    bY = true;
+                    bP = true;
+                    break;
+                case 0xE5:
+                    bR = true;
+                    bY = true;
+                    bP = true;
+                    break;
+                case 0xE6:
+                    bR = true;
+                    bB = true;
+                    bY = true;
+                    bP = true;
+                    break;
+                case 0xE7:
+                    bR = true;
+                    bG = true;
+                    bY = true;
+                    bP = true;
+                    break;
+                case 0xE8:
+                    bR = true;
+                    bG = true;
+                    bB = true;
+                    bY = true;
+                    bP = true;
+                    break;
+            }
+        }
+
+        // その他
+
+        #region [ private ]
+        //-----------------
+        /// <summary>
+        /// <para>GDAチャンネル番号に対応するDTXチャンネル番号。</para>
+        /// </summary>
+        [StructLayout( LayoutKind.Sequential )]
 		private struct STGDAPARAM
 		{
 			public string strGDAのチャンネル文字列;	
@@ -5929,23 +6267,23 @@ namespace DTXMania
 				//-----------------
 				#endregion
 			}
-			//-----------------
-			#endregion
-			#region [ 取得したチャンネル番号で、this.bチップがある に該当したり、this.bMovieをFullscreen再生する の条件を満足するなら、設定する。]
-			//-----------------
-			if( ( nチャンネル番号 >= 0x11 ) && ( nチャンネル番号 <= 0x1a ) )
-			{
-				this.bチップがある.Drums = true;
-			}
-			else if( ( nチャンネル番号 >= 0x20 ) && ( nチャンネル番号 <= 0x27 ) )
-			{
-				this.bチップがある.Guitar = true;
-			}
-			else if( ( nチャンネル番号 >= 0xA0 ) && ( nチャンネル番号 <= 0xa7 ) )
-			{
-				this.bチップがある.Bass = true;
-			}
-			else if ( ( nチャンネル番号 == 0x04 ) || ( nチャンネル番号 == 0x07 ) ||
+            //-----------------
+            #endregion
+            #region [ 取得したチャンネル番号で、this.bチップがある に該当したり、this.bMovieをFullscreen再生する の条件を満足するなら、設定する。]
+            //-----------------
+            if( ( nチャンネル番号 >= 0x11 ) && ( nチャンネル番号 <= 0x1c ) )
+            {
+                this.bチップがある.Drums = true;
+            }
+            else if( ( nチャンネル番号 >= 0x20 ) && ( nチャンネル番号 <= 0x27 ) || ( nチャンネル番号 >= 0x93 ) && ( nチャンネル番号 <= 0x9F ) || ( nチャンネル番号 >= 0xAA ) && ( nチャンネル番号 <= 0xAF ) || ( nチャンネル番号 >= 0xD0 ) && ( nチャンネル番号 <= 0xD3 ) )
+            {
+                this.bチップがある.Guitar = true;
+            }
+            else if( ( nチャンネル番号 >= 0xA0 ) && ( nチャンネル番号 <= 0xa7 ) || ( nチャンネル番号 == 0xC5 ) || ( nチャンネル番号 == 0xC6 ) || ( nチャンネル番号 >= 0xC8 ) && ( nチャンネル番号 <= 0xCF ) || ( nチャンネル番号 >= 0xDA ) && ( nチャンネル番号 <= 0xDF ) || ( nチャンネル番号 >= 0xE1 ) && ( nチャンネル番号 <= 0xE8 ) )
+            {
+                this.bチップがある.Bass = true;
+            }
+            else if ( ( nチャンネル番号 == 0x04 ) || ( nチャンネル番号 == 0x07 ) ||
 				( ( 0x55 <= nチャンネル番号 ) && ( nチャンネル番号 <= 0x59 ) ) || ( nチャンネル番号 == 0x60 ) )
 			{
 				this.bチップがある.BGA = true;
@@ -5994,10 +6332,64 @@ namespace DTXMania
 					this.bチップがある.OpenGuitar = true;
 					break;
 
-				case 0xA0:
-					this.bチップがある.OpenBass = true;
-					break;
-			}
+                case 0x93:
+                case 0x94:
+                case 0x95:
+                case 0x96:
+                case 0x97:
+                case 0x98:
+                case 0x99:
+                case 0x9A:
+                case 0x9B:
+                case 0x9C:
+                case 0x9D:
+                case 0x9E:
+                case 0x9F:
+                case 0xA9:
+                case 0xAA:
+                case 0xAB:
+                case 0xAC:
+                case 0xAD:
+                case 0xAE:
+                case 0xAF:
+                case 0xD0:
+                case 0xD1:
+                case 0xD2:
+                case 0xD3:
+                    this.bチップがある.YPGuitar = true;
+                    break;
+
+                case 0xC5:
+                case 0xC6:
+                case 0xC8:
+                case 0xC9:
+                case 0xCA:
+                case 0xCB:
+                case 0xCC:
+                case 0xCD:
+                case 0xCE:
+                case 0xCF:
+                case 0xDA:
+                case 0xDB:
+                case 0xDC:
+                case 0xDD:
+                case 0xDE:
+                case 0xDF:
+                case 0xE1:
+                case 0xE2:
+                case 0xE3:
+                case 0xE4:
+                case 0xE5:
+                case 0xE6:
+                case 0xE7:
+                case 0xE8:
+                    this.bチップがある.YPBass = true;
+                    break;
+
+                case 0xA0:
+                    this.bチップがある.OpenBass = true;
+                    break;
+            }
 			//-----------------
 			#endregion
 
@@ -6103,26 +6495,26 @@ namespace DTXMania
 				chip.n整数値 = nオブジェクト数値;
 				chip.n整数値_内部番号 = nオブジェクト数値;
 
-				#region [ chip.e楽器パート = ... ]
-				//-----------------
-				if( ( nチャンネル番号 >= 0x11 ) && ( nチャンネル番号 <= 0x1C ) )
-				{
-					chip.e楽器パート = E楽器パート.DRUMS;
-				}
-				if( ( nチャンネル番号 >= 0x20 ) && ( nチャンネル番号 <= 0x27 ) )
-				{
-					chip.e楽器パート = E楽器パート.GUITAR;
-				}
-				if( ( nチャンネル番号 >= 160 ) && ( nチャンネル番号 <= 0xA7 ) )
-				{
-					chip.e楽器パート = E楽器パート.BASS;
-				}
-				//-----------------
-				#endregion
+                #region [ chip.e楽器パート = ... ]
+                //-----------------
+                if( ( nチャンネル番号 >= 0x11 ) && ( nチャンネル番号 <= 0x1C ) )
+                {
+                    chip.e楽器パート = E楽器パート.DRUMS;
+                }
+                if( ( nチャンネル番号 >= 0x20 && nチャンネル番号 <= 0x27 ) || ( nチャンネル番号 >= 0x93 && nチャンネル番号 <= 0x9F ) || ( nチャンネル番号 >= 0xA9 && nチャンネル番号 <= 0xAF ) || ( nチャンネル番号 >= 0xD0 && nチャンネル番号 <= 0xD3 ) || ( nチャンネル番号 == 0x2A ) )
+                {
+                    chip.e楽器パート = E楽器パート.GUITAR;
+                }
+                if( ( nチャンネル番号 >= 0xA0 && nチャンネル番号 <= 0xA7 ) || ( nチャンネル番号 == 0xC5 ) || ( nチャンネル番号 == 0xC6 ) || ( nチャンネル番号 >= 0xC8 && nチャンネル番号 <= 0xCF ) || ( nチャンネル番号 >= 0xDA && nチャンネル番号 <= 0xDF ) || ( nチャンネル番号 >= 0xE1 && nチャンネル番号 <= 0xE8 ) )
+                {
+                    chip.e楽器パート = E楽器パート.BASS;
+                }
+                //-----------------
+                #endregion
 
-				// #34029 2014.7.15 yyagi
-				#region [ ドラムの空打ち音だったら、フラグを立てたうえで、通常チップのチャンネル番号に変更。ギターベースの空打ち音はとりあえずフラグを立てるだけ。 ]
-				if ( 0xB1 <= nチャンネル番号 && nチャンネル番号 <= 0xB9 )
+                // #34029 2014.7.15 yyagi
+                #region [ ドラムの空打ち音だったら、フラグを立てたうえで、通常チップのチャンネル番号に変更。ギターベースの空打ち音はとりあえずフラグを立てるだけ。 ]
+                if ( 0xB1 <= nチャンネル番号 && nチャンネル番号 <= 0xB9 )
 				{
 					chip.b空打ちチップである = true;
 					nチャンネル番号 = nチャンネル番号 - 0xB0 + 0x10;

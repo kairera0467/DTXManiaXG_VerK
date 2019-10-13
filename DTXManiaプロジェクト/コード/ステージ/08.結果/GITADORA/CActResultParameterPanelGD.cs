@@ -97,6 +97,7 @@ namespace DTXMania
                 this.tx達成率数字_整数 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\8_Rate Number Big.png" ) );
                 this.tx達成率数字_少数 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\8_Rate Number Small.png" ) );
 
+                this.tx項目文字列 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\8_text.png" ) );
 
                 #region[ 難易度、達成率、スキル値の下の白線の生成 ]
                 Bitmap b白線 = new Bitmap( 340, 2 );
@@ -130,6 +131,8 @@ namespace DTXMania
 
                 CDTXMania.tテクスチャの解放( ref this.tx達成率数字_整数 );
                 CDTXMania.tテクスチャの解放( ref this.tx達成率数字_少数 );
+
+                CDTXMania.tテクスチャの解放( ref this.tx項目文字列 );
 
                 CDTXMania.tテクスチャの解放( ref this.tx白線 );
 				base.OnManagedリソースの解放();
@@ -168,6 +171,11 @@ namespace DTXMania
                     //this.t特大文字表示( 1020, 370, string.Format("{0,6:##0.00}", CDTXMania.stage結果.st演奏記録[i].dbゲーム型スキル値));
                     this.tスキル値の描画(976, 328, CDTXMania.stage結果.st演奏記録[ i ].dbゲーム型スキル値 );
                     this.tx白線?.t2D描画( CDTXMania.app.Device, 842, 416 );
+
+                    // 各項目の文字
+                    this.tx項目文字列?.t2D描画( CDTXMania.app.Device, 847, 381, new Rectangle( 0, 0, 128, 32 ) );
+                    this.tx項目文字列?.t2D描画( CDTXMania.app.Device, 895, 254, new Rectangle( 0, 32, 96, 32 ) );
+                    this.tx項目文字列?.t2D描画( CDTXMania.app.Device, 917, 181, new Rectangle( 0, 64, 96, 32 ) );
                 }
 			}
 
@@ -201,6 +209,7 @@ namespace DTXMania
             CDTXMania.act文字コンソール.tPrint( 1054, 556, C文字コンソール.Eフォント種別.白, string.Format( "{0,3:##0}%", CDTXMania.stage結果.fPoor率.Drums ) );
             CDTXMania.act文字コンソール.tPrint( 1054, 580, C文字コンソール.Eフォント種別.白, string.Format( "{0,3:##0}%", CDTXMania.stage結果.fMiss率.Drums ) );
             CDTXMania.act文字コンソール.tPrint( 1054, 604, C文字コンソール.Eフォント種別.白, string.Format( "{0,3:##0}%", (((float)CDTXMania.stage結果.st演奏記録.Drums.n最大コンボ数) / ((float)CDTXMania.stage結果.st演奏記録.Drums.n全チップ数)) * 100.0f ) );
+
 
             //string test = string.Format("{0,4:###0}", CDTXMania.stage結果.st演奏記録.Drums.nPerfect数);
 			if( !this.ct表示用.b終了値に達した )
@@ -258,6 +267,7 @@ namespace DTXMania
         private CTexture tx達成率数字_整数;
         private CTexture tx達成率数字_少数;
         private CTexture tx白線;
+        private CTexture tx項目文字列;
 
         private ST文字位置[] st小文字位置 = new ST文字位置[]{
             new ST文字位置( '0', new Point( 0, 36 ) ),
@@ -546,11 +556,12 @@ namespace DTXMania
             // 1文字あたりのマージン
             int n文字間隔_整数部 = 46;
             int n文字間隔_小数部 = 32;
+            bool b先頭処理中 = true;
             bool b整数部処理中 = true;
             dbスキル値 = dbスキル値 * 100.0;
             dbスキル値 = Math.Floor( dbスキル値 );
             dbスキル値 = dbスキル値 / 100.0;
-            string formatText = string.Format( "{0,6:##0.00}", dbスキル値 );
+            string formatText = string.Format( "{0,6:000.00}", dbスキル値 );
 
             for( int i = 0; i < formatText.Length; i++ )
             {
@@ -564,6 +575,10 @@ namespace DTXMania
                     x += 18;
                     continue;
                 }
+                else if( ( !c.Equals( '0' ) && b先頭処理中 ) || i == 2 )
+                {
+                    b先頭処理中 = false;
+                }
                 else if( c.Equals( ' ' ) )
                 {
                     // 空白ならなにもせずcontinue
@@ -576,6 +591,7 @@ namespace DTXMania
                     {
                         if( b整数部処理中 )
                         {
+                            this.txスキル数字_整数.n透明度 = b先頭処理中 ? 128 : 255;
                             this.txスキル数字_整数.t2D描画( CDTXMania.app.Device, x, y, this.STスキル数字_整数[ j ].rect );
                             x += n文字間隔_整数部;
                         }

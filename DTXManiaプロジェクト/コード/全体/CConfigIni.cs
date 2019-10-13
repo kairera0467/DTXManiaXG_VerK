@@ -576,6 +576,7 @@ namespace DTXMania
         public STDGBVALUE<Eランダムモード> eRandomPedal;
         public STDGBVALUE<bool> bAssignToLBD;
         public int nPedalJudgeRangeDelta;                   // #39397 2019.07.19 kairera0467 ペダルレーンの補正値(通常の判定範囲に加算)
+        public bool bフレームを表示する;                  // 2019.09.07 kairera0467 フレーム表示をする(今の所matixxのみ)
 
         #endregion
         #region[ Ver.K 追加取得処理 ]
@@ -1390,6 +1391,7 @@ namespace DTXMania
             }
 
             this.nPedalJudgeRangeDelta = 20;
+            this.bフレームを表示する = true;
             #endregion
 
             //this.bNoMP3Streaming = false;
@@ -1483,7 +1485,7 @@ namespace DTXMania
             sw.WriteLine( "GroupNameBass={0}", this.strGroupName[ 2 ] );
             sw.WriteLine();
             sw.WriteLine( "; ネームカラー" );
-            sw.WriteLine( "; 0=白, 1=薄黄色, 2=黄色, 3=緑, 4=青, 5=紫 以下略。" );
+            sw.WriteLine( "; 0=白, 1=薄黄色, 2=黄色, 3=緑, 4=青, 5=紫, 6=赤, 7=銅, 8=銀, 9=金, 11～16=各色のグラデーション" );
             sw.WriteLine( "NameColorDrums={0}", this.nNameColor[ 0 ] );
             sw.WriteLine( "NameColorGuitar={0}", this.nNameColor[ 1 ] );
             sw.WriteLine( "NameColorBass={0}", this.nNameColor[ 2 ] );
@@ -2153,6 +2155,9 @@ namespace DTXMania
             sw.WriteLine( "ShutterImageDrums={0}", this.strShutterImageName.Drums );
             sw.WriteLine( "ShutterImageGuitar={0}", this.strShutterImageName.Guitar );
             sw.WriteLine( "ShutterImageBass={0}", this.strShutterImageName.Bass );
+            sw.WriteLine();
+            sw.WriteLine( "; フレームの表示(0:表示しない, 1:表示する)");
+            sw.WriteLine( "MatixxFrameDisp={0}", this.bフレームを表示する ? 1 : 0);
 
             #endregion
 			sw.WriteLine( ";-------------------" );
@@ -3362,6 +3367,10 @@ namespace DTXMania
                                             else if( str3.Equals( "ShutterImageBass" ) )
                                             {
                                                 this.strShutterImageName.Bass = str4;
+                                            }
+                                            else if( str3.Equals( "MatixxFrameDisp" ) )
+                                            {
+                                                this.bフレームを表示する = C変換.bONorOFF( str4[ 0 ] );
                                             }
 											continue;
 										}
