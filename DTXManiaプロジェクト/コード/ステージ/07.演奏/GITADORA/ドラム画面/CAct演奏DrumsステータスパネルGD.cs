@@ -176,10 +176,26 @@ namespace DTXMania
                 this.tx判定数数字 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_Ratenumber_s.png" ) );
                 this.tx達成率数字_整数 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_Ratenumber_l.png" ) );
 
+                #region[ 難易度ラベル/パート表記 ]
                 // 難易度ラベル/パート表記
                 // TODO:パート表記のフォントが3D描画の都合で汚くなってしまう。ここでテクスチャを合成したほうがよさそうかも...
-                this.tx難易度ラベル = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_Difficulty.png" ) );
-                this.txパート = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_Part.png" ) );
+                Image diff = CDTXMania.tテクスチャをImageで読み込む( CSkin.Path( @"Graphics\7_Difficulty.png" ) );
+                Image part = CDTXMania.tテクスチャをImageで読み込む( CSkin.Path( @"Graphics\7_Part.png" ) );
+                Bitmap bDiff = new Bitmap( 68, 68 );
+                Graphics gDiff = Graphics.FromImage( bDiff );
+                gDiff.PageUnit = GraphicsUnit.Pixel;
+                gDiff.DrawImage( diff, 0, 0, new Rectangle(0, 68 * CDTXMania.stage選曲GITADORA.n確定された曲の難易度, 68, 68), GraphicsUnit.Pixel );
+                gDiff.DrawImage( part, 0, 0, new Rectangle(0, 0, 68, 68), GraphicsUnit.Pixel );
+
+                this.tx難易度ラベル = new CTexture( CDTXMania.app.Device, bDiff, CDTXMania.TextureFormat, false );
+                //this.tx難易度ラベル = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_Difficulty.png" ) );
+                //this.txパート = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_Part.png" ) );
+
+                gDiff?.Dispose();
+                diff?.Dispose();
+                part?.Dispose();
+                bDiff?.Dispose();
+                #endregion
 
                 CDTXMania.t安全にDisposeする( ref bmpCardName );
 
@@ -452,14 +468,15 @@ namespace DTXMania
                 }
 
                 #region[ 難易度ラベル ]
-                if( this.txパート != null && this.tx難易度ラベル != null )
+                if( /*this.txパート != null &&*/ this.tx難易度ラベル != null )
                 {
                     Matrix matPart = Matrix.Identity;
                     matPart *= Matrix.Scaling( 0.6f, 1, 1 );
                     matPart *= Matrix.RotationY( C変換.DegreeToRadian( -38 ) );
                     matPart *= Matrix.Translation( -528, -110, 0 );
-                    this.tx難易度ラベル.t3D描画( CDTXMania.app.Device, matPart, new Rectangle( 0, 68 * CDTXMania.stage選曲GITADORA.n確定された曲の難易度, 68, 68 ) );
-                    this.txパート.t3D描画( CDTXMania.app.Device, matPart, new Rectangle( 0, 0, 68, 68 ) ); // DrumsだけなのでRectangle.Xは0で固定
+                    this.tx難易度ラベル.t3D描画( CDTXMania.app.Device, matPart );
+                    //this.tx難易度ラベル.t3D描画( CDTXMania.app.Device, matPart, new Rectangle( 0, 68 * CDTXMania.stage選曲GITADORA.n確定された曲の難易度, 68, 68 ) );
+                    //this.txパート.t3D描画( CDTXMania.app.Device, matPart, new Rectangle( 0, 0, 68, 68 ) ); // DrumsだけなのでRectangle.Xは0で固定
                 }
                 #endregion
                 #region[ HSアイコン ]
