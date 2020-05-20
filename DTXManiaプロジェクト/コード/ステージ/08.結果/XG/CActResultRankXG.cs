@@ -137,9 +137,10 @@ namespace DTXMania
 
                         case 6:
                         case 99:	// #23534 2010.10.28 yyagi: 演奏チップが0個のときは、rankEと見なす
-                            this.txランク文字[j] = CDTXMania.tテクスチャの生成(CSkin.Path(@"Graphics\8_rankE.png"));
                             if (this.b全オート[j])
                                 this.txランク文字[j] = CDTXMania.tテクスチャの生成(CSkin.Path(@"Graphics\8_rankSS.png"));
+                            else // 2020.5.20 kairera0467 解放漏れ修正
+                                this.txランク文字[j] = CDTXMania.tテクスチャの生成(CSkin.Path(@"Graphics\8_rankE.png"));
                             break;
 
                         default:
