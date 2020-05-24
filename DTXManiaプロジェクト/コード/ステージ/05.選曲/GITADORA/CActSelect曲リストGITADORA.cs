@@ -922,9 +922,9 @@ namespace DTXMania
 			tアイテム数の描画();
             #endregion
 
-            //if( CDTXMania.Input管理.Keyboard.bキーが押されている( (int)SlimDXKey.F7 ) )
+            if( CDTXMania.Input管理.Keyboard.bキーが押されている( (int)SlimDXKey.F7 ) )
             {
-                //this.tPuzzleFIFOTest();
+                this.tPuzzleFIFOTest();
             }
 
             #region [ スクロール地点の計算(描画はCActSelectShowCurrentPositionにて行う) #27648 ]

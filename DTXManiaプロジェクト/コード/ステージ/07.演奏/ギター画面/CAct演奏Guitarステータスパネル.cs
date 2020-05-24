@@ -55,10 +55,11 @@ namespace DTXMania
                 gSongNamePlate.DrawImage( CDTXMania.tテクスチャをImageで読み込む( strSongpanelFile ), 0, 0, nSongPanel[ 0 ], nSongPanel[ 1 ] );
 
                 #region[ 曲名 ]
-                if( string.IsNullOrEmpty( CDTXMania.DTX.TITLE ) || ( !CDTXMania.bコンパクトモード && CDTXMania.ConfigIni.b曲名表示をdefのものにする ) )
-                    this.strTitle = CDTXMania.stage選曲XG.r現在選択中の曲.strタイトル;
-                else
-                    this.strTitle = CDTXMania.DTX.TITLE;
+                //if( string.IsNullOrEmpty( CDTXMania.DTX.TITLE ) || ( !CDTXMania.bコンパクトモード && CDTXMania.ConfigIni.b曲名表示をdefのものにする ) )
+                //    this.strTitle = CDTXMania.stage選曲XG.r現在選択中の曲.strタイトル;
+                //else
+                //    this.strTitle = CDTXMania.DTX.TITLE;
+                this.strTitle = "";
 
                 if( File.Exists( CDTXMania.DTX.strフォルダ名 + "\\TitleTexture.png" ) )
                 {

@@ -406,6 +406,8 @@ namespace DTXMania
 			public bool bHit;
 			public bool b可視 = true;
             public bool bボーナスチップ = false;
+			public bool bロングノーツ = false;               // 2020.05.19 kairera0467
+			public bool bロングノーツHit中 = false;          // 2020.05.19 kairera0467 enumにしたいが...
 			public double dbチップサイズ倍率 = 1.0;
 			public double db実数値;
 			public EAVI種別 eAVI種別;
@@ -514,6 +516,19 @@ namespace DTXMania
 						case 0x90:
 						case 0x91:
 						case 0x92:
+						case 0x93:
+						case 0x94:
+						case 0x95:
+						case 0x96:
+						case 0x97:
+						case 0x98:
+						case 0x99:
+						case 0x9A:
+						case 0x9B:
+						case 0x9C:
+						case 0x9D:
+						case 0x9E:
+						case 0x9F:
 						case 0xa0:
 						case 0xa1:
 						case 0xa2:
@@ -523,7 +538,13 @@ namespace DTXMania
 						case 0xa6:
 						case 0xa7:
                         case 0xa8:
-						case 0xaf:
+						case 0xA9:
+						case 0xAA:
+						case 0xAB:
+						case 0xAC:
+						case 0xAD:
+						case 0xAE:
+						case 0xAF:
 						case 0xb1:
 						case 0xb2:
 						case 0xb3:
@@ -536,6 +557,10 @@ namespace DTXMania
 						case 0xba:
 						case 0xbb:
 						case 0xbc:
+						case 0xD0:
+						case 0xD1:
+						case 0xD2:
+						case 0xD3:
 							return true;
 					}
 					return false;
@@ -3510,7 +3535,7 @@ namespace DTXMania
 
 						CChip c_AddMixer = new CChip()
 						{
-							nチャンネル番号 = 0xDA,
+							nチャンネル番号 = 0xEA,
 							n整数値 = pChip.n整数値,
 							n整数値_内部番号 = pChip.n整数値_内部番号,
 							n発声時刻ms = nAddMixer時刻ms,
@@ -3616,7 +3641,7 @@ namespace DTXMania
 							}
 							CChip c = new CChip()											// mixer削除時刻を更新(遅延)する
 							{
-								nチャンネル番号 = 0xDB,
+								nチャンネル番号 = 0xEB,
 								n整数値 = listRemoveTiming[ index ].n整数値,
 								n整数値_内部番号 = listRemoveTiming[ index ].n整数値_内部番号,
 								n発声時刻ms = n新RemoveMixer時刻ms,
@@ -3632,7 +3657,7 @@ namespace DTXMania
 						{																	// 発音していたが既にmixer削除確定していたなら
 							CChip c = new CChip()											// 新しくmixer削除候補として追加する
 							{
-								nチャンネル番号 = 0xDB,
+								nチャンネル番号 = 0xEB,
 								n整数値 = pChip.n整数値,
 								n整数値_内部番号 = pChip.n整数値_内部番号,
 								n発声時刻ms = n新RemoveMixer時刻ms,

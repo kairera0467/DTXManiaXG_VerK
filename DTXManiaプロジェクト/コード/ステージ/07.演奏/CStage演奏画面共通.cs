@@ -727,6 +727,7 @@ namespace DTXMania
 		protected CDTX.CChip r現在の空うちベースChip;
 		protected CDTX.CChip r次にくるギターChip;
 		protected CDTX.CChip r次にくるベースChip;
+		protected STDGBVALUE<CDTX.CChip> r処理中のロングChip;
 		protected CTexture txWailing枠;
 		protected CTexture txチップ;
 		protected CTexture txヒットバー;
@@ -1780,7 +1781,9 @@ namespace DTXMania
 						}
 						continue;
 					}
-					else if ( ( ( ( nChannel == 0x2f ) && ( chip.e楽器パート == E楽器パート.GUITAR ) ) || ( ( ( 0x20 <= nChannel ) && ( nChannel <= 0x28 ) ) && ( chip.nチャンネル番号 == nChannel ) ) ) )
+					else if ( ( ( ( nChannel == 0x2f ) && ( chip.e楽器パート == E楽器パート.GUITAR ) ) || ( ( ( 0x20 <= nChannel ) && ( nChannel <= 0x28 ) ) && ( chip.nチャンネル番号 == nChannel ) ) || 
+						( nChannel >= 0x93 && nChannel <= 0x9F ) || ( nChannel >= 0xA9 && nChannel <= 0xAF ) || ( nChannel >= 0xD0 && nChannel <= 0xD3 )
+						) )
 					{
 						if ( chip.n発声時刻ms > nTime )
 						{
@@ -1816,7 +1819,10 @@ namespace DTXMania
 							||
 							(
 								( ( nChannel == 0x2f ) && ( chip.e楽器パート == E楽器パート.GUITAR ) ) ||
-								( ( ( nChannel >= 0x20 ) && ( nChannel <= 0x28 ) ) && ( chip.nチャンネル番号 == nChannel ) )
+								( ( ( nChannel >= 0x20 ) && ( nChannel <= 0x28 ) ) && ( chip.nチャンネル番号 == nChannel ) ||
+								( ( nChannel >= 0x93 && nChannel <= 0x9F ) && ( chip.nチャンネル番号 == nChannel ) ) ||
+								( ( nChannel >= 0xA9 && nChannel <= 0xAF ) && ( chip.nチャンネル番号 == nChannel ) ) ||
+								( ( nChannel >= 0xD0 && nChannel <= 0xD3 ) && ( chip.nチャンネル番号 == nChannel ) ) )
 							)
 							||
 							(
@@ -2550,6 +2556,32 @@ namespace DTXMania
 					case 0x25:
 					case 0x26:
 					case 0x27:
+
+					// 5レーン
+					case 0x93:
+					case 0x94:
+					case 0x95:
+					case 0x96:
+					case 0x97:
+					case 0x98:
+					case 0x99:
+					case 0x9A:
+					case 0x9B:
+					case 0x9C:
+					case 0x9D:
+					case 0x9E:
+					case 0x9F:
+					case 0xA9:
+					case 0xAA:
+					case 0xAB:
+					case 0xAC:
+					case 0xAD:
+					case 0xAE:
+					case 0xAF:
+					case 0xD0:
+					case 0xD1:
+					case 0xD2:
+					case 0xD3:
 						this.t進行描画_チップ_ギターベース( configIni, ref dTX, ref pChip, E楽器パート.GUITAR );
 						break;
 					#endregion
@@ -2558,8 +2590,22 @@ namespace DTXMania
 						this.t進行描画_チップ_ギター_ウェイリング( configIni, ref dTX, ref pChip, !CDTXMania.ConfigIni.bDrums有効 );
 						break;
 					#endregion
-					#region [ 2f: ウェイリングサウンド(ギター) ]
-					case 0x2f:	// ウェイリングサウンド(ギター)
+					#region[ 2C: ロングノーツ(ギター) ]
+					// 2020.05.19 kairera0467
+					// WIP
+					// チャンネル番号はAL基準
+					case 0x2C:
+						break;
+					#endregion
+					#region[ 2D: ロングノーツ(ベース) ]
+					// 2020.05.19 kairera0467
+					// WIP
+					// チャンネル番号はAL基準
+					case 0x2D:
+						break;
+                    #endregion
+                    #region [ 2f: ウェイリングサウンド(ギター) ]
+                    case 0x2f:	// ウェイリングサウンド(ギター)
 						if ( !pChip.bHit && ( pChip.nバーからの距離dot.Guitar < 0 ) )
 						{
 							pChip.bHit = true;
@@ -2765,13 +2811,14 @@ namespace DTXMania
 						break;
 					#endregion
 					#region [ af: ウェイリングサウンド(ベース) ]
-					case 0xaf:	// ウェイリングサウンド(ベース)
-						if ( !pChip.bHit && ( pChip.nバーからの距離dot.Bass < 0 ) )
-						{
-							pChip.bHit = true;
-							this.r現在の歓声Chip.Bass = pChip;
-						}
-						break;
+					// not used.
+					//case 0xaf:	// ウェイリングサウンド(ベース)
+					//	if ( !pChip.bHit && ( pChip.nバーからの距離dot.Bass < 0 ) )
+					//	{
+					//		pChip.bHit = true;
+					//		this.r現在の歓声Chip.Bass = pChip;
+					//	}
+					//	break;
 					#endregion
 					#region [ b1-b9, bc: 空打ち音設定(ドラム) ]
 					case 0xb1:	// 空打ち音設定(ドラム)
@@ -2833,8 +2880,8 @@ namespace DTXMania
 						}
 						break;
 					#endregion
-					#region [ da: ミキサーへチップ音追加 ]
-					case 0xDA:
+					#region [ ea: ミキサーへチップ音追加 ]
+					case 0xEA:
 						if ( !pChip.bHit && ( pChip.nバーからの距離dot.Drums < 0 ) )
 						{
 //Debug.WriteLine( "[DA(AddMixer)] BAR=" + pChip.n発声位置 / 384 + " ch=" + pChip.nチャンネル番号.ToString( "x2" ) + ", wav=" + pChip.n整数値.ToString( "x2" ) + ", time=" + pChip.n発声時刻ms );
@@ -2865,8 +2912,8 @@ namespace DTXMania
 						}
 						break;
 					#endregion
-					#region [ db: ミキサーからチップ音削除 ]
-					case 0xDB:
+					#region [ eb: ミキサーからチップ音削除 ]
+					case 0xEB:
 						if ( !pChip.bHit && ( pChip.nバーからの距離dot.Drums < 0 ) )
 						{
 //Debug.WriteLine( "[DB(RemoveMixer)] BAR=" + pChip.n発声位置 / 384 + " ch=" + pChip.nチャンネル番号.ToString( "x2" ) + ", wav=" + pChip.n整数値.ToString( "x2" ) + ", time=" + pChip.n発声時刻ms );
@@ -3004,6 +3051,11 @@ namespace DTXMania
 			CDTXMania.Timer.t一時停止();		// 再生時刻カウンタ停止
 
 			this.n現在のトップChip = CDTXMania.DTX.listChip.Count - 1;    // 終端にシーク
+			for (int i = 0; i < 3; i++)
+			{
+				this.r処理中のロングChip[i] = null;	// 2020.05.19 kairera0467
+			}
+
 
             // 自分自身のOn活性化()相当の処理もすべき。
 
@@ -3388,6 +3440,22 @@ namespace DTXMania
 								this.txチップ.t2D描画( CDTXMania.app.Device, x + nChipX[ 2 ], y - 4, new Rectangle( 77, 1, 35, 8 ) );
 							}
 							#endregion
+							#region [ Yチップ描画 ]
+                            //x += 39;
+							if( bChipHasY )
+							{
+								//this.txチップ.t2D描画( CDTXMania.app.Device, x + 3, y - 4, new Rectangle( 77, 1, 35, 8 ) );
+								this.txチップ.t2D描画( CDTXMania.app.Device, x + nChipX[ 3 ], y - 4, new Rectangle( 115, 1, 35, 8 ) );
+							}
+							#endregion
+							#region [ Pチップ描画 ]
+                            //x += 39;
+							if( bChipHasP )
+							{
+								//this.txチップ.t2D描画( CDTXMania.app.Device, x + 3, y - 4, new Rectangle( 77, 1, 35, 8 ) );
+								this.txチップ.t2D描画( CDTXMania.app.Device, x + nChipX[ 4 ], y - 4, new Rectangle( 153, 1, 35, 8 ) );
+							}
+							#endregion
 						}
 					}
 				}
@@ -3440,13 +3508,17 @@ namespace DTXMania
 					bool autoR = ( inst == E楽器パート.GUITAR ) ? bIsAutoPlay.GtR : bIsAutoPlay.BsR;
 					bool autoG = ( inst == E楽器パート.GUITAR ) ? bIsAutoPlay.GtG : bIsAutoPlay.BsG;
 					bool autoB = ( inst == E楽器パート.GUITAR ) ? bIsAutoPlay.GtB : bIsAutoPlay.BsB;
+					bool autoY = ( inst == E楽器パート.GUITAR ) ? bIsAutoPlay.GtY : bIsAutoPlay.BsY;
+					bool autoP = ( inst == E楽器パート.GUITAR ) ? bIsAutoPlay.GtP : bIsAutoPlay.BsP;
 					bool pushingR = CDTXMania.Pad.b押されている( inst, Eパッド.R );
 					bool pushingG = CDTXMania.Pad.b押されている( inst, Eパッド.G );
 					bool pushingB = CDTXMania.Pad.b押されている( inst, Eパッド.B );
+					bool pushingY = CDTXMania.Pad.b押されている( inst, Eパッド.Y );
+					bool pushingP = CDTXMania.Pad.b押されている( inst, Eパッド.P );
 
 					#region [ Chip Fire effects (auto時用) ]
                     // autoPickでない時の処理は、 t入力処理・ギターベース(E楽器パート) で行う
-                    bool bSuccessOPEN = bChipIsO && (autoR || !pushingR) && (autoG || !pushingG) && (autoB || !pushingB);
+                    bool bSuccessOPEN = bChipIsO && (autoR || !pushingR) && (autoG || !pushingG) && (autoB || !pushingB) && (autoY || !pushingY) && (autoP || !pushingP);
 					{
 						if ( ( bChipHasR && ( autoR || pushingR ) ) || bSuccessOPEN )
 						{
@@ -3460,11 +3532,11 @@ namespace DTXMania
 						{
 							this.actChipFireGB.Start( 2 + lo, 演奏判定ライン座標 );
 						}
-						if ( bSuccessOPEN )
+						if ( ( bChipHasY && ( autoY || pushingY ) ) || bSuccessOPEN )
 						{
 							this.actChipFireGB.Start( 3 + lo, 演奏判定ライン座標 );
 						}
-						if ( bSuccessOPEN )
+						if ( ( bChipHasP && ( autoP || pushingP ) ) || bSuccessOPEN )
 						{
 							this.actChipFireGB.Start( 4 + lo, 演奏判定ライン座標 );
 						}
@@ -3473,16 +3545,16 @@ namespace DTXMania
 					#region [ autopick ]
 					{
 						bool bMiss = true;
-						if ( bChipHasR == autoR && bChipHasG == autoG && bChipHasB == autoB )		// autoレーンとチップレーン一致時はOK
+						if ( bChipHasR == autoR && bChipHasG == autoG && bChipHasB == autoB && bChipHasY == autoY && bChipHasP == autoP )		// autoレーンとチップレーン一致時はOK
 						{																			// この条件を加えないと、同時に非autoレーンを押下している時にNGとなってしまう。
 							bMiss = false;
 						}
-						else if ( ( autoR || ( bChipHasR == pushingR ) ) && ( autoG || ( bChipHasG == pushingG ) ) && ( autoB || ( bChipHasB == pushingB ) ) )
+						else if ( ( autoR || ( bChipHasR == pushingR ) ) && ( autoG || ( bChipHasG == pushingG ) ) && ( autoB || ( bChipHasB == pushingB ) ) && ( autoY || ( bChipHasY == pushingY ) ) && ( autoP || ( bChipHasP == pushingP ) ) )
 							// ( bChipHasR == ( pushingR | autoR ) ) && ( bChipHasG == ( pushingG | autoG ) ) && ( bChipHasB == ( pushingB | autoB ) ) )
 						{
 							bMiss = false;
 						}
-						else if ( ( ( bChipIsO == true ) && ( !pushingR | autoR ) && ( !pushingG | autoG ) && ( !pushingB | autoB ) ) )	// OPEN時
+						else if ( ( ( bChipIsO == true ) && ( !pushingR | autoR ) && ( !pushingG | autoG ) && ( !pushingB | autoB ) && ( !pushingY | autoY ) && ( !pushingP | autoP ) ) )	// OPEN時
 						{
 							bMiss = false;
 						}
@@ -3889,11 +3961,15 @@ namespace DTXMania
 			bool autoR =	( inst == E楽器パート.GUITAR ) ? bIsAutoPlay.GtR : bIsAutoPlay.BsR;
 			bool autoG =	( inst == E楽器パート.GUITAR ) ? bIsAutoPlay.GtG : bIsAutoPlay.BsG;
 			bool autoB =	( inst == E楽器パート.GUITAR ) ? bIsAutoPlay.GtB : bIsAutoPlay.BsB;
+			bool autoY =    ( inst == E楽器パート.GUITAR ) ? bIsAutoPlay.GtY : bIsAutoPlay.BsY;
+            bool autoP =    ( inst == E楽器パート.GUITAR ) ? bIsAutoPlay.GtP : bIsAutoPlay.BsP;
 			bool autoPick =	( inst == E楽器パート.GUITAR ) ? bIsAutoPlay.GtPick : bIsAutoPlay.BsPick;
 			int nAutoW = ( autoW ) ? 8 : 0;
 			int nAutoR = ( autoR ) ? 4 : 0;
 			int nAutoG = ( autoG ) ? 2 : 0;
 			int nAutoB = ( autoB ) ? 1 : 0;
+			int nAutoY = ( autoY ) ? 16 : 0;
+			int nAutoP = ( autoP ) ? 32 : 0;
 			int nAutoMask = nAutoW | nAutoR | nAutoG | nAutoB;
 
 //			if ( bIsAutoPlay[ (int) Eレーン.Guitar - 1 + indexInst ] )	// このような、バグの入りやすい書き方(GT/BSのindex値が他と異なる)はいずれ見直したい
@@ -3901,21 +3977,384 @@ namespace DTXMania
 			CDTX.CChip chip = this.r次に来る指定楽器Chipを更新して返す(inst);
 			if ( chip != null )	
 			{
-				if ( ( chip.nチャンネル番号 & 4 ) != 0 && autoR )
-				{
-					this.actLaneFlushGB.Start( R );
-					this.actRGB.Push( R );
-				}
-				if ( ( chip.nチャンネル番号 & 2 ) != 0 && autoG )
-				{
-					this.actLaneFlushGB.Start( G );
-					this.actRGB.Push( G );
-				}
-				if ( ( chip.nチャンネル番号 & 1 ) != 0 && autoB )
-				{
-					this.actLaneFlushGB.Start( B );
-					this.actRGB.Push( B );
-				}
+				bool bAutoGuitarR = false;
+				bool bAutoGuitarG = false;
+				bool bAutoGuitarB = false;
+				bool bAutoGuitarY = false;
+				bool bAutoGuitarP = false;
+				bool bAutoBassR = false;
+				bool bAutoBassG = false;
+				bool bAutoBassB = false;
+				bool bAutoBassY = false;
+				bool bAutoBassP = false;
+
+                switch( chip.nチャンネル番号 )
+                {
+                    case 0x20:
+                        break;
+                    case 0x21:
+                        bAutoGuitarB = true;
+                        break;
+                    case 0x22:
+                        bAutoGuitarG = true;
+                        break;
+                    case 0x23:
+                        bAutoGuitarG = true;
+                        bAutoGuitarB = true;
+                        break;
+                    case 0x24:
+                        bAutoGuitarR = true;
+                        break;
+                    case 0x25:
+                        bAutoGuitarR = true;
+                        bAutoGuitarB = true;
+                        break;
+                    case 0x26:
+                        bAutoGuitarR = true;
+                        bAutoGuitarG = true;
+                        break;
+                    case 0x27:
+                        bAutoGuitarR = true;
+                        bAutoGuitarG = true;
+                        bAutoGuitarB = true;
+                        break;
+
+                    case 0x93:
+                        bAutoGuitarY = true;
+                        break;
+                    case 0x94:
+                        bAutoGuitarB = true;
+                        bAutoGuitarY = true;
+                        break;
+                    case 0x95:
+                        bAutoGuitarG = true;
+                        bAutoGuitarY = true;
+                        break;
+                    case 0x96:
+                        bAutoGuitarG = true;
+                        bAutoGuitarB = true;
+                        bAutoGuitarY = true;
+                        break;
+                    case 0x97:
+                        bAutoGuitarR = true;
+                        bAutoGuitarY = true;
+                        break;
+                    case 0x98:
+                        bAutoGuitarR = true;
+                        bAutoGuitarB = true;
+                        bAutoGuitarY = true;
+                        break;
+                    case 0x99:
+                        bAutoGuitarR = true;
+                        bAutoGuitarG = true;
+                        bAutoGuitarY = true;
+                        break;
+                    case 0x9A:
+                        bAutoGuitarR = true;
+                        bAutoGuitarG = true;
+                        bAutoGuitarB = true;
+                        bAutoGuitarY = true;
+                        break;
+                    case 0x9B:
+                        bAutoGuitarP = true;
+                        break;
+                    case 0x9C:
+                        bAutoGuitarB = true;
+                        bAutoGuitarP = true;
+                        break;
+                    case 0x9D:
+                        bAutoGuitarG = true;
+                        bAutoGuitarP = true;
+                        break;
+                    case 0x9E:
+                        bAutoGuitarG = true;
+                        bAutoGuitarB = true;
+                        bAutoGuitarP = true;
+                        break;
+                    case 0x9F:
+                        bAutoGuitarR = true;
+                        bAutoGuitarP = true;
+                        break;
+
+                    //BASS
+                    case 0xA1:
+                        bAutoBassB = true;
+                        break;
+
+                    case 0xA2:
+                        bAutoBassG = true;
+                        break;
+
+                    case 0xA3:
+                        bAutoBassG = true;
+                        bAutoBassB = true;
+                        break;
+
+                    case 0xA4:
+                        bAutoBassR = true;
+                        break;
+
+                    case 0xA5:
+                        bAutoBassR = true;
+                        bAutoBassB = true;
+                        break;
+
+                    case 0xA6:
+                        bAutoBassR = true;
+                        bAutoBassG = true;
+                        break;
+
+                    case 0xA7:
+                        bAutoBassR = true;
+                        bAutoBassG = true;
+                        bAutoBassB = true;
+                        break;
+
+                    //A8 WAILING(BASS)
+
+                    case 0xA9:
+                        bAutoGuitarR = true;
+                        bAutoGuitarB = true;
+                        bAutoGuitarP = true;
+                        break;
+
+                    case 0xAA:
+                        bAutoGuitarR = true;
+                        bAutoGuitarG = true;
+                        bAutoGuitarP = true;
+                        break;
+
+                    case 0xAB:
+                        bAutoGuitarR = true;
+                        bAutoGuitarG = true;
+                        bAutoGuitarB = true;
+                        bAutoGuitarP = true;
+                        break;
+
+                    case 0xAC:
+                        bAutoGuitarY = true;
+                        bAutoGuitarP = true;
+                        break;
+
+                    case 0xAD:
+                        bAutoGuitarB = true;
+                        bAutoGuitarY = true;
+                        bAutoGuitarP = true;
+                        break;
+
+                    case 0xAE:
+                        bAutoGuitarG = true;
+                        bAutoGuitarY = true;
+                        bAutoGuitarP = true;
+                        break;
+
+                    case 0xAF:
+                        bAutoGuitarG = true;
+                        bAutoGuitarB = true;
+                        bAutoGuitarY = true;
+                        bAutoGuitarP = true;
+                        break;
+
+                    case 0xC5:
+                        bAutoBassY = true;
+                        break;
+
+                    case 0xC6:
+                        bAutoBassB = true;
+                        bAutoBassY = true;
+                        break;
+
+                    case 0xC8:
+                        bAutoBassG = true;
+                        bAutoBassY = true;
+                        break;
+
+                    case 0xC9:
+                        bAutoBassG = true;
+                        bAutoBassB = true;
+                        bAutoBassY = true;
+                        break;
+
+                    case 0xCA:
+                        bAutoBassR = true;
+                        bAutoBassY = true;
+                        break;
+
+                    case 0xCB:
+                        bAutoBassR = true;
+                        bAutoBassB = true;
+                        bAutoBassY = true;
+                        break;
+                    case 0xCC:
+                        bAutoBassR = true;
+                        bAutoBassG = true;
+                        bAutoBassY = true;
+                        break;
+                    case 0xCD:
+                        bAutoBassR = true;
+                        bAutoBassG = true;
+                        bAutoBassB = true;
+                        bAutoBassY = true;
+                        break;
+                    case 0xCE:
+                        bAutoBassP = true;
+                        break;
+                    case 0xCF:
+                        bAutoBassB = true;
+                        bAutoBassP = true;
+                        break;
+
+                    case 0xD0:
+                        bAutoGuitarR = true;
+                        bAutoGuitarY = true;
+                        bAutoGuitarP = true;
+                        break;
+                    case 0xD1:
+                        bAutoGuitarR = true;
+                        bAutoGuitarB = true;
+                        bAutoGuitarY = true;
+                        bAutoGuitarP = true;
+                        break;
+                    case 0xD2:
+                        bAutoGuitarR = true;
+                        bAutoGuitarG = true;
+                        bAutoGuitarY = true;
+                        bAutoGuitarP = true;
+                        break;
+                    case 0xD3:
+                        bAutoGuitarR = true;
+                        bAutoGuitarG = true;
+                        bAutoGuitarB = true;
+                        bAutoGuitarY = true;
+                        bAutoGuitarP = true;
+                        break;
+
+                    case 0xDA:
+                        bAutoBassG = true;
+                        bAutoBassP = true;
+                        break;
+                    case 0xDB:
+                        bAutoBassG = true;
+                        bAutoBassB = true;
+                        bAutoBassP = true;
+                        break;
+                    case 0xDC:
+                        bAutoBassR = true;
+                        bAutoBassP = true;
+                        break;
+                    case 0xDD:
+                        bAutoBassR = true;
+                        bAutoBassB = true;
+                        bAutoBassP = true;
+                        break;
+                    case 0xDE:
+                        bAutoBassR = true;
+                        bAutoBassG = true;
+                        bAutoBassP = true;
+                        break;
+                    case 0xDF:
+                        bAutoBassR = true;
+                        bAutoBassG = true;
+                        bAutoBassB = true;
+                        bAutoBassP = true;
+                        break;
+                    case 0xE1:
+                        bAutoBassY = true;
+                        bAutoBassP = true;
+                        break;
+                    case 0xE2:
+                        bAutoBassB = true;
+                        bAutoBassY = true;
+                        bAutoBassP = true;
+                        break;
+                    case 0xE3:
+                        bAutoBassG = true;
+                        bAutoBassY = true;
+                        bAutoBassP = true;
+                        break;
+                    case 0xE4:
+                        bAutoBassG = true;
+                        bAutoBassB = true;
+                        bAutoBassY = true;
+                        bAutoBassP = true;
+                        break;
+                    case 0xE5:
+                        bAutoBassR = true;
+                        bAutoBassY = true;
+                        bAutoBassP = true;
+                        break;
+                    case 0xE6:
+                        bAutoBassR = true;
+                        bAutoBassB = true;
+                        bAutoBassY = true;
+                        bAutoBassP = true;
+                        break;
+                    case 0xE7:
+                        bAutoBassR = true;
+                        bAutoBassG = true;
+                        bAutoBassY = true;
+                        bAutoBassP = true;
+                        break;
+                    case 0xE8:
+                        bAutoBassR = true;
+                        bAutoBassG = true;
+                        bAutoBassB = true;
+                        bAutoBassY = true;
+                        bAutoBassP = true;
+                        break;
+                }
+                //オートさん専用
+                if( bAutoGuitarR && bIsAutoPlay.GtR )
+                {
+                    this.actLaneFlushGB.Start( 0 );
+                    this.actRGB.Push( R );
+                }
+                if( bAutoGuitarG && bIsAutoPlay.GtG )
+                {
+                    this.actLaneFlushGB.Start( 1 );
+                    this.actRGB.Push( G );
+                }
+                if( bAutoGuitarB && bIsAutoPlay.GtB )
+                {
+                    this.actLaneFlushGB.Start( 2 );
+                    this.actRGB.Push( B );
+                }
+                if( bAutoGuitarY && bIsAutoPlay.GtY )
+                {
+                    this.actLaneFlushGB.Start( 3 );
+                    this.actRGB.Push( Y );
+                }
+                if( bAutoGuitarP && bIsAutoPlay.GtP )
+                {
+                    this.actLaneFlushGB.Start( 4 );
+                    this.actRGB.Push( P );
+                }
+
+                if( bAutoBassR && bIsAutoPlay.BsR )
+                {
+                    this.actLaneFlushGB.Start( 5 );
+                    this.actRGB.Push( R );
+                }
+                if( bAutoBassG && bIsAutoPlay.BsG )
+                {
+                    this.actLaneFlushGB.Start( 6 );
+                    this.actRGB.Push( G );
+                }
+                if( bAutoBassB && bIsAutoPlay.BsB )
+                {
+                    this.actLaneFlushGB.Start( 7 );
+                    this.actRGB.Push( B );
+                }
+                if( bAutoBassY && bIsAutoPlay.BsY )
+                {
+                    this.actLaneFlushGB.Start( 8 );
+                    this.actRGB.Push( Y );
+                }
+                if( bAutoBassP && bIsAutoPlay.BsP )
+                {
+                    this.actLaneFlushGB.Start( 9 );
+                    this.actRGB.Push( P );
+                }
 //			}
 
 			}
