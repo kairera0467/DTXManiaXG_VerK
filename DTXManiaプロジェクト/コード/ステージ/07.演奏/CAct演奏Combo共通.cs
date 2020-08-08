@@ -122,11 +122,11 @@ namespace DTXMania
 
 		protected enum EEvent { 非表示, 数値更新, 同一数値, ミス通知 }
 		protected enum EMode { 非表示中, 進行表示中, 残像表示中 }
-        protected const int nギターコンボのCOMBO文字の高さ = 32;
-        protected const int nギターコンボのCOMBO文字の幅 = 90;
+        protected const int nギターコンボのCOMBO文字の高さ = 50;
+        protected const int nギターコンボのCOMBO文字の幅 = 220;
         protected const int nギターコンボの高さ = 92;
         protected const int nギターコンボの幅 = 72;
-        protected const int nギターコンボの文字間隔 = -6;
+        protected const int nギターコンボの文字間隔 = -4;
         protected const int nドラムコンボのCOMBO文字の高さ = 32;
         protected const int nドラムコンボのCOMBO文字の幅 = 90;
         protected const int nドラムコンボの高さ = 115;
@@ -807,7 +807,8 @@ namespace DTXMania
 			//-----------------
 			float f拡大率 = 1.0f;
 			if( nジャンプインデックス >= 0 && nジャンプインデックス < 180 )
-				f拡大率 = 1.0f - ( ( (float) this.nジャンプ差分値[ nジャンプインデックス ] ) / 45.0f );		// f拡大率 = 1.0 → 1.3333... → 1.0
+				f拡大率 = 1.0f - ( ( (float) this.nジャンプ差分値[ nジャンプインデックス ] ) / 90.0f );		// f拡大率 = 1.0 → 1.3333... → 1.0
+            // 45.0f -> 90.0f
 
 			if( this.txCOMBOギター != null )
 				this.txCOMBOギター.vc拡大縮小倍率 = new Vector3( f拡大率, f拡大率, 1.0f );
@@ -824,10 +825,10 @@ namespace DTXMania
 					x,
 					y,
 					new Rectangle(
-						128,
-						(int) ( 158 ),
-						(int) ( 124 ),
-						(int) ( 16 * Scale.Y )
+						0,
+						(int) ( 236 ),
+						(int) ( nギターコンボのCOMBO文字の幅 ),
+						(int) ( nギターコンボのCOMBO文字の高さ )
 					)
 				); 
 			//-----------------
@@ -841,7 +842,8 @@ namespace DTXMania
 				//-----------------
 				f拡大率 = 1.0f;
 				if( nジャンプインデックス >= 0 && nジャンプインデックス < 180 )
-					f拡大率 = 1.0f - ( ( (float) this.nジャンプ差分値[ nジャンプインデックス ] ) / 45f );		// f拡大率 = 1.0 → 1.3333... → 1.0
+					f拡大率 = 1.0f - ( ( (float) this.nジャンプ差分値[ nジャンプインデックス ] ) / 90.0f );		// f拡大率 = 1.0 → 1.3333... → 1.0
+                // 45.0f -> 90.0f
 
 				if( this.txCOMBOギター != null )
 					this.txCOMBOギター.vc拡大縮小倍率 = new Vector3( f拡大率, f拡大率, 1.0f );
@@ -851,7 +853,7 @@ namespace DTXMania
 				//-----------------
 				x -= nギターコンボの幅 + nギターコンボの文字間隔;
 				//y = (int) ( n表示中央Y * Scale.Y ) - nギターコンボの高さ;
-				y = n表示中央Y - nギターコンボの高さ;
+				y = n表示中央Y - ( nギターコンボの高さ + 10 );
 
 				if( this.txCOMBOギター != null )
 				{
@@ -860,8 +862,8 @@ namespace DTXMania
 						x - ( (int) ( ( ( f拡大率 - 1.0f ) * nギターコンボの幅 ) / 2.0f ) ),
 						y - ( (int) ( ( ( f拡大率 - 1.0f ) * nギターコンボの高さ ) / 2.0f ) ),
 						new Rectangle(
-							( n位の数[ i ] % 4 ) * nギターコンボの幅,
-							( n位の数[ i ] / 4 ) * nギターコンボの高さ,
+							( n位の数[ i ] % 5 ) * nギターコンボの幅,
+							( n位の数[ i ] / 5 ) * nギターコンボの高さ,
 							nギターコンボの幅,
 							nギターコンボの高さ
 						)
