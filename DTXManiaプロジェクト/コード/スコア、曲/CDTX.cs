@@ -405,9 +405,8 @@ namespace DTXMania
 		{
 			public bool bHit;
 			public bool b可視 = true;
-            public bool bボーナスチップ = false;
-			public bool bロングノーツ = false;               // 2020.05.19 kairera0467
-			public bool bロングノーツHit中 = false;          // 2020.05.19 kairera0467 enumにしたいが...
+			public bool bボーナスチップ = false;
+			public bool bロングノートHit中 = false;          // 2020.05.19 kairera0467 enumにしたいが...
 			public double dbチップサイズ倍率 = 1.0;
 			public double db実数値;
 			public EAVI種別 eAVI種別;
@@ -415,7 +414,7 @@ namespace DTXMania
 			public E楽器パート e楽器パート = E楽器パート.UNKNOWN;
 			public int nチャンネル番号;
 			public STDGBVALUE<int> nバーからの距離dot;       // 2019.9.7 kairera0467
-            public STDGBVALUE<int> nバーからの終端距離dot;   // 2019.9.7 kairera0467
+			public STDGBVALUE<int> nバーからの終端距離dot;   // 2019.9.7 kairera0467
 			public int n整数値;
 			public int n整数値_内部番号;
 			public int n総移動時間;
@@ -424,7 +423,7 @@ namespace DTXMania
 			public int n発声時刻ms;
 			public int n発声終了位置;             // 2019.9.7 kairera0467
 			public int n発声終了時刻ms;           // 2019.9.7 kairera0467
-			public int nLag;				      // 2011.2.1 yyagi
+			public int nLag;                      // 2011.2.1 yyagi
 			public int nCurrentComboForGhost;     // 2015.9.29 chnmr0
 			public CDTX.CAVI rAVI;
 			public CDTX.CAVIPAN rAVIPan;
@@ -432,13 +431,27 @@ namespace DTXMania
 			public CDTX.CBGAPAN rBGAPan;
 			public CDTX.CBMP rBMP;
 			public CDTX.CBMPTEX rBMPTEX;
+			public CChip chipロングノート終端;
+            public bool bGuitar可視チップ;
+            public bool bBass可視チップ;
+            public bool bGuitarBass_Open
+            {
+                get
+                {
+                    if( nチャンネル番号 == 0x20 || nチャンネル番号 == 0xA0 )
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+            }
 			public bool bBPMチップである
 			{
 				get
 				{
 					return (
-						this.nチャンネル番号 == (int) Ech定義.BPM ||
-						this.nチャンネル番号 == (int) Ech定義.BPMEx
+						this.nチャンネル番号 == (int)Ech定義.BPM ||
+						this.nチャンネル番号 == (int)Ech定義.BPMEx
 					);
 				}
 			}
@@ -446,7 +459,7 @@ namespace DTXMania
 			{
 				get
 				{
-					switch( this.nチャンネル番号 )
+					switch (this.nチャンネル番号)
 					{
 						case 0x01:
 						case 0x11:
@@ -459,8 +472,8 @@ namespace DTXMania
 						case 0x18:
 						case 0x19:
 						case 0x1a:
-                        case 0x1b:
-                        case 0x1c:
+						case 0x1b:
+						case 0x1c:
 						case 0x1f:
 						case 0x20:
 						case 0x21:
@@ -470,7 +483,7 @@ namespace DTXMania
 						case 0x25:
 						case 0x26:
 						case 0x27:
-                        case 0x28:
+						case 0x28:
 						case 0x2f:
 						case 0x31:
 						case 0x32:
@@ -482,8 +495,8 @@ namespace DTXMania
 						case 0x38:
 						case 0x39:
 						case 0x3a:
-                        case 0x3b:
-                        case 0x3c:
+						case 0x3b:
+						case 0x3c:
 						case 0x61:
 						case 0x62:
 						case 0x63:
@@ -537,7 +550,7 @@ namespace DTXMania
 						case 0xa5:
 						case 0xa6:
 						case 0xa7:
-                        case 0xa8:
+						case 0xa8:
 						case 0xA9:
 						case 0xAA:
 						case 0xAB:
@@ -557,10 +570,34 @@ namespace DTXMania
 						case 0xba:
 						case 0xbb:
 						case 0xbc:
+						case 0xC5:
+						case 0xC6:
+						case 0xC8:
+						case 0xC9:
+						case 0xCA:
+						case 0xCB:
+						case 0xCC:
+						case 0xCD:
+						case 0xCE:
+						case 0xCF:
 						case 0xD0:
 						case 0xD1:
 						case 0xD2:
 						case 0xD3:
+						case 0xDA:
+						case 0xDB:
+						case 0xDC:
+						case 0xDD:
+						case 0xDE:
+						case 0xDF:
+						case 0xE1:
+						case 0xE2:
+						case 0xE3:
+						case 0xE4:
+						case 0xE5:
+						case 0xE6:
+						case 0xE7:
+						case 0xE8:
 							return true;
 					}
 					return false;
@@ -571,19 +608,26 @@ namespace DTXMania
 				get
 				{
 					int num = this.nチャンネル番号;
-					if( ( ( ( num != 1 ) && ( ( 0x61 > num ) || ( num > 0x69 ) ) ) && ( ( 0x70 > num ) || ( num > 0x79 ) ) ) && ( ( 0x80 > num ) || ( num > 0x89 ) ) )
+					if ((((num != 1) && ((0x61 > num) || (num > 0x69))) && ((0x70 > num) || (num > 0x79))) && ((0x80 > num) || (num > 0x89)))
 					{
-						return ( ( 0x90 <= num ) && ( num <= 0x92 ) );
+						return ((0x90 <= num) && (num <= 0x92));
 					}
 					return true;
 				}
 			}
-			public bool bIsAutoPlayed;							// 2011.6.10 yyagi
-			public bool b演奏終了後も再生が続くチップである;	// #32248 2013.10.14 yyagi
-			public bool b空打ちチップである;					// #34029 2014.7.15 yyagi
-            public int n楽器パートでの出現順;                // #35411 2015.08.20 chnmr0
-            public bool bTargetGhost判定済み;               // #35411 2015.08.22 chnmr0
+			public bool bIsAutoPlayed;                          // 2011.6.10 yyagi
+			public bool b演奏終了後も再生が続くチップである; // #32248 2013.10.14 yyagi
+			public bool b空打ちチップである;                 // #34029 2014.7.15 yyagi
+			public int n楽器パートでの出現順;                // #35411 2015.08.20 chnmr0
+			public bool bTargetGhost判定済み;               // #35411 2015.08.22 chnmr0
 
+			public bool bロングノート               // 2020.05.19 kairera0467
+			{
+				get
+				{
+					return chipロングノート終端 != null;
+				}
+			}
 			public CChip()
 			{
 				this.nバーからの距離dot = new STDGBVALUE<int>() {
@@ -615,6 +659,9 @@ namespace DTXMania
 				this.nバーからの距離dot.Guitar = 0;
 				this.nバーからの距離dot.Bass = 0;
 				this.n総移動時間 = 0;
+				this.chipロングノート終端 = null;
+                this.bGuitar可視チップ = false;
+                this.bBass可視チップ = false;
 			}
 			public override string ToString()
 			{
@@ -1942,6 +1989,32 @@ namespace DTXMania
                 }
             }
         }
+		/// <summary>
+		/// 事実上DTXManiaALからの移植
+		/// </summary>
+		private void tロングノーツフラグを立てる()
+		{
+			// TODO:盛り込む処理(ALレギュレなので遵守)
+			//      -黄色連打みたいなフラグ管理(7000700,みたいな記述法になってるから)
+			//      -途中に別のギターチップ入ってたらロングを無効にする処理(7010700,なら1010000,に置き換えみたいな)
+			foreach( CChip chip in this.listChip )
+			{
+				if( chip.nチャンネル番号 == 0x2C || chip.nチャンネル番号 == 0x2D )
+				{
+					if( chip.chipロングノート終端 == null )
+					{
+						foreach( CChip chip2 in this.listChip )
+						{
+							if( chip.n発声位置 == chip2.n発声位置 && chip2.e楽器パート == ( chip.nチャンネル番号 == 0x2C ? E楽器パート.GUITAR : E楽器パート.BASS ) )
+							{
+								chip.chipロングノート終端 = chip2;
+								break;
+							}
+						}
+					}
+				}
+			}
+		}
 		public void tWave再生位置自動補正()
 		{
 			foreach( CWAV cwav in this.listWAV.Values )
@@ -2572,58 +2645,65 @@ namespace DTXMania
                     bHasP = true;
                     break;
                 case 0x9D:
+				case 0xDA:
                     bHasG = true;
                     bHasP = true;
                     break;
                 case 0x9E:
+				case 0xDB:
                     bHasG = true;
                     bHasB = true;
                     bHasP = true;
                     break;
                 case 0x9F:
+				case 0xDC:
                     bHasR = true;
                     bHasP = true;
                     break;
 
                 case 0xA9:
+				case 0xDD:
                     bHasR = true;
                     bHasB = true;
                     bHasP = true;
                     break;
                 case 0xAA:
+				case 0xDE:
                     bHasR = true;
                     bHasG = true;
                     bHasP = true;
                     break;
                 case 0xAB:
+				case 0xDF:
                     bHasR = true;
                     bHasG = true;
                     bHasB = true;
                     bHasP = true;
                     break;
                 case 0xAC:
+				case 0xE1:
                     bHasY = true;
                     bHasP = true;
                     break;
                 case 0xAD:
-                    bHasB = true;
+				case 0xE2:
+					bHasB = true;
                     bHasY = true;
                     bHasP = true;
                     break;
                 case 0xAE:
+				case 0xE3:
                     bHasG = true;
                     bHasY = true;
                     bHasP = true;
                     break;
-                //2017.7.16 kairera0467 Wikiのチャンネル定義表上ではギターGBYPだが、BassWailing Soundと重複しているので一旦コメントアウトしておく。
-                //case 0xAF:
+                case 0xAF:
                 case 0xE4:
                     bHasG = true;
                     bHasB = true;
                     bHasY = true;
                     bHasP = true;
                 break;
-                
                 case 0xD0:
                 case 0xE5:
                     bHasR = true;
@@ -3189,6 +3269,7 @@ namespace DTXMania
 						int n発声位置 = 0;
 						int ms = 0;
 						int nBar = 0;
+                        STDGBVALUE<CChip> chipLN処理中 = new STDGBVALUE<CChip>();
 						foreach ( CChip chip in this.listChip )
 						{
 							chip.n発声時刻ms = ms + ( (int) ( ( ( 0x271 * ( chip.n発声位置 - n発声位置 ) ) * dbBarLength ) / bpm ) );
@@ -3258,6 +3339,53 @@ namespace DTXMania
 										}
 										continue;
 									}
+#if DEBUG
+								case 0x2C: // ロングノーツ
+                                case 0x2D:
+                                    {
+                                        int part = chip.nチャンネル番号 == 0x2C ? (int)E楽器パート.GUITAR : (int)E楽器パート.BASS;
+                                        if ( chipLN処理中[ part ] == null )
+					                    {
+                                            // 同じ発声位置にあるギター/ベースチップを検索
+                                            // 始点チップとしてchipLN処理中[part]に入れる
+						                    foreach( CChip chip2 in this.listChip )
+						                    {
+							                    if( chip2.n発声位置 == chip.n発声位置 &&
+                                                    ((part == (int)E楽器パート.GUITAR && chip2.bGuitar可視チップ) ||
+                                                     (part == (int)E楽器パート.BASS && chip2.bBass可視チップ)) &&
+                                                     !chip2.bGuitarBass_Open && !(chip2.nチャンネル番号 == 0x2C || chip2.nチャンネル番号 == 0x2D) )
+                                                {
+								                    chipLN処理中[ part ] = chip2;
+								                    break;
+							                    }
+						                    }
+					                    }
+                                        else
+                                        {
+                                            // LN処理中のチップより先にあり、currentと同じかそれより前にあるLNチップを検索
+                                            // 
+						                    foreach( CChip chip2 in this.listChip )
+						                    {
+							                    if( chip2.n発声位置 > chipLN処理中[ part ].n発声位置 &&
+                                                    chip2.n発声位置 <= chip.n発声位置 &&
+                                                    (( part == (int)E楽器パート.GUITAR && chip2.bGuitar可視チップ ) ||
+                                                     ( part == (int)E楽器パート.BASS && chip2.bBass可視チップ ) ) )
+							                    {
+								                    //chipLN処理中[ part ] = null;
+								                    break;
+							                    }
+						                    }
+                                            if( chipLN処理中[ part ] != null )
+                                            {
+                                                chipLN処理中[ part ].chipロングノート終端 = chip;
+                                                chipLN処理中[ part ] = null;
+                                                //chip.chipロングノート終端 = chipLN処理中[ part ];
+                                                //chipLN処理中[ part ] = null;
+                                            }
+                                        }
+                                        continue;
+                                    }
+#endif
 								default:
 									{
                                         if( chip.nチャンネル番号 >= 0x4C && chip.nチャンネル番号 <= 0x4F )
@@ -3358,15 +3486,8 @@ namespace DTXMania
                         {
                             this.bCLASSIC譜面である.Drums = true;
                         }
-                        //Guitar、Bassは未実装
-                        //if()
-                        {
-                            this.bCLASSIC譜面である.Guitar = true;
-                        }
-                        //if
-                        {
-                            this.bCLASSIC譜面である.Bass = true;
-                        }
+                        this.bCLASSIC譜面である.Guitar = !this.bチップがある.YPGuitar;
+                        this.bCLASSIC譜面である.Bass = !this.bチップがある.YPBass;
                         #endregion
                         //span = (TimeSpan) ( DateTime.Now - timeBeginLoad );
 						//Trace.TraceInformation( "ch番号集合確認:           {0}", span.ToString() );
@@ -6526,13 +6647,15 @@ namespace DTXMania
                 {
                     chip.e楽器パート = E楽器パート.DRUMS;
                 }
-                if( ( nチャンネル番号 >= 0x20 && nチャンネル番号 <= 0x27 ) || ( nチャンネル番号 >= 0x93 && nチャンネル番号 <= 0x9F ) || ( nチャンネル番号 >= 0xA9 && nチャンネル番号 <= 0xAF ) || ( nチャンネル番号 >= 0xD0 && nチャンネル番号 <= 0xD3 ) || ( nチャンネル番号 == 0x2A ) )
+                if( ( nチャンネル番号 >= 0x20 && nチャンネル番号 <= 0x27 ) || ( nチャンネル番号 >= 0x93 && nチャンネル番号 <= 0x9F ) || ( nチャンネル番号 >= 0xA9 && nチャンネル番号 <= 0xAF ) || ( nチャンネル番号 >= 0xD0 && nチャンネル番号 <= 0xD3 ) || ( nチャンネル番号 == 0x2A ) /*|| nチャンネル番号 == 0x2C*/ )
                 {
                     chip.e楽器パート = E楽器パート.GUITAR;
+                    chip.bGuitar可視チップ = true;
                 }
                 if( ( nチャンネル番号 >= 0xA0 && nチャンネル番号 <= 0xA7 ) || ( nチャンネル番号 == 0xC5 ) || ( nチャンネル番号 == 0xC6 ) || ( nチャンネル番号 >= 0xC8 && nチャンネル番号 <= 0xCF ) || ( nチャンネル番号 >= 0xDA && nチャンネル番号 <= 0xDF ) || ( nチャンネル番号 >= 0xE1 && nチャンネル番号 <= 0xE8 ) )
                 {
                     chip.e楽器パート = E楽器パート.BASS;
+                    chip.bBass可視チップ = true;
                 }
                 //-----------------
                 #endregion

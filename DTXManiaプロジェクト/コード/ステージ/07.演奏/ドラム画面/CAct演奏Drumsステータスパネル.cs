@@ -79,10 +79,10 @@ namespace DTXMania
                 this.strGroupName = string.IsNullOrEmpty( CDTXMania.ConfigIni.strGroupName[0] ) ? "" : CDTXMania.ConfigIni.strGroupName[0];
                 gNamePlate.Dispose();
 
-                this.bNamePlate = new Bitmap( 0x170, 0x103 );
+                this.bNamePlate = new Bitmap( 368, 304 );
 
                 gNamePlate = Graphics.FromImage( this.bNamePlate );
-                gNamePlate.DrawImage( this.iNamePlate, 0, 0, 0x170, 0x103 );
+                gNamePlate.DrawImage( this.iNamePlate, 0, 0, 368, 304 );
 
                 if (CDTXMania.ConfigIni.eNamePlateType == Eタイプ.A)
                 {

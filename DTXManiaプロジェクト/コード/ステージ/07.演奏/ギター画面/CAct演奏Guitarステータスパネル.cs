@@ -250,7 +250,7 @@ namespace DTXMania
 
                     string str = string.Format( "{0:0.00}", ( (float)CDTXMania.DTX.LEVEL[ 1 + i ]) / 10f );
                     str = string.Format( "{0:0.00}", ( (float)CDTXMania.DTX.LEVEL[ 1 + 1 ] ) / 10.0f + ( CDTXMania.DTX.LEVELDEC[ 1 + i ] != 0 ? CDTXMania.DTX.LEVELDEC[ 1 + i ] / 100.0f : 0 ) );
-                    int[] nDigit = new int[]{ Convert.ToInt16( str[ 0 ].ToString() ), Convert.ToInt16( str[ 2 ].ToString() ), Convert.ToInt16( str[ 3 ].ToString() ) };
+                    int[] nDigit = new int[]{ Convert.ToInt16( str[ 0 ].ToString() ), Convert.ToInt16( str[ 2 ].ToString() ), Convert.ToInt16( string.IsNullOrWhiteSpace(str[ 3 ].ToString()) ? "0" : str[ 3 ].ToString() ) };
                     
                     if ( CDTXMania.ConfigIni.bCLASSIC譜面判別を有効にする ? ( CDTXMania.DTX.bCLASSIC譜面である[ 1 + i ] && CDTXMania.DTX.b強制的にXG譜面にする == false ) : false )
                     {

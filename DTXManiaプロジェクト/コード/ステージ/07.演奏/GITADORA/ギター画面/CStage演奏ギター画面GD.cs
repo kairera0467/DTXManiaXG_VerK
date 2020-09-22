@@ -22,22 +22,22 @@ namespace DTXMania
 			base.eフェーズID = CStage.Eフェーズ.共通_通常状態;
 			base.b活性化してない = true;
 			base.list子Activities.Add( this.actStageFailed = new CAct演奏ステージ失敗() );
-            base.list子Activities.Add( this.actBPMBar = new CAct演奏GuitarBPMバー() );
-			base.list子Activities.Add( this.actDANGER = new CAct演奏GuitarDanger() );
+            base.list子Activities.Add( this.actBPMBar = new CAct演奏GuitarBPMバーGD() );
+			base.list子Activities.Add( this.actDANGER = new CAct演奏GuitarDangerGD() );
 			base.list子Activities.Add( this.actAVI = new CAct演奏AVI() );
 			base.list子Activities.Add( this.actBGA = new CAct演奏BGA() );
 			base.list子Activities.Add( this.actPanel = new CAct演奏パネル文字列() );
 			base.list子Activities.Add( this.act譜面スクロール速度 = new CAct演奏スクロール速度() );
-			base.list子Activities.Add( this.actStatusPanels = new CAct演奏Guitarステータスパネル() );
-			base.list子Activities.Add( this.actWailingBonus = new CAct演奏GuitarWailingBonus() );
-			base.list子Activities.Add( this.actScore = new CAct演奏Guitarスコア() );
-			base.list子Activities.Add( this.actRGB = new CAct演奏GuitarRGB() );
-            base.list子Activities.Add( this.actLane = new CAct演奏Guitarレーン() );
-			base.list子Activities.Add( this.actLaneFlushGB = new CAct演奏GuitarレーンフラッシュGB() );
-			base.list子Activities.Add( this.actJudgeString = new CAct演奏Guitar判定文字列() );
-			base.list子Activities.Add( this.actGauge = new CAct演奏Guitarゲージ() );
-			base.list子Activities.Add( this.actCombo = new CAct演奏Guitarコンボ() );
-			base.list子Activities.Add( this.actChipFireGB = new CAct演奏Guitarチップファイア() );
+			base.list子Activities.Add( this.actStatusPanels = new CAct演奏GuitarステータスパネルGD() );
+			base.list子Activities.Add( this.actWailingBonus = new CAct演奏GuitarWailingBonus_GD() );
+			base.list子Activities.Add( this.actScore = new CAct演奏GuitarスコアGD() );
+			base.list子Activities.Add( this.actRGB = new CAct演奏GuitarRGB_GD() );
+            base.list子Activities.Add( this.actLane = new CAct演奏GuitarレーンGD() );
+			base.list子Activities.Add( this.actLaneFlushGB = new CAct演奏GuitarレーンフラッシュGB_GD() );
+			base.list子Activities.Add( this.actJudgeString = new CAct演奏Guitar判定文字列GD() );
+			base.list子Activities.Add( this.actGauge = new CAct演奏GuitarゲージGD() );
+			base.list子Activities.Add( this.actCombo = new CAct演奏GuitarコンボGD() );
+			base.list子Activities.Add( this.actChipFireGB = new CAct演奏GuitarチップファイアGD() );
 			base.list子Activities.Add( this.actPlayInfo = new CAct演奏演奏情報() );
 			base.list子Activities.Add( this.actFI = new CActFIFOBlack() );
 			base.list子Activities.Add( this.actFO = new CActFIFOBlack() );
@@ -246,7 +246,7 @@ namespace DTXMania
 
 		#region [ private ]
 		//-----------------
-        private CAct演奏Guitarレーン actLane;
+        private CAct演奏GuitarレーンGD actLane;
 
 		protected override E判定 tチップのヒット処理( long nHitTime, CDTX.CChip pChip, bool bCorrectLane )
 		{

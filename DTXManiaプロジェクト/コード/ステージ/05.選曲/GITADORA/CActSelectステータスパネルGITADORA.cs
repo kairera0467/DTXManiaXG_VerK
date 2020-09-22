@@ -336,7 +336,7 @@ namespace DTXMania
                                     //this.t大文字表示(73 + this.n本体X[ j ] + (i * 143), 19 + this.n本体Y[j] - y差分[i], string.Format("{0:0}", n難易度整数[i]));
                                     //this.t小文字表示(102 + this.n本体X[ j ] + (i * 143), 37 + this.n本体Y[j] - y差分[i], string.Format("{0,2:00}", n難易度小数[i]));
                                     //this.tx難易度数字XG.t2D描画(CDTXMania.app.Device, 94 + this.n本体X[j] + (i * 143), 51 + this.n本体Y[j] - y差分[i], new Rectangle(145, 54, 7, 8));
-                                    this.tレベル値の描画_中( 547, 626 - ( i * 60 ), string.Format("{0:0}", n難易度整数[i]) + "." + string.Format("{0,2:00}", n難易度小数[i]) );
+                                    this.tレベル値の描画_中( 547 - (j == 1 ? 236 : 0), 626 - ( i * 60 ), string.Format("{0:0}", n難易度整数[i]) + "." + string.Format("{0,2:00}", n難易度小数[i]) );
                                 }
                                 //else if ((this.str難易度ラベル[i] != null && !this.b現在選択中の曲に譜面がある[i][j]) || CDTXMania.stage選曲XG.r現在選択中の曲.eノード種別 == C曲リストノード.Eノード種別.RANDOM)
                                 //{
@@ -389,7 +389,7 @@ namespace DTXMania
                             //}
                             //-----------------
                             #endregion
-                            this.t難易度カーソル描画( 426, base.n現在選択中の曲の難易度 );
+                            this.t難易度カーソル描画( 426 - (j == 1 ? 236 : 0), base.n現在選択中の曲の難易度 );
 
                             if( CDTXMania.stage選曲GITADORA.r現在選択中の曲.eノード種別 == C曲リストノード.Eノード種別.SCORE )
                             {

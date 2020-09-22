@@ -64,7 +64,7 @@ namespace DTXMania
 
                 #region[ 曲名 ]
                 if( string.IsNullOrEmpty( CDTXMania.DTX.TITLE ) || ( !CDTXMania.bコンパクトモード && CDTXMania.ConfigIni.b曲名表示をdefのものにする ) )
-                    this.strTitle = CDTXMania.stage選曲.r現在選択中の曲.strタイトル;
+                    this.strTitle = CDTXMania.stage選曲GITADORA.r現在選択中の曲.strタイトル;
                 else
                     this.strTitle = CDTXMania.DTX.TITLE;
 

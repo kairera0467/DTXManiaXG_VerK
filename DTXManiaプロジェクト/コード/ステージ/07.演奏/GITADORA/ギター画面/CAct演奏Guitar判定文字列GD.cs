@@ -1292,7 +1292,7 @@ namespace DTXMania
                             int num5 = 0;
                             int num6 = 0;
                             
-                            int nJudgePosY = CDTXMania.stage演奏ギター画面.演奏判定ライン座標.n判定ラインY座標( E楽器パート.DRUMS, false, CDTXMania.ConfigIni.bReverse.Drums, false, true );
+                            int nJudgePosY = CDTXMania.stage演奏ギター画面GITADORA.演奏判定ライン座標.n判定ラインY座標( E楽器パート.DRUMS, false, CDTXMania.ConfigIni.bReverse.Drums, false, true );
                             base.iP_A = nJudgePosY - 189;
                             base.iP_B = nJudgePosY + 23;
 
@@ -1410,7 +1410,7 @@ namespace DTXMania
                             int num4 = 0;
                             int num5 = 0;
                             int num6 = 0;
-                            int nJudgePosY = CDTXMania.stage演奏ギター画面.演奏判定ライン座標.n判定ラインY座標( j == 13 ? E楽器パート.GUITAR : E楽器パート.BASS, false, CDTXMania.ConfigIni.bReverse.Drums, false, true );
+                            int nJudgePosY = CDTXMania.stage演奏ギター画面GITADORA.演奏判定ライン座標.n判定ラインY座標( j == 13 ? E楽器パート.GUITAR : E楽器パート.BASS, false, CDTXMania.ConfigIni.bReverse.Drums, false, true );
                             base.iP_A = nJudgePosY - 189;
                             base.iP_B = nJudgePosY + 23;
 							if( j == 13 )
