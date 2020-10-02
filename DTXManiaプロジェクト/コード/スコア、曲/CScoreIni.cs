@@ -1479,15 +1479,15 @@ namespace DTXMania
             #region[ ランク ]
             if ( retGame >= 95.0 ) {
                 nRank = (int)ERANK.SS;
-            } else if( retGame >= 0.80 ) {
+            } else if( retGame >= 80.0 ) {
                 nRank = (int)ERANK.S;
-            } else if( retGame >= 0.73 ) {
+            } else if( retGame >= 73.0 ) {
                 nRank = (int)ERANK.A;
-            } else if( retGame >= 0.63 ) {
+            } else if( retGame >= 63.0 ) {
                 nRank = (int)ERANK.B;
-            } else if( retGame >= 0.53 ) {
+            } else if( retGame >= 53.0 ) {
                 nRank = (int)ERANK.C;
-            } else if( retGame >= 0.45 ) {
+            } else if( retGame >= 45.0 ) {
                 nRank = (int)ERANK.D;
             } else {
                 nRank = (int)ERANK.E;
