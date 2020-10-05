@@ -541,9 +541,14 @@ namespace DTXMania
 		}
 		protected override void Update( GameTime gameTime )
 		{
+			if( !this.b起動完了済み )
+				return;
 		}
 		protected override void Draw( GameTime gameTime )
 		{
+			if( !this.b起動完了済み )
+				return;
+
 			Sound管理.t再生中の処理をする();
 
 			if( Timer != null )
@@ -1979,6 +1984,7 @@ for (int i = 0; i < 3; i++) {
 			}
 		}
 		private CSound previewSound;
+		private bool b起動完了済み = false;
 
 		private void t起動処理()
 		{
@@ -2605,6 +2611,8 @@ for (int i = 0; i < 3; i++) {
 			r現在のステージ.On活性化();
 			//---------------------
 			#endregion
+
+			this.b起動完了済み = true;
 		}
 
 		public void ShowWindowTitleWithSoundType()
