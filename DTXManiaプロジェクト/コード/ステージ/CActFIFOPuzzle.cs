@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
+using SharpDX.Animation;
 using FDK;
 
 using SlimDXKey = SlimDX.DirectInput.Key;
@@ -27,9 +28,26 @@ namespace DTXMania
 			this.counter.n現在の値 = this.counter.n終了値;
 		}
 
-		// CActivity 実装
+        public void tフェードアウト開始WAM()
+        {
+            this.mode = EFIFOモード.フェードアウト;
 
-		public override void On非活性化()
+            #region[ Storyboardの構築 ]
+            float f速度倍率 = 1.0f;
+            double dコマ秒 = 0.016;
+            double 秒(double v) => ( v / f速度倍率 );
+            var animation = CDTXMania.AnimationManager;
+
+            C図形 図形 = this._図形[ 0 ];
+
+
+
+            #endregion
+        }
+
+        // CActivity 実装
+
+        public override void On非活性化()
 		{
 			if( !base.b活性化してない )
 			{
@@ -242,6 +260,54 @@ namespace DTXMania
         CTexture tx青色;
         CTexture tx群青;
         CTexture tx黒;
+
+        protected C図形[] _図形 = new C図形[ 14 ];
+
+        protected class C図形 : IDisposable
+        {
+            public Variable var画像中心位置X;
+            public Variable var画像中心位置Y;
+            public Variable var画像Z軸回転度;
+            public Storyboard _ストーリーボード;
+            
+            public void Dispose()
+            {
+                this._ストーリーボード?.Abandon();
+                this._ストーリーボード = null;
+
+                this.var画像中心位置X?.Dispose();
+                this.var画像中心位置X = null;
+
+                this.var画像中心位置Y?.Dispose();
+                this.var画像中心位置Y = null;
+
+                this.var画像Z軸回転度?.Dispose();
+                this.var画像Z軸回転度 = null;
+            }
+        }
+
+        protected class Cタイトルロゴ : IDisposable
+        {
+            public Variable var画像中心位置X;
+            public Variable var画像中心位置Y;
+            public Variable var画像不透明度;
+            public Storyboard _ストーリーボード;
+
+            public void Dispose()
+            {
+                this._ストーリーボード?.Abandon();
+                this._ストーリーボード = null;
+
+                this.var画像中心位置X?.Dispose();
+                this.var画像中心位置X = null;
+
+                this.var画像中心位置Y?.Dispose();
+                this.var画像中心位置Y = null;
+
+                this.var画像不透明度?.Dispose();
+                this.var画像不透明度 = null;
+            }
+        }
         #endregion
     }
 }

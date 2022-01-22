@@ -446,7 +446,6 @@ namespace DTXMania
 							#endregion
 						}
 					}
-
                     this.actSelectFO決定.On進行描画();
 					#region [ ESC ]
 					if( CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDXKey.F7 ) )
@@ -454,8 +453,9 @@ namespace DTXMania
                         this.actSelectFO決定.tフェードアウト開始();
 					}
 					#endregion
-                    
-                    {
+
+#if DEBUG
+					{
                         //Debug
                         //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDXKey.F5 ) )
                         //{
@@ -469,13 +469,16 @@ namespace DTXMania
                         //        CDTXMania.Skin.sound変更音.t再生する();
                         //        CDTXMania.Skin.CreateShutterList();
                         //}
-                        //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDXKey.F9 ) )
-                        //{
-                        //        Debug.WriteLine( "[Test]シャッター画像のリスト生成＆呼び出し" );
-                        //        CDTXMania.Skin.sound変更音.t再生する();
-                        //        CDTXMania.Skin.arGetShutterName();
-                        //}
+						this.actFIFOPuzzle.On進行描画();
+                        if( CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDXKey.F9 ) )
+                        {
+                            //Debug.WriteLine( "[Test]シャッター画像のリスト生成＆呼び出し" );
+                            //CDTXMania.Skin.sound変更音.t再生する();
+                            //CDTXMania.Skin.arGetShutterName();
+							this.actFIFOPuzzle.tフェードアウト開始WAM();
+                        }
                     }
+#endif
 					this.actSortSongs.t進行描画();
 					this.actQuickConfig.t進行描画();
 				}
@@ -488,5 +491,7 @@ namespace DTXMania
         private CTexture tx背景_決定後;
 		private CTexture txFLIP;
         protected CActSelectFO曲決定 actSelectFO決定;
+
+		protected CActFIFOPuzzle actFIFOPuzzle;
     }
 }

@@ -108,6 +108,16 @@ namespace DTXMania
                 CDTXMania.t安全にDisposeする( ref b白線 );
                 CDTXMania.t安全にDisposeする( ref g白線 );
                 #endregion
+                #region[ 達成率ゲージ中身の生成]
+                Bitmap b = new Bitmap( 202, 14 );
+                Graphics g = Graphics.FromImage( b );
+                g.DrawImage( CDTXMania.tテクスチャをImageで読み込む( CSkin.Path( @"Graphics\8_Gauge.png" ) ),
+                        new Rectangle(0, 0, 202, 11), new Rectangle(8, 18, 204, 11), GraphicsUnit.Pixel
+                    );
+                this.txゲージ中身 = new CTexture( CDTXMania.app.Device, b, CDTXMania.TextureFormat, false );
+                b?.Dispose();
+                g?.Dispose();
+                #endregion
                 base.OnManagedリソースの作成();
 			}
 		}
@@ -161,21 +171,29 @@ namespace DTXMania
 			{
                 if( this.n本体X[ i ] != 0 )
                 {
+                    double rate = CDTXMania.stage結果.st演奏記録[ i ].db演奏型スキル値;
+
                     this.tレベル値の描画( 1078, 159, CDTXMania.DTX.LEVEL.Drums, CDTXMania.DTX.LEVELDEC.Drums );
                     this.tx白線?.t2D描画( CDTXMania.app.Device, 916, 215 );
 
                     //this.t特大文字表示( 1080, 260, string.Format("{0,-6:##0.00%}", CDTXMania.stage結果.st演奏記録[ i ].db演奏型スキル値 / 100.0 ) );
-                    this.t達成率値の描画( 1040, 232, CDTXMania.stage結果.st演奏記録[ i ].db演奏型スキル値 );
+                    this.t達成率値の描画( 1040, 232, rate );
                     this.tx白線?.t2D描画( CDTXMania.app.Device, 890, 288 );
 
                     //this.t特大文字表示( 1020, 370, string.Format("{0,6:##0.00}", CDTXMania.stage結果.st演奏記録[i].dbゲーム型スキル値));
-                    this.tスキル値の描画(976, 328, CDTXMania.stage結果.st演奏記録[ i ].dbゲーム型スキル値 );
+                    this.tスキル値の描画( 976, 328, CDTXMania.stage結果.st演奏記録[ i ].dbゲーム型スキル値 );
                     this.tx白線?.t2D描画( CDTXMania.app.Device, 842, 416 );
+
+                    this.txゲージ?.t2D描画( CDTXMania.app.Device, 977, 398, new Rectangle( 0, 0, 220, 16 ) );
+
+                    this.txゲージ中身.t2D描画( CDTXMania.app.Device, 985, 400, new Rectangle( 0, 0, (int)(203.0f * (rate / 100.0f) ), 11) );
 
                     // 各項目の文字
                     this.tx項目文字列?.t2D描画( CDTXMania.app.Device, 847, 381, new Rectangle( 0, 0, 128, 32 ) );
                     this.tx項目文字列?.t2D描画( CDTXMania.app.Device, 895, 254, new Rectangle( 0, 32, 96, 32 ) );
                     this.tx項目文字列?.t2D描画( CDTXMania.app.Device, 917, 181, new Rectangle( 0, 64, 96, 32 ) );
+
+                    this.tx項目文字列?.t2D描画( CDTXMania.app.Device, 1190, 397, new Rectangle( 0, 96, 32, 14 ) );
                 }
 			}
 
@@ -259,6 +277,7 @@ namespace DTXMania
         private CTexture tx難易度パネル;
         private CTexture txレベル数字;
         private CTexture txゲージ;
+        private CTexture txゲージ中身;
         private CTexture txゲージ2;
 		private CTexture[] tx文字 = new CTexture[ 3 ];
         private CTexture txスキル数字_整数;
