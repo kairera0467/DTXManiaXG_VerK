@@ -121,11 +121,6 @@ namespace DTXMania
                 this.txジャケットパネル背景 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_JacketPanel Background.png" ) );
                 this.txジャケットパネル枠 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_Jacket sensor.png" ) );
 
-                this.tx水色 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\FIFO Tile lightblue.png" ) );
-                this.tx黒 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\FIFO Tile black.png" ) );
-                this.tx青色 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\FIFO Tile blue.png" ) );
-                this.tx群青 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\FIFO Tile darkblue.png" ) );
-
                 this.txクリアランプ = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_Clearlamp.png" ) );
 
                 //this.tx曲名バー.Score = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_bar score.png" ), false );
@@ -228,11 +223,6 @@ namespace DTXMania
             CDTXMania.tテクスチャの解放( ref this.txジャケットパネル背景 );
             CDTXMania.tテクスチャの解放( ref this.txジャケットパネル枠 );
             CDTXMania.tテクスチャの解放( ref this.tx選択中のアーティスト名テクスチャ );
-
-            CDTXMania.tテクスチャの解放( ref this.tx水色 );
-            CDTXMania.tテクスチャの解放( ref this.tx黒 );
-            CDTXMania.tテクスチャの解放( ref this.tx青色 );
-            CDTXMania.tテクスチャの解放( ref this.tx群青 );
 
             CDTXMania.tテクスチャの解放( ref this.txクリアランプ );
 
@@ -551,10 +541,10 @@ namespace DTXMania
 				//-----------------
 				#endregion
 
-                if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F8 ) )
-                {
-                    this.tTextureCacheClear();
-                }
+                //if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F8 ) )
+                //{
+                //    this.tTextureCacheClear();
+                //}
 			}
 
 
@@ -921,12 +911,6 @@ namespace DTXMania
 			#region [ アイテム数の描画 #27648 ]
 			tアイテム数の描画();
             #endregion
-
-            if( CDTXMania.Input管理.Keyboard.bキーが押されている( (int)SlimDXKey.F7 ) )
-            {
-                this.tPuzzleFIFOTest();
-            }
-
             #region [ スクロール地点の計算(描画はCActSelectShowCurrentPositionにて行う) #27648 ]
             int py;
 			double d = 0;
@@ -1003,78 +987,7 @@ namespace DTXMania
         //protected Dictionary<string, CTexture> dicThumbnail = new Dictionary<string, CTexture>();
         protected Dictionary<string, CTexture> dicMusicName = new Dictionary<string, CTexture>();
         #endregion
-
-        #region[ 図形描画用 ]
-        CTexture tx水色;
-        CTexture tx青色;
-        CTexture tx群青;
-        CTexture tx黒;
-        #endregion
-
         #region[ 描画サブ ]
-        private void tPuzzleFIFOTest()
-        {
-            if( this.tx水色 != null && this.tx黒 != null )
-            {
-                //14 群青(右)
-                this.tx群青.fZ軸中心回転 = C変換.DegreeToRadian( 90 );
-                this.tx群青.t2D描画( CDTXMania.app.Device, 401, 206 );
-
-                //13 青(左)
-                this.tx青色.fZ軸中心回転 = C変換.DegreeToRadian( 90 );
-                this.tx青色.t2D描画( CDTXMania.app.Device, 79, 206 );
-
-                //12 水色(左上)
-                this.tx水色.fZ軸中心回転 = C変換.DegreeToRadian( 45 );
-                this.tx水色.t2D描画( CDTXMania.app.Device, 0, 48 );
-
-                //11 黒(左下)
-                this.tx黒.fZ軸中心回転 = C変換.DegreeToRadian( -45 );
-                this.tx黒.t2D描画( CDTXMania.app.Device, -10, 422 );
-
-                //10 青(上)
-                this.tx青色.fZ軸中心回転 = C変換.DegreeToRadian( 0 );
-                this.tx青色.t2D描画( CDTXMania.app.Device, 0, -224 );
-
-                //9 黒(下)
-                this.tx黒.fZ軸中心回転 = 0;
-                this.tx黒.t2D描画( CDTXMania.app.Device, 300, 609 );
-
-                //8 黒(右上)
-                this.tx黒.fZ軸中心回転 = C変換.DegreeToRadian( -45 );
-                this.tx黒.t2D描画( CDTXMania.app.Device, 465, -23 );
-
-                //7 水色(右下)
-                this.tx水色.t2D描画( CDTXMania.app.Device, 646, 416 );
-
-                //6 黒(右)
-                this.tx黒.fZ軸中心回転 = C変換.DegreeToRadian( 90 );
-                this.tx黒.t2D描画( CDTXMania.app.Device, 820, 206 );
-
-                //5 群青(左)
-                this.tx群青.fZ軸中心回転 = C変換.DegreeToRadian( 90 );
-                this.tx群青.t2D描画( CDTXMania.app.Device, -223, 196 );
-
-                //4 青(右下)
-                this.tx青色.fZ軸中心回転 = C変換.DegreeToRadian( 45 );
-                this.tx青色.t2D描画( CDTXMania.app.Device, 836, 422 );
-
-                //3 黒(左上)
-                this.tx黒.fZ軸中心回転 = C変換.DegreeToRadian( 45 );
-                this.tx黒.t2D描画( CDTXMania.app.Device, -309, -23 );
-
-                //2 群青(右上)
-                this.tx群青.fZ軸中心回転 = C変換.DegreeToRadian( -45 );
-                this.tx群青.t2D描画( CDTXMania.app.Device, 854, -24 );
-
-                //1 水色(左下)
-                this.tx水色.fZ軸中心回転 = C変換.DegreeToRadian( -45 );
-                this.tx水色.t2D描画( CDTXMania.app.Device, -306, 416 );
-            }
-        }
-
-
-        //なんとなくメソッド化してみる
         protected void tSongNotFound()
         {
 			if( this.bIsEnumeratingSongs )

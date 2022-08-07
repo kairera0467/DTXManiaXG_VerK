@@ -21,7 +21,11 @@ namespace DTXMania
             base.list子Activities.Add( this.act曲リスト = new CActSelect曲リストGITADORA() );
             base.list子Activities.Add( this.actShowCurrentPosition = new CActSelectShowCurrentPositionGITADORA() );
             base.list子Activities.Add( this.actSelectFO決定 = new CActSelectFO曲決定() );
-        }
+#if DEBUG
+			base.list子Activities.Add( this.actFIFOPuzzle = new CActFIFOPuzzle() );
+			base.list子Activities.Add( this.actFIFOFade = new CActFIFOFade() );
+#endif
+		}
         
         public override void OnManagedリソースの作成()
         {
@@ -469,13 +473,14 @@ namespace DTXMania
                         //        CDTXMania.Skin.sound変更音.t再生する();
                         //        CDTXMania.Skin.CreateShutterList();
                         //}
-						this.actFIFOPuzzle.On進行描画();
+						this.actFIFOFade.On進行描画();
+                        if( CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDXKey.F8 ) )
+                        {
+							//this.actFIFOFade.tフェードアウト開始WAM();
+                        }
                         if( CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDXKey.F9 ) )
                         {
-                            //Debug.WriteLine( "[Test]シャッター画像のリスト生成＆呼び出し" );
-                            //CDTXMania.Skin.sound変更音.t再生する();
-                            //CDTXMania.Skin.arGetShutterName();
-							this.actFIFOPuzzle.tフェードアウト開始WAM();
+							this.actFIFOFade.tフェードアウト開始WAM();
                         }
                     }
 #endif
@@ -493,5 +498,6 @@ namespace DTXMania
         protected CActSelectFO曲決定 actSelectFO決定;
 
 		protected CActFIFOPuzzle actFIFOPuzzle;
-    }
+		protected CActFIFOFade actFIFOFade;
+	}
 }

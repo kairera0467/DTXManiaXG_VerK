@@ -30,6 +30,7 @@ namespace DTXMania
 			//this.actFont = font = new CActDFPFont();
 			//base.list子Activities.Add( font );
 			base.list子Activities.Add( this.actFIFO = new CActFIFOWhite() );
+			base.list子Activities.Add( this.actFIFOpuzzle = new CActFIFOPuzzle() );
 			base.list子Activities.Add( this.actKeyAssign = new CActConfigKeyAssign() );
 			base.list子Activities.Add( this.actオプションパネル = new CActオプションパネル() );
 			base.b活性化してない = true;
@@ -161,7 +162,22 @@ namespace DTXMania
 			if( base.b初めての進行描画 )
 			{
 				base.eフェーズID = CStage.Eフェーズ.共通_フェードイン;
-				this.actFIFO.tフェードイン開始();
+				if( CDTXMania.bXGRelease )
+                {
+					this.actFIFO.tフェードイン開始();
+                }
+				else
+                {
+					if( CDTXMania.r直前のステージ.eステージID == Eステージ.タイトル )
+                    {
+						this.actFIFOpuzzle.tフェードイン開始WAM();
+                    }
+					else
+                    {
+						this.actFIFO.tフェードイン開始();
+                    }
+                }
+
 				base.b初めての進行描画 = false;
 			}
 
@@ -252,18 +268,60 @@ namespace DTXMania
 			switch( base.eフェーズID )
 			{
 				case CStage.Eフェーズ.共通_フェードイン:
-					if( this.actFIFO.On進行描画() != 0 )
-					{
-						CDTXMania.Skin.bgmコンフィグ画面.t再生する();
-						base.eフェーズID = CStage.Eフェーズ.共通_通常状態;
+					if( CDTXMania.bXGRelease )
+                    {
+						if (this.actFIFO.On進行描画() != 0)
+						{
+							CDTXMania.Skin.bgmコンフィグ画面.t再生する();
+							base.eフェーズID = CStage.Eフェーズ.共通_通常状態;
+						}
 					}
+					else
+                    {
+						if ( CDTXMania.r直前のステージ.eステージID == Eステージ.タイトル )
+                        {
+							if( this.actFIFOpuzzle.On進行描画() != 0 )
+							{
+								CDTXMania.Skin.bgmコンフィグ画面.t再生する();
+								base.eフェーズID = CStage.Eフェーズ.共通_通常状態;
+							}
+                        }
+						else
+                        {
+							if( this.actFIFO.On進行描画() != 0 )
+							{
+								CDTXMania.Skin.bgmコンフィグ画面.t再生する();
+								base.eフェーズID = CStage.Eフェーズ.共通_通常状態;
+							}
+                        }
+                    }
 					break;
 
 				case CStage.Eフェーズ.共通_フェードアウト:
-					if( this.actFIFO.On進行描画() == 0 )
-					{
-						break;
+					if( CDTXMania.bXGRelease )
+                    {
+						if (this.actFIFO.On進行描画() != 0)
+						{
+							break;
+						}
 					}
+					else
+                    {
+						if ( CDTXMania.r直前のステージ.eステージID == Eステージ.タイトル )
+                        {
+							if( this.actFIFOpuzzle.On進行描画() == 0 )
+							{
+								break;
+							}
+                        }
+						else
+                        {
+							if( this.actFIFO.On進行描画() != 0 )
+							{
+								break;
+							}
+                        }
+                    }
 					return 1;
 			}
 			//---------------------
@@ -302,8 +360,16 @@ namespace DTXMania
 					}
 					else
 					{
-						this.actFIFO.tフェードアウト開始();
-						base.eフェーズID = CStage.Eフェーズ.共通_フェードアウト;
+						if ( CDTXMania.bXGRelease || CDTXMania.r直前のステージ.eステージID != Eステージ.タイトル )
+                        {
+							this.actFIFO.tフェードアウト開始();
+							base.eフェーズID = CStage.Eフェーズ.共通_フェードアウト;
+                        }
+						else if ( CDTXMania.r直前のステージ.eステージID == Eステージ.タイトル )
+                        {
+							this.actFIFOpuzzle.tフェードアウト開始WAM();
+							base.eフェーズID = CStage.Eフェーズ.共通_フェードアウト;
+						}
 					}
 				}
 				#region [ ← ]
@@ -337,7 +403,14 @@ namespace DTXMania
 					if ( this.n現在のメニュー番号 == 4 )
 					{
 						CDTXMania.Skin.sound決定音.t再生する();
-						this.actFIFO.tフェードアウト開始();
+						if ( CDTXMania.bXGRelease || CDTXMania.r直前のステージ.eステージID != Eステージ.タイトル )
+                        {
+							this.actFIFO.tフェードアウト開始();
+						}
+						else
+                        {
+							this.actFIFOpuzzle.tフェードアウト開始WAM();
+                        }
 						base.eフェーズID = CStage.Eフェーズ.共通_フェードアウト;
 					}
 					#endregion
@@ -468,6 +541,7 @@ namespace DTXMania
 		}
 
 		private CActFIFOWhite actFIFO;
+		private CActFIFOPuzzle actFIFOpuzzle;
 		private CActConfigKeyAssign actKeyAssign;
         private CActConfigList共通 actList;
 		private CActオプションパネル actオプションパネル;

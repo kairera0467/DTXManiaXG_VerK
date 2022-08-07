@@ -29,8 +29,8 @@ namespace DTXMania
         {
             if( !base.b活性化してない )
             {
-                string strSongName = "";
-                string strArtistName = "";
+                string strSongName;
+                string strArtistName;
 
                 if ( string.IsNullOrEmpty( CDTXMania.DTX.TITLE ) || ( !CDTXMania.bコンパクトモード && CDTXMania.ConfigIni.b曲名表示をdefのものにする ) )
                     strSongName = CDTXMania.stage選曲GITADORA.r確定された曲.strタイトル;
@@ -444,6 +444,9 @@ namespace DTXMania
                     this.t判定率文字描画( -435, 17,  nowtotal == 0 ? "  0%" : string.Format("{0,3:##0}%", (CDTXMania.stage演奏ドラム画面GITADORA.nヒット数_Auto含む.Drums.Poor / (float)nowtotal) * 100.0f )  );
                     this.t判定率文字描画( -435, -13, nowtotal == 0 ? "  0%" : string.Format("{0,3:##0}%", (CDTXMania.stage演奏ドラム画面GITADORA.nヒット数_Auto含む.Drums.Miss / (float)nowtotal) * 100.0f )  );
                     this.t判定率文字描画( -435, -43, nowtotal == 0 ? "  0%" : string.Format("{0,3:##0}%", (CDTXMania.stage演奏ドラム画面GITADORA.actCombo.n現在のコンボ数.Drums最高値 / (float)nowtotal) * 100.0f )  );
+
+                    // 達成率
+
                 }
 #endregion
 
@@ -499,66 +502,66 @@ namespace DTXMania
                                 }
                 #endregion
                 #region[ スコア表示 ]
-                                this.n表示スコア.Drums = (long)CDTXMania.stage演奏ドラム画面GITADORA.actScore.n現在表示中のスコア.Drums;
-                                if( CDTXMania.ConfigIni.eSkillMode == ESkillType.DTXMania )
-                                {
-                                    //string str = this.n表示スコア.Drums.ToString("0000000000");
-                                    //for (int i = 0; i < 10; i++)
-                                    //{
-                                    //    Rectangle rectangle;
-                                    //    char ch = str[i];
-                                    //    if (ch.Equals(' '))
-                                    //    {
-                                    //        rectangle = new Rectangle(0, 0, 32, 36);
-                                    //    }
-                                    //    else
-                                    //    {
-                                    //        int num3 = int.Parse(str.Substring(i, 1));
-                                    //        rectangle = new Rectangle((num3 * 36), 0, 36, 50);
-                                    //    }
-                                    //    if (this.txScore != null)
-                                    //    {
-                                    //        SlimDX.Matrix matScoreXG = SlimDX.Matrix.Identity;
-                                    //        matScoreXG *= SlimDX.Matrix.Translation(-1370 + (i * 30), 50 + CDTXMania.stage演奏ドラム画面GITADORA.actScore.x位置[i].Drums, 0);
-                                    //        matScoreXG *= SlimDX.Matrix.Scaling(0.3f, 0.62f, 1f);
-                                    //        matScoreXG *= SlimDX.Matrix.RotationY(-0.8f);
-                                    //        this.txScore.t3D描画(CDTXMania.app.Device, matScoreXG, rectangle);
-                                    //    }
-                                    //}
-                                }
-                                else if( CDTXMania.ConfigIni.eSkillMode == ESkillType.XG )
-                                {
-                                    // 2019.1.12 kairera0467
-                                    // とりあえずXGスコア計算時のみ表示
-                                    if( this.txScore != null )
-                                    {
-                                        string str = string.Format("{0,7:######0}", this.n表示スコア.Drums);
-                                        for( int i = 0; i < 7; i++ )
-                                        {
-                                            Rectangle rectangle;
-                                            char ch = str[i];
-                                            if (ch.Equals(' '))
-                                            {
-                                                rectangle = new Rectangle(0, 0, 0, 0);
-                                            }
-                                            else
-                                            {
-                                                int num3 = int.Parse(str.Substring(i, 1));
-                                                rectangle = new Rectangle((num3 * 36), 0, 36, 50);
-                                            }
-                                            Matrix matScoreXG = Matrix.Identity;
-                                            matScoreXG *= Matrix.Scaling(0.6f, 1.1f, 1f);
-                                            matScoreXG *= Matrix.RotationY(C変換.DegreeToRadian(-40));
-                                            matScoreXG *= Matrix.Translation(-522 + (i * 14), 237 + CDTXMania.stage演奏ドラム画面GITADORA.actScore.x位置[i].Drums, i * 14);
-                                            this.txScore.t3D描画(CDTXMania.app.Device, matScoreXG, rectangle);
-                                        }
-                                        Matrix matScoreTxt = Matrix.Identity;
-                                        matScoreTxt *= Matrix.Scaling(0.6f, 1.5f, 1f);
-                                        matScoreTxt *= Matrix.RotationY(C変換.DegreeToRadian(-40));
-                                        matScoreTxt *= Matrix.Translation(-494f, 282f, 0);
-                                        this.txScore.t3D描画(CDTXMania.app.Device, matScoreTxt, new Rectangle( 0, 50, 88, 28 ));
-                                    }
-                                }
+                this.n表示スコア.Drums = (long)CDTXMania.stage演奏ドラム画面GITADORA.actScore.n現在表示中のスコア.Drums;
+                if( CDTXMania.ConfigIni.eSkillMode == ESkillType.DTXMania )
+                {
+                    //string str = this.n表示スコア.Drums.ToString("0000000000");
+                    //for (int i = 0; i < 10; i++)
+                    //{
+                    //    Rectangle rectangle;
+                    //    char ch = str[i];
+                    //    if (ch.Equals(' '))
+                    //    {
+                    //        rectangle = new Rectangle(0, 0, 32, 36);
+                    //    }
+                    //    else
+                    //    {
+                    //        int num3 = int.Parse(str.Substring(i, 1));
+                    //        rectangle = new Rectangle((num3 * 36), 0, 36, 50);
+                    //    }
+                    //    if (this.txScore != null)
+                    //    {
+                    //        SlimDX.Matrix matScoreXG = SlimDX.Matrix.Identity;
+                    //        matScoreXG *= SlimDX.Matrix.Translation(-1370 + (i * 30), 50 + CDTXMania.stage演奏ドラム画面GITADORA.actScore.x位置[i].Drums, 0);
+                    //        matScoreXG *= SlimDX.Matrix.Scaling(0.3f, 0.62f, 1f);
+                    //        matScoreXG *= SlimDX.Matrix.RotationY(-0.8f);
+                    //        this.txScore.t3D描画(CDTXMania.app.Device, matScoreXG, rectangle);
+                    //    }
+                    //}
+                }
+                else if( CDTXMania.ConfigIni.eSkillMode == ESkillType.XG )
+                {
+                    // 2019.1.12 kairera0467
+                    // とりあえずXGスコア計算時のみ表示
+                    if( this.txScore != null )
+                    {
+                        string str = string.Format("{0,7:######0}", this.n表示スコア.Drums);
+                        for( int i = 0; i < 7; i++ )
+                        {
+                            Rectangle rectangle;
+                            char ch = str[i];
+                            if (ch.Equals(' '))
+                            {
+                                rectangle = new Rectangle(0, 0, 0, 0);
+                            }
+                            else
+                            {
+                                int num3 = int.Parse(str.Substring(i, 1));
+                                rectangle = new Rectangle((num3 * 36), 0, 36, 50);
+                            }
+                            Matrix matScoreXG = Matrix.Identity;
+                            matScoreXG *= Matrix.Scaling(0.6f, 1.1f, 1f);
+                            matScoreXG *= Matrix.RotationY(C変換.DegreeToRadian(-40));
+                            matScoreXG *= Matrix.Translation(-522 + (i * 14), 237 + CDTXMania.stage演奏ドラム画面GITADORA.actScore.x位置[i].Drums, i * 14);
+                            this.txScore.t3D描画(CDTXMania.app.Device, matScoreXG, rectangle);
+                        }
+                        Matrix matScoreTxt = Matrix.Identity;
+                        matScoreTxt *= Matrix.Scaling(0.6f, 1.5f, 1f);
+                        matScoreTxt *= Matrix.RotationY(C変換.DegreeToRadian(-40));
+                        matScoreTxt *= Matrix.Translation(-494f, 282f, 0);
+                        this.txScore.t3D描画(CDTXMania.app.Device, matScoreTxt, new Rectangle( 0, 50, 88, 28 ));
+                    }
+                }
                 #endregion
             }
             return 0;
@@ -568,7 +571,7 @@ namespace DTXMania
 
         // その他
 
-#region [ private ]
+        #region [ private ]
         //-----------------
         private Bitmap b4font;
         private Bitmap bNamePlate;
@@ -684,6 +687,34 @@ namespace DTXMania
                 this.tx判定数数字.t3D描画(CDTXMania.app.Device, matScoreXG, rectangle);
             }
         }
-#endregion
+
+        private void t達成率文字描画(float x, float y, string str)
+        {
+            // TODO: MAX表記
+            for (int i = 0; i < 7; i++)
+            {
+                Rectangle rectangle;
+                char ch = str[i];
+                if (ch.Equals(' '))
+                {
+                    rectangle = new Rectangle(0, 0, 0, 0);
+                }
+                else if (ch.Equals('.'))
+                {
+                    rectangle = new Rectangle(0, 0, 0, 0);
+                }
+                else
+                {
+                    int num3 = int.Parse(str.Substring(i, 1));
+                    rectangle = new Rectangle((num3 * 20), 0, 20, 26);
+                }
+                Matrix matScoreXG = Matrix.Identity;
+                matScoreXG *= Matrix.Scaling(0.45f, 0.8f, 1f);
+                matScoreXG *= Matrix.RotationY(C変換.DegreeToRadian(-40));
+                matScoreXG *= Matrix.Translation(x + (i * 6), y, 28 + i * 6);
+                this.tx判定数数字.t3D描画(CDTXMania.app.Device, matScoreXG, rectangle);
+            }
+        }
+        #endregion
     }
 }

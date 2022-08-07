@@ -165,6 +165,8 @@
     <Compile Include="コード\ステージ\08.結果\GITADORA\CActResultRankGD.cs" />
     <Compile Include="コード\ステージ\08.結果\XG\CActResultParameterPanelXG.cs" />
     <Compile Include="コード\ステージ\08.結果\XG\CActResultRankXG.cs" />
+    <Compile Include="コード\ステージ\CActFIFOSpin.cs" />
+    <Compile Include="コード\ステージ\CActFIFOFade.cs" />
     <Compile Include="コード\ステージ\CActFIFOPuzzle.cs" />
     <Compile Include="コード\アイテム\CItemBase.cs" />
     <Compile Include="コード\アイテム\CItemInteger.cs" />

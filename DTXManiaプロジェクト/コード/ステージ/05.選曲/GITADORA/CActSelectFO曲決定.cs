@@ -74,7 +74,7 @@ namespace DTXMania
 					}
 				}
 			}
-
+            return 0;
 
 			if( CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDXKey.F3 ) )
 			{
@@ -214,9 +214,9 @@ namespace DTXMania
                 }
 
             }
-            this.counter.t進行();
+            //this.counter.t進行();
 
-            CDTXMania.act文字コンソール.tPrint( 0, 0, C文字コンソール.Eフォント種別.白, this.counter.n現在の値.ToString() );
+            //CDTXMania.act文字コンソール.tPrint( 0, 0, C文字コンソール.Eフォント種別.白, this.counter.n現在の値.ToString() );
 
             if ( this.counter.n現在の値 != 100 )
 			{

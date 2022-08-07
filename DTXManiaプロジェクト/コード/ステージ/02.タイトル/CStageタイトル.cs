@@ -22,6 +22,7 @@ namespace DTXMania
 			base.list子Activities.Add( this.actFIfromSetup = new CActFIFOWhite() );
 			base.list子Activities.Add( this.actFI = new CActFIFOWhite() );
 			base.list子Activities.Add( this.actFO = new CActFIFOWhite() );
+			base.list子Activities.Add( this.actFOpuzzle = new CActFIFOPuzzle() );
 		}
 
 
@@ -102,6 +103,11 @@ namespace DTXMania
 						this.actFIfromSetup.tフェードイン開始();
 						base.eフェーズID = CStage.Eフェーズ.タイトル_起動画面からのフェードイン;
 					}
+					else if ( CDTXMania.r直前のステージ == CDTXMania.stageコンフィグ && !CDTXMania.bXGRelease )
+                    {
+						this.actFOpuzzle.tフェードイン開始WAM();
+						base.eフェーズID = CStage.Eフェーズ.共通_フェードイン;
+					}
 					else
 					{
 						this.actFI.tフェードイン開始();
@@ -177,7 +183,15 @@ namespace DTXMania
 						{
 							return (int) E戻り値.EXIT;
 						}
-						this.actFO.tフェードアウト開始();
+
+						if ( this.n現在のカーソル行 == (int) E戻り値.CONFIG - 1 && !CDTXMania.bXGRelease )
+                        {
+							this.actFOpuzzle.tフェードアウト開始WAM();
+                        }
+						else
+                        {
+							this.actFO.tフェードアウト開始();
+                        }
 						base.eフェーズID = CStage.Eフェーズ.共通_フェードアウト;
 					}
 					//					if ( CDTXMania.Input管理.Keyboard.bキーが押された( (int) Key.Space ) )
@@ -242,18 +256,43 @@ namespace DTXMania
 				switch ( eフェーズid )
 				{
 					case CStage.Eフェーズ.共通_フェードイン:
-						if ( this.actFI.On進行描画() != 0 )
-						{
-							CDTXMania.Skin.soundタイトル音.t再生する();
-							base.eフェーズID = CStage.Eフェーズ.共通_通常状態;
-						}
+						if ( CDTXMania.r直前のステージ.eステージID == Eステージ.コンフィグ )
+                        {
+							if (this.actFOpuzzle.On進行描画() != 0)
+							{
+								CDTXMania.Skin.soundタイトル音.t再生する();
+								base.eフェーズID = CStage.Eフェーズ.共通_通常状態;
+							}
+                        }
+						else
+                        {
+							if ( this.actFI.On進行描画() != 0 )
+							{
+								CDTXMania.Skin.soundタイトル音.t再生する();
+								base.eフェーズID = CStage.Eフェーズ.共通_通常状態;
+							}
+                        }
 						break;
 
 					case CStage.Eフェーズ.共通_フェードアウト:
-						if ( this.actFO.On進行描画() == 0 )
-						{
-							break;
-						}
+						if (CDTXMania.bXGRelease)
+                        {
+							if ( this.actFO.On進行描画() == 0 )
+							{
+								break;
+							}
+                        }
+						else
+                        {
+							if ( this.n現在のカーソル行 != (int)E戻り値.CONFIG - 1 && this.actFO.On進行描画() == 0 )
+							{
+								break;
+							}
+							else if ( this.n現在のカーソル行 == (int)E戻り値.CONFIG - 1 && this.actFOpuzzle.On進行描画() == 0 )
+							{
+								break;
+							}
+                        }
 						base.eフェーズID = CStage.Eフェーズ.共通_終了状態;
 						switch ( this.n現在のカーソル行 )
 						{
@@ -350,6 +389,7 @@ namespace DTXMania
 		private CActFIFOWhite actFI;
 		private CActFIFOWhite actFIfromSetup;
 		private CActFIFOWhite actFO;
+		private CActFIFOPuzzle actFOpuzzle;
 		private CCounter ctカーソルフラッシュ用;
 		private STキー反復用カウンタ ctキー反復用;
 		private CCounter ct下移動用;
