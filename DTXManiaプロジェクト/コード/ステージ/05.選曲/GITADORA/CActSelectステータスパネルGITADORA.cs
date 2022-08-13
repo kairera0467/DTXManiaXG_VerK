@@ -145,6 +145,8 @@ namespace DTXMania
 
                 this.txBPM数字 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_BPM Number.png") );
 
+                this.tx達成率数字 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\5_RateNumber.png") );
+
 				base.OnManagedリソースの作成();
 			}
 		}
@@ -172,6 +174,8 @@ namespace DTXMania
                 CDTXMania.tテクスチャの解放( ref this.txスキル数字_大_小数点 );
 
                 CDTXMania.tテクスチャの解放( ref this.txBPM数字 );
+
+                CDTXMania.tテクスチャの解放( ref this.tx達成率数字 );
 
 				base.OnManagedリソースの解放();
 			}
@@ -279,20 +283,22 @@ namespace DTXMania
 
                         #region [ 選択曲の 最高スキル値の描画 ]
                         //-----------------
-                        //for (int j = 0; j < 3; j++)
-                        //{
-                            for (int i = 0; i < 5; i++)
+                        for (int i = 0; i < 5; i++)
+                        {
+                            if( this.db現在選択中の曲の最高スキル値難易度毎[ i ].Drums == 0.00 )
                             {
-                                //if( j == 0 )
-                                {
-                                    if( this.db現在選択中の曲の最高スキル値難易度毎[ i ].Drums != 0.00 )
-                                    {
-                                        // ToDo:エクセはどう表示される?
-                                        CDTXMania.act文字コンソール.tPrint( 450, 645 - ( i * 60 ), C文字コンソール.Eフォント種別.白, string.Format( "{0,6:##0.00}%", this.db現在選択中の曲の最高スキル値難易度毎[ i ].Drums ) );
-                                    }
-                                }
+                                continue;
                             }
-                        //}
+
+                            if( this.db現在選択中の曲の最高スキル値難易度毎[ i ].Drums >= 100.00 )
+                            {
+                                this.tx達成率数字?.t2D描画( CDTXMania.app.Device, 460, 645 - (i * 60), new Rectangle(0, 20, 48, 20) );
+                            }
+                            else
+                            {
+                                this.t達成率表示( 442, 645 - (i * 60), string.Format("{0,6:##0.00}%", this.db現在選択中の曲の最高スキル値難易度毎[i].Drums) );
+                            }
+                        }
                         //-----------------
                         #endregion
                         this.t難易度カーソル描画( 426, base.n現在選択中の曲の難易度 );
@@ -511,6 +517,7 @@ namespace DTXMania
         private CTexture txスキル数字_大_小数部;
         private CTexture txスキル数字_大_小数点;
         private CTexture txBPM数字; // 2019.04.30 kairera0467
+        private CTexture tx達成率数字;
 
         private CTexture txRank;
 
@@ -597,7 +604,6 @@ namespace DTXMania
                 new ST数字フォント(){ ch文字 = '9', rect = new Rectangle( 112, 28, 28, 28 ) },
                 new ST数字フォント(){ ch文字 = '~', rect = new Rectangle( 0, 56, 28, 28 ) }
             };
-
         }
 
         // 2019.04.21 kairera0467
@@ -794,18 +800,18 @@ namespace DTXMania
         };
 
         private ST達成率数字[] st達成率数字 = new ST達成率数字[]{
-            new ST達成率数字( '0', new Rectangle( 0, 62, 7, 16 ) ),
-            new ST達成率数字( '1', new Rectangle( 7, 62, 7, 16 ) ),
-            new ST達成率数字( '2', new Rectangle( 14, 62, 7, 16 ) ),
-            new ST達成率数字( '3', new Rectangle( 21, 62, 7, 16 ) ),
-            new ST達成率数字( '4', new Rectangle( 28, 62, 7, 16 ) ),
-            new ST達成率数字( '5', new Rectangle( 35, 62, 7, 16 ) ),
-            new ST達成率数字( '6', new Rectangle( 42, 62, 7, 16 ) ),
-            new ST達成率数字( '7', new Rectangle( 49, 62, 7, 16 ) ),
-            new ST達成率数字( '8', new Rectangle( 56, 62, 7, 16 ) ),
-            new ST達成率数字( '9', new Rectangle( 63, 62, 7, 16 ) ),
-            new ST達成率数字( '%', new Rectangle( 70, 62, 9, 16 ) ),
-            new ST達成率数字( '.', new Rectangle( 79, 62, 3, 16 ) )
+            new ST達成率数字( '0', new Rectangle( 0, 0, 16, 20 ) ),
+            new ST達成率数字( '1', new Rectangle( 16, 0, 16, 20 ) ),
+            new ST達成率数字( '2', new Rectangle( 32, 0, 16, 20 ) ),
+            new ST達成率数字( '3', new Rectangle( 48, 0, 16, 20 ) ),
+            new ST達成率数字( '4', new Rectangle( 64, 0, 16, 20 ) ),
+            new ST達成率数字( '5', new Rectangle( 80, 0, 16, 20 ) ),
+            new ST達成率数字( '6', new Rectangle( 96, 0, 16, 20 ) ),
+            new ST達成率数字( '7', new Rectangle( 112, 0, 16, 20 ) ),
+            new ST達成率数字( '8', new Rectangle( 128, 0, 16, 20 ) ),
+            new ST達成率数字( '9', new Rectangle( 144, 0, 16, 20 ) ),
+            new ST達成率数字( '.', new Rectangle( 162, 0, 14, 20 ) ),
+            new ST達成率数字( '%', new Rectangle( 176, 0, 16, 20 ) )
         };
 
         private ST文字位置[] stノート数数字 = new ST文字位置[]{
@@ -829,7 +835,7 @@ namespace DTXMania
             new Rectangle( 84, 0, 28, 28 ),
             new Rectangle( 112, 0, 28, 28 ),
             new Rectangle( 140, 0, 28, 28 ),
-            new Rectangle( 168, 0, 28, 28 ),
+            new Rectangle( 168, 28, 28, 28 ),
             new Rectangle( 0, 28, 28, 28 )
         };
 
@@ -887,23 +893,19 @@ namespace DTXMania
                 {
                     if (this.st達成率数字[i].ch == c)
                     {
-                        Rectangle rectangle = new Rectangle(this.st達成率数字[i].rc.X, this.st達成率数字[i].rc.Y, 7, 16);
+                        Rectangle rectangle = new Rectangle(this.st達成率数字[i].rc.X, this.st達成率数字[i].rc.Y, 16, 20);
 
-                        if( c == '.' )
-                            rectangle.Width -= 2;
-                        else if( c == '%' )
-                            rectangle.Width += 2;
-                        if (this.tx難易度数字XG != null)
+                        if (this.tx達成率数字 != null)
                         {
-                            this.tx難易度数字XG.t2D描画(CDTXMania.app.Device, x, y, rectangle);
+                            this.tx達成率数字.t2D描画(CDTXMania.app.Device, x, y, rectangle);
                         }
                         break;
                     }
                 }
                 if (c == '.')
-                    x += 4;
+                    x += 6;
                 else
-                    x += 8;
+                    x += 11;
             }
         }
 
