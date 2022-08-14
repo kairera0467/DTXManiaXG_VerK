@@ -181,11 +181,31 @@ namespace DTXMania
                 // TODO:パート表記のフォントが3D描画の都合で汚くなってしまう。ここでテクスチャを合成したほうがよさそうかも...
                 Image diff = CDTXMania.tテクスチャをImageで読み込む( CSkin.Path( @"Graphics\7_Difficulty.png" ) );
                 Image part = CDTXMania.tテクスチャをImageで読み込む( CSkin.Path( @"Graphics\7_Part.png" ) );
+                Image number = CDTXMania.tテクスチャをImageで読み込む( CSkin.Path( @"Graphics\7_Difficulty_number.png" ) );
                 Bitmap bDiff = new Bitmap( 68, 68 );
                 Graphics gDiff = Graphics.FromImage( bDiff );
                 gDiff.PageUnit = GraphicsUnit.Pixel;
                 gDiff.DrawImage( diff, 0, 0, new Rectangle(0, 68 * CDTXMania.stage選曲GITADORA.n確定された曲の難易度, 68, 68), GraphicsUnit.Pixel );
                 gDiff.DrawImage( part, 0, 0, new Rectangle(0, 0, 68, 68), GraphicsUnit.Pixel );
+
+                // 数値
+                int num_x = 0;
+                for ( int i = 0; i < str.Length; i++ )
+                {
+                    char ch = str[i];
+                    
+                    if (ch.Equals('.'))
+                    {
+                        gDiff.DrawImage( number, num_x - 1, 30, new Rectangle(240, 0, 8, 32), GraphicsUnit.Pixel );
+                        num_x += 2;
+                    }
+                    else
+                    {
+                        int digit = int.Parse(str.Substring(i, 1));
+                        gDiff.DrawImage( number, num_x, 30, new Rectangle(digit * 24, 0, 24, 32), GraphicsUnit.Pixel );
+                        num_x += 21;
+                    }
+                }
 
                 this.tx難易度ラベル = new CTexture( CDTXMania.app.Device, bDiff, CDTXMania.TextureFormat, false );
                 //this.tx難易度ラベル = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_Difficulty.png" ) );
@@ -194,6 +214,7 @@ namespace DTXMania
                 gDiff?.Dispose();
                 diff?.Dispose();
                 part?.Dispose();
+                number?.Dispose();
                 bDiff?.Dispose();
                 #endregion
 
