@@ -568,7 +568,7 @@ namespace DTXMania
         public STDGBVALUE<int> nShutterInSide;
         public STDGBVALUE<int> nShutterOutSide;
         private STDGBVALUE<string> strCardName;
-        public STDGBVALUE<string> strGroupName;
+        private STDGBVALUE<string> strGroupName;
         public string strResultSongNameFont;
         public STDGBVALUE<string> strShutterImageName;      // #36144 kairera0467 シャッター画像のパスではなくcsvに登録した名前を格納する。
         public STDGBVALUE<Eタイプ> eNumOfLanes;
@@ -588,11 +588,22 @@ namespace DTXMania
         /// <returns>プレイヤー名</returns>
         public string strGetCardName( E楽器パート epart )
         {
-            return String.IsNullOrEmpty( this.strCardName[ (int)epart ] ) ? "GUEST" : this.strCardName[ (int)epart ];
+            return string.IsNullOrEmpty( this.strCardName[ (int)epart ] ) ? "GUEST" : this.strCardName[ (int)epart ];
         }
-        #endregion
 
-        public bool bConfigIniがないかDTXManiaのバージョンが異なる
+		/// <summary>
+		/// Config.iniからグループ名,称号を取得する。
+		/// Config.iniが空だった場合は空白
+		/// </summary>
+		/// <param name="epart">取得する楽器パート</param>
+		/// <returns>グループ名,称号</returns>
+		public string strGetGroupName(E楽器パート epart)
+		{
+			return string.IsNullOrEmpty(this.strGroupName[(int)epart]) ? "" : this.strGroupName[(int)epart];
+		}
+		#endregion
+
+		public bool bConfigIniがないかDTXManiaのバージョンが異なる
 		{
 			get
 			{

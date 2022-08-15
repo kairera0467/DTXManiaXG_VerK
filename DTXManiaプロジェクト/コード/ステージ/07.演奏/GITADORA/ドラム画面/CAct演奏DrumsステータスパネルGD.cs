@@ -20,7 +20,8 @@ namespace DTXMania
 
         public override void On活性化()
         {
-            this.pfPlayerNameFont = new CPrivateFastFont( new FontFamily( CDTXMania.ConfigIni.str選曲リストフォント ), 18, FontStyle.Regular );
+            this.pfPlayerNameFont = new CPrivateFastFont( new FontFamily( CDTXMania.ConfigIni.str選曲リストフォント ), 15, FontStyle.Regular );
+            this.pfGroupNameFont = new CPrivateFastFont( new FontFamily( CDTXMania.ConfigIni.str選曲リストフォント ), 11, FontStyle.Regular );
             this.pfSongTitleFont = new CPrivateFastFont( new FontFamily( CDTXMania.ConfigIni.str選曲リストフォント ), 14, FontStyle.Regular );
             this.pfSongArtistFont = new CPrivateFastFont( new FontFamily( CDTXMania.ConfigIni.str選曲リストフォント ), 9, FontStyle.Regular );
             base.On活性化();
@@ -48,6 +49,7 @@ namespace DTXMania
                 this.txArtistName = this.t指定された文字テクスチャを生成する_小( strArtistName );
 
                 Bitmap bmpCardName = new Bitmap(1, 1);
+                Bitmap bmpTitleName = new Bitmap(1, 1);
                 #region[ ネームカラー ]
                 //--------------------
                 Color clNameColor = Color.White;
@@ -138,7 +140,9 @@ namespace DTXMania
                 #endregion
                 #region[ 名前、グループ名 ]
                 bmpCardName = this.pfPlayerNameFont.DrawPrivateFont( CDTXMania.ConfigIni.strGetCardName( E楽器パート.DRUMS ), Color.White, Color.Transparent );
+                bmpTitleName = this.pfGroupNameFont.DrawPrivateFont( CDTXMania.ConfigIni.strGetGroupName( E楽器パート.DRUMS ), Color.White, Color.Transparent );
                 this.txPlayerName = CDTXMania.tテクスチャの生成( bmpCardName, false );
+                this.txTitleName = CDTXMania.tテクスチャの生成( bmpTitleName, false );
                 #endregion
                 #region[ 難易度数値 ]
                 string str = string.Format( "{0:0.00}", ( (float)CDTXMania.DTX.LEVEL.Drums) / 10f );
@@ -178,10 +182,10 @@ namespace DTXMania
 
                 #region[ 難易度ラベル/パート表記 ]
                 // 難易度ラベル/パート表記
-                // TODO:パート表記のフォントが3D描画の都合で汚くなってしまう。ここでテクスチャを合成したほうがよさそうかも...
                 Image diff = CDTXMania.tテクスチャをImageで読み込む( CSkin.Path( @"Graphics\7_Difficulty.png" ) );
                 Image part = CDTXMania.tテクスチャをImageで読み込む( CSkin.Path( @"Graphics\7_Part.png" ) );
                 Image number = CDTXMania.tテクスチャをImageで読み込む( CSkin.Path( @"Graphics\7_Difficulty_number.png" ) );
+                //Image test = CDTXMania.tテクスチャをImageで読み込む(CSkin.Path(@"Graphics\0.png"));
                 Bitmap bDiff = new Bitmap( 68, 68 );
                 Graphics gDiff = Graphics.FromImage( bDiff );
                 gDiff.PageUnit = GraphicsUnit.Pixel;
@@ -207,14 +211,17 @@ namespace DTXMania
                     }
                 }
 
+                //gDiff.DrawImage( test, 40, 34, new Rectangle(0, 0, 18, 25), GraphicsUnit.Pixel );
+
+                // bDiff.Save("test.png");
+
                 this.tx難易度ラベル = new CTexture( CDTXMania.app.Device, bDiff, CDTXMania.TextureFormat, false );
-                //this.tx難易度ラベル = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_Difficulty.png" ) );
-                //this.txパート = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_Part.png" ) );
 
                 gDiff?.Dispose();
                 diff?.Dispose();
                 part?.Dispose();
                 number?.Dispose();
+                //test.Dispose();
                 bDiff?.Dispose();
                 #endregion
 
@@ -235,6 +242,7 @@ namespace DTXMania
                 CDTXMania.t安全にDisposeする( ref this.iRisky );
                 CDTXMania.t安全にDisposeする( ref this.iDrumspeed );
                 CDTXMania.t安全にDisposeする( ref this.pfPlayerNameFont );
+                CDTXMania.t安全にDisposeする( ref this.pfGroupNameFont );
                 CDTXMania.t安全にDisposeする( ref this.pfSongTitleFont );
                 CDTXMania.t安全にDisposeする( ref this.pfSongArtistFont );
                 CDTXMania.tテクスチャの解放( ref this.txJacket );
@@ -244,6 +252,7 @@ namespace DTXMania
                 CDTXMania.tテクスチャの解放( ref this.tx達成率数字_整数 );
 
                 CDTXMania.tテクスチャの解放( ref this.txPlayerName );
+                CDTXMania.tテクスチャの解放( ref this.txTitleName );
 
                 CDTXMania.tテクスチャの解放( ref this.tx難易度ラベル );
                 CDTXMania.tテクスチャの解放( ref this.txパート );
@@ -271,17 +280,18 @@ namespace DTXMania
 #endif
                     this.b初めての進行描画 = false;
                 }
-                //if ( CDTXMania.ConfigIni.bShowMusicInfo )
-                if( this.txNamePlate != null )
-                {
-                    //this.txNamePlate.t3D描画( CDTXMania.app.Device, identity );
-                }
+
+                // スキルパネルの設置座標からの相対距離
+                float f基準X = -465;
+                float f基準Y = -45;
+                float f基準角 = -38;
+
                 if( this.txスキルパネル != null )
                 {
                     Matrix matSkillPanel = Matrix.Identity;
-                    matSkillPanel *= Matrix.Scaling( 0.6f, 1.0f, 1 );
+                    matSkillPanel *= Matrix.Scaling( 0.6f, 0.95f, 1 );
                     matSkillPanel *= Matrix.RotationY( C変換.DegreeToRadian( -38 ) );
-                    matSkillPanel *= Matrix.Translation( -465, -25, 0 );
+                    matSkillPanel *= Matrix.Translation( f基準X, f基準Y, 0 );
                     this.txスキルパネル.t3D描画( CDTXMania.app.Device, matSkillPanel );
                 }
                 if( this.txPlayerName != null )
@@ -289,10 +299,17 @@ namespace DTXMania
                     Matrix matPlayerName = Matrix.Identity;
                     matPlayerName *= Matrix.Scaling( 0.6f, 1, 1 );
                     matPlayerName *= Matrix.RotationY( C変換.DegreeToRadian( -38 ) );
-                    matPlayerName *= Matrix.Translation( -578 + ( this.txPlayerName.szテクスチャサイズ.Width / 2.0f ), 161, 0 );
+                    matPlayerName *= Matrix.Translation( f基準X - 110 + ( this.txPlayerName.szテクスチャサイズ.Width / 2.0f ), f基準Y + 180, 0 );
                     this.txPlayerName.t3D描画( CDTXMania.app.Device, matPlayerName );
                 }
-
+                if( this.txTitleName != null )
+                {
+                    Matrix matTitleName = Matrix.Identity;
+                    matTitleName *= Matrix.Scaling( 0.6f, 1, 1 );
+                    matTitleName *= Matrix.RotationY( C変換.DegreeToRadian( -38 ) );
+                    matTitleName *= Matrix.Translation( f基準X - 118 + ( this.txTitleName.szテクスチャサイズ.Width / 2.0f ), f基準Y + 198, 0 );
+                    this.txTitleName.t3D描画( CDTXMania.app.Device, matTitleName);
+                }
 #if DEBUG
                 if( CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.F1 ) )
                 {
@@ -452,27 +469,23 @@ namespace DTXMania
                     //    this.tx判定数数字.t3D描画(CDTXMania.app.Device, matScoreXG, rectangle);
                     //}
 
-                    this.t判定数文字描画( -476, 107, CDTXMania.stage演奏ドラム画面GITADORA.nヒット数_Auto含む.Drums.Perfect );
-                    this.t判定数文字描画( -476, 77, CDTXMania.stage演奏ドラム画面GITADORA.nヒット数_Auto含む.Drums.Great );
-                    this.t判定数文字描画( -476, 47, CDTXMania.stage演奏ドラム画面GITADORA.nヒット数_Auto含む.Drums.Good );
-                    this.t判定数文字描画( -476, 17, CDTXMania.stage演奏ドラム画面GITADORA.nヒット数_Auto含む.Drums.Poor );
-                    this.t判定数文字描画( -476, -13, CDTXMania.stage演奏ドラム画面GITADORA.nヒット数_Auto含む.Drums.Miss );
-                    this.t判定数文字描画( -476, -43, CDTXMania.stage演奏ドラム画面GITADORA.actCombo.n現在のコンボ数.Drums最高値 );
+                    this.t判定数文字描画( f基準X + -11, f基準Y + 130, CDTXMania.stage演奏ドラム画面GITADORA.nヒット数_Auto含む.Drums.Perfect );
+                    this.t判定数文字描画( f基準X + -11, f基準Y + 101, CDTXMania.stage演奏ドラム画面GITADORA.nヒット数_Auto含む.Drums.Great );
+                    this.t判定数文字描画( f基準X + -11, f基準Y + 72, CDTXMania.stage演奏ドラム画面GITADORA.nヒット数_Auto含む.Drums.Good );
+                    this.t判定数文字描画( f基準X + -11, f基準Y + 43, CDTXMania.stage演奏ドラム画面GITADORA.nヒット数_Auto含む.Drums.Poor );
+                    this.t判定数文字描画( f基準X + -11, f基準Y + 14, CDTXMania.stage演奏ドラム画面GITADORA.nヒット数_Auto含む.Drums.Miss );
+                    this.t判定数文字描画( f基準X + -11, f基準Y + -15, CDTXMania.stage演奏ドラム画面GITADORA.actCombo.n現在のコンボ数.Drums最高値 );
 
-                    this.t判定率文字描画( -435, 107, nowtotal == 0 ? "  0%" : string.Format("{0,3:##0}%", (CDTXMania.stage演奏ドラム画面GITADORA.nヒット数_Auto含む.Drums.Perfect / (float)nowtotal) * 100.0f )  );
-                    this.t判定率文字描画( -435, 77,  nowtotal == 0 ? "  0%" : string.Format("{0,3:##0}%", (CDTXMania.stage演奏ドラム画面GITADORA.nヒット数_Auto含む.Drums.Great / (float)nowtotal) * 100.0f )  );
-                    this.t判定率文字描画( -435, 47,  nowtotal == 0 ? "  0%" : string.Format("{0,3:##0}%", (CDTXMania.stage演奏ドラム画面GITADORA.nヒット数_Auto含む.Drums.Good / (float)nowtotal) * 100.0f )  );
-                    this.t判定率文字描画( -435, 17,  nowtotal == 0 ? "  0%" : string.Format("{0,3:##0}%", (CDTXMania.stage演奏ドラム画面GITADORA.nヒット数_Auto含む.Drums.Poor / (float)nowtotal) * 100.0f )  );
-                    this.t判定率文字描画( -435, -13, nowtotal == 0 ? "  0%" : string.Format("{0,3:##0}%", (CDTXMania.stage演奏ドラム画面GITADORA.nヒット数_Auto含む.Drums.Miss / (float)nowtotal) * 100.0f )  );
-                    this.t判定率文字描画( -435, -43, nowtotal == 0 ? "  0%" : string.Format("{0,3:##0}%", (CDTXMania.stage演奏ドラム画面GITADORA.actCombo.n現在のコンボ数.Drums最高値 / (float)nowtotal) * 100.0f )  );
+                    this.t判定率文字描画( f基準X + 25, f基準Y + 130, nowtotal == 0 ? "  0%" : string.Format("{0,3:##0}%", (CDTXMania.stage演奏ドラム画面GITADORA.nヒット数_Auto含む.Drums.Perfect / (float)nowtotal) * 100.0f )  );
+                    this.t判定率文字描画( f基準X + 25, f基準Y + 101,  nowtotal == 0 ? "  0%" : string.Format("{0,3:##0}%", (CDTXMania.stage演奏ドラム画面GITADORA.nヒット数_Auto含む.Drums.Great / (float)nowtotal) * 100.0f )  );
+                    this.t判定率文字描画( f基準X + 25, f基準Y + 72,  nowtotal == 0 ? "  0%" : string.Format("{0,3:##0}%", (CDTXMania.stage演奏ドラム画面GITADORA.nヒット数_Auto含む.Drums.Good / (float)nowtotal) * 100.0f )  );
+                    this.t判定率文字描画( f基準X + 25, f基準Y + 43,  nowtotal == 0 ? "  0%" : string.Format("{0,3:##0}%", (CDTXMania.stage演奏ドラム画面GITADORA.nヒット数_Auto含む.Drums.Poor / (float)nowtotal) * 100.0f )  );
+                    this.t判定率文字描画( f基準X + 25, f基準Y + 14, nowtotal == 0 ? "  0%" : string.Format("{0,3:##0}%", (CDTXMania.stage演奏ドラム画面GITADORA.nヒット数_Auto含む.Drums.Miss / (float)nowtotal) * 100.0f )  );
+                    this.t判定率文字描画( f基準X + 25, f基準Y + -15, nowtotal == 0 ? "  0%" : string.Format("{0,3:##0}%", (CDTXMania.stage演奏ドラム画面GITADORA.actCombo.n現在のコンボ数.Drums最高値 / (float)nowtotal) * 100.0f )  );
 
-                    // 達成率
-
+                    // TODO: 達成率
                 }
 #endregion
-
-
-                
                 if ( this.txSongNamePlate != null )
                 {
                     this.txSongNamePlate.t2D描画( CDTXMania.app.Device, 969, -2 );
@@ -492,35 +505,34 @@ namespace DTXMania
                 }
 
                 #region[ 難易度ラベル ]
-                if( /*this.txパート != null &&*/ this.tx難易度ラベル != null )
+                if( this.tx難易度ラベル != null )
                 {
                     Matrix matPart = Matrix.Identity;
                     matPart *= Matrix.Scaling( 0.6f, 1, 1 );
-                    matPart *= Matrix.RotationY( C変換.DegreeToRadian( -38 ) );
-                    matPart *= Matrix.Translation( -528, -110, 0 );
+                    matPart *= Matrix.RotationY( C変換.DegreeToRadian( f基準角 ) );
+                    matPart *= Matrix.Translation( f基準X + -65, f基準Y + -86, 0 );
                     this.tx難易度ラベル.t3D描画( CDTXMania.app.Device, matPart );
-                    //this.tx難易度ラベル.t3D描画( CDTXMania.app.Device, matPart, new Rectangle( 0, 68 * CDTXMania.stage選曲GITADORA.n確定された曲の難易度, 68, 68 ) );
-                    //this.txパート.t3D描画( CDTXMania.app.Device, matPart, new Rectangle( 0, 0, 68, 68 ) ); // DrumsだけなのでRectangle.Xは0で固定
+                    // this.tx難易度ラベル.n透明度 = (int)(255 * 0.3);
                 }
                 #endregion
                 #region[ HSアイコン ]
-                                //ハイスピはここで描画させる。
-                                if( this.nCurrentDrumspeed != CDTXMania.ConfigIni.n譜面スクロール速度.Drums && this.iDrumspeed != null )
-                                {
-                                    Graphics gNamePlate = Graphics.FromImage( this.bNamePlate );
-                                    this.nCurrentDrumspeed = CDTXMania.ConfigIni.n譜面スクロール速度.Drums;
-                                    if( CDTXMania.ConfigIni.eNamePlateType == Eタイプ.A )
-                                    {
-                                        gNamePlate.DrawImage( this.iDrumspeed, new Rectangle( 209, 156, 42, 48 ), new Rectangle( 0, ( ( this.nCurrentDrumspeed > 15 ) ? 15 : this.nCurrentDrumspeed ) * 0x30, 0x2a, 0x30 ), GraphicsUnit.Pixel );
-                                    }
-                                    else if(CDTXMania.ConfigIni.eNamePlateType == Eタイプ.B)
-                                    {
-                                        gNamePlate.DrawImage( this.iDrumspeed, new Rectangle( 210, 141, 42, 48 ), new Rectangle( 0, ( ( this.nCurrentDrumspeed > 15 ) ? 15 : this.nCurrentDrumspeed ) * 0x30, 0x2a, 0x30 ), GraphicsUnit.Pixel );
-                                    }
-                                    gNamePlate.Dispose();
-                                    this.txNamePlate.Dispose();
-                                    this.txNamePlate = new CTexture( CDTXMania.app.Device, this.bNamePlate, CDTXMania.TextureFormat, false );
-                                }
+                //ハイスピはここで描画させる。
+                if( this.nCurrentDrumspeed != CDTXMania.ConfigIni.n譜面スクロール速度.Drums && this.iDrumspeed != null )
+                {
+                    Graphics gNamePlate = Graphics.FromImage( this.bNamePlate );
+                    this.nCurrentDrumspeed = CDTXMania.ConfigIni.n譜面スクロール速度.Drums;
+                    if( CDTXMania.ConfigIni.eNamePlateType == Eタイプ.A )
+                    {
+                        gNamePlate.DrawImage( this.iDrumspeed, new Rectangle( 209, 156, 42, 48 ), new Rectangle( 0, ( ( this.nCurrentDrumspeed > 15 ) ? 15 : this.nCurrentDrumspeed ) * 0x30, 0x2a, 0x30 ), GraphicsUnit.Pixel );
+                    }
+                    else if(CDTXMania.ConfigIni.eNamePlateType == Eタイプ.B)
+                    {
+                        gNamePlate.DrawImage( this.iDrumspeed, new Rectangle( 210, 141, 42, 48 ), new Rectangle( 0, ( ( this.nCurrentDrumspeed > 15 ) ? 15 : this.nCurrentDrumspeed ) * 0x30, 0x2a, 0x30 ), GraphicsUnit.Pixel );
+                    }
+                    gNamePlate.Dispose();
+                    this.txNamePlate.Dispose();
+                    this.txNamePlate = new CTexture( CDTXMania.app.Device, this.bNamePlate, CDTXMania.TextureFormat, false );
+                }
                 #endregion
                 #region[ スコア表示 ]
                 this.n表示スコア.Drums = (long)CDTXMania.stage演奏ドラム画面GITADORA.actScore.n現在表示中のスコア.Drums;
