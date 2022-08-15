@@ -123,8 +123,8 @@ namespace DTXMania
                     #region[ カードネーム ]
                     this.strPlayerName[ 0 ] = CDTXMania.ConfigIni.strGetCardName( E楽器パート.GUITAR );
                     this.strPlayerName[ 1 ] = CDTXMania.ConfigIni.strGetCardName( E楽器パート.BASS );
-                    this.strGroupName[ 0 ] = string.IsNullOrEmpty( CDTXMania.ConfigIni.strGroupName[ 1 ] ) ? "" : CDTXMania.ConfigIni.strGroupName[ 1 ];
-                    this.strGroupName[ 1 ] = string.IsNullOrEmpty( CDTXMania.ConfigIni.strGroupName[ 2 ] ) ? "" : CDTXMania.ConfigIni.strGroupName[ 2 ];
+                    this.strGroupName[ 0 ] = string.IsNullOrEmpty( CDTXMania.ConfigIni.strGetGroupName( E楽器パート.GUITAR ) ) ? "" : CDTXMania.ConfigIni.strGetGroupName( E楽器パート.GUITAR );
+                    this.strGroupName[ 1 ] = string.IsNullOrEmpty( CDTXMania.ConfigIni.strGetGroupName( E楽器パート.BASS ) ) ? "" : CDTXMania.ConfigIni.strGetGroupName( E楽器パート.BASS );
 
                     #endregion
                     #region[ ネームカラー ]

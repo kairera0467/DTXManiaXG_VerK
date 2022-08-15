@@ -76,7 +76,7 @@ namespace DTXMania
                     this.strPanelString = CDTXMania.DTX.TITLE;
 
                 this.strPlayerName = CDTXMania.ConfigIni.strGetCardName( E楽器パート.DRUMS );
-                this.strGroupName = string.IsNullOrEmpty( CDTXMania.ConfigIni.strGroupName[0] ) ? "" : CDTXMania.ConfigIni.strGroupName[0];
+                this.strGroupName = string.IsNullOrEmpty( CDTXMania.ConfigIni.strGetGroupName( E楽器パート.DRUMS ) ) ? "" : CDTXMania.ConfigIni.strGetGroupName( E楽器パート.DRUMS );
                 gNamePlate.Dispose();
 
                 this.bNamePlate = new Bitmap( 368, 304 );
