@@ -295,11 +295,11 @@ Trace.TraceInformation("WASAPI Device #{0}: {1}: IsDefault={2}, defPeriod={3}s, 
 		Retry:
 			var flags = (mode == Eデバイスモード.排他) ? BASSWASAPIInit.BASS_WASAPI_AUTOFORMAT | BASSWASAPIInit.BASS_WASAPI_EXCLUSIVE : BASSWASAPIInit.BASS_WASAPI_AUTOFORMAT;
 			//var flags = ( mode == Eデバイスモード.排他 ) ? BASSWASAPIInit.BASS_WASAPI_AUTOFORMAT | BASSWASAPIInit.BASS_WASAPI_EVENT | BASSWASAPIInit.BASS_WASAPI_EXCLUSIVE : BASSWASAPIInit.BASS_WASAPI_AUTOFORMAT | BASSWASAPIInit.BASS_WASAPI_EVENT;
-			//if ( COS.bIsWin7OrLater() && CSound管理.bSoundUpdateByEventWASAPI )
+			if ( COS.bIsWin7OrLater() && CSound管理.bSoundUpdateByEventWASAPI )
    //         if ( CSound管理.bSoundUpdateByEventWASAPI )
-			//{
-			//	flags |= BASSWASAPIInit.BASS_WASAPI_EVENT;	// Win7以降の場合は、WASAPIをevent drivenで動作させてCPU負荷減、レイテインシ改善
-			//}
+			{
+				flags |= BASSWASAPIInit.BASS_WASAPI_EVENT;	// Win7以降の場合は、WASAPIをevent drivenで動作させてCPU負荷減、レイテインシ改善
+			}
 			n周波数 = deviceInfo.mixfreq;
 			nチャンネル数 = deviceInfo.mixchans;
 
@@ -338,26 +338,26 @@ Trace.TraceInformation("WASAPI Device #{0}: {1}: IsDefault={2}, defPeriod={3}s, 
 					f希望バッファサイズsec = f更新間隔sec * 2;
 				}
 			}
-			//else
-			//if (COS.bIsWin10OrLater() && (mode == Eデバイスモード.共有))		// Win10 low latency shared mode support
-			//{
-			//	// バッファ自動設定をユーザーが望む場合は、periodを最小値にする。さもなくば、バッファサイズとしてユーザーが指定した値を、periodとして用いる。
-			//	if (n希望バッファサイズms == 0)
-			//	{
-			//		f更新間隔sec = deviceInfo.minperiod;
-			//	}
-			//	else
-			//	{
-			//		f更新間隔sec = n希望バッファサイズms / 1000.0f;
-			//		if (f更新間隔sec < deviceInfo.minperiod)
-			//		{
-			//			f更新間隔sec = deviceInfo.minperiod;
-			//		}
-			//	}
-			//	f希望バッファサイズsec = 0.0f;
-			//}
+            else
+            if (COS.bIsWin10OrLater() && (mode == Eデバイスモード.共有))     // Win10 low latency shared mode support
+            {
+                // バッファ自動設定をユーザーが望む場合は、periodを最小値にする。さもなくば、バッファサイズとしてユーザーが指定した値を、periodとして用いる。
+                if (n希望バッファサイズms == 0)
+                {
+                    f更新間隔sec = deviceInfo.minperiod;
+                }
+                else
+                {
+                    f更新間隔sec = n希望バッファサイズms / 1000.0f;
+                    if (f更新間隔sec < deviceInfo.minperiod)
+                    {
+                        f更新間隔sec = deviceInfo.minperiod;
+                    }
+                }
+                f希望バッファサイズsec = 0.0f;
+            }
 
-			Trace.TraceInformation("f希望バッファサイズsec=" + f希望バッファサイズsec + ", f更新間隔sec=" + f更新間隔sec + ": Win10 low latency audio 考慮後");
+            Trace.TraceInformation("f希望バッファサイズsec=" + f希望バッファサイズsec + ", f更新間隔sec=" + f更新間隔sec + ": Win10 low latency audio 考慮後");
 
 			Trace.TraceInformation("Start Bass_Wasapi_Init(device=" + nDevNo + ", freq=" + n周波数 + ", nchans=" + nチャンネル数 + ", flags=" + flags + "," +
 				" buffer=" + f希望バッファサイズsec + ", period=" + f更新間隔sec + ")" );
