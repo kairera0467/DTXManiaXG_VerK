@@ -780,9 +780,10 @@ namespace DTXMania
             public string strDTXフォルダのパス;
             public string strPreimageのパス;
             public Cスコア.ST譜面情報 ar譜面情報;
+			public STDGBVALUE<int> n最高クリア難易度;
             public STDGBVALUE<double>[] db達成率_難易度毎;
-            public STDGBVALUE<int> nランク_難易度毎;
-            public STDGBVALUE<bool> bフルコンボ_難易度毎;
+            public STDGBVALUE<int>[] nランク_難易度毎;
+            public STDGBVALUE<bool>[] bフルコンボ_難易度毎;
 		}
 
 		public struct ST選曲バー

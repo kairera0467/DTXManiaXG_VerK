@@ -455,7 +455,8 @@ namespace DTXMania
                             }
 
                             // TotalNotes
-                            this.tTotalNotes数字表示( 280, 658, String.Format( "{0,5:####0}", this.n選択中の曲のノート数_難易度毎[ base.n現在選択中の曲の難易度 ].Drums ) );
+                            if (CDTXMania.stage選曲GITADORA.r現在選択中の曲.eノード種別 == C曲リストノード.Eノード種別.SCORE)
+                                this.tTotalNotes数字表示( 280, 658, String.Format( "{0,5:####0}", this.n選択中の曲のノート数_難易度毎[ base.n現在選択中の曲の難易度 ].Drums ) );
                         }
                     }
 

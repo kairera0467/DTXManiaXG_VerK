@@ -54,7 +54,10 @@ namespace DTXMania
 
 
 				for( int j = 0; j < 3; j++ )
+                {
 					this.stバー情報[ i ].nスキル値[ j ] = (int) song.arスコア[ this.n現在のアンカ難易度レベルに最も近い難易度レベルを返す( song ) ].譜面情報.最大スキル[ j ];
+                    this.stバー情報[ i ].n最高クリア難易度[ j ] = this.n最高クリア難易度を返す(song.arスコア, j);
+                }
 
 				song = this.r次の曲( song );
 			}
@@ -781,9 +784,9 @@ namespace DTXMania
                                 this.txTumbnail[ nパネル番号 ].t2D描画( CDTXMania.app.Device, 712, y + 7 );
                             }
                             //クリアマーク
-                            if( this.stバー情報[ nパネル番号 ].nスキル値.Drums > 0 )
+                            if( this.stバー情報[ nパネル番号 ].n最高クリア難易度.Drums != -1 )
                             {
-                                this.txクリアランプ?.t2D描画( CDTXMania.app.Device, 707, y + 2, new Rectangle( 0, this.n現在選択中の曲の現在の難易度レベル * 36, 36, 36 ) );
+                                this.txクリアランプ?.t2D描画( CDTXMania.app.Device, 707, y + 2, new Rectangle( 0, this.stバー情報[ nパネル番号 ].n最高クリア難易度.Drums * 36, 36, 36 ) );
                             }
                             #endregion
                             #region [ タイトル名テクスチャを描画。]
@@ -858,9 +861,9 @@ namespace DTXMania
                             this.txTumbnail[ nパネル番号 ].t2D描画( CDTXMania.app.Device, 750, y + 7 );
                         }
                         //クリアマーク
-                        if( this.stバー情報[ nパネル番号 ].ar譜面情報.最大スキル.Drums > 0 )
+                        if( this.stバー情報[ nパネル番号 ].n最高クリア難易度.Drums != -1 )
                         {
-                            this.txクリアランプ?.t2D描画( CDTXMania.app.Device, 745, y + 2, new Rectangle( 0, this.n現在選択中の曲の現在の難易度レベル * 36, 36, 36 ) );
+                            this.txクリアランプ?.t2D描画( CDTXMania.app.Device, 745, y + 2, new Rectangle( 0, this.stバー情報[ nパネル番号 ].n最高クリア難易度.Drums * 36, 36, 36 ) );
                         }
                         #endregion
 						#region [ タイトル名テクスチャを描画。]
@@ -1261,6 +1264,29 @@ namespace DTXMania
             {
                 CDTXMania.tテクスチャの解放( ref this.txMusicName[ i ] );
             }
+        }
+
+        private int n最高クリア難易度を返す(Cスコア[] score, int nPart)
+        {
+            int ret = -1;
+
+            // 全難易度見ていって達成率が0%より上になっている最高難易度を取得
+
+            for (int i = 0; i < 5; i++)
+            {
+                if (score[i] == null)
+                {
+                    // 存在しない難易度はcontinue
+                    continue;
+                }
+
+                if (score[i].譜面情報.最大スキル[nPart] > 0)
+                {
+                    ret = i;
+                }
+            }
+
+            return ret;
         }
     }
 }
