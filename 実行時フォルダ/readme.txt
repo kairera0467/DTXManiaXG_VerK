@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////
    
-          DTXManiaXG(Ver.K) 4.10b
+          DTXManiaXG(Ver.K) 4.11
  
 ///////////////////////////////////////////////
 ○概要
@@ -16,7 +16,7 @@ DTXManiaXG(Ver.K)をDTXMania Release104を元に作り直したものです。
 ・絶対にVer3系までの環境に上書きをしないでください。
 ・スキンを含めて大きな変更が起こっているため、Ver3.61までの環境に上書きするのは大変危険です。
 
-○Ver3.61までとの大きな変更点
+○Ver3.62までとの大きな変更点
 ・64bit対応(32bit環境での起動も可能です)
 ・スクロール基準速度の変更
 ・フルスクリーン時の処理変更
@@ -97,12 +97,22 @@ DTXManiaXG(Ver.K)をDTXMania Release104を元に作り直したものです。
 ・xadec
 
 ○連絡先
-Project:https://ja.osdn.net/projects/dtxmaniaxg-verk/
+Project:https://github.com/kairera0467/DTXManiaXG_VerK/
 HP:http://dtxxgk.at-ninja.jp/
-Mail:gennsou76573@gmail.com
-Twitter:@kairera0467
+OfficialTwitter:@DTXManiaK
+開発者Twitter:@kairera0467
+開発者Discord:kairera0467
 
 ○更新履歴
+2023092200	4.11	matixxっぽいフェードイン・フェードアウトを1種類実装
+					matixx選曲画面の達成率表示のテクスチャ追加、MAX表記の実装
+					matixx選曲画面TotalNotesの数値は楽曲以外を選択している時に表示しないよう変更
+					matixx選曲画面のクリアマークはクリアしている最高難易度が表示されるよう変更
+					matixx演奏画面のステータスパネルの座標を大幅修正、譜面難易度数値表示,称号みたいな文字列表示を実装
+					matixxリザルト画面のスキル達成率ゲージを追加
+					SharpDXのバージョンを4.0.1から4.2.0に更新(FROM先生ありがとうございます)
+					WASAPI共有低遅延モードの使用制限を解除
+					起動時に例外が発生する不具合の修正(FROM先生ありがとうございます)
 2020100200	4.10b	XGスコア方式でリザルト画面のランク表示がSランク以上しか表示されない不具合の修正
 					bassasio.dllの更新漏れ
 2020092800	4.10a	.NET Frameworkを4.5.1から4.7.1に変更。
