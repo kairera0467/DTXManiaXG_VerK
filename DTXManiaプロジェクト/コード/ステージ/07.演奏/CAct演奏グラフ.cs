@@ -4,9 +4,12 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.Drawing;
 using System.IO;
-using SlimDX;
+using SharpDX;
 using FDK;
 
+using Color = System.Drawing.Color;
+using Rectangle = System.Drawing.Rectangle;
+using Point = System.Drawing.Point;
 namespace DTXMania
 {
 	internal class CAct演奏グラフ : CActivity
@@ -116,9 +119,9 @@ namespace DTXMania
 		{
 			if( !base.b活性化してない )
 			{
-				CDTXMania.tテクスチャの解放( ref this.txグラフ );
-                CDTXMania.tテクスチャの解放( ref this.txグラフ_ゲージ );
-                CDTXMania.tテクスチャの解放( ref this.txグラフ値自己ベストライン );
+				this.txグラフ?.Dispose();
+                this.txグラフ_ゲージ?.Dispose();
+                this.txグラフ値自己ベストライン?.Dispose();
 				base.OnManagedリソースの解放();
 			}
 		}
@@ -152,13 +155,14 @@ namespace DTXMania
                     }
 
 
-        	        if( CDTXMania.bXGRelease )
+        	        //if( CDTXMania.bXGRelease )
 		        	{
         			    this.nGraphBG_XPos.Drums = 966;
                         this.nGraphBG_XPos.Guitar = 356;
                         this.nGraphBG_XPos.Bass = 647;
                         this.nGraphBG_YPos = 50;
 	                }
+
 
 
 

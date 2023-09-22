@@ -10,10 +10,11 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>FDK</RootNamespace>
     <AssemblyName>FDK</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>slimdx_kairera0467.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>false</SignAssembly>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
     <ApplicationIcon>
     </ApplicationIcon>
     <FileUpgradeFlags>
@@ -46,7 +47,7 @@
     </DocumentationFile>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <NoWarn>0219</NoWarn>
-    <DefineConstants>TRACE;TEST_CancelEnterCodeInAltEnter2 TEST_Direct3D9Ex_</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;TEST_CancelEnterCodeInAltEnter2 TEST_Direct3D9Ex_ TEST_MultiThreadedMixer_</DefineConstants>
     <Optimize>false</Optimize>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
@@ -62,20 +63,73 @@
     <Optimize>true</Optimize>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;TEST_CancelEnterCodeInAltEnter2 TEST_Direct3D9Ex_ TEST_MultiThreadedMixer_</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoWarn>0219</NoWarn>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE;TEST_ENGLISH_ TEST_Direct3D9Ex_</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <NoWarn>0219</NoWarn>
+    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;TEST_CancelEnterCodeInAltEnter2 TEST_Direct3D9Ex_ TEST_MultiThreadedMixer_</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoWarn>0219</NoWarn>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;TEST_ENGLISH_ TEST_Direct3D9Ex_</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <NoWarn>0219</NoWarn>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Bass.Net">
       <HintPath>..\実行時フォルダ\dll\Bass.Net.dll</HintPath>
     </Reference>
-    <Reference Include="DirectShowLib-2005">
-      <HintPath>..\実行時フォルダ\dll\DirectShowLib-2005.dll</HintPath>
+    <Reference Include="DirectShowLib, Version=2.1.0.1599, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DirectShowLib.1.0.0\lib\DirectShowLib.dll</HintPath>
     </Reference>
-    <Reference Include="SlimDXc_net20x86_Jun2010, Version=1002.0.10.43, Culture=neutral, PublicKeyToken=53d0e4ef1f1579f5, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\実行時フォルダ\dll\SlimDXc_net20x86_Jun2010.dll</HintPath>
+    <Reference Include="SharpDX, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.4.2.0\lib\net45\SharpDX.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Direct3D9, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.Direct3D9.4.2.0\lib\net45\SharpDX.Direct3D9.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.DirectInput, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.DirectInput.4.2.0\lib\net45\SharpDX.DirectInput.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.DirectSound, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.DirectSound.4.2.0\lib\net45\SharpDX.DirectSound.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.DXGI, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.DXGI.4.2.0\lib\net45\SharpDX.DXGI.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Mathematics, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.Mathematics.4.2.0\lib\net45\SharpDX.Mathematics.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -118,9 +172,10 @@
     <Compile Include="コード\02.入力\DeviceConstantConverter.cs" />
     <Compile Include="コード\02.入力\E入力デバイス種別.cs" />
     <Compile Include="コード\02.入力\IInputDevice.cs" />
+    <Compile Include="コード\02.入力\SlimDX.DirectInput.Key.cs" />
     <Compile Include="コード\02.入力\STInputEvent.cs" />
-    <Compile Include="コード\03.サウンド\Cmp3.cs" />
-    <Compile Include="コード\03.サウンド\Cogg.cs" />
+    <Compile Include="コード\03.サウンド\BASSThreadedMixerWrapper.cs" />
+    <Compile Include="コード\03.サウンド\Cmp3ogg.cs" />
     <Compile Include="コード\03.サウンド\CSound.cs" />
     <Compile Include="コード\03.サウンド\CSoundDeviceASIO.cs" />
     <Compile Include="コード\03.サウンド\CSoundDeviceDirectSound.cs" />
@@ -178,7 +233,13 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="slimdx_kairera0467.snk" />
+    <ProjectReference Include="..\libbjxa\libbjxa.csproj">
+      <Project>{41e67409-f5ec-4216-a790-2519a7b22e51}</Project>
+      <Name>libbjxa</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -189,10 +250,30 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>copy /Y "$(TargetPath)" "$(SolutionDir)..\実行時フォルダ\dll\"
-copy /Y "$(TargetPath)" "$(SolutionDir)bin\x86\Debug\dll\"
+    <PostBuildEvent>echo.
+echo ビルド後イベントを開始します。
 
+set RUNTIMEDIR="$(SolutionDir)実行時フォルダ"
 
-</PostBuildEvent>
+echo.
+echo (1) 出力フォルダ から ソリューション出力フォルダ へコピーします。（日付の新しいファイルのみ）
+set DESTDIR="$(SolutionDir)$(OutDir)dll"
+if not exist %25DESTDIR%25 mkdir %25DESTDIR%25
+xcopy "$(TargetDir)*.dll" %25DESTDIR%25 /Y /D /EXCLUDE:$(TargetFileName)
+
+echo.
+echo (2) 出力フォルダ から 実行時リソースフォルダ にコピーします。（日付の新しいファイルのみ）
+set DESTDIR=%25RUNTIMEDIR%25\dll
+if not exist %25DESTDIR%25 mkdir %25DESTDIR%25
+xcopy "$(TargetDir)*.dll"  %25DESTDIR%25 /Y /D
+
+echo.
+echo (3) 実行時リソースフォルダ から ソリューション出力フォルダ にコピーします。（日付の新しいファイルのみ）
+set DESTDIR="$(SolutionDir)$(OutDir)dll"
+if not exist %25DESTDIR%25 mkdir %25DESTDIR%25
+xcopy %25RUNTIMEDIR%25\dll %25DESTDIR%25 /Y /D
+
+echo.
+echo ビルド後イベントを終了しました。</PostBuildEvent>
   </PropertyGroup>
 </Project>

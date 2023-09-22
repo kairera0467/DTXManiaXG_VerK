@@ -55,7 +55,7 @@ namespace FDK
 			#region [ BASS registration ]
 			// BASS.NET ユーザ登録（BASSスプラッシュが非表示になる）。
 
-			BassNet.Registration( "dtx2013@gmail.com", "2X9181017152222" );
+			BassNet.Registration( "dtxmaniaxgk@gmail.com", "2X9182021152222" );
 			#endregion
 			#region [ BASS Version Check ]
 			// BASS のバージョンチェック。

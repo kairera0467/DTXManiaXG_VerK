@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
-using SlimDX;
+using SharpDX;
 using FDK;
 
 namespace DTXMania
@@ -37,6 +37,7 @@ namespace DTXMania
 			if( !base.b活性化してない )
 			{
 				this.txDANGER = CDTXMania.tテクスチャの生成Af( CSkin.Path( @"Graphics\ScreenPlayDrums danger.png" ), false );
+                this.tx黒幕 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\Tile black 64x64.png" ) );
 				base.OnManagedリソースの作成();
 			}
 		}
@@ -45,6 +46,7 @@ namespace DTXMania
 			if( !base.b活性化してない )
 			{
 				CDTXMania.tテクスチャの解放( ref this.txDANGER );
+                CDTXMania.tテクスチャの解放( ref this.tx黒幕 );
 				base.OnManagedリソースの解放();
 			}
 		}
@@ -63,6 +65,18 @@ namespace DTXMania
 		{
 			if( !base.b活性化してない )
 			{
+                if( this.tx黒幕 != null && CDTXMania.stage演奏ドラム画面.actGauge.db現在のゲージ値.Drums <= 0.0 )
+                {
+                    this.tx黒幕.n透明度 = 191; //75%
+                    for( int i = 0; i <= ( SampleFramework.GameWindowSize.Width / 64 ); i++ )
+                    {
+                        for( int j = 0; j <= ( SampleFramework.GameWindowSize.Height / 64 ); j++ )
+                        {
+                            this.tx黒幕.t2D描画( CDTXMania.app.Device, i * 64, j * 64 );
+                        }
+                    }
+                }
+                
 				if( !bIsDangerDrums )
 				{
 					this.bDanger中[(int)E楽器パート.DRUMS] = false;
@@ -119,6 +133,7 @@ namespace DTXMania
 		//    new Rectangle( (int)(0x20 * Scale.X), (int)(0 * Scale.Y), (int)(0x20 * Scale.X), (int)(0x40 * Scale.Y) )
 		//};
 		private CTextureAf txDANGER;
+        private CTexture tx黒幕;
 
 		//-----------------
 		#endregion

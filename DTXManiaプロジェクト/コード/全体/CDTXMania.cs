@@ -5,28 +5,30 @@ using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Diagnostics;
+using System.Runtime;
 using System.Runtime.InteropServices;
 using System.IO;
 using System.Threading;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Xml;
-using SlimDX;
-using SlimDX.Direct3D9;
+using SharpDX;
+using SharpDX.Direct3D9;
 using FDK;
 using SampleFramework;
 
+using Point = System.Drawing.Point;
 namespace DTXMania
 {
 	internal class CDTXMania : Game
 	{
 		// プロパティ
 		#region [ properties ]
-		public static readonly string VERSION = "Ver4.00RC(16----)";
+		public static readonly string VERSION = "Ver4.11(230922)";
 		public static readonly string SLIMDXDLL = "c_net20x86_Jun2010";
 		public static readonly string D3DXDLL = "d3dx9_43.dll";		// June 2010
         //public static readonly string D3DXDLL = "d3dx9_42.dll";	// February 2010
         //public static readonly string D3DXDLL = "d3dx9_41.dll";	// March 2009
-        public static readonly bool bXGRelease = true; //システム内部にGITADORA風表示とで大きく異る箇所があるので、わかりやすくなるようにフラグを作成。
+        public static bool bXGRelease = true;
 
 		public static CDTXMania app
 		{
@@ -206,6 +208,16 @@ namespace DTXMania
 			get;
 			private set;
 		}
+		public static CStage選曲XG stage選曲XG
+		{
+			get;
+			private set;
+		}
+        public static CStage選曲GITADORA stage選曲GITADORA
+		{
+			get;
+			private set;
+		}
 		public static CStage曲読み込み stage曲読み込み
 		{
 			get;
@@ -217,6 +229,16 @@ namespace DTXMania
 			private set;
 		}
 		public static CStage演奏ドラム画面 stage演奏ドラム画面
+		{
+			get;
+			private set;
+		}
+		public static CStage演奏ギター画面GD stage演奏ギター画面GITADORA
+		{
+			get;
+			private set;
+		}
+		public static CStage演奏ドラム画面GD stage演奏ドラム画面GITADORA
 		{
 			get;
 			private set;
@@ -302,6 +324,11 @@ namespace DTXMania
 			get;
 			set;
 		}
+        public static CAnimationManager AnimationManager
+        {
+            get;
+            set;
+        }
         public static STDGBVALUE< List<int> > listAutoGhostLag = new STDGBVALUE<List<int>>();
         public static STDGBVALUE< List<int> > listTargetGhsotLag = new STDGBVALUE<List<int>>();
         public static STDGBVALUE< CScoreIni.C演奏記録 > listTargetGhostScoreData = new STDGBVALUE< CScoreIni.C演奏記録 >();
@@ -514,9 +541,14 @@ namespace DTXMania
 		}
 		protected override void Update( GameTime gameTime )
 		{
+			if( !this.b起動完了済み )
+				return;
 		}
 		protected override void Draw( GameTime gameTime )
 		{
+			if( !this.b起動完了済み )
+				return;
+
 			Sound管理.t再生中の処理をする();
 
 			if( Timer != null )
@@ -538,6 +570,9 @@ namespace DTXMania
 
 			if ( this.bApplicationActive )	// DTXMania本体起動中の本体/モニタの省電力モード移行を抑止
 				CPowerManagement.tDisableMonitorSuspend();
+
+            if( AnimationManager == null )
+                AnimationManager = new CAnimationManager();
 
 			// #xxxxx 2013.4.8 yyagi; sleepの挿入位置を、EndScnene～Present間から、BeginScene前に移動。描画遅延を小さくするため。
 			#region [ スリープ ]
@@ -596,7 +631,10 @@ namespace DTXMania
 			#endregion
 
 			this.Device.BeginScene();
-			this.Device.Clear( ClearFlags.ZBuffer | ClearFlags.Target, Color.Black, 1f, 0 );
+			this.Device.Clear( ClearFlags.ZBuffer | ClearFlags.Target, SharpDX.Color.Black, 1f, 0 );
+
+            if( AnimationManager != null )
+                AnimationManager.t進行();
 
 			if( r現在のステージ != null )
 			{
@@ -625,7 +663,12 @@ namespace DTXMania
 				{														// → songs.db等の書き込み時だと音切れするっぽい
 					actEnumSongs.On非活性化();
 					EnumSongs.SongListEnumCompletelyDone();
-					CDTXMania.stage選曲.bIsEnumeratingSongs = false;
+                    if( CDTXMania.bXGRelease ) {
+					    CDTXMania.stage選曲XG.bIsEnumeratingSongs = false;
+                    } else {
+					    CDTXMania.stage選曲GITADORA.bIsEnumeratingSongs = false;
+                    }
+
 				}
 				#region [ 曲検索スレッドの起動/終了 ]					// ここに"Enumerating Songs..."表示を集約
 				if ( !CDTXMania.bコンパクトモード )
@@ -647,7 +690,8 @@ namespace DTXMania
 								 !EnumSongs.IsSongListEnumStarted )
 							{
 								actEnumSongs.On活性化();
-								CDTXMania.stage選曲.bIsEnumeratingSongs = true;
+                                if( CDTXMania.bXGRelease ) CDTXMania.stage選曲XG.bIsEnumeratingSongs = true;
+								else CDTXMania.stage選曲GITADORA.bIsEnumeratingSongs = true;
 								EnumSongs.Init( CDTXMania.Songs管理.listSongsDB, CDTXMania.Songs管理.nSongsDBから取得できたスコア数 );	// songs.db情報と、取得した曲数を、新インスタンスにも与える
 								EnumSongs.StartEnumFromDisk();		// 曲検索スレッドの起動・開始
 								if ( CDTXMania.Songs管理.nSongsDBから取得できたスコア数 == 0 )	// もし初回起動なら、検索スレッドのプライオリティをLowestでなくNormalにする
@@ -689,10 +733,12 @@ namespace DTXMania
 							if ( EnumSongs.IsSongListEnumerated )
 							{
 								actEnumSongs.On非活性化();
-								CDTXMania.stage選曲.bIsEnumeratingSongs = false;
+                                if( CDTXMania.bXGRelease ) CDTXMania.stage選曲XG.bIsEnumeratingSongs = false;
+								else CDTXMania.stage選曲GITADORA.bIsEnumeratingSongs = false;
 
 								bool bRemakeSongTitleBar = ( r現在のステージ.eステージID == CStage.Eステージ.選曲 ) ? true : false;
-								CDTXMania.stage選曲.Refresh( EnumSongs.Songs管理, bRemakeSongTitleBar );
+                                if( CDTXMania.bXGRelease ) CDTXMania.stage選曲XG.Refresh( EnumSongs.Songs管理, bRemakeSongTitleBar );
+								else CDTXMania.stage選曲GITADORA.Refresh( EnumSongs.Songs管理, bRemakeSongTitleBar );
 								EnumSongs.SongListEnumCompletelyDone();
 							}
 							#endregion
@@ -754,9 +800,19 @@ namespace DTXMania
 								r現在のステージ.On非活性化();
 								Trace.TraceInformation( "----------------------" );
 								Trace.TraceInformation( "■ 選曲" );
-								stage選曲.On活性化();
-								r直前のステージ = r現在のステージ;
-								r現在のステージ = stage選曲;
+                                //stage選曲.On活性化(); //2017.10.01 kairera0467 完全移行まで
+                                if( bXGRelease )
+                                {
+								    stage選曲XG.On活性化();
+								    r直前のステージ = r現在のステージ;
+								    r現在のステージ = stage選曲XG;
+                                }
+                                else
+                                {
+								    stage選曲GITADORA.On活性化();
+								    r直前のステージ = r現在のステージ;
+								    r現在のステージ = stage選曲GITADORA;
+                                }
 								//-----------------------------
 								#endregion
 								break;
@@ -906,10 +962,19 @@ namespace DTXMania
 									r現在のステージ.On非活性化();
 									Trace.TraceInformation( "----------------------" );
 									Trace.TraceInformation( "■ 選曲" );
-									stage選曲.On活性化();
-									r直前のステージ = r現在のステージ;
-									r現在のステージ = stage選曲;
-
+                                    if( bXGRelease )
+                                    {
+									    stage選曲XG.On活性化();
+									    r直前のステージ = r現在のステージ;
+									    r現在のステージ = stage選曲XG;
+                                    }
+                                    else
+                                    {
+									    stage選曲GITADORA.On活性化();
+									    r直前のステージ = r現在のステージ;
+									    r現在のステージ = stage選曲GITADORA;
+                                    }
+                                    
 									foreach( STPlugin pg in this.listプラグイン )
 									{
 										Directory.SetCurrentDirectory( pg.strプラグインフォルダ );
@@ -1055,9 +1120,19 @@ namespace DTXMania
 								this.tガベージコレクションを実行する();
 								Trace.TraceInformation( "----------------------" );
 								Trace.TraceInformation( "■ 選曲" );
-								stage選曲.On活性化();
-								r直前のステージ = r現在のステージ;
-								r現在のステージ = stage選曲;
+                                if( bXGRelease )
+                                {
+								    stage選曲XG.On活性化();
+								    r直前のステージ = r現在のステージ;
+								    r現在のステージ = stage選曲XG;
+                                }
+                                else
+                                {
+								    stage選曲GITADORA.On活性化();
+								    r直前のステージ = r現在のステージ;
+								    r現在のステージ = stage選曲GITADORA;
+                                }
+
 								foreach ( STPlugin pg in this.listプラグイン )
 								{
 									Directory.SetCurrentDirectory( pg.strプラグインフォルダ );
@@ -1085,7 +1160,10 @@ for (int i = 0; i < 3; i++) {
 }		
 #endif
 								r直前のステージ = r現在のステージ;
-								r現在のステージ = stage演奏ドラム画面;
+                                if( CDTXMania.bXGRelease )
+								    r現在のステージ = stage演奏ドラム画面;
+                                else
+                                    r現在のステージ = stage演奏ドラム画面GITADORA;
 							}
 							else
 							{
@@ -1104,7 +1182,10 @@ for (int i = 0; i < 3; i++) {
 }		
 #endif
 								r直前のステージ = r現在のステージ;
-								r現在のステージ = stage演奏ギター画面;
+                                if( CDTXMania.bXGRelease )
+								    r現在のステージ = stage演奏ギター画面;
+                                else
+                                    r現在のステージ = stage演奏ギター画面GITADORA;
 							}
 
 							foreach( STPlugin pg in this.listプラグイン )
@@ -1144,11 +1225,17 @@ for (int i = 0; i < 3; i++) {
 							{
 								if ( !ConfigIni.bギタレボモード )
 								{
-									CDTXMania.stage演奏ドラム画面.t停止();
+                                    if( CDTXMania.bXGRelease )
+									    CDTXMania.stage演奏ドラム画面.t停止();
+                                    else
+                                        CDTXMania.stage演奏ドラム画面GITADORA.t停止();
 								}
 								else
 								{
-									CDTXMania.stage演奏ギター画面.t停止();
+                                    if( CDTXMania.bXGRelease )
+									    CDTXMania.stage演奏ギター画面.t停止();
+                                    else
+                                        CDTXMania.stage演奏ギター画面GITADORA.t停止();
 								}
 								if ( previewSound != null )
 								{
@@ -1192,15 +1279,28 @@ for (int i = 0; i < 3; i++) {
 							{
 								if ( DTXVmode.NeedReload )
 								{
-									if ( !ConfigIni.bギタレボモード )
-									{
-										CDTXMania.stage演奏ドラム画面.t再読込();
-									}
-									else
-									{
-										CDTXMania.stage演奏ギター画面.t再読込();
-									}
-
+                                    if( CDTXMania.bXGRelease )
+                                    {
+									    if ( !ConfigIni.bギタレボモード )
+									    {
+										    CDTXMania.stage演奏ドラム画面.t再読込();
+									    }
+									    else
+									    {
+										    CDTXMania.stage演奏ギター画面.t再読込();
+									    }
+                                    }
+                                    else
+                                    {
+									    if ( !ConfigIni.bギタレボモード )
+									    {
+										    CDTXMania.stage演奏ドラム画面GITADORA.t再読込();
+									    }
+									    else
+									    {
+										    CDTXMania.stage演奏ギター画面GITADORA.t再読込();
+									    }
+                                    }
 									CDTXMania.ConfigIni.bDrums有効 = !DTXVmode.GRmode;
 									CDTXMania.ConfigIni.bGuitar有効 = true;
 									CDTXMania.ConfigIni.bTimeStretch = DTXVmode.TimeStretch;
@@ -1213,14 +1313,28 @@ for (int i = 0; i < 3; i++) {
 								}
 								else
 								{
-									if ( !ConfigIni.bギタレボモード )
-									{
-										CDTXMania.stage演奏ドラム画面.t演奏位置の変更( CDTXMania.DTXVmode.nStartBar );
-									}
-									else
-									{
-										CDTXMania.stage演奏ギター画面.t演奏位置の変更( CDTXMania.DTXVmode.nStartBar );
-									}
+                                    if( CDTXMania.bXGRelease )
+                                    {
+									    if ( !ConfigIni.bギタレボモード )
+									    {
+										    CDTXMania.stage演奏ドラム画面.t演奏位置の変更( CDTXMania.DTXVmode.nStartBar );
+									    }
+									    else
+									    {
+										    CDTXMania.stage演奏ギター画面.t演奏位置の変更( CDTXMania.DTXVmode.nStartBar );
+									    }
+                                    }
+                                    else
+                                    {
+									    if ( !ConfigIni.bギタレボモード )
+									    {
+										    CDTXMania.stage演奏ドラム画面GITADORA.t演奏位置の変更( CDTXMania.DTXVmode.nStartBar );
+									    }
+									    else
+									    {
+										    CDTXMania.stage演奏ギター画面GITADORA.t演奏位置の変更( CDTXMania.DTXVmode.nStartBar );
+									    }
+                                    }
 								}
 							}
 						}
@@ -1306,9 +1420,19 @@ for (int i = 0; i < 3; i++) {
 								{
 									Trace.TraceInformation( "----------------------" );
 									Trace.TraceInformation( "■ 選曲" );
-									stage選曲.On活性化();
-									r直前のステージ = r現在のステージ;
-									r現在のステージ = stage選曲;
+                                    if( bXGRelease )
+                                    {
+									    stage選曲XG.On活性化();
+									    r直前のステージ = r現在のステージ;
+									    r現在のステージ = stage選曲XG;
+                                    }
+                                    else
+                                    {
+									    stage選曲GITADORA.On活性化();
+									    r直前のステージ = r現在のステージ;
+									    r現在のステージ = stage選曲GITADORA;
+                                    }
+
 
 									#region [ プラグイン Onステージ変更() の呼び出し ]
 									//---------------------
@@ -1354,9 +1478,18 @@ for (int i = 0; i < 3; i++) {
 								{
 									Trace.TraceInformation( "----------------------" );
 									Trace.TraceInformation( "■ 選曲" );
-									stage選曲.On活性化();
-									r直前のステージ = r現在のステージ;
-									r現在のステージ = stage選曲;
+                                    if( bXGRelease )
+                                    {
+									    stage選曲XG.On活性化();
+									    r直前のステージ = r現在のステージ;
+									    r現在のステージ = stage選曲XG;
+                                    }
+                                    else
+                                    {
+									    stage選曲GITADORA.On活性化();
+									    r直前のステージ = r現在のステージ;
+									    r現在のステージ = stage選曲GITADORA;
+                                    }
 
 									#region [ プラグイン Onステージ変更() の呼び出し ]
 									//---------------------
@@ -1380,14 +1513,23 @@ for (int i = 0; i < 3; i++) {
 								//-----------------------------
 								CScoreIni.C演奏記録 c演奏記録_Drums, c演奏記録_Guitar, c演奏記録_Bass;
 								CDTX.CChip[] chipArray = new CDTX.CChip[ 11 ];
-								if( ConfigIni.bギタレボモード )
-								{
-									stage演奏ギター画面.t演奏結果を格納する( out c演奏記録_Drums, out c演奏記録_Guitar, out c演奏記録_Bass );
-								}
-								else
-								{
-									stage演奏ドラム画面.t演奏結果を格納する( out c演奏記録_Drums, out c演奏記録_Guitar, out c演奏記録_Bass, out chipArray );
-								}
+                                if( CDTXMania.bXGRelease )
+                                {
+								    if( ConfigIni.bギタレボモード ) {
+									    stage演奏ギター画面.t演奏結果を格納する( out c演奏記録_Drums, out c演奏記録_Guitar, out c演奏記録_Bass );
+								    } else {
+									    stage演奏ドラム画面.t演奏結果を格納する( out c演奏記録_Drums, out c演奏記録_Guitar, out c演奏記録_Bass, out chipArray );
+								    }
+                                }
+                                else
+                                {
+								    if( ConfigIni.bギタレボモード ) {
+									    stage演奏ギター画面GITADORA.t演奏結果を格納する( out c演奏記録_Drums, out c演奏記録_Guitar, out c演奏記録_Bass );
+								    } else {
+									    stage演奏ドラム画面GITADORA.t演奏結果を格納する( out c演奏記録_Drums, out c演奏記録_Guitar, out c演奏記録_Bass, out chipArray );
+								    }
+                                }
+
 
 								if ( CDTXMania.ConfigIni.bIsSwappedGuitarBass )		// #24063 2011.1.24 yyagi Gt/Bsを入れ替えていたなら、演奏結果も入れ替える
 								{
@@ -1518,9 +1660,18 @@ for (int i = 0; i < 3; i++) {
 							{
 								Trace.TraceInformation( "----------------------" );
 								Trace.TraceInformation( "■ 選曲" );
-								stage選曲.On活性化();
-								r直前のステージ = r現在のステージ;
-								r現在のステージ = stage選曲;
+                                if( bXGRelease )
+                                {
+								    stage選曲XG.On活性化();
+								    r直前のステージ = r現在のステージ;
+								    r現在のステージ = stage選曲XG;
+                                }
+                                else
+                                {
+								    stage選曲GITADORA.On活性化();
+								    r直前のステージ = r現在のステージ;
+								    r現在のステージ = stage選曲GITADORA;
+                                }
 
 								foreach( STPlugin pg in this.listプラグイン )
 								{
@@ -1820,17 +1971,20 @@ for (int i = 0; i < 3; i++) {
 		{
 			get
 			{
+                string strCPUmode = ( Environment.Is64BitProcess ) ? " [x64]" : " [x86]";
+
 				if ( DTXVmode.Enabled )
 				{
-					return "DTXViewer release " + VERSION;
+					return "DTXViewer release " + VERSION + strCPUmode;
 				}
 				else
 				{
-					return "DTXMania .NET style release " + VERSION;
+					return "DTXMania .NET style release " + VERSION + strCPUmode;
 				}
 			}
 		}
 		private CSound previewSound;
+		private bool b起動完了済み = false;
 
 		private void t起動処理()
 		{
@@ -1889,7 +2043,7 @@ for (int i = 0; i < 3; i++) {
 			}
 			Trace.WriteLine("");
 			Trace.WriteLine("DTXMania powered by YAMAHA Silent Session Drums");
-			Trace.WriteLine(string.Format("Release: {0}", VERSION));
+			Trace.WriteLine(string.Format("Release: {0} {1} mode.", VERSION, (Environment.Is64BitProcess)? "x64":"x86" ));
 			Trace.WriteLine("");
 			Trace.TraceInformation("----------------------");
 			Trace.TraceInformation("■ アプリケーションの初期化");
@@ -2260,6 +2414,9 @@ for (int i = 0; i < 3; i++) {
 					case 2:
 						soundDeviceType = ESoundDeviceType.ExclusiveWASAPI;
 						break;
+                    case 3:
+                        soundDeviceType = ESoundDeviceType.SharedWASAPI;
+                        break;
 					default:
 						soundDeviceType = ESoundDeviceType.Unknown;
 						break;
@@ -2267,18 +2424,39 @@ for (int i = 0; i < 3; i++) {
 				Sound管理 = new CSound管理(base.Window.Handle,
 											soundDeviceType,
 											CDTXMania.ConfigIni.nWASAPIBufferSizeMs,
-					// CDTXMania.ConfigIni.nASIOBufferSizeMs,
+                                            CDTXMania.ConfigIni.bEventDrivenWASAPI,
 											0,
 											CDTXMania.ConfigIni.nASIODevice,
 											CDTXMania.ConfigIni.bUseOSTimer
 				);
 				//Sound管理 = FDK.CSound管理.Instance;
 				//Sound管理.t初期化( soundDeviceType, 0, 0, CDTXMania.ConfigIni.nASIODevice, base.Window.Handle );
+                
 
 				ShowWindowTitleWithSoundType();
 				FDK.CSound管理.bIsTimeStretch = CDTXMania.ConfigIni.bTimeStretch;
 				Sound管理.nMasterVolume = CDTXMania.ConfigIni.nMasterVolume;
 				//FDK.CSound管理.bIsMP3DecodeByWindowsCodec = CDTXMania.ConfigIni.bNoMP3Streaming;
+
+
+				string strDefaultSoundDeviceBusType = CSound管理.strDefaultDeviceBusType;
+				Trace.TraceInformation($"Bus type of the default sound device = {strDefaultSoundDeviceBusType}");
+
+				if (strDefaultSoundDeviceBusType.ToUpper().Equals("USB"))
+				{
+					if (CDTXMania.ConfigIni.bWarnSoundDeviceOnUSB)
+					{
+						string strWarnMes = "あなたがPCとMIDI機器を接続するためにお使いのケーブル(MIDI2.0-USB)は、MIDI入力が不安定なことが多く報告されているため、DTXManiaでのご利用はお勧めしません。\n\n"+
+                        "OKをクリックすると、続行します。(以後このメッセージを表示しません)\n" +
+                        "キャンセルをクリックすると、続行します。";
+						var ret = MessageBox.Show(strWarnMes, "DTXMania Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
+						if (ret == DialogResult.OK)
+						{
+							CDTXMania.ConfigIni.bWarnSoundDeviceOnUSB = false;
+						}
+					}
+				}
+
 				Trace.TraceInformation("サウンドデバイスの初期化を完了しました。");
 			}
 			catch (Exception e)
@@ -2334,9 +2512,13 @@ for (int i = 0; i < 3; i++) {
 			//			stageオプション = new CStageオプション();
 			stageコンフィグ = new CStageコンフィグ();
 			stage選曲 = new CStage選曲();
+            stage選曲XG = new CStage選曲XG();
+            stage選曲GITADORA = new CStage選曲GITADORA();
 			stage曲読み込み = new CStage曲読み込み();
 			stage演奏ドラム画面 = new CStage演奏ドラム画面();
 			stage演奏ギター画面 = new CStage演奏ギター画面();
+            stage演奏ドラム画面GITADORA = new CStage演奏ドラム画面GD();
+            stage演奏ギター画面GITADORA = new CStage演奏ギター画面GD();
 			stage結果 = new CStage結果();
 			stageChangeSkin = new CStageChangeSkin();
 			stage終了 = new CStage終了();
@@ -2351,6 +2533,11 @@ for (int i = 0; i < 3; i++) {
 			this.listトップレベルActivities.Add(stage曲読み込み);
 			this.listトップレベルActivities.Add(stage演奏ドラム画面);
 			this.listトップレベルActivities.Add(stage演奏ギター画面);
+            if( CDTXMania.bXGRelease )
+            {
+                this.listトップレベルActivities.Add( stage演奏ドラム画面GITADORA );
+                this.listトップレベルActivities.Add( stage演奏ギター画面GITADORA );
+            }
 			this.listトップレベルActivities.Add(stage結果);
 			this.listトップレベルActivities.Add(stageChangeSkin);
 			this.listトップレベルActivities.Add(stage終了);
@@ -2424,6 +2611,8 @@ for (int i = 0; i < 3; i++) {
 			r現在のステージ.On活性化();
 			//---------------------
 			#endregion
+
+			this.b起動完了済み = true;
 		}
 
 		public void ShowWindowTitleWithSoundType()
@@ -2433,7 +2622,7 @@ for (int i = 0; i < 3; i++) {
 			{
 				delay = "(" + Sound管理.GetSoundDelay() + "ms)";
 			}
-			base.Window.Text = strWindowTitle + " (" + Sound管理.GetCurrentSoundDeviceType() + delay + ")";
+			base.Window.Text = strWindowTitle + " (" + Sound管理.GetCurrentSoundDeviceType().ToString() + delay + ")";
 		}
 
 		private void t終了処理()
@@ -2797,12 +2986,25 @@ for (int i = 0; i < 3; i++) {
 				ini.tヒストリを追加する( str新ヒストリ行 );
 				if( !bコンパクトモード )
 				{
-					stage選曲.r現在選択中のスコア.譜面情報.演奏回数.Drums = ini.stファイル.PlayCountDrums;
-					stage選曲.r現在選択中のスコア.譜面情報.演奏回数.Guitar = ini.stファイル.PlayCountGuitar;
-					stage選曲.r現在選択中のスコア.譜面情報.演奏回数.Bass = ini.stファイル.PlayCountBass;
+                    if( CDTXMania.bXGRelease ) {
+					    stage選曲XG.r現在選択中のスコア.譜面情報.演奏回数.Drums = ini.stファイル.PlayCountDrums;
+					    stage選曲XG.r現在選択中のスコア.譜面情報.演奏回数.Guitar = ini.stファイル.PlayCountGuitar;
+					    stage選曲XG.r現在選択中のスコア.譜面情報.演奏回数.Bass = ini.stファイル.PlayCountBass;
+                    } else {
+					    stage選曲GITADORA.r現在選択中のスコア.譜面情報.演奏回数.Drums = ini.stファイル.PlayCountDrums;
+					    stage選曲GITADORA.r現在選択中のスコア.譜面情報.演奏回数.Guitar = ini.stファイル.PlayCountGuitar;
+					    stage選曲GITADORA.r現在選択中のスコア.譜面情報.演奏回数.Bass = ini.stファイル.PlayCountBass;
+                    }
+
+
 					for( int j = 0; j < ini.stファイル.History.Length; j++ )
 					{
-						stage選曲.r現在選択中のスコア.譜面情報.演奏履歴[ j ] = ini.stファイル.History[ j ];
+                        if( CDTXMania.bXGRelease ) {
+						    stage選曲XG.r現在選択中のスコア.譜面情報.演奏履歴[ j ] = ini.stファイル.History[ j ];
+                        } else {
+						    stage選曲GITADORA.r現在選択中のスコア.譜面情報.演奏履歴[ j ] = ini.stファイル.History[ j ];
+                        }
+
 					}
 				}
 			}
@@ -2815,11 +3017,17 @@ for (int i = 0; i < 3; i++) {
 		}
 		private void tガベージコレクションを実行する()
 		{
+			//LOHに対するコンパクションを要求
+			GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
+		
 			GC.Collect();
 			GC.WaitForPendingFinalizers();
 			GC.Collect();
 			GC.WaitForPendingFinalizers();
-		}
+
+            //通常通り、LOHへのGCを抑制
+            GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.Default;
+        }
 		private void tプラグイン検索と生成()
 		{
 			this.listプラグイン = new List<STPlugin>();
@@ -2962,8 +3170,10 @@ for (int i = 0; i < 3; i++) {
 			{
 				for ( int i = 0; i < 0x10; i++ )
 				{
-					if ( ConfigIni.KeyAssign.System.Capture[ i ].コード > 0 &&
-						 e.KeyCode == DeviceConstantConverter.KeyToKeyCode( (SlimDX.DirectInput.Key) ConfigIni.KeyAssign.System.Capture[ i ].コード ) )
+                    var captureCode = (SlimDX.DirectInput.Key)ConfigIni.KeyAssign.System[ (int)EKeyConfigPad.Capture ][ i ].コード;
+
+					if( (int) captureCode > 0 &&
+						e.KeyCode == DeviceConstantConverter.KeyToKeys( captureCode ) )
 					{
 						// Debug.WriteLine( "capture: " + string.Format( "{0:2x}", (int) e.KeyCode ) + " " + (int) e.KeyCode );
 						string strFullPath =

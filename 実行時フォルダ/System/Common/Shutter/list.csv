@@ -1,0 +1,16 @@
+; DTXManiaXG(Ver.K) Ver4.00
+; シャッター画像一覧定義ファイル
+
+; ファイル名とCONFIG画面に出る名前の紐付けを行います。
+; <usage>
+; name,filename(Drums),filename(GuitarBass)
+
+; <caution>
+; ・上から順にリストに追加されます。
+; ・システム側でリストの末尾に「BLACK」が追加されます。
+; ・シャッター画像は558x720(ドラム)、252x720(ギター)推奨です。
+
+; <sample>
+; dtxmania,dtxmania_d.png,dtxmania_gb.png
+
+DEFAULT,default_d.png,default_gb.png

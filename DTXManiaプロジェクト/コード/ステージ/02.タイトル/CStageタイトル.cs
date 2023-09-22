@@ -4,8 +4,10 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Drawing;
-using SlimDX.DirectInput;
+using System.IO;
 using FDK;
+
+using SlimDXKey = SlimDX.DirectInput.Key;
 
 namespace DTXMania
 {
@@ -20,6 +22,7 @@ namespace DTXMania
 			base.list子Activities.Add( this.actFIfromSetup = new CActFIFOWhite() );
 			base.list子Activities.Add( this.actFI = new CActFIFOWhite() );
 			base.list子Activities.Add( this.actFO = new CActFIFOWhite() );
+			base.list子Activities.Add( this.actFOpuzzle = new CActFIFOPuzzle() );
 		}
 
 
@@ -100,6 +103,11 @@ namespace DTXMania
 						this.actFIfromSetup.tフェードイン開始();
 						base.eフェーズID = CStage.Eフェーズ.タイトル_起動画面からのフェードイン;
 					}
+					else if ( CDTXMania.r直前のステージ == CDTXMania.stageコンフィグ && !CDTXMania.bXGRelease )
+                    {
+						this.actFOpuzzle.tフェードイン開始WAM();
+						base.eフェーズID = CStage.Eフェーズ.共通_フェードイン;
+					}
 					else
 					{
 						this.actFI.tフェードイン開始();
@@ -148,20 +156,20 @@ namespace DTXMania
 				if ( base.eフェーズID == CStage.Eフェーズ.共通_通常状態		// 通常状態、かつ
 					&& CDTXMania.act現在入力を占有中のプラグイン == null )	// プラグインの入力占有がない
 				{
-					if ( CDTXMania.Input管理.Keyboard.bキーが押された( (int) Key.Escape ) )
+					if ( CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDXKey.Escape ) )
 						return (int) E戻り値.EXIT;
 
-					this.ctキー反復用.Up.tキー反復( CDTXMania.Input管理.Keyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.UpArrow ), new CCounter.DGキー処理( this.tカーソルを上へ移動する ) );
+					this.ctキー反復用.Up.tキー反復( CDTXMania.Input管理.Keyboard.bキーが押されている( (int) SlimDXKey.UpArrow ), new CCounter.DGキー処理( this.tカーソルを上へ移動する ) );
 					this.ctキー反復用.R.tキー反復( CDTXMania.Pad.b押されているGB( Eパッド.HH ), new CCounter.DGキー処理( this.tカーソルを上へ移動する ) );
 					if ( CDTXMania.Pad.b押された( E楽器パート.DRUMS, Eパッド.SD ) )
 						this.tカーソルを上へ移動する();
 
-					this.ctキー反復用.Down.tキー反復( CDTXMania.Input管理.Keyboard.bキーが押されている( (int) SlimDX.DirectInput.Key.DownArrow ), new CCounter.DGキー処理( this.tカーソルを下へ移動する ) );
+					this.ctキー反復用.Down.tキー反復( CDTXMania.Input管理.Keyboard.bキーが押されている( (int) SlimDXKey.DownArrow ), new CCounter.DGキー処理( this.tカーソルを下へ移動する ) );
 					this.ctキー反復用.B.tキー反復( CDTXMania.Pad.b押されているGB( Eパッド.BD ), new CCounter.DGキー処理( this.tカーソルを下へ移動する ) );
 					if ( CDTXMania.Pad.b押された( E楽器パート.DRUMS, Eパッド.FT ) )
 						this.tカーソルを下へ移動する();
 
-					if ( ( CDTXMania.Pad.b押されたDGB( Eパッド.CY ) || CDTXMania.Pad.b押された( E楽器パート.DRUMS, Eパッド.RD ) ) || ( CDTXMania.Pad.b押された( E楽器パート.DRUMS, Eパッド.LC ) || ( CDTXMania.ConfigIni.bEnterがキー割り当てのどこにも使用されていない && CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDX.DirectInput.Key.Return ) ) ) )
+					if ( ( CDTXMania.Pad.b押されたDGB( Eパッド.CY ) || CDTXMania.Pad.b押された( E楽器パート.DRUMS, Eパッド.RD ) ) || ( CDTXMania.Pad.b押された( E楽器パート.DRUMS, Eパッド.LC ) || ( CDTXMania.ConfigIni.bEnterがキー割り当てのどこにも使用されていない && CDTXMania.Input管理.Keyboard.bキーが押された( (int)SlimDXKey.Return ) ) ) )
 					{
 						if ( ( this.n現在のカーソル行 == (int) E戻り値.GAMESTART - 1 ) && CDTXMania.Skin.soundゲーム開始音.b読み込み成功 )
 						{
@@ -175,7 +183,15 @@ namespace DTXMania
 						{
 							return (int) E戻り値.EXIT;
 						}
-						this.actFO.tフェードアウト開始();
+
+						if ( this.n現在のカーソル行 == (int) E戻り値.CONFIG - 1 && !CDTXMania.bXGRelease )
+                        {
+							this.actFOpuzzle.tフェードアウト開始WAM();
+                        }
+						else
+                        {
+							this.actFO.tフェードアウト開始();
+                        }
 						base.eフェーズID = CStage.Eフェーズ.共通_フェードアウト;
 					}
 					//					if ( CDTXMania.Input管理.Keyboard.bキーが押された( (int) Key.Space ) )
@@ -229,7 +245,7 @@ namespace DTXMania
 				}
 				#endregion
                 #region[ バージョン表示 ]
-                string strVersion = "DTX:J:A:A:2016042700";
+                string strVersion = "DTX:J:A:A:2023092200";
 #if DEBUG
                 strVersion += "  DEBUG";
 #endif
@@ -240,18 +256,43 @@ namespace DTXMania
 				switch ( eフェーズid )
 				{
 					case CStage.Eフェーズ.共通_フェードイン:
-						if ( this.actFI.On進行描画() != 0 )
-						{
-							CDTXMania.Skin.soundタイトル音.t再生する();
-							base.eフェーズID = CStage.Eフェーズ.共通_通常状態;
-						}
+						if ( CDTXMania.r直前のステージ.eステージID == Eステージ.コンフィグ )
+                        {
+							if (this.actFOpuzzle.On進行描画() != 0)
+							{
+								CDTXMania.Skin.soundタイトル音.t再生する();
+								base.eフェーズID = CStage.Eフェーズ.共通_通常状態;
+							}
+                        }
+						else
+                        {
+							if ( this.actFI.On進行描画() != 0 )
+							{
+								CDTXMania.Skin.soundタイトル音.t再生する();
+								base.eフェーズID = CStage.Eフェーズ.共通_通常状態;
+							}
+                        }
 						break;
 
 					case CStage.Eフェーズ.共通_フェードアウト:
-						if ( this.actFO.On進行描画() == 0 )
-						{
-							break;
-						}
+						if (CDTXMania.bXGRelease)
+                        {
+							if ( this.actFO.On進行描画() == 0 )
+							{
+								break;
+							}
+                        }
+						else
+                        {
+							if ( this.n現在のカーソル行 != (int)E戻り値.CONFIG - 1 && this.actFO.On進行描画() == 0 )
+							{
+								break;
+							}
+							else if ( this.n現在のカーソル行 == (int)E戻り値.CONFIG - 1 && this.actFOpuzzle.On進行描画() == 0 )
+							{
+								break;
+							}
+                        }
 						base.eフェーズID = CStage.Eフェーズ.共通_終了状態;
 						switch ( this.n現在のカーソル行 )
 						{
@@ -348,6 +389,7 @@ namespace DTXMania
 		private CActFIFOWhite actFI;
 		private CActFIFOWhite actFIfromSetup;
 		private CActFIFOWhite actFO;
+		private CActFIFOPuzzle actFOpuzzle;
 		private CCounter ctカーソルフラッシュ用;
 		private STキー反復用カウンタ ctキー反復用;
 		private CCounter ct下移動用;

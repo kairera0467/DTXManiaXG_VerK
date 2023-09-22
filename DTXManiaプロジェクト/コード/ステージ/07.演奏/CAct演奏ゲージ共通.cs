@@ -250,12 +250,30 @@ namespace DTXMania
 		#endregion
 
 		public STDGBVALUE<double> db現在のゲージ値;
-		protected CCounter ct本体移動;
-		protected CCounter ct本体振動;
 		protected CCounter ctマスクFIFO;
 		protected CTexture txゲージ;
         protected CTexture txゲージ背景;
-        protected CTexture txマスクF;
-        protected CTexture txマスクD;
+        
+        protected STGaugeAddAnime[] stGaugeAddAnime = new STGaugeAddAnime[ 32 ];
+        protected struct STGaugeAddAnime
+        {
+            public bool bUsing;
+            public CCounter ctAnimeCounter;
+            public E楽器パート ePart;
+        }
+
+        public void tGaugeAddAnime( E楽器パート ePart )
+        {
+            for( int j = 0; j < 32; j++ )
+            {
+                if( !this.stGaugeAddAnime[ j ].bUsing && db現在のゲージ値[ (int)ePart ] != 1.0 ) //ゲージがMAXの場合は動かさない
+                {
+                    this.stGaugeAddAnime[ j ].bUsing = true;
+                    this.stGaugeAddAnime[ j ].ctAnimeCounter = new CCounter( 0, 11, 30, CDTXMania.Timer ); // カウンタ
+                    this.stGaugeAddAnime[ j ].ePart = ePart;
+                    break;
+                }
+            }
+        }
 	}
 }

@@ -5,8 +5,9 @@ using System.Diagnostics;
 using System.Text;
 using System.Runtime.InteropServices;
 using FDK;
-using SlimDX;
+using SharpDX;
 
+using Rectangle = System.Drawing.Rectangle;
 namespace DTXMania
 {
 	internal class CAct演奏Guitar判定文字列 : CAct演奏判定文字列共通
@@ -1291,7 +1292,7 @@ namespace DTXMania
                             int num5 = 0;
                             int num6 = 0;
                             
-                            int nJudgePosY = CDTXMania.stage演奏ドラム画面.演奏判定ライン座標.n判定ラインY座標( E楽器パート.DRUMS, false, CDTXMania.ConfigIni.bReverse.Drums, false, true );
+                            int nJudgePosY = CDTXMania.stage演奏ギター画面.演奏判定ライン座標.n判定ラインY座標( E楽器パート.DRUMS, false, CDTXMania.ConfigIni.bReverse.Drums, false, true );
                             base.iP_A = nJudgePosY - 189;
                             base.iP_B = nJudgePosY + 23;
 
@@ -1324,7 +1325,7 @@ namespace DTXMania
                                 }
                             }
 
-                            int nRectX = CDTXMania.ConfigIni.nJudgeWidgh;
+                            int nRectX = CDTXMania.ConfigIni.nJudgeWidth;
                             int nRectY = CDTXMania.ConfigIni.nJudgeHeight;
 
                             int xc = (num5 + base.st状態[j].n相対X座標) + (this.stレーンサイズ[j].w / 2);

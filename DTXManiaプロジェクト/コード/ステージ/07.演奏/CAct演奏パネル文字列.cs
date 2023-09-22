@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
 using System.Diagnostics;
-using SlimDX;
+using SharpDX;
 using FDK;
 
+using Rectangle = System.Drawing.Rectangle;
 namespace DTXMania
 {
 	internal class CAct演奏パネル文字列 : CActivity

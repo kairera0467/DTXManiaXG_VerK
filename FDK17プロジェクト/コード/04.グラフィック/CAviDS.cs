@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using DirectShowLib;
 using DirectShowLib.DES;
-using SlimDX;
+using SharpDX;
 
 namespace FDK
 {
@@ -192,7 +192,7 @@ namespace FDK
 			}
 		}
 
-		public unsafe void tGetBitmap(SlimDX.Direct3D9.Device device, CTexture ctex, int timeMs)
+		public unsafe void tGetBitmap(SharpDX.Direct3D9.Device device, CTexture ctex, int timeMs)
 		{
 			int bufferSize = 0;
 			int hr = 0x0;
@@ -205,8 +205,8 @@ namespace FDK
 				samplePtr = Marshal.AllocHGlobal(bufferSize);
 			}
 
-			DataRectangle rectangle3 = ctex.texture.LockRectangle(0, SlimDX.Direct3D9.LockFlags.None);
-			hr = grabber.GetCurrentBuffer(ref bufferSize, rectangle3.Data.DataPointer);
+			DataRectangle rectangle3 = ctex.texture.LockRectangle(0, SharpDX.Direct3D9.LockFlags.None);
+			hr = grabber.GetCurrentBuffer(ref bufferSize, rectangle3.DataPointer);
 			DsError.ThrowExceptionForHR(hr);
 			ctex.texture.UnlockRectangle(0);
 		}

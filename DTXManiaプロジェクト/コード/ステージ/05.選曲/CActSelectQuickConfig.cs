@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Text;
 using System.Drawing;
 using System.IO;
-using SlimDX;
+using SharpDX;
 using FDK;
 
 namespace DTXMania
@@ -18,7 +18,7 @@ namespace DTXMania
 
 		public CActSelectQuickConfig()
 		{
-			CActSelectQuickConfigMain();
+			//CActSelectQuickConfigMain();
 		}
 
 		private void CActSelectQuickConfigMain()
@@ -558,6 +558,7 @@ namespace DTXMania
 
 		public override void On活性化()
 		{
+            CActSelectQuickConfigMain();
 			this.ft表示用フォント = new Font( "Arial", 26f * Scale.Y, FontStyle.Bold, GraphicsUnit.Pixel );
 			base.On活性化();
 			this.bGotoDetailConfig = false;
@@ -575,6 +576,17 @@ namespace DTXMania
 		{
 			if( !base.b活性化してない )
 			{
+				string pathCursor = CSkin.Path( @"Graphics\ScreenConfig menu cursor.png" );
+				string pathPopupMenuBackground = CSkin.Path( @"Graphics\ScreenSelect sort menu background.png" );
+				if( File.Exists ( pathCursor ) )
+				{
+					this.txCursor = CDTXMania.tテクスチャの生成( pathCursor, false );
+				}
+				if( File.Exists( pathPopupMenuBackground ) )
+				{
+					this.txPopupMenuBackground = CDTXMania.tテクスチャの生成( pathPopupMenuBackground, false );
+				}
+
 				string pathパネル本体 = CSkin.Path( @"Graphics\ScreenSelect popup auto settings.png" );
 				if ( File.Exists( pathパネル本体 ) )
 				{
@@ -587,6 +599,8 @@ namespace DTXMania
 		{
 			if ( !base.b活性化してない )
 			{
+                CDTXMania.tテクスチャの解放( ref this.txPopupMenuBackground );
+				CDTXMania.tテクスチャの解放( ref this.txCursor );
 				CDTXMania.tテクスチャの解放( ref this.txパネル本体 );
 				CDTXMania.tテクスチャの解放( ref this.tx文字列パネル );
 				base.OnManagedリソースの解放();

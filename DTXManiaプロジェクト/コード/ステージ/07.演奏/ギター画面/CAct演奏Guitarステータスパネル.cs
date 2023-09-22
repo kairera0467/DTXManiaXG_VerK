@@ -10,23 +10,24 @@ namespace DTXMania
 {
 	internal class CAct演奏Guitarステータスパネル : CAct演奏ステータスパネル共通
 	{
-		// コンストラクタ
-		public override void OnManagedリソースの作成()
+        // コンストラクタ
+        public override void On活性化()
+        {
+            this.ftGroupFont = new Font( CDTXMania.ConfigIni.str選曲リストフォント, 16f, FontStyle.Regular, GraphicsUnit.Pixel );
+
+            this.pfNameFont = new CPrivateFastFont( new FontFamily( "Arial" ), 20, FontStyle.Bold );
+            this.pfSongTitleFont = new CPrivateFastFont( new FontFamily( CDTXMania.ConfigIni.str選曲リストフォント ), 20, FontStyle.Regular );
+
+            base.On活性化();
+        }
+
+        public override void OnManagedリソースの作成()
 		{
 			if( !base.b活性化してない )
 			{
                 this.strGroupName = new string[ 2 ];
                 this.strPlayerName = new string[ 2 ];
                 this.txパネル = new CTexture[ 2 ];
-                this.pfSongTitleFont = new CPrivateFastFont( new FontFamily( CDTXMania.ConfigIni.str選曲リストフォント ), 20, FontStyle.Regular );
-                this.pfNameFont = new CPrivateFastFont( new FontFamily( "Arial" ), 24, FontStyle.Bold );
-                this.ftGroupFont = new Font( "ＤＦＧ平成ゴシック体W5", 16f, FontStyle.Regular, GraphicsUnit.Pixel );
-                this.ftDisplayFont = new Font( "ＤＦＧ平成ゴシック体W5", 20f, FontStyle.Regular, GraphicsUnit.Pixel );
-                this.ftLevelFont = new Font( "Impact", 26f, FontStyle.Regular );
-                this.ftDifficultyL = new Font( "Arial", 30f, FontStyle.Bold );
-                this.ftDifficultyS = new Font( "Arial", 20f, FontStyle.Bold );
-                if( CDTXMania.ConfigIni.eNamePlateType == Eタイプ.B )
-                    this.ftDifficultyL = new Font( "Arial", 46f, FontStyle.Bold );
 
                 #region[ 曲名パネル ]
                 int[] nSongPanel = new int[] { 250, 112 };
@@ -39,6 +40,14 @@ namespace DTXMania
                     strSongpanelFile = CSkin.Path( @"Graphics\7_Guitar Songpanel_XG.png" );
                 }
 
+                if( CDTXMania.ConfigIni.eNamePlateType == Eタイプ.B ) {
+                    this.iDifficulty = CDTXMania.tテクスチャをImageで読み込む( CSkin.Path( @"Graphics\7_Difficulty_XG.png" ) );
+                    this.iDifficultyNumber = CDTXMania.tテクスチャをImageで読み込む( CSkin.Path( @"Graphics\7_Difficulty_number_XG.png" ) );
+                } else {
+                    this.iDifficulty = CDTXMania.tテクスチャをImageで読み込む( CSkin.Path( @"Graphics\7_Difficulty.png" ) );
+                    this.iDifficultyNumber = CDTXMania.tテクスチャをImageで読み込む( CSkin.Path( @"Graphics\7_Difficulty_number_XG2.png" ) );
+                }
+
                 Bitmap bSongPanel = new Bitmap( nSongPanel[ 0 ], nSongPanel[ 1 ] );
                 Graphics gSongNamePlate = Graphics.FromImage( bSongPanel );
                 gSongNamePlate.PageUnit = GraphicsUnit.Pixel;
@@ -46,10 +55,11 @@ namespace DTXMania
                 gSongNamePlate.DrawImage( CDTXMania.tテクスチャをImageで読み込む( strSongpanelFile ), 0, 0, nSongPanel[ 0 ], nSongPanel[ 1 ] );
 
                 #region[ 曲名 ]
-                if( string.IsNullOrEmpty( CDTXMania.DTX.TITLE ) || ( !CDTXMania.bコンパクトモード && CDTXMania.ConfigIni.b曲名表示をdefのものにする ) )
-                    this.strTitle = CDTXMania.stage選曲.r現在選択中の曲.strタイトル;
-                else
-                    this.strTitle = CDTXMania.DTX.TITLE;
+                //if( string.IsNullOrEmpty( CDTXMania.DTX.TITLE ) || ( !CDTXMania.bコンパクトモード && CDTXMania.ConfigIni.b曲名表示をdefのものにする ) )
+                //    this.strTitle = CDTXMania.stage選曲XG.r現在選択中の曲.strタイトル;
+                //else
+                //    this.strTitle = CDTXMania.DTX.TITLE;
+                this.strTitle = "";
 
                 if( File.Exists( CDTXMania.DTX.strフォルダ名 + "\\TitleTexture.png" ) )
                 {
@@ -64,8 +74,8 @@ namespace DTXMania
                 {
                     //PrivateFontのテスト
                     Bitmap bmpSongName = pfSongTitleFont.DrawPrivateFont( this.strTitle, Color.White );
-                    int x = CDTXMania.ConfigIni.eNamePlateType == Eタイプ.A ? 80 : 250;
-                    int y = CDTXMania.ConfigIni.eNamePlateType == Eタイプ.A ? 60 : 18;
+                    int x = CDTXMania.ConfigIni.eNamePlateType == Eタイプ.A ? 16 : 250;
+                    int y = CDTXMania.ConfigIni.eNamePlateType == Eタイプ.A ? 70 : 18;
                     if( ( bmpSongName.Size.Width / 1.25f ) > 240 )
                     {
                         gSongNamePlate.DrawImage( bmpSongName, x, y, ( bmpSongName.Size.Width / 1.25f ) * ( 240.0f / ( bmpSongName.Size.Width / 1.25f ) ), bmpSongName.Size.Height );
@@ -111,10 +121,10 @@ namespace DTXMania
                     gNamePlate.PageUnit = GraphicsUnit.Pixel;
 
                     #region[ カードネーム ]
-                    this.strPlayerName[ 0 ] = string.IsNullOrEmpty( CDTXMania.ConfigIni.strCardName[ 1 ] ) ? "GUEST" : CDTXMania.ConfigIni.strCardName[ 1 ];
-                    this.strPlayerName[ 1 ] = string.IsNullOrEmpty( CDTXMania.ConfigIni.strCardName[ 2 ] ) ? "GUEST" : CDTXMania.ConfigIni.strCardName[ 2 ];
-                    this.strGroupName[ 0 ] = string.IsNullOrEmpty( CDTXMania.ConfigIni.strGroupName[ 1 ] ) ? "" : CDTXMania.ConfigIni.strGroupName[ 1 ];
-                    this.strGroupName[ 1 ] = string.IsNullOrEmpty( CDTXMania.ConfigIni.strGroupName[ 2 ] ) ? "" : CDTXMania.ConfigIni.strGroupName[ 2 ];
+                    this.strPlayerName[ 0 ] = CDTXMania.ConfigIni.strGetCardName( E楽器パート.GUITAR );
+                    this.strPlayerName[ 1 ] = CDTXMania.ConfigIni.strGetCardName( E楽器パート.BASS );
+                    this.strGroupName[ 0 ] = string.IsNullOrEmpty( CDTXMania.ConfigIni.strGetGroupName( E楽器パート.GUITAR ) ) ? "" : CDTXMania.ConfigIni.strGetGroupName( E楽器パート.GUITAR );
+                    this.strGroupName[ 1 ] = string.IsNullOrEmpty( CDTXMania.ConfigIni.strGetGroupName( E楽器パート.BASS ) ) ? "" : CDTXMania.ConfigIni.strGetGroupName( E楽器パート.BASS );
 
                     #endregion
                     #region[ ネームカラー ]
@@ -210,7 +220,7 @@ namespace DTXMania
                     #region[ ネームプレート、難易度、カードネーム ]
                     if( CDTXMania.ConfigIni.eNamePlateType == Eタイプ.A )
                     {
-                        Rectangle Rect1 = new Rectangle( 7, 91, 234, 38 );
+                        Rectangle Rect1 = new Rectangle( 6, 90, 234, 38 );
                         Rectangle RectDifficulty = new Rectangle( base.rectDiffPanelPoint.X, base.rectDiffPanelPoint.Y, 234, 38 );
 
                         gNamePlate = Graphics.FromImage( bNamePlate );
@@ -238,48 +248,47 @@ namespace DTXMania
                     else if( CDTXMania.ConfigIni.eNamePlateType == Eタイプ.B )
                         bLevel = new Bitmap( 250, 297 );
 
-                    string strLevel = string.Format("{0:0.00}", ((float)CDTXMania.DTX.LEVEL[ i + 1 ]) / 10f);
-                    strLevel = string.Format("{0:0.00}", ((float)CDTXMania.DTX.LEVEL[ i + 1 ]) / 10.0f + (CDTXMania.DTX.LEVELDEC[ i + 1 ] != 0 ? CDTXMania.DTX.LEVELDEC[ i + 1 ] / 100.0f : 0));
-
-                    if (CDTXMania.ConfigIni.bCLASSIC譜面判別を有効にする &&
-                        (CDTXMania.DTX.bCLASSIC譜面である.Guitar == false) &&
-                        (CDTXMania.DTX.b強制的にXG譜面にする == false))
+                    string str = string.Format( "{0:0.00}", ( (float)CDTXMania.DTX.LEVEL[ 1 + i ]) / 10f );
+                    str = string.Format( "{0:0.00}", ( (float)CDTXMania.DTX.LEVEL[ 1 + 1 ] ) / 10.0f + ( CDTXMania.DTX.LEVELDEC[ 1 + i ] != 0 ? CDTXMania.DTX.LEVELDEC[ 1 + i ] / 100.0f : 0 ) );
+                    int[] nDigit = new int[]{ Convert.ToInt16( str[ 0 ].ToString() ), Convert.ToInt16( str[ 2 ].ToString() ), Convert.ToInt16( string.IsNullOrWhiteSpace(str[ 3 ].ToString()) ? "0" : str[ 3 ].ToString() ) };
+                    
+                    if ( CDTXMania.ConfigIni.bCLASSIC譜面判別を有効にする ? ( CDTXMania.DTX.bCLASSIC譜面である[ 1 + i ] && CDTXMania.DTX.b強制的にXG譜面にする == false ) : false )
                     {
-                        strLevel = string.Format("{0:00}", CDTXMania.DTX.LEVEL[ i + 1 ]);
+                        str = string.Format( "{0:00}", CDTXMania.DTX.LEVEL[ 1 + i ] );
+                        nDigit = new int[]{ Convert.ToInt16( str[ 0 ].ToString() ), Convert.ToInt16( str[ 1 ].ToString() ) };
                     }
-
-                    int widthG = (int)gNamePlate.MeasureString(this.stパネルマップ[ 0 ].label.Substring(0, 3) + "   ", this.ftLevelFont).Width;
-                    //数字の描画部分。その左側。
-                    if (CDTXMania.ConfigIni.bCLASSIC譜面判別を有効にする &&
-                        (CDTXMania.DTX.bCLASSIC譜面である.Guitar == false) &&
-                        (CDTXMania.DTX.b強制的にXG譜面にする == false))
+                    //左
+                    if( CDTXMania.ConfigIni.bCLASSIC譜面判別を有効にする ? ( CDTXMania.DTX.bCLASSIC譜面である[ 1 + i ] && CDTXMania.DTX.b強制的にXG譜面にする == false ) : false )
                     {
-                        if (CDTXMania.ConfigIni.eNamePlateType == Eタイプ.A)
-                            gNamePlate.DrawString(strLevel.Substring(0, 2), this.ftDifficultyL, Brushes.Black, 91f + widthG, 89f);
-                        else if (CDTXMania.ConfigIni.eNamePlateType == Eタイプ.B)
-                            gNamePlate.DrawString(strLevel.Substring(0, 2), this.ftDifficultyL, Brushes.Black, 44f + widthG, 47f);
-                    }
-                    else
-                    {
-                        if (CDTXMania.ConfigIni.eNamePlateType == Eタイプ.A)
-                            gNamePlate.DrawString(strLevel.Substring(0, 1), this.ftDifficultyL, Brushes.Black, 91f + widthG, 89f);
-                        else if (CDTXMania.ConfigIni.eNamePlateType == Eタイプ.B)
-                            gNamePlate.DrawString(strLevel.Substring(0, 1), this.ftDifficultyL, Brushes.Black, 44f + widthG, 47f);
-                    }
-                    widthG += (int)gNamePlate.MeasureString(strLevel.Substring(0, 1), this.ftDifficultyL).Width;
-
-                    //数字の右。
-                    if (CDTXMania.ConfigIni.bCLASSIC譜面判別を有効にする &&
-                        (CDTXMania.DTX.bCLASSIC譜面である.Guitar == false) &&
-                        (CDTXMania.DTX.b強制的にXG譜面にする == false))
-                    {
+                        if( CDTXMania.ConfigIni.eNamePlateType == Eタイプ.A ){
+                            gNamePlate.DrawImage( this.iDifficultyNumber, 150, 94, new Rectangle( nDigit[ 0 ] * 22, 0, 22, 32 ), GraphicsUnit.Pixel );
+                            gNamePlate.DrawImage( this.iDifficultyNumber, 178, 94, new Rectangle( nDigit[ 1 ] * 22, 0, 22, 32 ), GraphicsUnit.Pixel );
+                        } else if( CDTXMania.ConfigIni.eNamePlateType == Eタイプ.B ) {
+                            gNamePlate.DrawImage( this.iDifficultyNumber, new Rectangle( 94, 60, 34, 48), new Rectangle( nDigit[ 0 ] * 34, 0, 34, 48 ), GraphicsUnit.Pixel );
+                            gNamePlate.DrawImage( this.iDifficultyNumber, new Rectangle( 128, 60, 34, 48), new Rectangle( nDigit[ 1 ] * 34, 0, 34, 48 ), GraphicsUnit.Pixel );
+                        }
                     }
                     else
                     {
-                        if (CDTXMania.ConfigIni.eNamePlateType == Eタイプ.A)
-                            gNamePlate.DrawString(strLevel.Substring(1, 3), this.ftDifficultyS, Brushes.Black, 88f + widthG, 100f);
-                        else if (CDTXMania.ConfigIni.eNamePlateType == Eタイプ.B)
-                            gNamePlate.DrawString(strLevel.Substring(1, 3), this.ftDifficultyS, Brushes.Black, 44f + widthG, 78f);
+                        if( CDTXMania.ConfigIni.eNamePlateType == Eタイプ.A ) {
+                            gNamePlate.DrawImage( this.iDifficultyNumber, new Rectangle( 156, 94, 24, 32 ), new Rectangle( nDigit[ 0 ] * 22, 0, 22, 32 ), GraphicsUnit.Pixel );
+                            gNamePlate.DrawImage( this.iDifficultyNumber, new Rectangle( 188, 120, 6, 4 ), new Rectangle( 0, 54, 4, 4 ), GraphicsUnit.Pixel );
+                        } else if( CDTXMania.ConfigIni.eNamePlateType == Eタイプ.B ) {
+                            gNamePlate.DrawImage( this.iDifficultyNumber, new Rectangle( 94, 60, 42, 44 ), new Rectangle( nDigit[ 0 ] * 34, 0, 34, 48 ), GraphicsUnit.Pixel );
+                            gNamePlate.DrawImage( this.iDifficultyNumber, new Rectangle( 139, 100, 6, 4 ), new Rectangle( 0, 70, 4, 4 ), GraphicsUnit.Pixel );
+                        }
+                    }
+
+                    //右
+                    if( CDTXMania.ConfigIni.bCLASSIC譜面判別を有効にする ? ( !CDTXMania.DTX.bCLASSIC譜面である.Drums || CDTXMania.DTX.b強制的にXG譜面にする ) : true )
+                    {
+                        if( CDTXMania.ConfigIni.eNamePlateType == Eタイプ.A ) {
+                            gNamePlate.DrawImage( this.iDifficultyNumber, new Rectangle( 197, 105, 20, 20 ), new Rectangle( 16 * nDigit[ 1 ], 32, 16, 22 ), GraphicsUnit.Pixel );
+                            gNamePlate.DrawImage( this.iDifficultyNumber, new Rectangle( 217, 105, 20, 20 ), new Rectangle( 16 * nDigit[ 2 ], 32, 16, 22 ), GraphicsUnit.Pixel );
+                        } else if( CDTXMania.ConfigIni.eNamePlateType == Eタイプ.B ) {
+                            gNamePlate.DrawImage( this.iDifficultyNumber, new Rectangle( 150, 82, 22, 22 ), new Rectangle( 16 * nDigit[ 1 ], 48, 16, 22 ), GraphicsUnit.Pixel );
+                            gNamePlate.DrawImage( this.iDifficultyNumber, new Rectangle( 175, 82, 22, 22 ), new Rectangle( 16 * nDigit[ 2 ], 48, 16, 22 ), GraphicsUnit.Pixel );
+                        }
                     }
                     #endregion
 
@@ -340,7 +349,7 @@ namespace DTXMania
                     int nSongNamePanelY = 521;
                     if( CDTXMania.ConfigIni.eNamePlateType == Eタイプ.A )
                     {
-                        if( CDTXMania.ConfigIni.bGraph.Drums )
+                        if( bUseGraph[ 0 ] || bUseGraph[ 1 ] )
                             nSongNamePanelY = 293;
 
                         this.tx曲名パネル.t2D描画( CDTXMania.app.Device, nSongNamePanelX, nSongNamePanelY );
@@ -436,8 +445,12 @@ namespace DTXMania
                             }
                             if( this.txScore != null && bShowPanel[ i ] )
                             {
-                                this.txScore.t2D描画( CDTXMania.app.Device, nNamePlateX[ i ] + 65 + ( j * 18 ), nNamePlateY[ i ] + 170, rectangle );
+
                                 this.txScore.vc拡大縮小倍率.X = 0.7f;
+                                if (CDTXMania.ConfigIni.eNamePlateType == Eタイプ.A)
+                                    this.txScore.t2D描画( CDTXMania.app.Device, nNamePlateX[ i ] + 65 + ( j * 18 ), nNamePlateY[ i ] + 185, rectangle);
+                                else if (CDTXMania.ConfigIni.eNamePlateType == Eタイプ.B)
+                                    this.txScore.t2D描画( CDTXMania.app.Device, nNamePlateX[ i ] + 65 + ( j * 18 ), nNamePlateY[ i ] + 170, rectangle );   
                             }
                         }
                     }
@@ -483,16 +496,13 @@ namespace DTXMania
         private CTexture tx曲名パネル;
         private CPrivateFastFont pfSongTitleFont;
         private CPrivateFastFont pfNameFont;
-        private Font ftDifficultyL;
-        private Font ftDifficultyS;
-        private Font ftDisplayFont;
         private Font ftGroupFont;
-        private Font ftLevelFont;
         private string[] strGroupName;
         private string[] strPlayerName;
         private string strTitle;
-
-		//-----------------
-		#endregion
-	}
+        private Image iDifficulty;
+        private Image iDifficultyNumber;
+        //-----------------
+        #endregion
+    }
 }

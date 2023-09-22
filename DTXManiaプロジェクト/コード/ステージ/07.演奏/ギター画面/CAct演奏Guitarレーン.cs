@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
 using FDK;
-using SlimDX.Direct3D9;
+using SharpDX.Direct3D9;
 
 namespace DTXMania
 {
@@ -41,26 +41,32 @@ namespace DTXMania
 
         public override void OnManagedリソースの作成()
         {
-            for( int i = 0; i < 10; i++ )
+            if( !this.b活性化してない )
             {
-                this.txLane[ i ] = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_Paret.png" ) );
+                for( int i = 0; i < 10; i++ )
+                {
+                    this.txLane[ i ] = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_Paret.png" ) );
+                }
+                this.txLaneBackground = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_Guitar_Lane_Back.png" ) );
+                this.txLaneShadow = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_Guitar LaneShadow.png" ) );
+                this.txLaneBackground_Dark = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\Tile black 64x64.png" ) );
+                base.OnManagedリソースの作成();
             }
-            this.txLaneBackground = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_Guitar_Lane_Back.png" ) );
-            this.txLaneShadow = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_Guitar LaneShadow.png" ) );
-            this.txLaneBackground_Dark = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\Tile black 64x64.png" ) );
-            base.OnManagedリソースの作成();
         }
 
         public override void OnManagedリソースの解放()
         {
-            for( int i = 0; i < 10; i++ )
-            { 
-                CDTXMania.tテクスチャの解放( ref this.txLane[ i ] );
+            if( !this.b活性化してない )
+            {
+                for( int i = 0; i < 10; i++ )
+                { 
+                    CDTXMania.tテクスチャの解放( ref this.txLane[ i ] );
+                }
+                CDTXMania.tテクスチャの解放( ref this.txLaneBackground );
+                CDTXMania.tテクスチャの解放( ref this.txLaneShadow );
+                CDTXMania.tテクスチャの解放( ref this.txLaneBackground_Dark );
+                base.OnManagedリソースの解放();
             }
-            CDTXMania.tテクスチャの解放( ref this.txLaneBackground );
-            CDTXMania.tテクスチャの解放( ref this.txLaneShadow );
-            CDTXMania.tテクスチャの解放( ref this.txLaneBackground_Dark );
-            base.OnManagedリソースの解放();
         }
 
         public override int On進行描画()

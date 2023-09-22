@@ -48,9 +48,9 @@ namespace DTXMania
 		{
 			if ( !base.b活性化してない )
 			{
-				CDTXMania.tテクスチャの解放( ref this.txWailingBonus );
-                CDTXMania.tテクスチャの解放( ref this.txWailingFlush );
-                CDTXMania.tテクスチャの解放( ref this.txWailingFire );
+                this.txWailingBonus?.Dispose();
+                this.txWailingFlush?.Dispose();
+                this.txWailingFire?.Dispose();
 				base.OnManagedリソースの解放();
 			}
 		}

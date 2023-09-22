@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DTXMania</RootNamespace>
     <AssemblyName>DTXManiaGR</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ApplicationIcon>dtx.ico</ApplicationIcon>
     <IsWebBootstrapper>false</IsWebBootstrapper>
@@ -43,7 +43,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>TRACE;_TEST_ENGLISH TEST_Direct3D9Ex_ WindowedFullscreen animetest</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;_TEST_ENGLISH TEST_Direct3D9Ex_ WindowedFullscreen animetest BPMBar_WAM</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
@@ -64,13 +64,67 @@
     <UseVSHostingProcess>true</UseVSHostingProcess>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;_TEST_ENGLISH TEST_Direct3D9Ex_ WindowedFullscreen animetest BPMBar_WAM</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoWarn>0219</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE;TEST_ENGLISH_ TEST_Direct3D9Ex_ WindowedFullscreen</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <NoWarn>0219</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;_TEST_ENGLISH TEST_Direct3D9Ex_ WindowedFullscreen animetest BPMBar_WAM</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoWarn>0219</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;TEST_ENGLISH_ TEST_Direct3D9Ex_ WindowedFullscreen</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <NoWarn>0219</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DirectShowLib-2005">
-      <HintPath>bin\x86\Debug\dll\DirectShowLib-2005.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.VisualBasic" />
-    <Reference Include="SlimDXc_net20x86_Jun2010">
-      <HintPath>..\実行時フォルダ\dll\SlimDXc_net20x86_Jun2010.dll</HintPath>
+    <Reference Include="SharpDX, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.4.2.0\lib\net45\SharpDX.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Animation, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.Animation.4.2.0\lib\net45\SharpDX.Animation.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Direct3D9, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.Direct3D9.4.2.0\lib\net45\SharpDX.Direct3D9.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Mathematics, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.Mathematics.4.2.0\lib\net45\SharpDX.Mathematics.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -97,6 +151,7 @@
     <None Include="DTXManiaGR.exe.x86.manifest">
       <SubType>Designer</SubType>
     </None>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -106,6 +161,13 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="コード\ステージ\08.結果\GITADORA\CActResultParameterPanelGD.cs" />
+    <Compile Include="コード\ステージ\08.結果\GITADORA\CActResultRankGD.cs" />
+    <Compile Include="コード\ステージ\08.結果\XG\CActResultParameterPanelXG.cs" />
+    <Compile Include="コード\ステージ\08.結果\XG\CActResultRankXG.cs" />
+    <Compile Include="コード\ステージ\CActFIFOSpin.cs" />
+    <Compile Include="コード\ステージ\CActFIFOFade.cs" />
+    <Compile Include="コード\ステージ\CActFIFOPuzzle.cs" />
     <Compile Include="コード\アイテム\CItemBase.cs" />
     <Compile Include="コード\アイテム\CItemInteger.cs" />
     <Compile Include="コード\アイテム\CItemList.cs" />
@@ -123,20 +185,31 @@
     <Compile Include="コード\ステージ\02.タイトル\CActEnumSongs.cs" />
     <Compile Include="コード\ステージ\02.タイトル\CStageタイトル.cs" />
     <Compile Include="コード\ステージ\04.コンフィグ\CActConfigKeyAssign.cs" />
-    <Compile Include="コード\ステージ\04.コンフィグ\CActConfigList.cs" />
+    <Compile Include="コード\ステージ\04.コンフィグ\CActConfigListGD.cs" />
+    <Compile Include="コード\ステージ\04.コンフィグ\CActConfigList共通.cs" />
+    <Compile Include="コード\ステージ\04.コンフィグ\CActConfigListXG.cs" />
     <Compile Include="コード\ステージ\04.コンフィグ\CStageコンフィグ.cs" />
     <Compile Include="コード\ステージ\05.選曲\CActSelectArtistComment.cs" />
     <Compile Include="コード\ステージ\05.選曲\CActSelectInformation.cs" />
     <Compile Include="コード\ステージ\05.選曲\CActSelectPopupMenu.cs" />
-    <Compile Include="コード\ステージ\05.選曲\CActSelectPreimageパネル.cs" />
     <Compile Include="コード\ステージ\05.選曲\CActSelectPresound.cs" />
     <Compile Include="コード\ステージ\05.選曲\CActSelectQuickConfig.cs" />
-    <Compile Include="コード\ステージ\05.選曲\CActSelectShowCurrentPosition.cs" />
-    <Compile Include="コード\ステージ\05.選曲\CActSelectステータスパネル.cs" />
-    <Compile Include="コード\ステージ\05.選曲\CActSelect曲リスト.cs" />
+    <Compile Include="コード\ステージ\05.選曲\CActSelectShowCurrentPosition共通.cs" />
+    <Compile Include="コード\ステージ\05.選曲\GITADORA\CActSelectFO曲決定.cs" />
+    <Compile Include="コード\ステージ\05.選曲\GITADORA\CActSelectShowCurrentPositionGITADORA.cs" />
+    <Compile Include="コード\ステージ\05.選曲\GITADORA\CStage選曲GITADORA.cs" />
+    <Compile Include="コード\ステージ\05.選曲\XG\CActSelectShowCurrentPositionXG.cs" />
+    <Compile Include="コード\ステージ\05.選曲\XG\CActSelectステータスパネルXG.cs" />
+    <Compile Include="コード\ステージ\05.選曲\GITADORA\CActSelectステータスパネルGITADORA.cs" />
+    <Compile Include="コード\ステージ\05.選曲\CActSelectステータスパネル共通.cs" />
+    <Compile Include="コード\ステージ\05.選曲\XG\CActSelect曲リストXG.cs" />
+    <Compile Include="コード\ステージ\05.選曲\CActSelect曲リスト共通.cs" />
+    <Compile Include="コード\ステージ\05.選曲\GITADORA\CActSelect曲リストGITADORA.cs" />
     <Compile Include="コード\ステージ\05.選曲\CActSelect演奏履歴パネル.cs" />
     <Compile Include="コード\ステージ\05.選曲\CActSortSongs.cs" />
     <Compile Include="コード\ステージ\05.選曲\CStage選曲.cs" />
+    <Compile Include="コード\ステージ\05.選曲\XG\CStage選曲XG.cs" />
+    <Compile Include="コード\ステージ\06.曲読み込み\CAct曲読み込みメイン画面GD.cs" />
     <Compile Include="コード\ステージ\06.曲読み込み\CStage曲読み込み.cs" />
     <Compile Include="コード\ステージ\07.演奏\CAct演奏AVI.cs" />
     <Compile Include="コード\ステージ\07.演奏\CAct演奏BGA.cs" />
@@ -146,11 +219,13 @@
     <Compile Include="コード\ステージ\07.演奏\CAct演奏RGB共通.cs" />
     <Compile Include="コード\ステージ\07.演奏\CAct演奏WailingBonus共通.cs" />
     <Compile Include="コード\ステージ\07.演奏\CAct演奏ゲージ共通.cs" />
+    <Compile Include="コード\ステージ\07.演奏\CAct演奏クリアバー共通.cs" />
     <Compile Include="コード\ステージ\07.演奏\CAct演奏スクロール速度.cs" />
     <Compile Include="コード\ステージ\07.演奏\CAct演奏スコア共通.cs" />
     <Compile Include="コード\ステージ\07.演奏\CAct演奏ステージ失敗.cs" />
     <Compile Include="コード\ステージ\07.演奏\CAct演奏ステータスパネル共通.cs" />
     <Compile Include="コード\ステージ\07.演奏\CAct演奏チップファイアGB.cs" />
+    <Compile Include="コード\ステージ\07.演奏\CAct演奏シャッター.cs" />
     <Compile Include="コード\ステージ\07.演奏\CAct演奏パネル文字列.cs" />
     <Compile Include="コード\ステージ\07.演奏\CAct演奏レーンフラッシュGB共通.cs" />
     <Compile Include="コード\ステージ\07.演奏\CAct演奏判定文字列共通.cs" />
@@ -159,6 +234,32 @@
     <Compile Include="コード\ステージ\07.演奏\CStage演奏画面共通.cs" />
     <Compile Include="コード\ステージ\07.演奏\CWailingChip.cs" />
     <Compile Include="コード\ステージ\07.演奏\C演奏判定ライン座標共通.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ギター画面\CAct演奏GuitarBPMバーGD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ギター画面\CAct演奏GuitarDangerGD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ギター画面\CAct演奏GuitarRGB_GD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ギター画面\CAct演奏GuitarWailingBonus_GD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ギター画面\CAct演奏GuitarゲージGD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ギター画面\CAct演奏GuitarコンボGD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ギター画面\CAct演奏GuitarスコアGD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ギター画面\CAct演奏GuitarステータスパネルGD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ギター画面\CAct演奏GuitarチップファイアGD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ギター画面\CAct演奏GuitarレーンGD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ギター画面\CAct演奏GuitarレーンフラッシュGB_GD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ギター画面\CAct演奏Guitar判定文字列GD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ギター画面\CStage演奏ギター画面GD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ドラム画面\CAct演奏Drumsクリアバー.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ドラム画面\CAct演奏DrumsBPMバーGD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ドラム画面\CAct演奏DrumsDangerGD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ドラム画面\CAct演奏DrumsゲージGD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ドラム画面\CAct演奏DrumsコンボDGB_GD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ドラム画面\CAct演奏DrumsスコアGD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ドラム画面\CAct演奏DrumsステータスパネルGD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ドラム画面\CAct演奏DrumsチップファイアD_GD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ドラム画面\CAct演奏DrumsパッドGD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ドラム画面\CAct演奏DrumsレーンGD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ドラム画面\CAct演奏DrumsレーンフラッシュD_GD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ドラム画面\CAct演奏Drums判定文字列GD.cs" />
+    <Compile Include="コード\ステージ\07.演奏\GITADORA\ドラム画面\CStage演奏ドラム画面GD.cs" />
     <Compile Include="コード\ステージ\07.演奏\ギター画面\CAct演奏Guitarレーン.cs" />
     <Compile Include="コード\ステージ\07.演奏\ギター画面\CAct演奏GuitarBPMバー.cs" />
     <Compile Include="コード\ステージ\07.演奏\ギター画面\CAct演奏GuitarDanger.cs" />
@@ -190,16 +291,19 @@
     <Compile Include="コード\ステージ\07.演奏\ドラム画面\CAct演奏DrumsレーンフラッシュGB.cs" />
     <Compile Include="コード\ステージ\07.演奏\ドラム画面\CAct演奏Drums判定文字列.cs" />
     <Compile Include="コード\ステージ\07.演奏\ドラム画面\CStage演奏ドラム画面.cs" />
-    <Compile Include="コード\ステージ\08.結果\CActResultImage.cs" />
-    <Compile Include="コード\ステージ\08.結果\CActResultParameterPanel.cs" />
-    <Compile Include="コード\ステージ\08.結果\CActResultRank.cs" />
+    <Compile Include="コード\ステージ\08.結果\CActResultImage共通.cs" />
+    <Compile Include="コード\ステージ\08.結果\CActResultParameterPanel共通.cs" />
+    <Compile Include="コード\ステージ\08.結果\CActResultRank共通.cs" />
     <Compile Include="コード\ステージ\08.結果\CActResultSongBar.cs" />
     <Compile Include="コード\ステージ\08.結果\CStage結果.cs" />
+    <Compile Include="コード\ステージ\08.結果\GITADORA\CActResultImageGD.cs" />
+    <Compile Include="コード\ステージ\08.結果\XG\CActResultImageXG.cs" />
     <Compile Include="コード\ステージ\09.終了\CStage終了.cs" />
     <Compile Include="コード\ステージ\10.ChangeSkin\CStageChangeSkin.cs" />
     <Compile Include="コード\ステージ\CActDFPFont.cs" />
     <Compile Include="コード\ステージ\CActFIFOBlack.cs" />
     <Compile Include="コード\ステージ\CActFIFOWhite.cs" />
+    <Compile Include="コード\ステージ\CActFIFOWhiteClear.cs" />
     <Compile Include="コード\ステージ\CActLVLNFont.cs" />
     <Compile Include="コード\ステージ\CActオプションパネル.cs" />
     <Compile Include="コード\ステージ\CDTXVmode.cs" />
@@ -208,6 +312,7 @@
     <Compile Include="コード\プラグイン\IPluginActivity.cs" />
     <Compile Include="コード\プラグイン\IPluginHost.cs" />
     <Compile Include="コード\全体\CActFlushGPU.cs" />
+    <Compile Include="コード\全体\CAnimationManager.cs" />
     <Compile Include="コード\全体\CConfigIni.cs" />
     <Compile Include="コード\全体\CDTXMania.cs" />
     <Compile Include="コード\全体\CDTXVersion.cs" />
@@ -215,12 +320,12 @@
     <Compile Include="コード\全体\CPreviewMagnifier.cs" />
     <Compile Include="コード\全体\CPrivateFastFont.cs" />
     <Compile Include="コード\全体\CPrivateFont.cs" />
+    <Compile Include="コード\全体\CResources.cs" />
     <Compile Include="コード\全体\CScale.cs" />
     <Compile Include="コード\全体\CSkin.cs" />
     <Compile Include="コード\全体\C定数.cs" />
     <Compile Include="コード\全体\C文字コンソール.cs" />
     <Compile Include="コード\全体\Program.cs" />
-    <None Include="slimdx_kairera0467.snk" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="dtx.ico" />
@@ -267,12 +372,39 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>copy /Y "$(TargetPath)" "$(SolutionDir)..\実行時フォルダ"
-copy /Y "$(TargetPath)".config "$(SolutionDir)..\実行時フォルダ"
-move /Y "$(TargetDir)Bass.Net.dll" "$(TargetDir)dll"
-move /Y "$(TargetDir)DirectShowLib-2005.dll" "$(TargetDir)dll"
-move /Y "$(TargetDir)FDK.dll" "$(TargetDir)dll"
-move /Y "$(TargetDir)SlimDXc_net20x86_Jun2010.dll" "$(TargetDir)dll"
-</PostBuildEvent>
+    <PostBuildEvent>echo.
+echo ビルド後イベントを開始します。
+
+set RUNTIMEDIR="$(SolutionDir)実行時フォルダ"
+
+echo.
+echo (1) 出力フォルダ内のdllファイルを出力フォルダ/dllフォルダへ移動します。
+set DESTDIR="$(TargetDir)dll"
+if not exist %25DESTDIR%25 mkdir %25DESTDIR%25
+move /Y "$(TargetDir)*.dll" %25DESTDIR%25
+
+echo.
+echo (2) 出力フォルダから 実行時リソースフォルダ にコピーします。 (dllは、日付の新しいファイルのみ)
+set DESTDIR=%25RUNTIMEDIR%25
+xcopy "$(TargetDir)$(TargetFileName)" %25DESTDIR%25 /Y
+xcopy "$(TargetDir)$(TargetFileName).config" %25DESTDIR%25 /Y
+set DESTDIR=%25RUNTIMEDIR%25\ja-JP
+if not exist %25DESTDIR%25 mkdir %25DESTDIR%25
+xcopy "$(TargetDir)ja-JP" %25DESTDIR%25
+set DESTDIR=%25RUNTIMEDIR%25\dll
+if not exist %25DESTDIR%25 mkdir %25DESTDIR%25
+xcopy "$(TargetDir)dll" %25DESTDIR%25 /Y /D /S
+
+echo.
+echo (3) 実行時リソースフォルダ から 出力フォルダ にコピーします。 (日付の新しいファイルのみ)
+set DESTDIR="$(TargetDir)dll"
+if not exist %25DESTDIR%25 mkdir %25DESTDIR%25
+xcopy %25RUNTIMEDIR%25\dll %25DESTDIR%25 /Y /D /S
+set DESTDIR="$(TargetDir)System"
+if not exist %25DESTDIR%25 mkdir %25DESTDIR%25
+xcopy %25RUNTIMEDIR%25\System %25DESTDIR%25 /Y /D /S /E
+
+echo.
+echo ビルド後イベントを終了しました。</PostBuildEvent>
   </PropertyGroup>
 </Project>

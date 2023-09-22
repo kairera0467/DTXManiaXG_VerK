@@ -6,9 +6,9 @@ using System.IO;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Threading;
-using SlimDX;
-using SlimDX.Direct3D9;
-using SlimDX.Multimedia;
+using SharpDX;
+using SharpDX.Direct3D9;
+using SharpDX.Multimedia;
 using DirectShowLib;
 
 namespace FDK
@@ -242,6 +242,16 @@ namespace FDK
 			get;
 			protected set;
 		}
+
+        public bool b再生が完了した()
+        {
+            // 2019.03.30 kairera0467
+            long currentPos = 0;
+            long duration = 0;
+            this.MediaSeeking.GetCurrentPosition( out currentPos );
+            this.MediaSeeking.GetDuration( out duration );
+            return currentPos >= duration;
+        }
 
 
 		// メソッド
@@ -500,7 +510,7 @@ namespace FDK
 				{
 					#region [ (A) ピッチが合うので、テクスチャに直接転送する。]
 					//-----------------
-					hr = this.memoryRenderer.GetCurrentBuffer( dr.Data.DataPointer, this.nデータサイズbyte );
+					hr = this.memoryRenderer.GetCurrentBuffer( dr.DataPointer, this.nデータサイズbyte );
 					DsError.ThrowExceptionForHR( hr );
 					//-----------------
 					#endregion
@@ -544,7 +554,7 @@ namespace FDK
 
 					this.ptrSnap = (byte*) this.ip.ToPointer();
 					var ptr = stackalloc UInt32*[ CDirectShow.n並列度 ];	// stackalloc（GC対象外、メソッド終了時に自動開放）は、スタック変数相手にしか使えない。
-					ptr[ 0 ] = (UInt32*) dr.Data.DataPointer.ToPointer();	//		↓
+					ptr[ 0 ] = (UInt32*) dr.DataPointer.ToPointer();	//		↓
 					for( int i = 1; i < CDirectShow.n並列度; i++ )			// スタック変数で確保、初期化して…
 						ptr[ i ] = ptr[ i - 1 ] + this.n幅px;				//		↓
 					this.ptrTexture = ptr;									// スタック変数をクラスメンバに渡す（これならOK）。
@@ -755,18 +765,12 @@ namespace FDK
 				DsError.ThrowExceptionForHR( hr );
 				try
 				{
-					wfx = new WaveFormat();
-
 					#region [ type.formatPtr から wfx に、拡張領域を除くデータをコピーする。]
 					//-----------------
 					var wfxTemp = new WaveFormatEx();	// SlimDX.Multimedia.WaveFormat は Marshal.PtrToStructure() で使えないので、それが使える DirectShowLib.WaveFormatEx を介して取得する。（面倒…）
 					Marshal.PtrToStructure( type.formatPtr, (object) wfxTemp );
-					wfx.AverageBytesPerSecond = wfxTemp.nAvgBytesPerSec;
-					wfx.BitsPerSample = wfxTemp.wBitsPerSample;
-					wfx.BlockAlignment = wfxTemp.nBlockAlign;
-					wfx.Channels = wfxTemp.nChannels;
-					wfx.FormatTag = (WaveFormatTag) ( (ushort) wfxTemp.wFormatTag );	// DirectShowLib.WaveFormatEx.wFormatTag は short だが、SlimDX.Mulrimedia.WaveFormat.FormatTag は ushort である。（面倒…）
-					wfx.SamplesPerSecond = wfxTemp.nSamplesPerSec;
+
+					wfx = WaveFormat.CreateCustomFormat( (WaveFormatEncoding) wfxTemp.wFormatTag, wfxTemp.nSamplesPerSec, wfxTemp.nChannels, wfxTemp.nAvgBytesPerSec, wfxTemp.nBlockAlign, wfxTemp.wBitsPerSample );
 					//-----------------
 					#endregion
 					#region [ 拡張領域が存在するならそれを wfx拡張データ に格納する。 ]
@@ -857,7 +861,7 @@ namespace FDK
 			{
 				// videoRenderer を探す。
 				CDirectShow.SearchMMRenderers(graphBuilder, out videoRenderer, out videoRendererInputPin, out audioRenderer, out audioRendererInputPin);
-				if (videoRenderer != null && audioRendererInputPin != null)
+				if (videoRenderer != null && videoRendererInputPin != null)
 				{
 					// 既存のレンダラにつながっているピン対を取得
 					hr = videoRendererInputPin.ConnectedTo(out connectedOutputPin);
@@ -886,16 +890,24 @@ namespace FDK
 					hr = sampleGrabber.FindPin("Out", out grabberOutputPin);
 					DsError.ThrowExceptionForHR(hr);
 					hr = grabberOutputPin.ConnectedTo(out grabberOutputConnectedPin);
-					DsError.ThrowExceptionForHR(hr);
-					hr = grabberOutputConnectedPin.Disconnect();
-					DsError.ThrowExceptionForHR(hr);
-					hr = grabberOutputPin.Disconnect();
-					DsError.ThrowExceptionForHR(hr);
+					// grabberのoutに何もつながっていない場合(つまり、grabberのoutとrendererのinが直結している場合)は、
+					// grabberのoutと、別のフィルタのinの間の切断処理を行わない。
+					if (hr != CWin32.S_OK)
+					{
+						//Debug.WriteLine("grabber out: 未接続:");
+					}
+					else
+					{
+						hr = grabberOutputConnectedPin.Disconnect();
+						DsError.ThrowExceptionForHR(hr);
+						hr = grabberOutputPin.Disconnect();
+						DsError.ThrowExceptionForHR(hr);
+					}
 					hr = grabberOutputPin.Connect(nullRendererInputPin, null);
 					DsError.ThrowExceptionForHR(hr);
 				}
 
-				if( audioRenderer != null && audioRendererInputPin != null )
+				if ( audioRenderer != null && audioRendererInputPin != null )
 				{
 					C共通.tCOMオブジェクトを解放する(ref connectedOutputPin);
 

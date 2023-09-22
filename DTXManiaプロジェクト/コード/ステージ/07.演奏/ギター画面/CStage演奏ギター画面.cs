@@ -7,7 +7,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Diagnostics;
 using System.Threading;
-using SlimDX.Direct3D9;
+using SharpDX.Direct3D9;
 using FDK;
 
 namespace DTXMania
@@ -43,6 +43,7 @@ namespace DTXMania
 			base.list子Activities.Add( this.actFO = new CActFIFOBlack() );
 			base.list子Activities.Add( this.actFOClear = new CActFIFOWhite() );
             base.list子Activities.Add( this.actGraph = new CAct演奏グラフ() );
+            base.list子Activities.Add( this.actFOClearXG = new CActFIFOWhiteClear() );
 		}
 
 
@@ -81,8 +82,8 @@ namespace DTXMania
 			}
 			else
 			{
-				this.actGraph.dbグラフ値目標_渡 = CDTXMania.stage選曲.r確定されたスコア.譜面情報.最大スキル[ nGraphUsePart ];	// #24074 2011.01.23 add ikanick
-                this.actGraph.dbグラフ値自己ベスト = CDTXMania.stage選曲.r確定されたスコア.譜面情報.最大スキル[ nGraphUsePart ];
+				this.actGraph.dbグラフ値目標_渡 = CDTXMania.stage選曲XG.r確定されたスコア.譜面情報.最大スキル[ nGraphUsePart ];	// #24074 2011.01.23 add ikanick
+                this.actGraph.dbグラフ値自己ベスト = CDTXMania.stage選曲XG.r確定されたスコア.譜面情報.最大スキル[ nGraphUsePart ];
 
                 // #35411 2015.08.21 chnmr0 add
                 // ゴースト利用可のなとき、0で初期化
@@ -399,7 +400,6 @@ namespace DTXMania
 		{
 			Rectangle bgrect = new Rectangle( 640 - ( 278 / 2 ), 0, 278, 355 );
 			string DefaultBgFilename = @"Graphics\7_background Guitar.png";
-			string DefaultLaneFilename = "";
 			string BgFilename = "";
 			string BACKGROUND = null;
 			if ( ( CDTXMania.DTX.BACKGROUND_GR != null ) && ( CDTXMania.DTX.BACKGROUND_GR.Length > 0 ) )
@@ -414,7 +414,7 @@ namespace DTXMania
 			{
 				BgFilename = CDTXMania.DTX.strフォルダ名 + BACKGROUND;
 			}
-			base.t背景テクスチャの生成( DefaultBgFilename, DefaultLaneFilename, bgrect, BgFilename );
+			base.t背景テクスチャの生成( DefaultBgFilename, bgrect, BgFilename );
 		}
 
 		protected override void t進行描画_チップ_ドラムス( CConfigIni configIni, ref CDTX dTX, ref CDTX.CChip pChip )

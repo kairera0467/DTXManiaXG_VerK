@@ -268,7 +268,7 @@ namespace DTXMania
 
 			public void tRemoveMixer()
 			{
-				if ( CDTXMania.Sound管理.GetCurrentSoundDeviceType() != "DirectShow" )
+				if ( CDTXMania.Sound管理.GetCurrentSoundDeviceType() != "DirectSound" )
 				{
 					for ( int i = 0; i < 2; i++ )
 					{
@@ -541,6 +541,7 @@ namespace DTXMania
 			InitializeSkinPathRoot();
 			ReloadSkinPaths();
 			PrepareReloadSkin();
+            CreateShutterList(); //2017.04.13 kairera0467
 		}
 		public CSkin()
 		{
@@ -549,6 +550,7 @@ namespace DTXMania
 			bUseBoxDefSkin = true;
 			ReloadSkinPaths();
 			PrepareReloadSkin();
+            CreateShutterList(); //2017.04.13 kairera0467
 		}
 		private string InitializeSkinPathRoot()
 		{
@@ -629,6 +631,7 @@ namespace DTXMania
 					}
 				}
 			}
+            CreateShutterList();
 		}
 
 
@@ -843,6 +846,10 @@ namespace DTXMania
                             str3 = strArray[0].Trim();
                             str4 = strArray[1].Trim();
                             //-----------------------------
+                            if (str3.Equals("SkinType"))
+                            {
+                                CDTXMania.bXGRelease = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 1, 0 ) == 0 ? true : false;
+                            }
                             if (str3.Equals("NamePlateType"))
                             {
                                 CDTXMania.ConfigIni.eNamePlateType = (Eタイプ)C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 3, (int)CDTXMania.ConfigIni.eNamePlateType );
@@ -877,11 +884,43 @@ namespace DTXMania
                             }
                             else if (str3.Equals("JudgeWidgh"))
                             {
-                                CDTXMania.ConfigIni.nJudgeWidgh = C変換.n値を文字列から取得して返す(str4, CDTXMania.ConfigIni.nJudgeWidgh);
+                                CDTXMania.ConfigIni.nJudgeWidth = C変換.n値を文字列から取得して返す(str4, CDTXMania.ConfigIni.nJudgeWidth);
                             }
                             else if (str3.Equals("JudgeHeight"))
                             {
                                 CDTXMania.ConfigIni.nJudgeHeight = C変換.n値を文字列から取得して返す(str4, CDTXMania.ConfigIni.nJudgeHeight);
+                            }
+                            else if (str3.Equals("JudgeStringBarX"))
+                            {
+                                string[] ar = str4.Split( ',' );
+                                for( int i = 0; i < 3; i++ )
+                                {
+                                    CDTXMania.ConfigIni.nJudgeStringBarX[ i ] = int.Parse( ar[ i ] );
+                                }
+                            }
+                            else if (str3.Equals("JudgeStringBarY"))
+                            {
+                                string[] ar = str4.Split( ',' );
+                                for( int i = 0; i < 3; i++ )
+                                {
+                                    CDTXMania.ConfigIni.nJudgeStringBarY[ i ] = int.Parse( ar[ i ] );
+                                }
+                            }
+                            else if (str3.Equals("JudgeStringBarWidth"))
+                            {
+                                string[] ar = str4.Split( ',' );
+                                for( int i = 0; i < 3; i++ )
+                                {
+                                    CDTXMania.ConfigIni.nJudgeStringBarWidth[ i ] = int.Parse( ar[ i ] );
+                                }
+                            }
+                            else if (str3.Equals("JudgeStringBarHeight"))
+                            {
+                                string[] ar = str4.Split( ',' );
+                                for( int i = 0; i < 3; i++ )
+                                {
+                                    CDTXMania.ConfigIni.nJudgeStringBarHeight[ i ] = int.Parse( ar[ i ] );
+                                }
                             }
                             else if (str3.Equals("ExplosionFrames"))
                             {
@@ -891,9 +930,9 @@ namespace DTXMania
                             {
                                 CDTXMania.ConfigIni.nExplosionInterval = C変換.n値を文字列から取得して範囲内に丸めて返す(str4, 0, int.MaxValue, (int)CDTXMania.ConfigIni.nExplosionInterval);
                             }
-                            else if (str3.Equals("ExplosionWidgh"))
+                            else if (str3.Equals("ExplosionWidth"))
                             {
-                                CDTXMania.ConfigIni.nExplosionWidgh = C変換.n値を文字列から取得して範囲内に丸めて返す(str4, 0, int.MaxValue, (int)CDTXMania.ConfigIni.nExplosionWidgh);
+                                CDTXMania.ConfigIni.nExplosionWidth = C変換.n値を文字列から取得して範囲内に丸めて返す(str4, 0, int.MaxValue, (int)CDTXMania.ConfigIni.nExplosionWidth);
                             }
                             else if (str3.Equals("ExplosionHeight"))
                             {
@@ -940,8 +979,79 @@ namespace DTXMania
             }
         }
 
+        // 2017.03.05 kairera0467
+        // スキンを再読込する度に作り直す。
+        public void CreateShutterList()
+        {
+            string strListCSV;
+            bool bFileFound = false;
+            this.listShutterImage = new List<CShutterImage>();
+
+            //csvを読み込む
+            if( File.Exists( CSkin.Path( @"..\\Common\\Shutter\\list.csv" ) ) )
+            {
+                StreamReader reader = new StreamReader( CSkin.Path( @"..\\Common\\Shutter\\list.csv" ) );
+                strListCSV = reader.ReadToEnd();
+
+                //設定していく。
+                string[] delimiter = { "\n" };
+                string[] strSingleLine = strListCSV.Split( delimiter, StringSplitOptions.RemoveEmptyEntries );
+                foreach( string s in strSingleLine )
+                {
+                    if( s.IndexOf( ";" ) != -1 ) //先頭文字が;の場合は無視
+                        continue;
+                    string str = s.Replace( '\r', ' ' );
+
+                    //正常なら3個になる。
+                    if( str.IndexOf(' ') != -1 )
+                        str = str.Remove( str.IndexOf(' '), 1 );
+                    string[] strArray = str.Split( ',' );
+
+                    if( strArray.Length != 3 )
+                        continue;
+                    if( strArray[ 0 ] == "BLACK" ) //「BLACK」はシステム側で追加する名前なので無視する
+                        continue;
+
+                    var shutter = new CShutterImage();
+                    shutter.strName = strArray[ 0 ];
+                    shutter.strFilePathD = strArray[ 1 ];
+                    shutter.strFilePathGB = strArray[ 2 ];
+
+                    this.listShutterImage.Add( shutter );
+                }
+                reader.Close();
+
+                //BLACK追加
+                this.listShutterImage.Add( new CShutterImage() { strName = "BLACK" } );
+            }
+        }
+
+        // 2017.03.30 kairera0467
+        public string[] arGetShutterName()
+        {
+            //変数の用意
+            string[] arNameList = new string[] { "BLACK" }; //csvファイルが存在しなかった時用
+
+            //原始的だが仕方がない
+            if( this.listShutterImage.Count != 0 )
+            {
+                string strList = "";
+                for( int i = 0; i < this.listShutterImage.Count; i++ )
+                {
+                    strList += this.listShutterImage[i].strName;
+                    
+                    if( i < this.listShutterImage.Count - 1 )
+                        strList += ",";
+                }
+                arNameList = strList.Split( ',' );
+            }
+
+            return arNameList;
+        }
+
 		// その他
         public bool b曲決定後に背景画像を変更する;
+        public List<CShutterImage> listShutterImage;
 		#region [ private ]
 		//-----------------
 		private bool bDisposed済み;
@@ -949,4 +1059,66 @@ namespace DTXMania
 		#endregion
 
 	}
+
+    public class CShutterImage
+    {
+        public bool bFileFound;
+        public string strName;
+        public string strFilePathD;
+        public string strFilePathGB;
+
+        public CShutterImage()
+        {
+            bFileFound = false;
+            strName = "";
+            strFilePathD = "";
+            strFilePathGB = "";
+        }
+    }
+
+    public class CAttackEffectImage
+    {
+        public bool bFileFound;
+        public string strName;
+        public string strFilePathD;
+        public string strFilePathGB;
+
+        public CAttackEffectImage()
+        {
+            bFileFound = false;
+            strName = "";
+            strFilePathD = "";
+            strFilePathGB = "";
+        }
+    }
+
+    public class CComboImage
+    {
+        public bool bFileFound;
+        public string strName;
+        public string strFilePathD;
+        public string strFilePathGB;
+
+        public CComboImage()
+        {
+            bFileFound = false;
+            strName = "";
+            strFilePathD = "";
+            strFilePathGB = "";
+        }
+    }
+
+    public class CJudgeStringImage
+    {
+        public bool bFileFound;
+        public string strName;
+        public string strFilePath;
+
+        public CJudgeStringImage()
+        {
+            bFileFound = false;
+            strName = "";
+            strFilePath = "";
+        }
+    }
 }

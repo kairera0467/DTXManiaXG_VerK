@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
 using System.Diagnostics;
-using SlimDX;
+using SharpDX;
 using FDK;
 
+using Rectangle = System.Drawing.Rectangle;
 namespace DTXMania
 {
 	internal class CActSelectArtistComment : CActivity
@@ -18,7 +19,10 @@ namespace DTXMania
 		}
 		public void t選択曲が変更された()
 		{
-			Cスコア cスコア = CDTXMania.stage選曲.r現在選択中のスコア;
+			Cスコア cスコア;
+            if( CDTXMania.bXGRelease ) cスコア = CDTXMania.stage選曲XG.r現在選択中のスコア;
+            else cスコア = CDTXMania.stage選曲GITADORA.r現在選択中のスコア;
+
 			if( cスコア != null )
 			{
 				Bitmap image = new Bitmap( 1, 1 );

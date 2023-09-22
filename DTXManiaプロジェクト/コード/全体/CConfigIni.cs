@@ -7,6 +7,8 @@ using System.Diagnostics;
 using System.Web;
 using FDK;
 
+using SlimDXKey = SlimDX.DirectInput.Key;
+
 namespace DTXMania
 {
 	internal class CConfigIni
@@ -435,6 +437,7 @@ namespace DTXMania
 			// DirectSound,
 			ASIO,
 			WASAPI,
+            WASAPI_Share,
 			Unknown=99
 		}
 		// プロパティ
@@ -525,6 +528,8 @@ namespace DTXMania
 		public bool bUseBoxDefSkin;						// #28195 2012.5.6 yyagi Skin切替用 box.defによるスキン変更機能を使用するか否か
         public STDGBVALUE<EAutoGhostData> eAutoGhost;               // #35411 2015.8.18 chnmr0 プレー時使用ゴーストデータ種別
         public STDGBVALUE<ETargetGhostData> eTargetGhost;               // #35411 2015.8.18 chnmr0 ゴーストデータ再生方法
+        public bool bWarnMIDI20USB;                 // #37961 2019.1.21 add yyagi USBケーブル「MIDI2.0-USB」を使用しているときの警告表示有無
+        public bool bWarnSoundDeviceOnUSB;          // #38358 2019.2.1 add yyagi USB接続のサウンドデバイスを使用しているときの警告表示有無
 
         #region[ Ver.K追加 ]
         public bool bCLASSIC譜面判別を有効にする;
@@ -532,10 +537,12 @@ namespace DTXMania
         public bool bJudgeCountDisp;
         public bool bSkillModeを自動切替えする;
         public bool bXPerfect判定を有効にする;
+        public bool bWindowClipMode;
 
         public EMovieClipMode eMovieClipMode;
         public ESkillType eSkillMode;
         public ERDPosition eRDPosition;
+        public STDGBVALUE<EJust> eJUST;
         public Eタイプ eHHOGraphics;
         public Eタイプ eJudgeAnimeType;
         public Eタイプ eLaneType;
@@ -543,11 +550,15 @@ namespace DTXMania
         public Eタイプ eNamePlateType;
         public int nJudgeFrames;
         public int nJudgeInterval;
-        public int nJudgeWidgh;
+        public int nJudgeWidth;
         public int nJudgeHeight;
+        public int[] nJudgeStringBarX;
+        public int[] nJudgeStringBarY;
+        public int[] nJudgeStringBarWidth;
+        public int[] nJudgeStringBarHeight;
         public int nExplosionFrames;
         public int nExplosionInterval;
-        public int nExplosionWidgh;
+        public int nExplosionWidth;
         public int nExplosionHeight;
         public STDGBVALUE<bool> bJudgeLineDisp;
         public STDGBVALUE<bool> bLaneFlush;
@@ -556,11 +567,43 @@ namespace DTXMania
         public STDGBVALUE<int> nNameColor;
         public STDGBVALUE<int> nShutterInSide;
         public STDGBVALUE<int> nShutterOutSide;
-        public STDGBVALUE<string> strCardName;
-        public STDGBVALUE<string> strGroupName;
-        #endregion
+        private STDGBVALUE<string> strCardName;
+        private STDGBVALUE<string> strGroupName;
+        public string strResultSongNameFont;
+        public STDGBVALUE<string> strShutterImageName;      // #36144 kairera0467 シャッター画像のパスではなくcsvに登録した名前を格納する。
+        public STDGBVALUE<Eタイプ> eNumOfLanes;
+        public STDGBVALUE<Eタイプ> eDkdkType;
+        public STDGBVALUE<Eランダムモード> eRandomPedal;
+        public STDGBVALUE<bool> bAssignToLBD;
+        public int nPedalJudgeRangeDelta;                   // #39397 2019.07.19 kairera0467 ペダルレーンの補正値(通常の判定範囲に加算)
+        public bool bフレームを表示する;                  // 2019.09.07 kairera0467 フレーム表示をする(今の所matixxのみ)
 
-        public bool bConfigIniがないかDTXManiaのバージョンが異なる
+        #endregion
+        #region[ Ver.K 追加取得処理 ]
+        /// <summary>
+        /// Config.iniからプレイヤー名を取得する。
+        /// Config.iniが空だった場合は「GUEST」が返される
+        /// </summary>
+        /// <param name="epart">取得する楽器パート</param>
+        /// <returns>プレイヤー名</returns>
+        public string strGetCardName( E楽器パート epart )
+        {
+            return string.IsNullOrEmpty( this.strCardName[ (int)epart ] ) ? "GUEST" : this.strCardName[ (int)epart ];
+        }
+
+		/// <summary>
+		/// Config.iniからグループ名,称号を取得する。
+		/// Config.iniが空だった場合は空白
+		/// </summary>
+		/// <param name="epart">取得する楽器パート</param>
+		/// <returns>グループ名,称号</returns>
+		public string strGetGroupName(E楽器パート epart)
+		{
+			return string.IsNullOrEmpty(this.strGroupName[(int)epart]) ? "" : this.strGroupName[(int)epart];
+		}
+		#endregion
+
+		public bool bConfigIniがないかDTXManiaのバージョンが異なる
 		{
 			get
 			{
@@ -592,7 +635,7 @@ namespace DTXMania
 					{
 						for( int k = 0; k < 0x10; k++ )
 						{
-							if( ( this.KeyAssign[ i ][ j ][ k ].入力デバイス == E入力デバイス.キーボード ) && ( this.KeyAssign[ i ][ j ][ k ].コード == (int) SlimDX.DirectInput.Key.Return ) )
+							if( ( this.KeyAssign[ i ][ j ][ k ].入力デバイス == E入力デバイス.キーボード ) && ( this.KeyAssign[ i ][ j ][ k ].コード == (int) SlimDXKey.Return ) )
 							{
 								return false;
 							}
@@ -733,6 +776,7 @@ namespace DTXMania
 		public int nWASAPIBufferSizeMs;				// #24820 2013.1.15 yyagi WASAPIのバッファサイズ
 //		public int nASIOBufferSizeMs;				// #24820 2012.12.28 yyagi ASIOのバッファサイズ
 		public int nASIODevice;						// #24820 2013.1.17 yyagi ASIOデバイス
+        public bool bEventDrivenWASAPI;              // #36261 2016.4.27 yyagi WASAPI動作をevent drivenにするかどうか
 		public bool bUseOSTimer;					// #33689 2014.6.6 yyagi 演奏タイマーの種類
 		public bool bDynamicBassMixerManagement;	// #24820
 		public bool bTimeStretch;					// #23664 2013.2.24 yyagi ピッチ変更無しで再生速度を変更するかどうか
@@ -1265,6 +1309,8 @@ namespace DTXMania
 			this.nVelocityMin.FT = 0;
 			this.nVelocityMin.CY = 0;
 			this.nVelocityMin.RD = 0;
+            this.nVelocityMin.LP = 0;
+            this.nVelocityMin.LBD = 0;
 			#endregion
 			this.nRisky = 0;							// #23539 2011.7.26 yyagi RISKYモード
 			this.nShowLagType = (int) EShowLagType.OFF;	// #25370 2011.6.3 yyagi ズレ時間表示
@@ -1282,11 +1328,12 @@ namespace DTXMania
 			this.bUseBoxDefSkin = true;					// #28195 2012.5.6 yyagi box.defによるスキン切替機能を使用するか否か
 			this.bTight = false;                        // #29500 2012.9.11 kairera0467 TIGHTモード
 			#region [ WASAPI/ASIO ]
-			this.nSoundDeviceType = FDK.COS.bIsVistaOrLater ?
+			this.nSoundDeviceType = FDK.COS.bIsVistaOrLater() ?
 				(int) ESoundDeviceTypeForConfig.WASAPI : (int) ESoundDeviceTypeForConfig.ACM;	// #24820 2012.12.23 yyagi 初期値はACM | #31927 2013.8.25 yyagi OSにより初期値変更
 			this.nWASAPIBufferSizeMs = 50;				// #24820 2013.1.15 yyagi 初期値は50(0で自動設定)
 			this.nASIODevice = 0;						// #24820 2013.1.17 yyagi
 //			this.nASIOBufferSizeMs = 0;					// #24820 2012.12.25 yyagi 初期値は0(自動設定)
+            this.bEventDrivenWASAPI = false;
 			#endregion
 
 			this.bUseOSTimer = false;;					// #33689 2014.6.6 yyagi 初期値はfalse (FDKのタイマー。ＦＲＯＭ氏考案の独自タイマー)
@@ -1310,38 +1357,59 @@ namespace DTXMania
             this.bJudgeCountDisp = false;
             this.bSkillModeを自動切替えする = true;
             this.bXPerfect判定を有効にする = false;
+            this.bWindowClipMode = false;
             this.b曲名表示をdefのものにする = true;
             this.eHHOGraphics = Eタイプ.A;
-            this.eJudgeAnimeType = Eタイプ.B;
+            this.eJudgeAnimeType = Eタイプ.C;
             this.eLaneType = Eタイプ.A;
             this.eLBDGraphics = Eタイプ.A;
-            this.eMovieClipMode = EMovieClipMode.OFF;
+            this.eMovieClipMode = EMovieClipMode.FullScreen;
             this.eNamePlateType = Eタイプ.A;
             this.eRDPosition = ERDPosition.RCRD;
             this.eSkillMode = ESkillType.DTXMania;
+            for( int i = 0; i < 3; i++ )
+            {
+                this.eJUST[ i ] = EJust.OFF;
+            }
 
             this.nExplosionFrames = 1;
             this.nExplosionInterval = 50;
-            this.nExplosionWidgh = 0;
+            this.nExplosionWidth = 0;
             this.nExplosionHeight = 0;
             this.nJudgeFrames = 24;
             this.nJudgeInterval = 14;
-            this.nJudgeWidgh = 250;
+            this.nJudgeWidth = 250;
             this.nJudgeHeight = 170;
+            this.nJudgeStringBarX = new int[] { 0, 0, 0 };
+            this.nJudgeStringBarY = new int[] { 112, 134, 156 };
+            this.nJudgeStringBarWidth = new int[] { 210, 210, 210 };
+            this.nJudgeStringBarHeight = new int[] { 20, 20, 20 };
             this.nNameColor = new STDGBVALUE<int>();
+            this.nShutterInSide = new STDGBVALUE<int>();
+            this.nShutterOutSide = new STDGBVALUE<int>();
             this.strCardName = new STDGBVALUE<string>();
             this.strGroupName = new STDGBVALUE<string>();
+            this.strResultSongNameFont = "MS PGothic";
 
             for( int i = 0; i < 3; i++ )
             {
                 this.bJudgeLineDisp[ i ] = true;
                 this.bLaneFlush[ i ] = true;
                 this.nLaneDispType[ i ] = 0;
+                this.nShutterInSide[ i ] = 0;
+                this.nShutterOutSide[ i ] = 0;
+                this.strShutterImageName[ i ] = "";
             }
+
+            this.nPedalJudgeRangeDelta = 20;
+            this.bフレームを表示する = true;
             #endregion
 
             //this.bNoMP3Streaming = false;
 			this.nMasterVolume = 100;					// #33700 2014.4.26 yyagi マスターボリュームの設定(WASAPI/ASIO用)
+
+            this.bWarnMIDI20USB = true;
+            this.bWarnSoundDeviceOnUSB = true;
 		}
 		public CConfigIni( string iniファイル名 )
 			: this()
@@ -1428,7 +1496,7 @@ namespace DTXMania
             sw.WriteLine( "GroupNameBass={0}", this.strGroupName[ 2 ] );
             sw.WriteLine();
             sw.WriteLine( "; ネームカラー" );
-            sw.WriteLine( "; 0=白, 1=薄黄色, 2=黄色, 3=緑, 4=青, 5=紫 以下略。" );
+            sw.WriteLine( "; 0=白, 1=薄黄色, 2=黄色, 3=緑, 4=青, 5=紫, 6=赤, 7=銅, 8=銀, 9=金, 11～16=各色のグラデーション" );
             sw.WriteLine( "NameColorDrums={0}", this.nNameColor[ 0 ] );
             sw.WriteLine( "NameColorGuitar={0}", this.nNameColor[ 1 ] );
             sw.WriteLine( "NameColorBass={0}", this.nNameColor[ 2 ] );
@@ -1504,10 +1572,10 @@ namespace DTXMania
 			sw.WriteLine();											        			//
 			#endregion
 			#region [ WASAPI/ASIO関連 ]
-			sw.WriteLine( "; サウンド出力方式(0=ACM(って今はまだDirectSoundですが), 1=ASIO, 2=WASAPI)" );
+			sw.WriteLine( "; サウンド出力方式(0=ACM(って今はまだDirectSoundですが), 1=ASIO, 2=WASAPI排他, 3=WASAPI共有)" );
 			sw.WriteLine( "; WASAPIはVista以降のOSで使用可能。推奨方式はWASAPI。" );
 			sw.WriteLine( "; なお、WASAPIが使用不可ならASIOを、ASIOが使用不可ならACMを使用します。" );
-			sw.WriteLine( "; Sound device type(0=ACM, 1=ASIO, 2=WASAPI)" );
+			sw.WriteLine( "; Sound device type(0=ACM, 1=ASIO, 2=WASAPI Exclucive, 3=WASAPI Shared)" );
 			sw.WriteLine( "; WASAPI can use on Vista or later OSs." );
 			sw.WriteLine( "; If WASAPI is not available, DTXMania try to use ASIO. If ASIO can't be used, ACM is used." );
 			sw.WriteLine( "SoundDeviceType={0}", (int) this.nSoundDeviceType );
@@ -1549,6 +1617,10 @@ namespace DTXMania
 			sw.WriteLine( "; Playback timer used for WASAPI/ASIO" );
 			sw.WriteLine( "; (0=FDK Timer, 1=System Timer)" );
 			sw.WriteLine( "SoundTimerType={0}", this.bUseOSTimer ? 1 : 0 );
+			sw.WriteLine();
+
+			sw.WriteLine( "; WASAPI使用時にEventDrivenモードを使う" );
+			sw.WriteLine( "EventDrivenWASAPI={0}", this.bEventDrivenWASAPI ? 1 : 0 );
 			sw.WriteLine();
 
 			sw.WriteLine( "; 全体ボリュームの設定" );
@@ -1624,8 +1696,11 @@ namespace DTXMania
 			sw.WriteLine( "; BGAの表示(0:OFF, 1:ON)" );
 			sw.WriteLine( "BGA={0}", this.bBGA有効 ? 1 : 0 );
 			sw.WriteLine();
-			sw.WriteLine( "; クリップの表示位置(0:OFF, 1:ON)" );
-			sw.WriteLine( "MovieClipMode={0}", (int)this.eMovieClipMode );
+			//sw.WriteLine( "; クリップの表示位置(0:OFF, 1:FullScreen, 2:Window, 3:FullScreen + Window)" );
+			//sw.WriteLine( "MovieClipMode={0}", (int)this.eMovieClipMode );
+			//sw.WriteLine();
+			sw.WriteLine( "; クリップのウィンドウ表示(0:OFF, 1:ON)" );
+			sw.WriteLine( "WindowClipDisp={0}", this.bWindowClipMode ? 1 : 0 );
 			sw.WriteLine();
 			#endregion
 			#region [ フィルイン ]
@@ -1776,7 +1851,7 @@ namespace DTXMania
 			sw.WriteLine( "JudgeLinePosOffsetDrums={0}",  this.nJudgeLinePosOffset.Drums );		//
 			sw.WriteLine( "JudgeLinePosOffsetGuitar={0}", this.nJudgeLinePosOffset.Guitar );	//
 			sw.WriteLine( "JudgeLinePosOffsetBass={0}",   this.nJudgeLinePosOffset.Bass );		//
-
+            
 			sw.WriteLine( "; 判定ラインの表示位置(ギター, ベース)" );	// #33891 2014.6.26 yyagi
 			sw.WriteLine( "; 0=Normal, 1=Lower" );
 			sw.WriteLine( "; Position of the Judgement line and RGB button; Vseries compatible(1) or not(0)." );	//
@@ -1801,6 +1876,8 @@ namespace DTXMania
 			sw.WriteLine( "FTVelocityMin={0}", this.nVelocityMin.FT );						//
 			sw.WriteLine( "CYVelocityMin={0}", this.nVelocityMin.CY );						//
 			sw.WriteLine( "RDVelocityMin={0}", this.nVelocityMin.RD );						//
+            sw.WriteLine( "LPVelocityMin={0}", this.nVelocityMin.LP );						//
+			sw.WriteLine( "LBDVelocityMin={0}", this.nVelocityMin.LBD);						//
 			sw.WriteLine();																	//
 			#endregion
 
@@ -1960,21 +2037,21 @@ namespace DTXMania
             sw.WriteLine();
 
             #region[DTXManiaXG追加オプション]
-            //sw.WriteLine("; 譜面仕様変更(0:デフォルト10レーン, 1:XG9レーン, 2:CLASSIC6レーン)");
-            //sw.WriteLine("NumOfLanes={0}", (int)this.eNumOfLanes.Drums);
-            //sw.WriteLine();
-            //sw.WriteLine("; dkdk仕様変更(0:デフォルト, 1:始動足変更, 2:dkdk1レーン化)");
-            //sw.WriteLine("DkdkType={0}", (int)this.eDkdkType.Drums);
-            //sw.WriteLine();
-            //sw.WriteLine("; バスをLBDに振り分け(0:OFF, 1:ON)");
-            //sw.WriteLine("AssignToLBD={0}", this.bAssignToLBD.Drums ? 1 : 0);
-            //sw.WriteLine();
-            //sw.WriteLine("; ドラムパッドRANDOMモード(0:OFF, 1:Mirror, 2:Random, 3:SuperRandom, 4:HyperRandom, 5:MasterRandom, 6:AnotherRandom)");
-            //sw.WriteLine("DrumsRandomPad={0}", (int)this.eRandom.Drums);
-            //sw.WriteLine();
-            //sw.WriteLine("; ドラム足RANDOMモード(0:OFF, 1:Mirror, 2:Random, 3:SuperRandom, 4:HyperRandom, 5:MasterRandom, 6:AnotherRandom)");
-            //sw.WriteLine("DrumsRandomPedal={0}", (int)this.eRandomPedal.Drums);
-            //sw.WriteLine();
+            sw.WriteLine( "; 譜面仕様変更(0:デフォルト10レーン, 1:XG9レーン, 2:CLASSIC6レーン)" );
+            sw.WriteLine( "NumOfLanes={0}", (int)this.eNumOfLanes.Drums );
+            sw.WriteLine();
+            sw.WriteLine( "; dkdk仕様変更(0:デフォルト, 1:始動足変更, 2:dkdk1レーン化)" );
+            sw.WriteLine( "DkdkType={0}", (int)this.eDkdkType.Drums );
+            sw.WriteLine();
+            sw.WriteLine( "; バスをLBDに振り分け(0:OFF, 1:ON)" );
+            sw.WriteLine( "AssignToLBD={0}", this.bAssignToLBD.Drums ? 1 : 0 );
+            sw.WriteLine();
+            sw.WriteLine( "; ドラムパッドRANDOMモード(0:OFF, 1:Mirror, 2:Random, 3:SuperRandom, 4:HyperRandom, 5:MasterRandom, 6:AnotherRandom)" );
+            sw.WriteLine( "DrumsRandomPad={0}", (int)this.eRandom.Drums );
+            sw.WriteLine();
+            sw.WriteLine( "; ドラム足RANDOMモード(0:OFF, 1:Mirror, 2:Random, 3:SuperRandom, 4:HyperRandom, 5:MasterRandom, 6:AnotherRandom)" );
+            sw.WriteLine( "DrumsRandomPedal={0}", (int)this.eRandomPedal.Drums );
+            sw.WriteLine();
             //sw.WriteLine("; LP消音機能(0:OFF, 1:ON)");
             //sw.WriteLine("MutingLP={0}", this.bMutingLP ? 1 : 0);
             //sw.WriteLine();
@@ -2018,16 +2095,16 @@ namespace DTXMania
             sw.WriteLine( "; XPerfect判定を有効にする(0:OFF, 1:ON)" );
             sw.WriteLine( "XPerfectJudgeMode={0}", this.bXPerfect判定を有効にする ? 1 : 0 );
             sw.WriteLine();
-            //sw.WriteLine("; シャッターINSIDE(0～100)");
-            //sw.WriteLine("DrumsShutterIn={0}", (int)this.nShutterInSide.Drums);
-            //sw.WriteLine("GuitarShutterIn={0}", (int)this.nShutterInSide.Guitar);
-            //sw.WriteLine("BassShutterIn={0}", (int)this.nShutterInSide.Bass);
-            //sw.WriteLine();
-            //sw.WriteLine("; シャッターOUTSIDE(0～100)");
-            //sw.WriteLine("DrumsShutterOut={0}", (int)this.nShutterOutSide.Drums);
-            //sw.WriteLine("GuitarShutterOut={0}", (int)this.nShutterOutSide.Guitar);
-            //sw.WriteLine("BassShutterOut={0}", (int)this.nShutterOutSide.Bass);
-            //sw.WriteLine();
+            sw.WriteLine( "; シャッターINSIDE(0～100)" );
+            sw.WriteLine( "DrumsShutterIn={0}", (int)this.nShutterInSide.Drums );
+            sw.WriteLine( "GuitarShutterIn={0}", (int)this.nShutterInSide.Guitar );
+            sw.WriteLine( "BassShutterIn={0}", (int)this.nShutterInSide.Bass );
+            sw.WriteLine();
+            sw.WriteLine( "; シャッターOUTSIDE(0～100)" );
+            sw.WriteLine( "DrumsShutterOut={0}", (int)this.nShutterOutSide.Drums );
+            sw.WriteLine( "GuitarShutterOut={0}", (int)this.nShutterOutSide.Guitar );
+            sw.WriteLine( "BassShutterOut={0}", (int)this.nShutterOutSide.Bass );
+            sw.WriteLine();
             //sw.WriteLine( "; ボーナス演出の表示(0:表示しない, 1:表示する)");
             //sw.WriteLine("DrumsStageEffect={0}", this.ボーナス演出を表示する ? 1 : 0);
             //sw.WriteLine();
@@ -2080,6 +2157,19 @@ namespace DTXMania
             sw.WriteLine( "; 判定数の表示(0:表示しない, 1:表示する)");
             sw.WriteLine("JudgeCountDisp={0}", this.bJudgeCountDisp ? 1 : 0);
             sw.WriteLine();
+            sw.WriteLine( "; JUST" );
+            sw.WriteLine( "DrumsJust={0}", (int)this.eJUST.Drums );
+            sw.WriteLine( "GuitarJust={0}", (int)this.eJUST.Guitar );
+            sw.WriteLine( "BassJust={0}", (int)this.eJUST.Bass );
+            sw.WriteLine();
+            sw.WriteLine( "; シャッター画像" );
+            sw.WriteLine( "ShutterImageDrums={0}", this.strShutterImageName.Drums );
+            sw.WriteLine( "ShutterImageGuitar={0}", this.strShutterImageName.Guitar );
+            sw.WriteLine( "ShutterImageBass={0}", this.strShutterImageName.Bass );
+            sw.WriteLine();
+            sw.WriteLine( "; フレームの表示(0:表示しない, 1:表示する)");
+            sw.WriteLine( "MatixxFrameDisp={0}", this.bフレームを表示する ? 1 : 0);
+
             #endregion
 			sw.WriteLine( ";-------------------" );
 			#endregion
@@ -2191,6 +2281,9 @@ namespace DTXMania
 			sw.WriteLine( "Good={0}", this.nヒット範囲ms.Good );
 			sw.WriteLine( "Poor={0}", this.nヒット範囲ms.Poor );
 			sw.WriteLine();
+            sw.WriteLine( "; ペダルレーンの判定補正値[ms]" );
+            sw.WriteLine( "; 各判定のヒット範囲に加算されます。0～200msで指定できます。(暫定仕様)" );
+            sw.WriteLine( "PedalJudgeRangeDelta={0}", this.nPedalJudgeRangeDelta );
 			sw.WriteLine( ";-------------------" );
 			#endregion
 			#region [ GUID ]
@@ -2607,7 +2700,7 @@ namespace DTXMania
 											#region [ WASAPI/ASIO関係 ]
 											else if ( str3.Equals( "SoundDeviceType" ) )
 											{
-												this.nSoundDeviceType = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 2, this.nSoundDeviceType );
+												this.nSoundDeviceType = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 3, this.nSoundDeviceType );
 											}
 											else if ( str3.Equals( "WASAPIBufferSizeMs" ) )
 											{
@@ -2630,6 +2723,10 @@ namespace DTXMania
 											{
 												this.bUseOSTimer = C変換.bONorOFF( str4[ 0 ] );
 											}
+                                            else if ( str3.Equals( "EventDrivenWASAPI" ) )
+                                            {
+                                                this.bEventDrivenWASAPI = C変換.bONorOFF( str4[ 0 ] );
+                                            }
 											else if ( str3.Equals( "MasterVolume" ) )
 											{
 											    this.nMasterVolume = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 100, this.nMasterVolume );
@@ -2712,10 +2809,14 @@ namespace DTXMania
 											{
 												this.bBGA有効 = C変換.bONorOFF( str4[ 0 ] );
 											}
-                                            else if( str3.Equals( "MovieClipMode" ) )
-                                            {
-                                                this.eMovieClipMode = (EMovieClipMode) C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 3, (int) this.eMovieClipMode );
-                                            }
+                                            //else if( str3.Equals( "MovieClipMode" ) )
+                                            //{
+                                            //    this.eMovieClipMode = (EMovieClipMode) C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 3, (int) this.eMovieClipMode );
+                                            //}
+											else if ( str3.Equals( "WindowClipDisp" ) )
+											{
+												this.bWindowClipMode = C変換.bONorOFF( str4[ 0 ] );
+											}
 											#endregion
 											#region [ フィルイン関係 ]
 											else if ( str3.Equals( "FillInEffect" ) )
@@ -2924,6 +3025,14 @@ namespace DTXMania
 											{
 												this.nVelocityMin.RD = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 127, this.nVelocityMin.RD );
 											}
+                                            else if ( str3.Equals( "LPVelocityMin" ) )			// #23857 2011.1.31 yyagi
+											{
+												this.nVelocityMin.LP = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 127, this.nVelocityMin.LP );
+											}
+											else if ( str3.Equals( "LBDVelocityMin" ) )			// #23857 2011.1.31 yyagi
+											{
+												this.nVelocityMin.LBD = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 127, this.nVelocityMin.LBD );
+											}
 											#endregion
 											//else if ( str3.Equals( "NoMP3Streaming" ) )
 											//{
@@ -3074,7 +3183,25 @@ namespace DTXMania
 											{
 												this.eRandom.Bass = (Eランダムモード) C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 3, (int) this.eRandom.Bass );
 											}
-											else if( str3.Equals( "GuitarLight" ) )
+                                            #region[  ]
+                                            else if( str3.Equals( "NumOfLanes" ) )
+                                            {
+                                                this.eNumOfLanes.Drums = ( Eタイプ )C変換.n値を文字列から取得して範囲内に丸めて返す(str4, 0, 2, (int)this.eNumOfLanes.Drums);
+                                            }
+                                            else if( str3.Equals( "DkdkType" ) )
+                                            {
+                                                this.eDkdkType.Drums = ( Eタイプ )C変換.n値を文字列から取得して範囲内に丸めて返す(str4, 0, 2, (int)this.eDkdkType.Drums);
+                                            }
+                                            else if( str3.Equals( "DrumsRandomPad" ) )
+                                            {
+                                                this.eRandom.Drums = ( Eランダムモード )C変換.n値を文字列から取得して範囲内に丸めて返す(str4, 0, 6, (int)this.eRandom.Drums);
+                                            }
+                                            else if( str3.Equals( "DrumsRandomPedal" ) )
+                                            {
+                                                this.eRandomPedal.Drums = ( Eランダムモード )C変換.n値を文字列から取得して範囲内に丸めて返す(str4, 0, 6, (int)this.eRandomPedal.Drums);
+                                            }
+                                            #endregion
+                                            else if( str3.Equals( "GuitarLight" ) )
 											{
 												this.bLight.Guitar = C変換.bONorOFF( str4[ 0 ] );
 											}
@@ -3142,6 +3269,30 @@ namespace DTXMania
 											{
 												this.bTight = C変換.bONorOFF( str4[ 0 ] );
 											}
+                                            else if( str3.Equals( "DrumsShutterIn" ) )
+                                            {
+                                                this.nShutterInSide.Drums = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 100, this.nShutterInSide.Drums );
+                                            }
+                                            else if( str3.Equals( "DrumsShutterOut" ) )
+                                            {
+                                                this.nShutterOutSide.Drums = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, -100, 100, this.nShutterOutSide.Drums );
+                                            }
+                                            else if( str3.Equals( "GuitarShutterIn" ) )
+                                            {
+                                                this.nShutterInSide.Guitar = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 100, this.nShutterInSide.Guitar );
+                                            }
+                                            else if( str3.Equals( "GuitarShutterOut" ) )
+                                            {
+                                                this.nShutterOutSide.Guitar = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, -100, 100, this.nShutterOutSide.Guitar );
+                                            }
+                                            else if( str3.Equals( "BassShutterIn" ) )
+                                            {
+                                                this.nShutterInSide.Bass = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 100, this.nShutterInSide.Bass );
+                                            }
+                                            else if( str3.Equals( "BassShutterOut" ) )
+                                            {
+                                                this.nShutterOutSide.Bass = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, -100, 100, this.nShutterOutSide.Guitar );
+                                            }
                                             else if( str3.Equals( "DrumsLaneType" ) )
                                             {
                                                 this.eLaneType = ( Eタイプ ) C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 3, (int)this.eLaneType );
@@ -3203,6 +3354,34 @@ namespace DTXMania
                                             else if( str3.Equals( "JudgeCountDisp" ) )
                                             {
                                                 this.bJudgeCountDisp = C変換.bONorOFF( str4[ 0 ] );
+                                            }
+                                            else if( str3.Equals( "DrumsJust" ) )
+                                            {
+                                                this.eJUST.Drums = (EJust) C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 2, (int)this.eJUST.Drums );
+                                            }
+                                            else if( str3.Equals( "GuitarJust" ) )
+                                            {
+                                                this.eJUST.Guitar = (EJust) C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 2, (int)this.eJUST.Guitar );
+                                            }
+                                            else if( str3.Equals( "BassJust" ) )
+                                            {
+                                                this.eJUST.Bass = (EJust) C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 2, (int)this.eJUST.Bass );
+                                            }
+                                            else if( str3.Equals( "ShutterImageDrums" ) )
+                                            {
+                                                this.strShutterImageName.Drums = str4;
+                                            }
+                                            else if( str3.Equals( "ShutterImageGuitar" ) )
+                                            {
+                                                this.strShutterImageName.Guitar = str4;
+                                            }
+                                            else if( str3.Equals( "ShutterImageBass" ) )
+                                            {
+                                                this.strShutterImageName.Bass = str4;
+                                            }
+                                            else if( str3.Equals( "MatixxFrameDisp" ) )
+                                            {
+                                                this.bフレームを表示する = C変換.bONorOFF( str4[ 0 ] );
                                             }
 											continue;
 										}
@@ -3367,7 +3546,7 @@ namespace DTXMania
 										if( str3.Equals( "Perfect" ) )
 										{
 											this.nヒット範囲ms.Perfect = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 0x3e7, this.nヒット範囲ms.Perfect );
-											}
+										}
 										else if( str3.Equals( "Great" ) )
 										{
 											this.nヒット範囲ms.Great = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 0x3e7, this.nヒット範囲ms.Great );
@@ -3380,6 +3559,10 @@ namespace DTXMania
 										{
 											this.nヒット範囲ms.Poor = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 0x3e7, this.nヒット範囲ms.Poor );
 										}
+                                        else if( str3.Equals( "PedalHitRangeDelta" ) )
+                                        {
+                                            this.nPedalJudgeRangeDelta = C変換.n値を文字列から取得して範囲内に丸めて返す( str4, 0, 200, this.nPedalJudgeRangeDelta );
+                                        }
 										continue;
 									//-----------------------------
 									#endregion

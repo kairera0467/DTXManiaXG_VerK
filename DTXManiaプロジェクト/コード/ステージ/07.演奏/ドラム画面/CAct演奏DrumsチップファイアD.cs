@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 using System.Runtime.InteropServices;
-using SlimDX;
+using SharpDX;
 using FDK;
 
+using Rectangle = System.Drawing.Rectangle;
 namespace DTXMania
 {
 	internal class CAct演奏DrumsチップファイアD : CActivity
@@ -492,7 +493,7 @@ namespace DTXMania
                             identity *= Matrix.Translation( this.nレーンの中央X座標[ this.st火花[ i ].nLane ] - 320f, fPosTest, 0f );
                             if( this.tx火花2 != null )
                             {
-                                int n幅 = CDTXMania.ConfigIni.nExplosionWidgh;
+                                int n幅 = CDTXMania.ConfigIni.nExplosionWidth;
                                 int n高さ = CDTXMania.ConfigIni.nExplosionHeight;
 
                                 this.tx火花2.t3D描画( CDTXMania.app.Device, identity, new Rectangle( n幅 * this.st火花[ i ].ct進行.n現在の値, this.st火花[ i ].nLane * n高さ, n幅, n高さ ) );

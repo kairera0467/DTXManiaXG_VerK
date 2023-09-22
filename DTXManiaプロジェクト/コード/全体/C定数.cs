@@ -34,8 +34,8 @@ namespace DTXMania
 		HiHatOpen			= 0x18,
 		RideCymbal			= 0x19,
 		LeftCymbal			= 0x1A,
-		//nouse_1b			= 0x1B,
-		//nouse_1c			= 0x1C,
+		LeftPedal			= 0x1B,
+		LeftBassDrum		= 0x1C,
 		//nouse_1d			= 0x1D,
 		//nouse_1e			= 0x1E,
 		//nouse_1f			= 0x1F,
@@ -66,8 +66,8 @@ namespace DTXMania
 		HiHatOpen_Hidden	= 0x38,
 		RideCymbal_Hidden	= 0x39,
 		LeftCymbal_Hidden	= 0x3A,
-		//nouse_3b			= 0x3B,
-		//nouse_3c			= 0x3C,
+		LeftPedal_Hidden	= 0x3B,
+		LeftBassDrum_Hidden	= 0x3C,
 		//nouse_3d			= 0x3D,
 		//nouse_3e			= 0x3E,
 		//nouse_3f			= 0x3F,
@@ -83,10 +83,10 @@ namespace DTXMania
 		//BMS_reserved_49		= 0x49,
 		//nouse_4a			= 0x4A,
 		//nouse_4b			= 0x4B,
-		//nouse_4c			= 0x4C,
-		//nouse_4d			= 0x4D,
-		//nouse_4e			= 0x4E,
-		//nouse_4f			= 0x4F,
+		Bonus1			    = 0x4C,
+		Bonus2		    	= 0x4D,
+		Bonus3		    	= 0x4E,
+		Bonus4	    		= 0x4F,
 		BarLine				= 0x50,
 		BeatLine			= 0x51,
 		MIDIChorus			= 0x52,
@@ -157,19 +157,19 @@ namespace DTXMania
 		//nouse_90			= 0x90,
 		//nouse_91			= 0x91,
 		//nouse_92			= 0x92,
-		//nouse_93			= 0x93,
-		//nouse_94			= 0x94,
-		//nouse_95			= 0x95,
-		//nouse_96			= 0x96,
-		//nouse_97			= 0x97,
-		//nouse_98			= 0x98,
-		//nouse_99			= 0x99,
-		//nouse_9a			= 0x9A,
-		//nouse_9b			= 0x9B,
-		//nouse_9c			= 0x9C,
-		//nouse_9d			= 0x9D,
-		//nouse_9e			= 0x9E,
-		//nouse_9f			= 0x9F,
+		Guitar_xxxYx		= 0x93,
+		Guitar_xxBYx		= 0x94,
+		Guitar_xGxYx		= 0x95,
+		Guitar_xGBYx		= 0x96,
+		Guitar_RxxYx		= 0x97,
+		Guitar_RxBYx		= 0x98,
+		Guitar_RGxYx		= 0x99,
+		Guitar_RGBYx		= 0x9A,
+		Guitar_xxxxP		= 0x9B,
+		Guitar_xxBxP		= 0x9C,
+		Guitar_xGxxP		= 0x9D,
+		Guitar_xGBxP		= 0x9E,
+		Guitar_RxxxP		= 0x9F,
 		Bass_Open			= 0xA0,
 		Bass_xxB			= 0xA1,
 		Bass_xGx			= 0xA2,
@@ -179,13 +179,13 @@ namespace DTXMania
 		Bass_RGx			= 0xA6,
 		Bass_RGB			= 0xA7,
 		Bass_Wailing		= 0xA8,
-		//nouse_a9			= 0xA9,
-		//nouse_aa			= 0xAA,
-		//nouse_ab			= 0xAB,
-		//nouse_ac			= 0xAC,
-		//nouse_ad			= 0xAD,
-		//nouse_ae			= 0xAE,
-		Bass_WailingSound	= 0xAF,
+		Guitar_RxBxP		= 0xA9,
+		Guitar_RGxxP		= 0xAA,
+		Guitar_RGBxP		= 0xAB,
+		Guitar_xxxYP		= 0xAC,
+		Guitar_xxBYP		= 0xAD,
+		Guitar_xGxYP		= 0xAE,
+		Guitar_xGBYP        = 0xAF, //Bass_WailingSound	= 0xAF,
 		//nouse_b0			= 0xB0,
 		HiHatClose_NoChip	= 0xB1,
 		Snare_NoChip		= 0xB2,
@@ -199,8 +199,8 @@ namespace DTXMania
 		Guitar_NoChip		= 0xBA,
 		Bass_NoChip			= 0xBB,
 		LeftCymbal_NoChip	= 0xBC,
-		//nouse_bd			= 0xBD,
-		//nouse_be			= 0xBE,
+		LeftPedal_NoChip	= 0xBD,
+		LeftBassDrum_NoChip	= 0xBE,
 		//nouse_bf			= 0xBF,
 		//nouse_c0			= 0xC0,
 		BeatLineShift		= 0xC1,
@@ -268,6 +268,13 @@ namespace DTXMania
 		//nouse_ff			= 0xFF,
 	}
 	#endregion
+    public enum ERelease
+    {
+        XG,
+        GITADORA,
+        GDReEvolve,
+        GDmatixx
+    }
     public enum EMovieClipMode
     {
         OFF = 0,
@@ -303,6 +310,12 @@ namespace DTXMania
     {
         RDRC,
         RCRD
+    }
+    public enum EJust
+    {
+        OFF,
+        JUST,
+        GREAT,
     }
     public enum Eタイプ
     {
@@ -1077,10 +1090,9 @@ namespace DTXMania
 				throw new IndexOutOfRangeException();
 			}
 		}
-	}
+    }
 
-
-	internal class C定数
+    internal class C定数
 	{
 		public const int BGA_H = 0x163;
 		public const int BGA_W = 0x116;
@@ -1095,7 +1107,9 @@ namespace DTXMania
 		public const int SCORE_W = 12;
 		public const int SUDDEN_POS = 200;
 
-		public class Drums
+        public static int[] nチップ幅テーブルDB = new int[] { 6, 6, 6, 6, 6, 7, 7, 9, 10, 12, 16, 19, 24 }; // 2019.9.10 kairera0467
+
+        public class Drums
 		{
 			public const int BAR_Y = 0x1a6;
 			public const int BAR_Y_REV = 0x38;

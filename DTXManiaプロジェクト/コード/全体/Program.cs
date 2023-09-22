@@ -54,11 +54,14 @@ namespace DTXMania
 
 		[DllImport( "kernel32", CharSet = CharSet.Unicode, SetLastError = true )]
 		internal static extern IntPtr LoadLibrary( string lpFileName );
-		#endregion
-		//-----------------------------
-		#endregion
 
-		[STAThread] 
+        [DllImport( "kernel32", CharSet = CharSet.Unicode, SetLastError = true )]
+        internal static extern bool SetDllDirectory( string lpPathName );
+        #endregion
+        //-----------------------------
+        #endregion
+
+        [STAThread] 
 		private static void Main()
 		{
 			mutex二重起動防止用 = new Mutex( false, "DTXManiaMutex" );
@@ -72,22 +75,22 @@ namespace DTXMania
 				Trace.WriteLine( "EXEのあるフォルダ: " + Path.GetDirectoryName( Application.ExecutablePath ) );
 
 				#region [DLLの存在チェック]
-				if ( !tDLLの存在チェック( "dll\\SlimDX" + CDTXMania.SLIMDXDLL + ".dll",
-					"SlimDX" + CDTXMania.SLIMDXDLL + ".dll またはその依存するdllが存在しません。" + newLine + "DTXManiaをダウンロードしなおしてください。",
-					"SlimDX" + CDTXMania.SLIMDXDLL + ".dll, or its depended DLL, is not found." + newLine + "Please download DTXMania again."
-					) ) bDLLnotfound = true;
+				//if ( !tDLLの存在チェック( "dll\\SlimDX" + CDTXMania.SLIMDXDLL + ".dll",
+				//	"SlimDX" + CDTXMania.SLIMDXDLL + ".dll またはその依存するdllが存在しません。" + newLine + "DTXManiaをダウンロードしなおしてください。",
+				//	"SlimDX" + CDTXMania.SLIMDXDLL + ".dll, or its depended DLL, is not found." + newLine + "Please download DTXMania again."
+				//	) ) bDLLnotfound = true;
 				if ( !tDLLの存在チェック( "dll\\FDK.dll",
 					"FDK.dll またはその依存するdllが存在しません。" + newLine + "DTXManiaをダウンロードしなおしてください。",
 					"FDK.dll, or its depended DLL, is not found." + newLine + "Please download DTXMania again."
 					) ) bDLLnotfound = true;
-				if ( !tDLLの存在チェック( "xadec.dll",		// #35444 2015.8.27 yyagi; Changed dll path
-					"xadec.dll が存在しません。" + newLine + "DTXManiaをダウンロードしなおしてください。",
-					"xadec.dll is not found." + newLine + "Please download DTXMania again."
-					) ) bDLLnotfound = true;
-				if ( !tDLLの存在チェック( "dll\\SoundDecoder.dll",
-					"SoundDecoder.dll またはその依存するdllが存在しません。" + newLine + "DTXManiaをダウンロードしなおしてください。",
-					"SoundDecoder.dll, or its depended DLL, is not found." + newLine + "Please download DTXMania again."
-					) ) bDLLnotfound = true;
+				//if ( !tDLLの存在チェック( "xadec.dll",		// #35444 2015.8.27 yyagi; Changed dll path
+				//	"xadec.dll が存在しません。" + newLine + "DTXManiaをダウンロードしなおしてください。",
+				//	"xadec.dll is not found." + newLine + "Please download DTXMania again."
+				//	) ) bDLLnotfound = true;
+				//if ( !tDLLの存在チェック( "dll\\SoundDecoder.dll",
+				//	"SoundDecoder.dll またはその依存するdllが存在しません。" + newLine + "DTXManiaをダウンロードしなおしてください。",
+				//	"SoundDecoder.dll, or its depended DLL, is not found." + newLine + "Please download DTXMania again."
+				//	) ) bDLLnotfound = true;
 				if ( !tDLLの存在チェック( CDTXMania.D3DXDLL,
 					CDTXMania.D3DXDLL + " が存在しません。" + newLine + "DirectX Redist フォルダの DXSETUP.exe を実行し、" + newLine + "必要な DirectX ランタイムをインストールしてください。",
 					CDTXMania.D3DXDLL + " is not found." + newLine + "Please execute DXSETUP.exe in \"DirectX Redist\" folder, to install DirectX runtimes required for DTXMania.",
@@ -117,9 +120,9 @@ namespace DTXMania
 					"bass_fx.dll を読み込めません。bass_fx.dll か bass.dll が存在しません。" + newLine + "DTXManiaをダウンロードしなおしてください。",
 					"bass_fx.dll is not loaded. bass_fx.dll or bass.dll must not exist." + newLine + "Please download DTXMania again."
 					) ) bDLLnotfound = true;
-				if ( !tDLLの存在チェック( "dll\\DirectShowLib-2005.dll",
-					"DirectShowLib-2005.dll が存在しません。" + newLine + "DTXManiaをダウンロードしなおしてください。",
-					"DirectShowLib-2005.dll is not found." + newLine + "Please download DTXMania again."
+				if ( !tDLLの存在チェック( "dll\\DirectShowLib.dll",
+					"DirectShowLib.dll が存在しません。" + newLine + "DTXManiaをダウンロードしなおしてください。",
+					"DirectShowLib.dll is not found." + newLine + "Please download DTXMania again."
 					) ) bDLLnotfound = true;
 				#endregion
 				if ( !bDLLnotfound )
@@ -128,14 +131,24 @@ namespace DTXMania
 					Thread.CurrentThread.CurrentCulture = new CultureInfo( "en-US" );
 #endif
 
-					DWM.EnableComposition( false );	// Disable AeroGrass temporally
+					DWM.EnableComposition( false ); // Disable AeroGrass temporally
 
-					// BEGIN #23670 2010.11.13 from: キャッチされない例外は放出せずに、ログに詳細を出力する。
-					// BEGIM #24606 2011.03.08 from: DEBUG 時は例外発生箇所を直接デバッグできるようにするため、例外をキャッチしないようにする。
+                    string path = Path.GetDirectoryName( Application.ExecutablePath );
+                    SetDllDirectory( null );
+                    if( Environment.Is64BitProcess )
+                    {
+                        SetDllDirectory( Path.Combine( path, @"dll\x64" ) );
+                    }
+                    else
+                    {
+                        SetDllDirectory( Path.Combine( path, @"dll" ) );
+                    }
+                    // BEGIN #23670 2010.11.13 from: キャッチされない例外は放出せずに、ログに詳細を出力する。
+                    // BEGIM #24606 2011.03.08 from: DEBUG 時は例外発生箇所を直接デバッグできるようにするため、例外をキャッチしないようにする。
 #if !DEBUG
 					try
 #endif
-					{
+                    {
 						using ( var mania = new CDTXMania() )
 							mania.Run();
 

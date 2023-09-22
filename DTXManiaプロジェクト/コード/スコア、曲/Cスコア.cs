@@ -72,6 +72,34 @@ namespace DTXMania
 			public int Duration;
             public STDGBVALUE<bool> b完全にCLASSIC譜面である;
             public STDGBVALUE<bool> b譜面がある;
+            public int n可視チップ数_HH;
+            public int n可視チップ数_SD;
+            public int n可視チップ数_BD;
+            public int n可視チップ数_HT;
+            public int n可視チップ数_LT;
+            public int n可視チップ数_CY;
+            public int n可視チップ数_FT;
+            public int n可視チップ数_HHO;
+            public int n可視チップ数_RD;
+            public int n可視チップ数_LC;
+            public int n可視チップ数_LP;
+            public int n可視チップ数_LBD;
+            public int n可視チップ数_Guitar;
+            public int n可視チップ数_Guitar_R;
+            public int n可視チップ数_Guitar_G;
+            public int n可視チップ数_Guitar_B;
+            public int n可視チップ数_Guitar_Y;
+            public int n可視チップ数_Guitar_P;
+            public int n可視チップ数_Guitar_OP;
+            public int n可視チップ数_Bass;
+            public int n可視チップ数_Bass_R;
+            public int n可視チップ数_Bass_G;
+            public int n可視チップ数_Bass_B;
+            public int n可視チップ数_Bass_Y;
+            public int n可視チップ数_Bass_P;
+            public int n可視チップ数_Bass_OP;
+            public double 最低Bpm;
+            public double 最大Bpm;
 
 			[Serializable]
 			[StructLayout( LayoutKind.Sequential )]
@@ -280,6 +308,25 @@ namespace DTXMania
 					}
 				}
 			}
+
+            public STDGBVALUE<string> strレベル小数点含
+            {
+                get
+                {
+                    STDGBVALUE<string> ret = new STDGBVALUE<string>();
+                    for( int i = 0; i < 3; i++ )
+                    {
+                        int n整数 = this.レベル[ i ] / 10;
+                        int n小数 = ( this.レベル[ i ] - ( n整数 * 10 ) ) * 10;
+                        n小数 += this.レベルDec[ i ];
+
+                        ret[ i ] += string.Format( "{0:0}", n整数 );
+                        ret[ i ] += ".";
+                        ret[ i ] += string.Format( "{0,2:00}", n小数 );
+                    }
+                    return ret;
+                }
+            }
 		}
 
 		public bool bSongDBにキャッシュがあった;
@@ -334,6 +381,11 @@ namespace DTXMania
             this.譜面情報.b譜面がある.Drums = false;
             this.譜面情報.b譜面がある.Guitar = false;
             this.譜面情報.b譜面がある.Bass = false;
+            this.譜面情報.n可視チップ数_HH = 0;
+            this.譜面情報.n可視チップ数_SD = 0;
+            this.譜面情報.n可視チップ数_BD = 0;
+            this.譜面情報.最低Bpm = 120.0;
+            this.譜面情報.最大Bpm = 120.0;
 		}
 	}
 }
