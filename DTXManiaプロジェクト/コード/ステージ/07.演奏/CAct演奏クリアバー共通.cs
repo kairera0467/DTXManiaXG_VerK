@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Drawing;
-using System.Diagnostics;
-using SharpDX;
-using SharpDX.Direct3D9;
-using FDK;
+﻿using FDK;
 
 namespace DTXMania
 {
@@ -31,14 +24,14 @@ namespace DTXMania
             this.db現在の曲進行割合 = 0;
             for( int i = 0; i < 3; i++ )
             {
-                this.bClearBar[ i ] = new bool[ 30 ];
+                this.bClearBar[ i ] = new bool[ SECTION_COUNT ];
                 this.b区間内でミスをした[ i ] = false;
             }
-            this.db区間位置 = new double[ 30 ];
+            this.db区間位置 = new double[ SECTION_COUNT ];
             this.dbEndPos = ( CDTXMania.DTX.listChip.Count > 0 ) ? CDTXMania.DTX.listChip[ CDTXMania.DTX.listChip.Count - 1 ].n発声時刻ms / 1000.0 : 0;
                     
-            double db区間 = this.dbEndPos / 30.0;
-            for( int i = 0; i < 30; i++ )
+            double db区間 = this.dbEndPos / (double)SECTION_COUNT;
+            for( int i = 0; i < SECTION_COUNT; i++ )
             {
                 db区間位置[ i ] = db区間 * i;
             }
@@ -71,34 +64,6 @@ namespace DTXMania
 		}
 		public override int On進行描画()
 		{
-			if( !base.b活性化してない )
-			{
-                //double[] db区間位置 = new double[ 30 ];
-                //if( this.b初めての進行描画 )
-                //{
-                //    this.dbNowPos = ( ( ( ( double ) CDTXMania.Timer.n現在時刻 ) / 1000.0 ) );
-                //    this.dbEndPos = ( CDTXMania.DTX.listChip.Count > 0 ) ? CDTXMania.DTX.listChip[ CDTXMania.DTX.listChip.Count - 1 ].n発声時刻ms / 1000.0 : 0;
-                    
-                //    double db区間 = this.dbEndPos / 30.0;
-                //    for( int i = 0; i < 30; i++ )
-                //    {
-                //        db区間位置[ i ] = db区間 * i;
-                //    }
-
-                //    base.b初めての進行描画 = false;
-                //}
-                //this.db現在の曲進行割合 = dbNowPos / dbEndPos;
-
-                //for( int j = n現在の区間; j < 30; j++ )
-                //{
-                //    if( this.dbNowPos >= db区間位置[ j ] )
-                //    {
-                //        this.tクリアゲージ判定();
-                //        this.n現在の区間++;
-                //        break;
-                //    }
-                //}
-            }
             return 0;
 		}
 
@@ -124,6 +89,7 @@ namespace DTXMania
             this.b区間内でミスをした[ (int)ePart ] = true;
         }
 
+        protected const int SECTION_COUNT = 64;
         protected STDGBVALUE<bool[]> bClearBar; //各パートごとにフラグを用意する。
         protected double[] db区間位置;
         protected int n現在の区間;
