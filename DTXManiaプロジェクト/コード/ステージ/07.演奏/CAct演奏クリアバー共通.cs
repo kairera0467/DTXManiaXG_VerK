@@ -1,4 +1,6 @@
 ﻿using FDK;
+using SharpDX.Animation;
+using System;
 
 namespace DTXMania
 {
@@ -35,7 +37,8 @@ namespace DTXMania
             {
                 db区間位置[ i ] = db区間 * i;
             }
-			base.On活性化();
+            this._カーソル = new カーソル();
+            base.On活性化();
 		}
 		public override void On非活性化()
 		{
@@ -45,13 +48,15 @@ namespace DTXMania
                 this.b区間内でミスをした[ i ] = false;
             }  
             this.db区間位置 = null;
-			base.On非活性化();
+
+            this._カーソル?.Dispose();
+            this._カーソル = null;
+            base.On非活性化();
 		}
 		public override void OnManagedリソースの作成()
 		{
 			if( !base.b活性化してない )
 			{
-
 				base.OnManagedリソースの作成();
 			}
 		}
@@ -89,6 +94,11 @@ namespace DTXMania
             this.b区間内でミスをした[ (int)ePart ] = true;
         }
 
+        public void カーソルアニメ実行()
+        {
+            this._カーソル.アニメーション開始(CDTXMania.AnimationManager);
+        }
+
         protected const int SECTION_COUNT = 64;
         protected STDGBVALUE<bool[]> bClearBar; //各パートごとにフラグを用意する。
         protected double[] db区間位置;
@@ -98,5 +108,53 @@ namespace DTXMania
         protected double dbEndPos;
         protected double db現在の曲進行割合;
         protected STDGBVALUE<bool> b区間内でミスをした;
+
+        protected class カーソル : IDisposable
+        {
+            public Variable X座標差分;
+            public Variable エフェクト拡大率;
+            public Variable エフェクト不透明度;
+            public Storyboard ストーリーボード;
+
+
+            public virtual void Dispose()
+            {
+                this.ストーリーボード?.Abandon();
+                this.ストーリーボード = null;
+
+                this.X座標差分?.Dispose();
+                this.X座標差分 = null;
+
+                this.エフェクト不透明度?.Dispose();
+                this.エフェクト不透明度 = null;
+
+                this.エフェクト拡大率?.Dispose();
+                this.エフェクト拡大率 = null;
+            }
+
+            public void アニメーション開始( CAnimationManager am )
+            {
+                this.Dispose();
+
+                // 1～28 開く動作
+                // それ移行 動かない
+                // 1拍過ぎた時 1コマ目に戻す
+                float f速度倍率 = 1.0f;
+                double dコマ秒 = 0.016;
+                double 秒(double v) => (v / f速度倍率);
+
+                // 矢印開度
+                X座標差分 = new Variable(am.Manager, 0);
+                ストーリーボード = new Storyboard(am.Manager);
+
+                using (var X移動 = am.TrasitionLibrary.Linear(秒(dコマ秒 * 28), 18))
+                {
+                    ストーリーボード.AddTransition(X座標差分, X移動);
+                }
+
+                this.ストーリーボード?.Schedule(am.Timer.Time);
+            }
+        }
+        protected カーソル _カーソル = null;
     }
 }

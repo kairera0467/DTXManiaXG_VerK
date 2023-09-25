@@ -2881,11 +2881,27 @@ for (int i = 0; i < 3; i++) {
 				{
 					Trace.Unindent();
 				}
+                //---------------------
+                #endregion
+                #region [ Windows Animation Managerの終了処理 ]
 				//---------------------
-				#endregion
-				#region [ Config.iniの出力 ]
+				Trace.TraceInformation("Windows Animation Managerの終了処理を行います。");
+				Trace.Indent();
+				try
+                {
+					AnimationManager?.Dispose();
+					AnimationManager = null;
+					Trace.TraceInformation("Windows Animation Managerの終了処理を完了しました。");
+				}
+				finally
+                {
+					Trace.Unindent();
+                }
 				//---------------------
-				Trace.TraceInformation("Config.ini を出力します。");
+                #endregion
+                #region [ Config.iniの出力 ]
+                //---------------------
+                Trace.TraceInformation("Config.ini を出力します。");
 //				if ( ConfigIni.bIsSwappedGuitarBass )			// #24063 2011.1.16 yyagi ギターベースがスワップしているときは元に戻す
 				if ( ConfigIni.bIsSwappedGuitarBass_AutoFlagsAreSwapped )	// #24415 2011.2.21 yyagi FLIP中かつ演奏中にalt-f4で終了したときは、AUTOのフラグをswapして戻す
 				{

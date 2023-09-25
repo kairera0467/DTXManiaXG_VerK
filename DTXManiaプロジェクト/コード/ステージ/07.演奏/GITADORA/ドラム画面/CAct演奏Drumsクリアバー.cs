@@ -65,6 +65,7 @@ namespace DTXMania
         {
             if( this.b初めての進行描画 )
             {
+                this._カーソル.アニメーション開始( CDTXMania.AnimationManager );
                 base.b初めての進行描画 = false;
             }
             this.dbNowPos = ( ( double ) CDTXMania.Timer.n現在時刻 ) / 1000.0;
@@ -95,7 +96,17 @@ namespace DTXMania
                     }
                 }
             }
-            this.txSongBar_Cursor.t2D描画( CDTXMania.app.Device, 853, db現在の曲進行割合 <= 1.0 ? 570 - (int)( 512.0 * db現在の曲進行割合 ) : 58 );
+
+            // カーソル
+            // 中央
+            this.txSongBar_Cursor.t2D描画( CDTXMania.app.Device, 860, db現在の曲進行割合 <= 1.0 ? 577 - (int)( 512.0 * db現在の曲進行割合 ) : 58,
+                new Rectangle(0, 0, 40, 11));
+            // 左
+            this.txSongBar_Cursor.t2D描画( CDTXMania.app.Device, 872 - (int)this._カーソル.X座標差分.Value, db現在の曲進行割合 <= 1.0 ? 572 - (int)( 512.0 * db現在の曲進行割合 ) : 58,
+                new Rectangle(0, 11, 10, 21));
+            // 右
+            this.txSongBar_Cursor.t2D描画( CDTXMania.app.Device, 877 + (int)this._カーソル.X座標差分.Value, db現在の曲進行割合 <= 1.0 ? 572 - (int)( 512.0 * db現在の曲進行割合 ) : 58,
+                new Rectangle(10, 11, 10, 21));
             return 0;
         }
 
