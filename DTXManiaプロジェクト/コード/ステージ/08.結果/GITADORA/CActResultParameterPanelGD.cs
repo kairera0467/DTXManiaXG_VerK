@@ -99,6 +99,10 @@ namespace DTXMania
 
                 this.tx項目文字列 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\8_text.png" ) );
 
+                this.tx判定項目文字列 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\8_JudgeString.png" ) );
+
+                this.txNewRecord = CDTXMania.tテクスチャの生成( CSkin.Path(@"Graphics\8_NewRecord.png") );
+
                 #region[ 難易度、達成率、スキル値の下の白線の生成 ]
                 Bitmap b白線 = new Bitmap( 340, 2 );
                 Graphics g白線 = Graphics.FromImage( b白線 );
@@ -144,6 +148,10 @@ namespace DTXMania
 
                 CDTXMania.tテクスチャの解放( ref this.tx項目文字列 );
 
+                CDTXMania.tテクスチャの解放( ref this.tx判定項目文字列 );
+
+                CDTXMania.tテクスチャの解放( ref this.txNewRecord );
+
                 CDTXMania.tテクスチャの解放( ref this.tx白線 );
 				base.OnManagedリソースの解放();
 			}
@@ -157,9 +165,11 @@ namespace DTXMania
 			if( base.b初めての進行描画 )
 			{
 				this.ct表示用 = new CCounter( 0, 1000, 3, CDTXMania.Timer );
+                this.ctNewRecord = new CCounter( 0, 1, 160, CDTXMania.Timer );
 				base.b初めての進行描画 = false;
 			}
 			this.ct表示用.t進行();
+            this.ctNewRecord.t進行Loop();
             int[] z = new int[3];
             bool bSwap = CDTXMania.ConfigIni.bIsSwappedGuitarBass;
             z[ 0 ] = 0;
@@ -172,6 +182,13 @@ namespace DTXMania
                 if( this.n本体X[ i ] != 0 )
                 {
                     double rate = CDTXMania.stage結果.st演奏記録[ i ].db演奏型スキル値;
+                    double bestRate = -1;
+                    switch (i)
+                    {
+                        case 0:
+                            bestRate = CDTXMania.stage結果.sc更新前Scoreini.stセクション.HiSkillDrums.db演奏型スキル値;
+                            break;
+                    }
 
                     this.tレベル値の描画( 1078, 159, CDTXMania.DTX.LEVEL.Drums, CDTXMania.DTX.LEVELDEC.Drums );
                     this.tx白線?.t2D描画( CDTXMania.app.Device, 916, 215 );
@@ -180,13 +197,30 @@ namespace DTXMania
                     this.t達成率値の描画( 1040, 232, rate );
                     this.tx白線?.t2D描画( CDTXMania.app.Device, 890, 288 );
 
+                    // 新記録表示テスト
+                    // 認識が正しければ達成率と曲別スキル値の更新は完全に同じタイミングで出るので、判定は1箇所でいいはず
+                    if ( CDTXMania.stage結果.b新記録スキル[ i ] )
+                    {
+                        this.txNewRecord?.t2D描画( CDTXMania.app.Device, 1041, 288, new Rectangle(0, this.ctNewRecord.n現在の値 * 24, 96, 24) );
+                        this.txNewRecord?.t2D描画( CDTXMania.app.Device, 845, 436, new Rectangle(0, this.ctNewRecord.n現在の値 * 24, 96, 24) );
+                    }
+
                     //this.t特大文字表示( 1020, 370, string.Format("{0,6:##0.00}", CDTXMania.stage結果.st演奏記録[i].dbゲーム型スキル値));
                     this.tスキル値の描画( 976, 328, CDTXMania.stage結果.st演奏記録[ i ].dbゲーム型スキル値 );
                     this.tx白線?.t2D描画( CDTXMania.app.Device, 842, 416 );
 
                     this.txゲージ?.t2D描画( CDTXMania.app.Device, 977, 398, new Rectangle( 0, 0, 220, 16 ) );
 
+                    // TODO: ゲージの先端の描画方法を改善する
+                    //       ゲージ右端の先端をくっつける方法でも十分実現可能ではありそう(ゲージ本体テクスチャを塗り部分と枠部分で分ける必要あり)
                     this.txゲージ中身.t2D描画( CDTXMania.app.Device, 985, 400, new Rectangle( 0, 0, (int)(203.0f * (rate / 100.0f) ), 11) );
+
+                    // 目標ラインテスト
+                    // TODO: 当分の間は自己ベストの達成率の部分を表示する機能として実装する予定
+                    //this.txゲージ中身.n透明度 = 96;
+                    //this.txゲージ中身.t2D描画( CDTXMania.app.Device, 985, 400, new Rectangle( 0, 0, (int)(203.0f * (bestRate / 100.0f) ), 11) );
+                    //this.txゲージ中身.n透明度 = 255;
+
 
                     // 各項目の文字
                     this.tx項目文字列?.t2D描画( CDTXMania.app.Device, 847, 381, new Rectangle( 0, 0, 128, 32 ) );
@@ -201,14 +235,15 @@ namespace DTXMania
             int num5 = this.ct表示用.n現在の値 / 100;
             double num6 = 1.0 - (((double)(this.ct表示用.n現在の値 % 100)) / 100.0);
             int height = 20;
-            
+
             //文字
-            CDTXMania.act文字コンソール.tPrint( 877, 484, C文字コンソール.Eフォント種別.白, "PERFECT" );
-            CDTXMania.act文字コンソール.tPrint( 877, 508, C文字コンソール.Eフォント種別.白, "GREAT" );
-            CDTXMania.act文字コンソール.tPrint( 877, 532, C文字コンソール.Eフォント種別.白, "GOOD" );
-            CDTXMania.act文字コンソール.tPrint( 877, 556, C文字コンソール.Eフォント種別.白, "OK" );
-            CDTXMania.act文字コンソール.tPrint( 877, 580, C文字コンソール.Eフォント種別.白, "MISS" );
-            CDTXMania.act文字コンソール.tPrint( 877, 604, C文字コンソール.Eフォント種別.白, "MAX COMBO" );
+            this.tx判定項目文字列?.t2D描画( CDTXMania.app.Device, 878, 476, new Rectangle( 0, 0, 128, 24 ) );
+            this.tx判定項目文字列?.t2D描画( CDTXMania.app.Device, 878, 501, new Rectangle( 0, 24, 128, 24 ) );
+            this.tx判定項目文字列?.t2D描画( CDTXMania.app.Device, 878, 525, new Rectangle( 0, 48, 128, 24 ) );
+            this.tx判定項目文字列?.t2D描画( CDTXMania.app.Device, 878, 549, new Rectangle( 0, 72, 128, 24 ) );
+            this.tx判定項目文字列?.t2D描画( CDTXMania.app.Device, 878, 572, new Rectangle( 0, 96, 128, 24 ) );
+            this.tx判定項目文字列?.t2D描画( CDTXMania.app.Device, 878, 596, new Rectangle( 0, 120, 128, 24 ) );
+
             CDTXMania.act文字コンソール.tPrint( 877, 628, C文字コンソール.Eフォント種別.白, "Score" );
 
             //数値
@@ -266,6 +301,7 @@ namespace DTXMania
         private ST数字フォント[] ST達成率数字_少数;
 
 		private CCounter ct表示用;
+        private CCounter ctNewRecord;
         private STDGBVALUE<int> n本体X;
         private STDGBVALUE<int> n本体Y;
         private STDGBVALUE<int> n白X;
@@ -287,6 +323,7 @@ namespace DTXMania
         private CTexture tx達成率数字_少数;
         private CTexture tx白線;
         private CTexture tx項目文字列;
+        private CTexture tx判定項目文字列;
 
         private ST文字位置[] st小文字位置 = new ST文字位置[]{
             new ST文字位置( '0', new Point( 0, 36 ) ),
