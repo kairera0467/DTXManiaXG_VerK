@@ -315,7 +315,8 @@ namespace DTXMania
 							#region [ Upstairs / Left ]
 							if ( ( ( this.act曲リスト.r現在選択中の曲 != null ) && ( this.act曲リスト.r現在選択中の曲.r親ノード != null ) ) &&
 								( CDTXMania.Pad.b押された( E楽器パート.DRUMS, Eパッド.LC ) ||
-								  CDTXMania.Pad.b押されたGB( Eパッド.Pick ) || CDTXMania.Pad.b押されたGB( Eパッド.Cancel ) ) )
+								  CDTXMania.Pad.b押されたGB( Eパッド.Pick ) || CDTXMania.Pad.b押されたGB( Eパッド.Cancel ) ||
+								  CDTXMania.Input管理.Keyboard.bキーが押された( (int) SlimDXKey.LeftArrow ) ) )
 							{
 								this.actPresound.tサウンド停止();
 								CDTXMania.Skin.sound取消音.t再生する();
