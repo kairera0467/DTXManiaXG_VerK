@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////
-   
-          DTXManiaXG(Ver.K) 4.11
- 
+
+          DTXManiaXG(Ver.K) 4.12
+
 ///////////////////////////////////////////////
 ○概要
 DTXManiaXG(Ver.K)をDTXMania Release104を元に作り直したものです。
@@ -23,7 +23,7 @@ DTXManiaXG(Ver.K)をDTXMania Release104を元に作り直したものです。
 ・フォルダ構成の変更
 ・全スキン共通画像フォルダを実装
 ・シャッター位置の計算式をだいたい本家準拠に変更
-・VisualStudio2015以降でのビルドに対応、推奨コンパイラをVisualStudio2017に変更
+・VisualStudio2015以降でのビルドに対応、推奨コンパイラをVisualStudio2019に変更
 ・XG風表示とGITADORA風表示を1つの本体に統合(スキンごとに変更可能)
 ・DirectXに使用するライブラリをSharpDXに変更
 ・DirectSound時の音声デコードに使用するライブラリをBassに変更
@@ -73,6 +73,9 @@ DTXManiaXG(Ver.K)をDTXMania Release104を元に作り直したものです。
 
 ○既知の不具合
 ・シャッター画像で「BLACK」を選択してから再度CONFIG画面に入ると「DEFAULT」に戻っている
+・ライドシンバルがオートにならないことがある
+・[matixx風のみ]ムービーファイルの比率が16:9でないとウィンドウ表示がおかしくなる
+・
 
 ○matixx風表示
 ・難易度ラベル表示は固定になっています。(BASIC、ADVANCED、EXTREME、MASTER、ULTIMATEの5つ。DTXMania2準拠)
@@ -96,14 +99,22 @@ DTXManiaXG(Ver.K)をDTXMania Release104を元に作り直したものです。
 ・SlimDX
 ・xadec
 
-○連絡先
+○連絡先など
 Project:https://github.com/kairera0467/DTXManiaXG_VerK/
-HP:http://dtxxgk.at-ninja.jp/
+HP:https://kairera.site/
 OfficialTwitter:@DTXManiaK
 開発者Twitter:@kairera0467
 開発者Discord:kairera0467
 
 ○更新履歴
+2023110700	4.12	matixx風演奏画面のフェーズバーのカーソルの画像を作り直し。簡易的なアニメーションを実装。
+					matixxリザルト画面のNEW RECORD表示を実装。
+					選曲画面で矢印キーを押下することでフォルダから抜ける機能を追加(XG:上キー, matixx:左キー)
+					クリアバーの分割数を30から64に変更。
+					matixxリザルト画面の判定項目文字列のテクスチャ追加。
+					matixx選曲画面のクリアマークが正しい位置に表示されない、初期表示時に違う難易度のマークが表示されるといった不具合を修正。
+					XGスキンを使用している場合にタイトル画面でフリーズする不具合を修正。
+					CONFIG画面でスキンをmatixx風からXG風に変えてタイトル画面に戻ると操作不能になる不具合を修正。
 2023092200	4.11	matixxっぽいフェードイン・フェードアウトを1種類実装
 					matixx選曲画面の達成率表示のテクスチャ追加、MAX表記の実装
 					matixx選曲画面TotalNotesの数値は楽曲以外を選択している時に表示しないよう変更
