@@ -2696,7 +2696,11 @@ namespace DTXMania
 						    if ( !pChip.bHit && ( pChip.nバーからの距離dot.Drums < 0 ) )
 						    {
                                 this.actBPMBar.tStoryboard実行(); // 2019.03.28 kairera0467
-                            }
+								if (this.actClearBar != null)
+                                {
+									this.actClearBar.カーソルアニメ実行();
+                                }
+							}
 							this.t進行描画_チップ_小節線( configIni, ref dTX, ref pChip );
 							break;
 						}
@@ -2706,6 +2710,10 @@ namespace DTXMania
 						if ( !pChip.bHit && ( pChip.nバーからの距離dot.Drums < 0 ) )
 						{
                             this.actBPMBar.tStoryboard実行(); // 2019.03.28 kairera0467
+							if (this.actClearBar != null)
+                            {
+								this.actClearBar.カーソルアニメ実行();
+							}
 							pChip.bHit = true;
 						}
 						if ( ( ePlayMode == E楽器パート.DRUMS ) && ( configIni.nLaneDispType.Drums < 2 ) && pChip.b可視 && ( this.txチップ != null ) )

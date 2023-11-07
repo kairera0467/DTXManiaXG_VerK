@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Drawing;
+﻿using System.Drawing;
 using FDK;
-using SharpDX.Direct3D9;
 
 namespace DTXMania
 {
@@ -28,20 +24,21 @@ namespace DTXMania
         {
             if( !this.b活性化してない )
             {
-                //matixxは縦17pxずつ
                 #region[ ゲージ粒 ]
-                Bitmap canvas = new Bitmap( 7, 17 ); //現在:7px 記録:3px
+                // 横 現在:7px 記録:3px
+                // 縦 8pxの64分割で合計512px
+                Bitmap canvas = new Bitmap( 7, 8 );
                 Graphics g = Graphics.FromImage(canvas);
 
                 SolidBrush sbOK = new SolidBrush( Color.FromArgb( 225, 225, 60 ) );
                 SolidBrush sbNG  = new SolidBrush( Color.FromArgb( 110, 140, 230 ) );
 
-                //OK色
-                g.FillRectangle( sbOK, 0, 0, 7, 17 );
+                // OK色
+                g.FillRectangle( sbOK, 0, 0, 7, 8 );
                 this.txClearGauge_OK = CDTXMania.tテクスチャの生成( canvas );
             
-                //NG色
-                g.FillRectangle( sbNG, 0, 0, 7, 17 );
+                // NG色
+                g.FillRectangle( sbNG, 0, 0, 7, 8 );
                 this.txClearGauge_NG = CDTXMania.tテクスチャの生成( canvas );
 
 
@@ -66,15 +63,15 @@ namespace DTXMania
 
         public override int On進行描画()
         {
-            
             if( this.b初めての進行描画 )
             {
+                this._カーソル.アニメーション開始( CDTXMania.AnimationManager );
                 base.b初めての進行描画 = false;
             }
-            this.dbNowPos = ( ( ( ( double ) CDTXMania.Timer.n現在時刻 ) / 1000.0 ) );
+            this.dbNowPos = ( ( double ) CDTXMania.Timer.n現在時刻 ) / 1000.0;
             this.db現在の曲進行割合 = dbNowPos / dbEndPos;
 
-            for( int j = n現在の区間; j < 30; j++ )
+            for( int j = n現在の区間; j < SECTION_COUNT; j++ )
             {
                 if( this.dbNowPos >= db区間位置[ j ] )
                 {
@@ -84,22 +81,32 @@ namespace DTXMania
                 }
             }
 
-            for( int i = 0; i < 30; i++ )
+            for( int i = 0; i < SECTION_COUNT; i++ )
             {
                 if( i < this.n現在の区間 - 1 )
                 {
                     if( base.bClearBar.Drums[ i ] ) {
                         if( this.txClearGauge_OK != null ) {
-                            this.txClearGauge_OK.t2D描画( CDTXMania.app.Device, 904, 566 - ( i * 17 ) );
+                            this.txClearGauge_OK.t2D描画( CDTXMania.app.Device, 904, 575 - ( i * 8 ) );
                         }
                     } else {
                         if( this.txClearGauge_NG != null ) {
-                            this.txClearGauge_NG.t2D描画( CDTXMania.app.Device, 904, 566 - ( i * 17 ) );
+                            this.txClearGauge_NG.t2D描画( CDTXMania.app.Device, 904, 575 - ( i * 8 ) );
                         }
                     }
                 }
             }
-            this.txSongBar_Cursor.t2D描画( CDTXMania.app.Device, 853, db現在の曲進行割合 <= 1.0 ? 570 - (int)( 512.0 * db現在の曲進行割合 ) : 58 );
+
+            // カーソル
+            // 中央
+            this.txSongBar_Cursor.t2D描画( CDTXMania.app.Device, 860, db現在の曲進行割合 <= 1.0 ? 577 - (int)( 512.0 * db現在の曲進行割合 ) : 58,
+                new Rectangle(0, 0, 40, 11));
+            // 左
+            this.txSongBar_Cursor.t2D描画( CDTXMania.app.Device, 872 - (int)this._カーソル.X座標差分.Value, db現在の曲進行割合 <= 1.0 ? 572 - (int)( 512.0 * db現在の曲進行割合 ) : 58,
+                new Rectangle(0, 11, 10, 21));
+            // 右
+            this.txSongBar_Cursor.t2D描画( CDTXMania.app.Device, 877 + (int)this._カーソル.X座標差分.Value, db現在の曲進行割合 <= 1.0 ? 572 - (int)( 512.0 * db現在の曲進行割合 ) : 58,
+                new Rectangle(10, 11, 10, 21));
             return 0;
         }
 

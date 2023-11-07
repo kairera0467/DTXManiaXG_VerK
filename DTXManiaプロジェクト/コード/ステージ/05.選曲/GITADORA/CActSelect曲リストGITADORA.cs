@@ -442,7 +442,10 @@ namespace DTXMania
 						// 新しく最下部に表示されるパネル用のスキル値を取得。
 
 						for( int i = 0; i < 3; i++ )
+                        {
 							this.stバー情報[ index ].nスキル値[ i ] = (int) song.arスコア[ this.n現在のアンカ難易度レベルに最も近い難易度レベルを返す( song ) ].譜面情報.最大スキル[ i ];
+                            this.stバー情報[ index ].n最高クリア難易度[ i ] = this.n最高クリア難易度を返す(song.arスコア, i);
+                        }
 
 
 						// 1行(100カウント)移動完了。
@@ -522,7 +525,10 @@ namespace DTXMania
 						// 新しく最上部に表示されるパネル用のスキル値を取得。
 						
 						for( int i = 0; i < 3; i++ )
+                        {
 							this.stバー情報[ index ].nスキル値[ i ] = (int) song.arスコア[ this.n現在のアンカ難易度レベルに最も近い難易度レベルを返す( song ) ].譜面情報.最大スキル[ i ];
+                            this.stバー情報[ index ].n最高クリア難易度[ i ] = this.n最高クリア難易度を返す(song.arスコア, i);
+                        }
 
 
 						// 1行(100カウント)移動完了。
@@ -651,10 +657,10 @@ namespace DTXMania
                                 this.txTumbnail[ nパネル番号 ].vc拡大縮小倍率 = new Vector3( fRet, fRet, 1.0f );
                                 this.txTumbnail[ nパネル番号 ].t2D描画( CDTXMania.app.Device, 712, 329 );
                             }
-                            //クリアマーク
-                            if( this.stバー情報[ nパネル番号 ].nスキル値.Drums > 0 )
+                            // クリアマーク
+                            if( this.stバー情報[ nパネル番号 ].n最高クリア難易度.Drums != -1 )
                             {
-                                this.txクリアランプ?.t2D描画( CDTXMania.app.Device, 707, 324, new Rectangle( 0, this.n現在選択中の曲の現在の難易度レベル * 36, 36, 36 ) );
+                                this.txクリアランプ?.t2D描画( CDTXMania.app.Device, 707, 324, new Rectangle( 0, this.stバー情報[ nパネル番号 ].n最高クリア難易度.Drums * 36, 36, 36 ) );
                             }
                             #endregion
                             #region[ 左側ジャケット画像描画 ]
@@ -706,10 +712,10 @@ namespace DTXMania
                                 this.txTumbnail[ nパネル番号 ].vc拡大縮小倍率 = new Vector3( fRet, fRet, 1.0f );
                                 this.txTumbnail[ nパネル番号 ].t2D描画( CDTXMania.app.Device, 750, y + 7 );
                             }
-                            //クリアマーク
-                            if( this.stバー情報[ nパネル番号 ].nスキル値.Drums > 0 )
+                            // クリアマーク
+                            if( this.stバー情報[ nパネル番号 ].n最高クリア難易度.Drums != -1 )
                             {
-                                this.txクリアランプ?.t2D描画( CDTXMania.app.Device, 745, y + 2, new Rectangle( 0, this.n現在選択中の曲の現在の難易度レベル * 36, 36, 36 ) );
+                                this.txクリアランプ?.t2D描画( CDTXMania.app.Device, 745, y + 2, new Rectangle( 0, this.stバー情報[ nパネル番号 ].n最高クリア難易度.Drums * 36, 36, 36 ) );
                             }
                             #endregion
 							#region [ タイトル名テクスチャを描画。]
@@ -783,7 +789,7 @@ namespace DTXMania
                                 this.txTumbnail[ nパネル番号 ].vc拡大縮小倍率 = new Vector3( fRet, fRet, 1.0f );
                                 this.txTumbnail[ nパネル番号 ].t2D描画( CDTXMania.app.Device, 712, y + 7 );
                             }
-                            //クリアマーク
+                            // クリアマーク
                             if( this.stバー情報[ nパネル番号 ].n最高クリア難易度.Drums != -1 )
                             {
                                 this.txクリアランプ?.t2D描画( CDTXMania.app.Device, 707, y + 2, new Rectangle( 0, this.stバー情報[ nパネル番号 ].n最高クリア難易度.Drums * 36, 36, 36 ) );
@@ -860,7 +866,7 @@ namespace DTXMania
                             this.txTumbnail[ nパネル番号 ].vc拡大縮小倍率 = new Vector3( fRet, fRet, 1.0f );
                             this.txTumbnail[ nパネル番号 ].t2D描画( CDTXMania.app.Device, 750, y + 7 );
                         }
-                        //クリアマーク
+                        // クリアマーク
                         if( this.stバー情報[ nパネル番号 ].n最高クリア難易度.Drums != -1 )
                         {
                             this.txクリアランプ?.t2D描画( CDTXMania.app.Device, 745, y + 2, new Rectangle( 0, this.stバー情報[ nパネル番号 ].n最高クリア難易度.Drums * 36, 36, 36 ) );

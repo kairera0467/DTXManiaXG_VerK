@@ -245,7 +245,7 @@ namespace DTXMania
 				}
 				#endregion
                 #region[ バージョン表示 ]
-                string strVersion = "DTX:J:A:A:2023092200";
+                string strVersion = "DTX:J:A:A:2023110700";
 #if DEBUG
                 strVersion += "  DEBUG";
 #endif
@@ -258,7 +258,7 @@ namespace DTXMania
 					case CStage.Eフェーズ.共通_フェードイン:
 						if ( CDTXMania.r直前のステージ.eステージID == Eステージ.コンフィグ )
                         {
-							if (this.actFOpuzzle.On進行描画() != 0)
+							if (CDTXMania.bXGRelease ? (this.actFI.On進行描画() != 0) : (this.actFOpuzzle.On進行描画() != 0))
 							{
 								CDTXMania.Skin.soundタイトル音.t再生する();
 								base.eフェーズID = CStage.Eフェーズ.共通_通常状態;

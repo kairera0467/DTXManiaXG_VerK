@@ -1119,6 +1119,12 @@ namespace DTXMania
             //パネルにあらかじめ曲名とアーティスト名を埋め込んでおく。
 
             //2016.02.21 kairera0467 ここの最適化が足りないかも。
+
+            // PrivateFont未生成の場合は曲選択画面ではないので抜ける
+            if ( this.pfPanelFont == null )
+            {
+                return;
+            }
             
             if( nバー番号 < 0 || nバー番号 > 15 )
 				return;
