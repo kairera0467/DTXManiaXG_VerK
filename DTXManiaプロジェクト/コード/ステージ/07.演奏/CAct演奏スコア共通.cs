@@ -91,7 +91,7 @@ namespace DTXMania
 						}
 						#endregion
 						#region [ Auto Neck ]
-						if ( bAutoPlay.GtR || bAutoPlay.GtG || bAutoPlay.GtB )
+						if ( bAutoPlay.GtR || bAutoPlay.GtG || bAutoPlay.GtB || bAutoPlay.GtY || bAutoPlay.GtP )
 						{
 							rev /= 4;
 						}
@@ -116,7 +116,7 @@ namespace DTXMania
 						}
 						#endregion
 						#region [ Auto Neck ]
-						if ( bAutoPlay.BsR || bAutoPlay.BsG || bAutoPlay.BsB )
+						if ( bAutoPlay.BsR || bAutoPlay.BsG || bAutoPlay.BsB || bAutoPlay.BsY || bAutoPlay.BsP )
 						{
 							rev /= 4;
 						}

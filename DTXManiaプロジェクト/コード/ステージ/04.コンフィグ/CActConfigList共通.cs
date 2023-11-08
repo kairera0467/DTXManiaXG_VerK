@@ -1182,6 +1182,14 @@ namespace DTXMania
 				"Bネックを自動で演奏します。",
 				"To play B neck automatically." );
 			this.list項目リスト.Add( this.iGuitarB );
+			this.iGuitarY = new CItemToggle( "    Y", CDTXMania.ConfigIni.bAutoPlay.GtY,
+				"Yネックを自動で演奏します。",
+				"To play Y neck automatically." );
+			this.list項目リスト.Add( this.iGuitarY );
+			this.iGuitarP = new CItemToggle( "    P", CDTXMania.ConfigIni.bAutoPlay.GtP,
+				"Pネックを自動で演奏します。",
+				"To play P neck automatically." );
+			this.list項目リスト.Add( this.iGuitarP );
 			this.iGuitarPick = new CItemToggle( "    Pick", CDTXMania.ConfigIni.bAutoPlay.GtPick,
 				"ピックを自動で演奏します。",
 				"To play Pick automatically." );
@@ -1436,6 +1444,14 @@ namespace DTXMania
 				"Bネックを自動で演奏します。",
 				"To play B neck automatically." );
 			this.list項目リスト.Add( this.iBassB );
+			this.iBassY = new CItemToggle( "    Y", CDTXMania.ConfigIni.bAutoPlay.BsY,
+				"Yネックを自動で演奏します。",
+				"To play Y neck automatically." );
+			this.list項目リスト.Add( this.iBassY );
+			this.iBassP = new CItemToggle( "    P", CDTXMania.ConfigIni.bAutoPlay.BsP,
+				"Pネックを自動で演奏します。",
+				"To play P neck automatically." );
+			this.list項目リスト.Add( this.iBassP );
 			this.iBassPick = new CItemToggle( "    Pick", CDTXMania.ConfigIni.bAutoPlay.BsPick,
 				"ピックを自動で演奏します。",
 				"To play Pick automatically." );
@@ -3049,7 +3065,9 @@ namespace DTXMania
 		private CItemThreeState iBassAutoPlayAll;			// #23886 2012.5.8 yyagi
 		private CItemToggle iBassR;							//
 		private CItemToggle iBassG;							//
-		private CItemToggle iBassB;							//
+		private CItemToggle iBassB;                         //
+		private CItemToggle iBassY;                         // 2023.11.8 kairera0467
+		private CItemToggle iBassP;                         //
 		private CItemToggle iBassPick;						//
 		private CItemToggle iBassW;							//
 
@@ -3113,7 +3131,9 @@ namespace DTXMania
         private CItemThreeState iGuitarAutoPlayAll;			// #23886 2012.5.8 yyagi
 		private CItemToggle iGuitarR;						//
 		private CItemToggle iGuitarG;						//
-		private CItemToggle iGuitarB;						//
+		private CItemToggle iGuitarB;                       //
+		private CItemToggle iGuitarY;						// 2023.11.8 kairera0467
+		private CItemToggle iGuitarP;						//
 		private CItemToggle iGuitarPick;					//
 		private CItemToggle iGuitarW;						//
 
@@ -3167,11 +3187,11 @@ namespace DTXMania
 		}
 		private void t全部のギターパッドのAutoを切り替える( bool bAutoON )
 		{
-			this.iGuitarR.bON = this.iGuitarG.bON = this.iGuitarB.bON = this.iGuitarPick.bON = this.iGuitarW.bON = bAutoON;
+			this.iGuitarR.bON = this.iGuitarG.bON = this.iGuitarB.bON = this.iGuitarY.bON = this.iGuitarP.bON = this.iGuitarPick.bON = this.iGuitarW.bON = bAutoON;
 		}
 		private void t全部のベースパッドのAutoを切り替える( bool bAutoON )
 		{
-			this.iBassR.bON = this.iBassG.bON = this.iBassB.bON = this.iBassPick.bON = this.iBassW.bON = bAutoON;
+			this.iBassR.bON = this.iBassG.bON = this.iBassB.bON = this.iBassY.bON = this.iBassP.bON = this.iBassPick.bON = this.iBassW.bON = bAutoON;
 		}
 		private void tConfigIniへ記録する()
 		{
@@ -3280,6 +3300,8 @@ namespace DTXMania
 			CDTXMania.ConfigIni.bAutoPlay.BsR = this.iBassR.bON;
 			CDTXMania.ConfigIni.bAutoPlay.BsG = this.iBassG.bON;
 			CDTXMania.ConfigIni.bAutoPlay.BsB = this.iBassB.bON;
+			CDTXMania.ConfigIni.bAutoPlay.BsY = this.iBassY.bON;
+			CDTXMania.ConfigIni.bAutoPlay.BsP = this.iBassP.bON;
 			CDTXMania.ConfigIni.bAutoPlay.BsPick = this.iBassPick.bON;
 			CDTXMania.ConfigIni.bAutoPlay.BsW = this.iBassW.bON;
 			CDTXMania.ConfigIni.n譜面スクロール速度.Bass = this.iBassScrollSpeed.n現在の値;
@@ -3387,6 +3409,8 @@ namespace DTXMania
 			CDTXMania.ConfigIni.bAutoPlay.GtR = this.iGuitarR.bON;
 			CDTXMania.ConfigIni.bAutoPlay.GtG = this.iGuitarG.bON;
 			CDTXMania.ConfigIni.bAutoPlay.GtB = this.iGuitarB.bON;
+			CDTXMania.ConfigIni.bAutoPlay.GtY = this.iGuitarY.bON;
+			CDTXMania.ConfigIni.bAutoPlay.GtP = this.iGuitarP.bON;
 			CDTXMania.ConfigIni.bAutoPlay.GtPick = this.iGuitarPick.bON;
 			CDTXMania.ConfigIni.bAutoPlay.GtW = this.iGuitarW.bON;
 			CDTXMania.ConfigIni.n譜面スクロール速度.Guitar = this.iGuitarScrollSpeed.n現在の値;

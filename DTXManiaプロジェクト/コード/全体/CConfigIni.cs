@@ -1283,11 +1283,15 @@ namespace DTXMania
 			this.bAutoPlay.GtR = true;
 			this.bAutoPlay.GtG = true;
 			this.bAutoPlay.GtB = true;
+			this.bAutoPlay.GtY = true;
+			this.bAutoPlay.GtP = true;
 			this.bAutoPlay.GtPick = true;
 			this.bAutoPlay.GtW = true;
 			this.bAutoPlay.BsR = true;
 			this.bAutoPlay.BsG = true;
 			this.bAutoPlay.BsB = true;
+			this.bAutoPlay.BsY = true;
+			this.bAutoPlay.BsP = true;
 			this.bAutoPlay.BsPick = true;
 			this.bAutoPlay.BsW = true;
 			#endregion
@@ -2258,6 +2262,8 @@ namespace DTXMania
 			sw.WriteLine( "GuitarR={0}", this.bAutoPlay.GtR ? 1 : 0 );
 			sw.WriteLine( "GuitarG={0}", this.bAutoPlay.GtG ? 1 : 0 );
 			sw.WriteLine( "GuitarB={0}", this.bAutoPlay.GtB ? 1 : 0 );
+			sw.WriteLine( "GuitarY={0}", this.bAutoPlay.GtY ? 1 : 0 );
+			sw.WriteLine( "GuitarP={0}", this.bAutoPlay.GtP ? 1 : 0 );
 			sw.WriteLine( "GuitarPick={0}", this.bAutoPlay.GtPick ? 1 : 0 );
 			sw.WriteLine( "GuitarWailing={0}", this.bAutoPlay.GtW ? 1 : 0 );
 			sw.WriteLine();
@@ -2266,6 +2272,8 @@ namespace DTXMania
 			sw.WriteLine( "BassR={0}", this.bAutoPlay.BsR ? 1 : 0 );
 			sw.WriteLine( "BassG={0}", this.bAutoPlay.BsG ? 1 : 0 );
 			sw.WriteLine( "BassB={0}", this.bAutoPlay.BsB ? 1 : 0 );
+			sw.WriteLine( "BassY={0}", this.bAutoPlay.BsY ? 1 : 0 );
+			sw.WriteLine( "BassP={0}", this.bAutoPlay.BsP ? 1 : 0 );
 			sw.WriteLine( "BassPick={0}", this.bAutoPlay.BsPick ? 1 : 0 );
 			sw.WriteLine( "BassWailing={0}", this.bAutoPlay.BsW ? 1 : 0 );
 			sw.WriteLine();
@@ -3504,6 +3512,14 @@ namespace DTXMania
 										{
 											this.bAutoPlay.GtB = C変換.bONorOFF( str4[ 0 ] );
 										}
+										else if ( str3.Equals( "GuitarY" ) )
+										{
+											this.bAutoPlay.GtY = C変換.bONorOFF( str4[ 0 ] );
+										}
+										else if ( str3.Equals( "GuitarP" ) )
+										{
+											this.bAutoPlay.GtP = C変換.bONorOFF( str4[ 0 ] );
+										}
 										else if ( str3.Equals( "GuitarPick" ) )
 										{
 											this.bAutoPlay.GtPick = C変換.bONorOFF( str4[ 0 ] );
@@ -3527,6 +3543,14 @@ namespace DTXMania
 										else if ( str3.Equals( "BassB" ) )
 										{
 											this.bAutoPlay.BsB = C変換.bONorOFF( str4[ 0 ] );
+										}
+										else if ( str3.Equals( "BassY" ) )
+										{
+											this.bAutoPlay.BsY = C変換.bONorOFF( str4[ 0 ] );
+										}
+										else if ( str3.Equals( "BassP" ) )
+										{
+											this.bAutoPlay.BsP = C変換.bONorOFF( str4[ 0 ] );
 										}
 										else if ( str3.Equals( "BassPick" ) )
 										{
@@ -3931,6 +3955,8 @@ HP=M044
 R=K055
 G=K056,J012
 B=K057
+Y=
+P=
 Pick=K0115,K046,J06
 Wail=K0116
 Decide=K060
@@ -3941,6 +3967,8 @@ Cancel=K061
 R=K090
 G=K091,J013
 B=K092
+Y=
+P=
 Pick=K0103,K0100,J08
 Wail=K089
 Decide=K096

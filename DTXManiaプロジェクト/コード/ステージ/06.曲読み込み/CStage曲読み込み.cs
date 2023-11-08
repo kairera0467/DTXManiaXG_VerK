@@ -609,7 +609,7 @@ namespace DTXMania
                             #region[ 譜面に応じてSkillMode変更 ]
                             if( CDTXMania.ConfigIni.bSkillModeを自動切替えする )
                             {
-                                if( CDTXMania.ConfigIni.bDrums有効 ? CDTXMania.DTX.bCLASSIC譜面である[ 0 ] : CDTXMania.DTX.bCLASSIC譜面である[ 1 ] | CDTXMania.DTX.bCLASSIC譜面である[ 2 ] )
+                                if (CDTXMania.ConfigIni.bDrums有効 && CDTXMania.DTX.bCLASSIC譜面である[ 0 ])
                                 {
                                     CDTXMania.ConfigIni.eSkillMode = ESkillType.DTXMania;
                                 }
