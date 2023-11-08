@@ -1630,9 +1630,9 @@ namespace DTXMania
         private long tXG加算するスコアを計算する( E判定 eJudge, E楽器パート e楽器パート )
         {
             // BEMANIWikiより
-            int nTotalNotes = 0;
+            int nTotalNotes;
             long Delta = 0;
-            int nエクセ点数までに必要な点数 = ( int )(1000000 - this.actScore.n現在の本当のスコア.Drums);
+			long exceDelta = 0;
 
             double db判定補正 = 1.0;
             int n現在コンボ = 0;
@@ -1675,21 +1675,27 @@ namespace DTXMania
                     {
                         int nBonusNotes = CDTXMania.DTX.nボーナスチップ数;
                         nTotalNotes = CDTXMania.DTX.n可視チップ数.Drums;
-                        int n基礎点 = (int)( ( 1000000 - 500 * nBonusNotes ) / ( 1275 + 50 * ( nTotalNotes - 50 ) ) );
-                        //DM:(100万-500xボーナスノーツ数)/{1275+50×(総ノーツ数-50)}
-                        if( ( nTotalNotes - 1 ) == this.nヒット数_Auto含む.Drums.Perfect )
+						int maxScore = 1000000 - 500 * nBonusNotes;
+
+						// 総ノーツ数51以上: 合計点 / {1275+50×(総ノーツ数-50)}
+						// 50以下: 合計点 / ((総ノーツ数 + 1) * (総ノーツ数 / 2))
+						int n基礎点 = nTotalNotes > 50 ? maxScore / ( 1275 + 50 * ( nTotalNotes - 50 ) ) :
+							(int)(maxScore / ((nTotalNotes + 1) * (nTotalNotes / 2)));
+                        if (nTotalNotes == this.nヒット数_Auto含む.Drums.Perfect)
                         {
-                            //100万-500×ボーナスノーツ数-基礎点×{1275+50×(総ノーツ数-51)}
-                            //エクセ時はコンボ補正無し。
-                            n基礎点 = (int)( 1000000.0 - 500.0 * nBonusNotes - n基礎点 * ( 1275 + 50 * ( nTotalNotes - 51 ) ) );
-                            n現在コンボ = 1;
-                        }
+							// エクセ時の補正
+                            // 100万-500×ボーナスノーツ数-基礎点×{1275+50×(総ノーツ数-50)}
+							exceDelta = nTotalNotes > 50 ? maxScore - n基礎点 * (1275 + 50 * (nTotalNotes - 50))
+								: maxScore - n基礎点 * ((nTotalNotes + 1) * (nTotalNotes / 2));
+						}
 
                         Delta = n基礎点;
                     }
                     break;
                 case E楽器パート.GUITAR:
                     {
+						// TODO: 作り直し
+
                         //GF:1000000÷50÷(その曲のMAXCOMBO-24.5)
                         nTotalNotes = CDTXMania.DTX.n可視チップ数.Guitar;
                         int n基礎点 = (int)( 1000000.0 / 50.0 / ( nTotalNotes - 24.5 ) );
@@ -1707,8 +1713,10 @@ namespace DTXMania
                     break;
                 case E楽器パート.BASS:
                     {
-                        //GF:1000000÷50÷(その曲のMAXCOMBO-24.5)
-                        nTotalNotes = CDTXMania.DTX.n可視チップ数.Bass;
+						// TODO: 作り直し
+
+						//GF:1000000÷50÷(その曲のMAXCOMBO-24.5)
+						nTotalNotes = CDTXMania.DTX.n可視チップ数.Bass;
                         int n基礎点 = (int)( 1000000.0 / 50.0 / ( nTotalNotes - 24.5 ) );
 
                         if( nTotalNotes == this.nヒット数_Auto含む.Bass.Perfect )
@@ -1725,7 +1733,7 @@ namespace DTXMania
             }
             #endregion
 
-            Delta = ( long )( ( Delta  * n現在コンボ ) * db判定補正 );
+            Delta = ( long )( ( Delta * n現在コンボ ) * db判定補正 ) + exceDelta;
             return Delta;
         }
 
