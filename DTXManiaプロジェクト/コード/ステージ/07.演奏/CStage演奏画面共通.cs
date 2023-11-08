@@ -1680,7 +1680,7 @@ namespace DTXMania
 						// 総ノーツ数51以上: 合計点 / {1275+50×(総ノーツ数-50)}
 						// 50以下: 合計点 / ((総ノーツ数 + 1) * (総ノーツ数 / 2))
 						int n基礎点 = nTotalNotes > 50 ? maxScore / ( 1275 + 50 * ( nTotalNotes - 50 ) ) :
-							(int)(maxScore / ((nTotalNotes + 1) * (nTotalNotes / 2)));
+							maxScore / ((nTotalNotes + 1) * (nTotalNotes / 2));
                         if (nTotalNotes == this.nヒット数_Auto含む.Drums.Perfect)
                         {
 							// エクセ時の補正
@@ -1698,15 +1698,15 @@ namespace DTXMania
 
                         //GF:1000000÷50÷(その曲のMAXCOMBO-24.5)
                         nTotalNotes = CDTXMania.DTX.n可視チップ数.Guitar;
-                        int n基礎点 = (int)( 1000000.0 / 50.0 / ( nTotalNotes - 24.5 ) );
-
+                        int n基礎点 = nTotalNotes > 50 ? 1000000 / ( 1275 + 50 * (nTotalNotes - 50) ) :
+							1000000 / ((nTotalNotes + 1) * (nTotalNotes / 2));
                         if( nTotalNotes == this.nヒット数_Auto含む.Guitar.Perfect )
                         {
-                            //1000000-PERFECT基準値×50×(その曲のMAXCOMBO-25.5)
-                            //エクセ時はコンボ補正無し。
-                            n基礎点 = (int)( 1000000.0 - n基礎点 * 50.0 * ( nTotalNotes - 25.5 ) );
-                            n現在コンボ = 1;
-                        }
+							// エクセ時の補正
+							// 100万-基礎点×{1275+50×(総ノーツ数-50)}
+							exceDelta = nTotalNotes > 50 ? 1000000 - n基礎点 * (1275 + 50 * (nTotalNotes - 50))
+								: 1000000 - n基礎点 * ((nTotalNotes + 1) * (nTotalNotes / 2));
+						}
 
                         Delta = n基礎点;
                     }
@@ -1721,11 +1721,11 @@ namespace DTXMania
 
                         if( nTotalNotes == this.nヒット数_Auto含む.Bass.Perfect )
                         {
-                            //1000000-PERFECT基準値×50×(その曲のMAXCOMBO-25.5)
-                            //エクセ時はコンボ補正無し。
-                            n基礎点 = (int)( 1000000.0 - n基礎点 * 50.0 * ( nTotalNotes - 25.5 ) );
-                            n現在コンボ = 1;
-                        }
+							// エクセ時の補正
+							// 100万-基礎点×{1275+50×(総ノーツ数-50)}
+							exceDelta = nTotalNotes > 50 ? 1000000 - n基礎点 * (1275 + 50 * (nTotalNotes - 50))
+								: 1000000 - n基礎点 * ((nTotalNotes + 1) * (nTotalNotes / 2));
+						}
 
                         Delta = n基礎点;
                     }
