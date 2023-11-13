@@ -306,7 +306,12 @@ namespace DTXMania
 				this.演奏判定ライン座標.n判定位置[ k ] = CDTXMania.ConfigIni.e判定位置[ k ];
                 this.演奏判定ライン座標.nJudgeLinePosY[ k ] = CDTXMania.ConfigIni.nJudgeLine[ k ];
 				this.演奏判定ライン座標.nJudgeLinePosY_delta[ k ] = CDTXMania.ConfigIni.nJudgeLinePosOffset[ k ];
-				this.bReverse[ k ]             = CDTXMania.ConfigIni.bReverse[ k ];					//
+				this.bReverse[ k ]             = CDTXMania.ConfigIni.bReverse[ k ];                 //
+
+				this.r処理中のロングChip[ k ] = null;
+				this.n処理中のロングノート長さms[ k ] = 0;
+				this.nロングノートPart[ k ] = 0;
+				this.nロングノートボーナススコア[ k ] = 0;
 			}
 			actCombo.演奏判定ライン座標 = 演奏判定ライン座標;
 			for ( int i = 0; i < 3; i++ )
@@ -728,6 +733,9 @@ namespace DTXMania
 		protected CDTX.CChip r次にくるギターChip;
 		protected CDTX.CChip r次にくるベースChip;
 		protected STDGBVALUE<CDTX.CChip> r処理中のロングChip;
+		private STDGBVALUE<int> nロングノートPart;
+		private STDGBVALUE<int> n処理中のロングノート長さms;
+		private STDGBVALUE<int> nロングノートボーナススコア;
 		protected CTexture txWailing枠;
 		protected CTexture txチップ;
 		protected CTexture txヒットバー;
@@ -1361,58 +1369,68 @@ namespace DTXMania
 		protected E判定 tチップのヒット処理( long nHitTime, CDTX.CChip pChip, E楽器パート screenmode, bool bCorrectLane )
 		{
 			pChip.bHit = true;
-#region [メソッド化する前の記述(注釈化)]
-//            bool bPChipIsAutoPlay = false;
-//            bool bGtBsR = ( ( pChip.nチャンネル番号 & 4 ) > 0 );
-//            bool bGtBsG = ( ( pChip.nチャンネル番号 & 2 ) > 0 );
-//            bool bGtBsB = ( ( pChip.nチャンネル番号 & 1 ) > 0 );
-//            bool bGtBsW = ( ( pChip.nチャンネル番号 & 0x0F ) == 0x08 );
-//            bool bGtBsO = ( ( pChip.nチャンネル番号 & 0x0F ) == 0x00 );
-//            if ( pChip.e楽器パート == E楽器パート.DRUMS )
-//            {
-//                if ( bIsAutoPlay[ this.nチャンネル0Atoレーン07[ pChip.nチャンネル番号 - 0x11 ] ] )
-//                {
-//                    bPChipIsAutoPlay = true;
-//                }
-//            }
-//            else if ( pChip.e楽器パート == E楽器パート.GUITAR )
-//            {
-////Trace.TraceInformation( "chip:{0}{1}{2} ", bGtBsR, bGtBsG, bGtBsB );
-////Trace.TraceInformation( "auto:{0}{1}{2} ", bIsAutoPlay[ (int) Eレーン.GtR ], bIsAutoPlay[ (int) Eレーン.GtG ], bIsAutoPlay[ (int) Eレーン.GtB ]);
-//                bPChipIsAutoPlay = true;
-//                if ( !bIsAutoPlay[ (int) Eレーン.GtPick ] ) bPChipIsAutoPlay = false;
-//                else
-//                {
-//                    if ( bGtBsR  && !bIsAutoPlay[ (int) Eレーン.GtR ] ) bPChipIsAutoPlay = false;
-//                    else if ( bGtBsG && !bIsAutoPlay[ (int) Eレーン.GtG ] ) bPChipIsAutoPlay = false;
-//                    else if ( bGtBsB && !bIsAutoPlay[ (int) Eレーン.GtB ] ) bPChipIsAutoPlay = false;
-//                    else if ( bGtBsW && !bIsAutoPlay[ (int) Eレーン.GtW ] ) bPChipIsAutoPlay = false;
-//                    else if ( bGtBsO &&
-//                        ( !bIsAutoPlay[ (int) Eレーン.GtR] || !bIsAutoPlay[ (int) Eレーン.GtG] || !bIsAutoPlay[ (int) Eレーン.GtB] ) )
-//                        bPChipIsAutoPlay = false;
-//                }
-//            }
-//            else if ( pChip.e楽器パート == E楽器パート.BASS )
-//            {
-//                bPChipIsAutoPlay = true;
-//                if ( !bIsAutoPlay[ (int) Eレーン.BsPick ] ) bPChipIsAutoPlay = false;
-//                else
-//                {
-//                    if ( bGtBsR && !bIsAutoPlay[ (int) Eレーン.BsR ] ) bPChipIsAutoPlay = false;
-//                    else if ( bGtBsG && bIsAutoPlay[ (int) Eレーン.BsG ] ) bPChipIsAutoPlay = false;
-//                    else if ( bGtBsB && bIsAutoPlay[ (int) Eレーン.BsB ] ) bPChipIsAutoPlay = false;
-//                    else if ( bGtBsW && bIsAutoPlay[ (int) Eレーン.BsW ] ) bPChipIsAutoPlay = false;
-//                    else if ( bGtBsO &&
-//                        ( !bIsAutoPlay[ (int) Eレーン.BsR ] || !bIsAutoPlay[ (int) Eレーン.BsG ] || !bIsAutoPlay[ (int) Eレーン.BsB ] ) )
-//                        bPChipIsAutoPlay = false;
-//                }
-//            }
-//            else
-//            {
-//                this.bAUTOでないチップが１つでもバーを通過した = true;
-//            }
-////Trace.TraceInformation( "ch={0:x2}, flag={1}",  pChip.nチャンネル番号, bPChipIsAutoPlay.ToString() );
-#endregion
+			#region [メソッド化する前の記述(注釈化)]
+			//            bool bPChipIsAutoPlay = false;
+			//            bool bGtBsR = ( ( pChip.nチャンネル番号 & 4 ) > 0 );
+			//            bool bGtBsG = ( ( pChip.nチャンネル番号 & 2 ) > 0 );
+			//            bool bGtBsB = ( ( pChip.nチャンネル番号 & 1 ) > 0 );
+			//            bool bGtBsW = ( ( pChip.nチャンネル番号 & 0x0F ) == 0x08 );
+			//            bool bGtBsO = ( ( pChip.nチャンネル番号 & 0x0F ) == 0x00 );
+			//            if ( pChip.e楽器パート == E楽器パート.DRUMS )
+			//            {
+			//                if ( bIsAutoPlay[ this.nチャンネル0Atoレーン07[ pChip.nチャンネル番号 - 0x11 ] ] )
+			//                {
+			//                    bPChipIsAutoPlay = true;
+			//                }
+			//            }
+			//            else if ( pChip.e楽器パート == E楽器パート.GUITAR )
+			//            {
+			////Trace.TraceInformation( "chip:{0}{1}{2} ", bGtBsR, bGtBsG, bGtBsB );
+			////Trace.TraceInformation( "auto:{0}{1}{2} ", bIsAutoPlay[ (int) Eレーン.GtR ], bIsAutoPlay[ (int) Eレーン.GtG ], bIsAutoPlay[ (int) Eレーン.GtB ]);
+			//                bPChipIsAutoPlay = true;
+			//                if ( !bIsAutoPlay[ (int) Eレーン.GtPick ] ) bPChipIsAutoPlay = false;
+			//                else
+			//                {
+			//                    if ( bGtBsR  && !bIsAutoPlay[ (int) Eレーン.GtR ] ) bPChipIsAutoPlay = false;
+			//                    else if ( bGtBsG && !bIsAutoPlay[ (int) Eレーン.GtG ] ) bPChipIsAutoPlay = false;
+			//                    else if ( bGtBsB && !bIsAutoPlay[ (int) Eレーン.GtB ] ) bPChipIsAutoPlay = false;
+			//                    else if ( bGtBsW && !bIsAutoPlay[ (int) Eレーン.GtW ] ) bPChipIsAutoPlay = false;
+			//                    else if ( bGtBsO &&
+			//                        ( !bIsAutoPlay[ (int) Eレーン.GtR] || !bIsAutoPlay[ (int) Eレーン.GtG] || !bIsAutoPlay[ (int) Eレーン.GtB] ) )
+			//                        bPChipIsAutoPlay = false;
+			//                }
+			//            }
+			//            else if ( pChip.e楽器パート == E楽器パート.BASS )
+			//            {
+			//                bPChipIsAutoPlay = true;
+			//                if ( !bIsAutoPlay[ (int) Eレーン.BsPick ] ) bPChipIsAutoPlay = false;
+			//                else
+			//                {
+			//                    if ( bGtBsR && !bIsAutoPlay[ (int) Eレーン.BsR ] ) bPChipIsAutoPlay = false;
+			//                    else if ( bGtBsG && bIsAutoPlay[ (int) Eレーン.BsG ] ) bPChipIsAutoPlay = false;
+			//                    else if ( bGtBsB && bIsAutoPlay[ (int) Eレーン.BsB ] ) bPChipIsAutoPlay = false;
+			//                    else if ( bGtBsW && bIsAutoPlay[ (int) Eレーン.BsW ] ) bPChipIsAutoPlay = false;
+			//                    else if ( bGtBsO &&
+			//                        ( !bIsAutoPlay[ (int) Eレーン.BsR ] || !bIsAutoPlay[ (int) Eレーン.BsG ] || !bIsAutoPlay[ (int) Eレーン.BsB ] ) )
+			//                        bPChipIsAutoPlay = false;
+			//                }
+			//            }
+			//            else
+			//            {
+			//                this.bAUTOでないチップが１つでもバーを通過した = true;
+			//            }
+			////Trace.TraceInformation( "ch={0:x2}, flag={1}",  pChip.nチャンネル番号, bPChipIsAutoPlay.ToString() );
+			#endregion
+
+			if (pChip.bロングノート)
+            {
+				pChip.bロングノートHit中 = true;
+				r処理中のロングChip[(int)pChip.e楽器パート] = pChip;
+				n処理中のロングノート長さms[(int)pChip.e楽器パート] = pChip.chipロングノート終端.n発声時刻ms - pChip.n発声時刻ms;
+				nロングノートPart[(int)pChip.e楽器パート] = 0;
+				Trace.TraceInformation($"LNヒット s:{pChip.n発声時刻ms} e:{pChip.chipロングノート終端.n発声時刻ms}");
+            }
+
 			if ( pChip.e楽器パート == E楽器パート.UNKNOWN )
 			{
 				this.bAUTOでないチップが１つでもバーを通過した = true;
@@ -1550,7 +1568,17 @@ namespace DTXMania
 							{
 								this.nヒット数_Auto含まない[ indexInst ].Miss++;
 							}
-                            if( !CDTXMania.bXGRelease ) this.actClearBar.t区間内ミス通知( pChip.e楽器パート );
+							if (eJudgeResult == E判定.Miss)
+                            {
+#if DEBUG
+								Trace.TraceInformation("LNミス");
+#endif
+								pChip.bロングノートHit中 = false;
+								r処理中のロングChip[indexInst] = null;
+								n処理中のロングノート長さms[indexInst] = 0;
+								nロングノートPart[indexInst] = 0;
+                            }
+							if( !CDTXMania.bXGRelease ) this.actClearBar.t区間内ミス通知( pChip.e楽器パート );
 							break;
 						default:	// #24068 2011.1.10 ikanick changed
 							// #24167 2011.1.16 yyagi changed
@@ -2367,8 +2395,27 @@ namespace DTXMania
                 return true;
             }
 
-			//double speed = 264.0;	// BPM150の時の1小節の長さ[dot]
-			const double speed = 324.0;	// BPM150の時の1小節の長さ[dot]
+			#region[ LN用 ]
+			CDTX.CChip cChip = CDTXMania.DTX.listChip[this.n現在のトップChip];
+			if (cChip.bHit && cChip.nバーからの距離dot.Guitar < -200 && cChip.nバーからの距離dot.Bass < -200)
+            {
+				if (cChip.bロングノート)
+				{
+					CDTX.CChip chipロングノーツ終端 = cChip.chipロングノート終端;
+					if (chipロングノーツ終端.bHit && chipロングノーツ終端.nバーからの距離dot.Guitar < -200 && chipロングノーツ終端.nバーからの距離dot.Bass < -200)
+                    {
+						this.n現在のトップChip++;
+                    }
+				}
+				else
+                {
+					this.n現在のトップChip++;
+                }
+            }
+            #endregion
+
+            //double speed = 264.0;	// BPM150の時の1小節の長さ[dot]
+            const double speed = 324.0;	// BPM150の時の1小節の長さ[dot]
 
 			double ScrollSpeedDrums =  ( this.act譜面スクロール速度.db現在の譜面スクロール速度.Drums  + 1.0 ) * 0.5       * 37.5 * speed / 60000.0;
 			double ScrollSpeedGuitar = ( this.act譜面スクロール速度.db現在の譜面スクロール速度.Guitar + 1.0 ) * 0.5 * 0.5 * 37.5 * speed / 60000.0;
@@ -2384,7 +2431,7 @@ namespace DTXMania
 				pChip.nバーからの距離dot.Guitar = (int) ( ( pChip.n発声時刻ms - CSound管理.rc演奏用タイマ.n現在時刻 ) * ScrollSpeedGuitar );
 				pChip.nバーからの距離dot.Bass = (int) ( ( pChip.n発声時刻ms - CSound管理.rc演奏用タイマ.n現在時刻 ) * ScrollSpeedBass );
 
-				// 2020.08.09 kairera0467 ロングノーツ
+				// 2020.08.09 kairera0467 ロングノーツ終端の距離計算
 				if( pChip.chipロングノート終端 != null )
                 {
 					pChip.chipロングノート終端.nバーからの距離dot.Guitar = (int) ( ( pChip.chipロングノート終端.n発声時刻ms - CSound管理.rc演奏用タイマ.n現在時刻 ) * ScrollSpeedGuitar );
@@ -2402,9 +2449,23 @@ namespace DTXMania
 					( dTX.listChip[ this.n現在のトップChip ].nバーからの距離dot.Bass < -65 * Scale.Y ) && 
 					dTX.listChip[ this.n現在のトップChip ].bHit )
 				{
-					//					nCurrentTopChip = ++this.n現在のトップChip;
-					++this.n現在のトップChip;
-					continue;
+					// 2023.11.9 kairera0467 LN追加による措置
+					if (dTX.listChip[this.n現在のトップChip].bロングノート)
+                    {
+						// LNの場合は処理済みであるかチェックする
+						CDTX.CChip chipロングノート終端 = dTX.listChip[this.n現在のトップChip].chipロングノート終端;
+						if (chipロングノート終端.bHit && chipロングノート終端.nバーからの距離dot.Drums < -65)
+                        {
+							this.n現在のトップChip++;
+							continue;
+                        }
+                    }
+					else
+                    {
+						// LN以外は従来どおり
+						++this.n現在のトップChip;
+						continue;
+					}
 				}
 				bool bPChipIsAutoPlay = bCheckAutoPlay( pChip );
 
@@ -2656,20 +2717,29 @@ namespace DTXMania
 						this.t進行描画_チップ_ギター_ウェイリング( configIni, ref dTX, ref pChip, !CDTXMania.ConfigIni.bDrums有効 );
 						break;
 					#endregion
-					#region[ 2C: ロングノーツ(ギター) ]
+					#region[ 2C, 2D: ロングノーツ(ギター,ベース) ]
 					// 2020.05.19 kairera0467
-					// WIP
 					// チャンネル番号はAL基準
 					case 0x2C:
+					case 0x2D:
+                        {
+							if (!pChip.bHit && pChip.nバーからの距離dot.Drums <= 0)
+                            {
+								pChip.bHit = true;
+								if (r処理中のロングChip[instIndex] != null && r処理中のロングChip[instIndex].chipロングノート終端 == pChip)
+                                {
+#if DEBUG
+									Trace.TraceInformation($"LN終点通過 inst:{instIndex} now:{CSound管理.rc演奏用タイマ.n現在時刻ms}ms");
+#endif
+									r処理中のロングChip[instIndex].bロングノートHit中 = false;
+									r処理中のロングChip[instIndex] = null;
+									n処理中のロングノート長さms[instIndex] = 0;
+									nロングノートPart[instIndex] = 0;
+                                }
+                            }
+                        }
 						break;
 					#endregion
-					#region[ 2D: ロングノーツ(ベース) ]
-					// 2020.05.19 kairera0467
-					// WIP
-					// チャンネル番号はAL基準
-					case 0x2D:
-						break;
-                    #endregion
                     #region [ 2f: ウェイリングサウンド(ギター) ]
                     case 0x2f:	// ウェイリングサウンド(ギター)
 						if ( !pChip.bHit && ( pChip.nバーからの距離dot.Guitar < 0 ) )
@@ -3503,7 +3573,7 @@ namespace DTXMania
 							y_long = pChip.chipロングノート終端.nバーからの距離dot[ instIndex ];
 						}
 					}
-					if ( ( 104 < y ) && ( y < 720 ) )
+					//if ( ( 104 < y ) && ( y < 720 ) ) // 2023.11.9 kairera0467 ロングノーツ描画のためコメントアウト. 通常チップ限定で再運用できないか?
 					{
 						if ( this.txチップ != null )
 						{
@@ -4161,6 +4231,12 @@ namespace DTXMania
 //			if ( bIsAutoPlay[ (int) Eレーン.Guitar - 1 + indexInst ] )	// このような、バグの入りやすい書き方(GT/BSのindex値が他と異なる)はいずれ見直したい
 //			{
 			CDTX.CChip chip = this.r処理中のロングChip[ (int)inst ] == null ? this.r次に来る指定楽器Chipを更新して返す(inst) : this.r処理中のロングChip[ (int)inst ];
+			int nChipColorFlag = 0;
+			bool bChipColorHasR = false;
+			bool bChipColorHasG = false;
+			bool bChipColorHasB = false;
+			bool bChipColorHasY = false;
+			bool bChipColorHasP = false;
 			if ( chip != null )	
 			{
 				bool bAutoGuitarR = false;
@@ -4550,6 +4626,18 @@ namespace DTXMania
 
 //			}
 
+				// TODO: CDTX.tギターレーンのチップパターンを取得する が使えないか検証
+				bChipColorHasR = bAutoGuitarR || bAutoBassR;
+				bChipColorHasG = bAutoGuitarG || bAutoBassG;
+				bChipColorHasB = bAutoGuitarB || bAutoBassB;
+				bChipColorHasY = bAutoGuitarY || bAutoBassY;
+				bChipColorHasP = bAutoGuitarP || bAutoBassP;
+
+				nChipColorFlag = (bChipColorHasR ? 4 : 0) |
+					(bChipColorHasG ? 2 : 0) |
+					(bChipColorHasB ? 1 : 0) |
+					(bChipColorHasY ? 16 : 0) |
+					(bChipColorHasP ? 32 : 0);
 			}
 //			else
 			{
@@ -4591,84 +4679,75 @@ namespace DTXMania
                 }
 
 				// TODO: ロングノーツ
-				//if (chipロングノ\u30fcトHit中[inst] != null)
-				//{
-				//	CChip cChip2 = chipロングノ\u30fcトHit中[inst];
+				if (r処理中のロングChip[(int)inst] != null)
+				{
+					CDTX.CChip cChip2 = r処理中のロングChip[(int)inst];
 				//	bool[] arrayBoolFromEChannel2 = EnumConverter.GetArrayBoolFromEChannel(cChip2.eチャンネル番号);
 				//	int num4 = nRGBYPのbool配列からマスク値を返す(arrayBoolFromEChannel2);
-				//	if ((num4 & ~num2) == (num3 & ~num2))
-				//	{
-				//		if ((num4 & num2) != num4)
-				//		{
-				//			actGauge.Damage(inst, EJudge.Good);
-				//		}
-				//		for (int i = 0; i < 5; i++)
-				//		{
-				//			if (arrayBoolFromEChannel2[i] && (array3[i] || array[i]))
-				//			{
-				//				actChipFireGB.Start(i + num, bLN: true);
-				//			}
-				//		}
-				//	}
-				//	else if (e指定時刻からChipのJUDGEを返す(((CTimerBase)CSound管理.rc演奏用タイマ).get_n現在時刻(), chipロングノ\u30fcトHit中[inst].chipロングノ\u30fcト終端, CDTXMania.Instance.ConfigIni.nInputAdjustTimeMs[inst]) >= EJudge.Miss)
-				//	{
-				//		cChip2.bロングノ\u30fcトHit中 = false;
-				//		chipロングノ\u30fcトHit中[inst] = null;
-				//		EPad e = (inst == EPart.Guitar) ? EPad.GtPick : EPad.BsPick;
-				//		CDTXMania.Instance.DTX.tWavの再生停止(n最後に再生した実WAV番号[e]);
-				//	}
-				//}
+				//  if ((num4 & ~num2) == (num3 & ~num2))
+					if ((nChipColorFlag & ~nAutoMask & 0x3F) == (flagRGB & ~nAutoMask & 0x3F))
+					{
+						if ((nChipColorFlag & nAutoMask & 0x3F) != nChipColorFlag)
+						{
+							actGauge.Damage(inst, cChip2.e楽器パート, E判定.Good);
+						}
 
-				int num2 = 0;
-                if( this.r処理中のロングChip[ (int)inst ] != null )
-                {
-					CDTX.CChip chip2 = this.r処理中のロングChip[(int)inst];
-					int num3 = 0;
-					int num4 = 0;
-					bool bHasR = false;
-					bool bHasG = false;
-					bool bHasB = false;
-					bool bHasY = false;
-					bool bHasP = false;
-					CDTXMania.DTX.tギターレーンのチップパターンを取得する(chip2.nチャンネル番号, ref bHasR, ref bHasG, ref bHasB, ref bHasY, ref bHasP);
-					// 2020.8.29 kairera0467 TODO:ここのif文の内容が理解できてない
-					if((num4 & ~num2) == (num3 & ~num2 ))
-                    {
-						if((num4 & num2) != num4 )
-                        {
-							// actGauge.Damage
-                        }
-
-						// chipfire
-						if( bHasR )
+						// TODO: 押下中のアニメーション
+						/*
+						if (bChipColorHasR && (autoR || pushingR != 0))
                         {
 							this.actChipFireGB.Start(R, 演奏判定ライン座標);
                         }
-						else if( bHasG )
-                        {
+						if (bChipColorHasG && (autoG || pushingG != 0))
+						{
 							this.actChipFireGB.Start(G, 演奏判定ライン座標);
 						}
-						else if ( bHasB )
+						if (bChipColorHasB && (autoB || pushingB != 0))
 						{
 							this.actChipFireGB.Start(B, 演奏判定ライン座標);
 						}
-						else if ( bHasY )
-						{
+						if (bChipColorHasY && (autoY || pushingY != 0))
+                        {
 							this.actChipFireGB.Start(Y, 演奏判定ライン座標);
-						}
-						else if ( bHasP )
-						{
+                        }
+						if (bChipColorHasP && (autoP || pushingP != 0))
+                        {
 							this.actChipFireGB.Start(P, 演奏判定ライン座標);
+                        }
+						*/
+
+						if (this.nロングノートPart[(int)inst] < 5)
+                        {
+							int nLongNoteNextPart = this.nロングノートPart[(int)inst] + 1;
+							int nLongNoteNextPartTime = this.r処理中のロングChip[(int)inst].n発声時刻ms + (nLongNoteNextPart * this.n処理中のロングノート長さms[(int)inst] / 6);
+
+							if (CSound管理.rc演奏用タイマ.n現在時刻ms >= nLongNoteNextPartTime)
+                            {
+								//Trace.TraceInformation($"LNボーナス加算 now{CSound管理.rc演奏用タイマ.n現在時刻ms}ms");
+								// 100点追加
+								this.actScore.Add(inst, bIsAutoPlay, 100);
+								this.nロングノートボーナススコア[(int)inst] += 100;
+								// TODO: スコア追加演出
+
+								this.nロングノートPart[(int)inst]++;
+							}
 						}
 					}
-					else if( e指定時刻からChipのJUDGEを返す( CSound管理.rc演奏用タイマ.n現在時刻, this.r処理中のロングChip[ ( int )inst ].chipロングノート終端, CDTXMania.ConfigIni.nInputAdjustTimeMs[ ( int )inst ] ) >= E判定.Miss )
-                    {
-						chip2.bロングノートHit中 = false;
-						this.r処理中のロングChip[ (int)inst ] = null;
-						Eレーン e = ( inst == E楽器パート.GUITAR ) ? Eレーン.GtPick : Eレーン.BsPick;
-						CDTXMania.DTX.tWavの再生停止( n最後に再生した実WAV番号[ (int)e ] );
-                    }
-                }
+					else if (e指定時刻からChipのJUDGEを返す(
+						CSound管理.rc演奏用タイマ.n現在時刻ms,
+						r処理中のロングChip[(int)inst].chipロングノート終端,
+						CDTXMania.ConfigIni.nInputAdjustTimeMs[(int)inst]) >= E判定.Miss)
+					{
+						// TODO: 離した時にノート画像を非表示にする
+						cChip2.bロングノートHit中 = false;
+						r処理中のロングChip[(int)inst] = null;
+						n処理中のロングノート長さms[(int)inst] = 0;
+						nロングノートPart[(int)inst] = 0;
+
+						// 再生しているLN音を停止
+						CDTXMania.DTX.tWavの再生停止((inst == E楽器パート.GUITAR) ? n最後に再生した実WAV番号.GtPick : n最後に再生した実WAV番号.BsPick);
+					}
+				}
 
 				// auto pickだとここから先に行かないので注意
 				List<STInputEvent> events = CDTXMania.Pad.GetEvents( inst, Eパッド.Pick );

@@ -178,11 +178,22 @@ namespace DTXMania
 				{
 					get
 					{
-						return this.padHHO;
+						return this.padHHO_Y;
 					}
 					set
 					{
-						this.padHHO = value;
+						this.padHHO_Y = value;
+					}
+				}
+				public CConfigIni.CKeyAssign.STKEYASSIGN[] Y
+				{
+					get
+					{
+						return this.padHHO_Y;
+					}
+					set
+					{
+						this.padHHO_Y = value;
 					}
 				}
 				public CConfigIni.CKeyAssign.STKEYASSIGN[] RD
@@ -200,11 +211,22 @@ namespace DTXMania
 				{
 					get
 					{
-						return this.padLC;
+						return this.padLC_P;
 					}
 					set
 					{
-						this.padLC = value;
+						this.padLC_P = value;
+					}
+				}
+				public CConfigIni.CKeyAssign.STKEYASSIGN[] P
+				{
+					get
+					{
+						return this.padLC_P;
+					}
+					set
+					{
+						this.padLC_P = value;
 					}
 				}
 				public CConfigIni.CKeyAssign.STKEYASSIGN[] LP
@@ -268,13 +290,13 @@ namespace DTXMania
 								return this.padCY_Decide;
 
 							case (int) EKeyConfigPad.HHO:
-								return this.padHHO;
+								return this.padHHO_Y;
 
 							case (int) EKeyConfigPad.RD:
 								return this.padRD;
 
 							case (int) EKeyConfigPad.LC:
-								return this.padLC;
+								return this.padLC_P;
 
 							case (int) EKeyConfigPad.LP:	// #27029 2012.1.4 from
 								return this.padLP;			//
@@ -320,7 +342,7 @@ namespace DTXMania
 								return;
 
 							case (int) EKeyConfigPad.HHO:
-								this.padHHO = value;
+								this.padHHO_Y = value;
 								return;
 
 							case (int) EKeyConfigPad.RD:
@@ -328,7 +350,7 @@ namespace DTXMania
 								return;
 
 							case (int) EKeyConfigPad.LC:
-								this.padLC = value;
+								this.padLC_P = value;
 								return;
 
 							case (int) EKeyConfigPad.LP:
@@ -353,9 +375,9 @@ namespace DTXMania
 				private CConfigIni.CKeyAssign.STKEYASSIGN[] padCY_Decide;
 				private CConfigIni.CKeyAssign.STKEYASSIGN[] padFT_Cancel;
 				private CConfigIni.CKeyAssign.STKEYASSIGN[] padHH_R;
-				private CConfigIni.CKeyAssign.STKEYASSIGN[] padHHO;
+				private CConfigIni.CKeyAssign.STKEYASSIGN[] padHHO_Y;
 				private CConfigIni.CKeyAssign.STKEYASSIGN[] padHT_Pick;
-				private CConfigIni.CKeyAssign.STKEYASSIGN[] padLC;
+				private CConfigIni.CKeyAssign.STKEYASSIGN[] padLC_P;
 				private CConfigIni.CKeyAssign.STKEYASSIGN[] padLT_Wail;
 				private CConfigIni.CKeyAssign.STKEYASSIGN[] padRD;
 				private CConfigIni.CKeyAssign.STKEYASSIGN[] padSD_G;
@@ -2376,6 +2398,12 @@ namespace DTXMania
 			sw.Write( "B=" );
 			this.tキーの書き出し( sw, this.KeyAssign.Guitar.B );
 			sw.WriteLine();
+			sw.Write( "Y=" );
+			this.tキーの書き出し( sw, this.KeyAssign.Guitar.Y );
+			sw.WriteLine();
+			sw.Write( "P=" );
+			this.tキーの書き出し( sw, this.KeyAssign.Guitar.P );
+			sw.WriteLine();
 			sw.Write( "Pick=" );
 			this.tキーの書き出し( sw, this.KeyAssign.Guitar.Pick );
 			sw.WriteLine();
@@ -2401,6 +2429,12 @@ namespace DTXMania
 			sw.WriteLine();
 			sw.Write( "B=" );
 			this.tキーの書き出し( sw, this.KeyAssign.Bass.B );
+			sw.WriteLine();
+			sw.Write( "Y=" );
+			this.tキーの書き出し( sw, this.KeyAssign.Bass.Y );
+			sw.WriteLine();
+			sw.Write( "P=" );
+			this.tキーの書き出し( sw, this.KeyAssign.Bass.P );
 			sw.WriteLine();
 			sw.Write( "Pick=" );
 			this.tキーの書き出し( sw, this.KeyAssign.Bass.Pick );
@@ -3675,6 +3709,14 @@ namespace DTXMania
 											{
 												this.tキーの読み出しと設定( str4, this.KeyAssign.Guitar.B );
 											}
+											else if( str3.Equals( "Y" ) )
+											{
+												this.tキーの読み出しと設定( str4, this.KeyAssign.Guitar.Y );
+											}
+											else if( str3.Equals( "P" ) )
+											{
+												this.tキーの読み出しと設定( str4, this.KeyAssign.Guitar.P );
+											}
 											else if( str3.Equals( "Pick" ) )
 											{
 												this.tキーの読み出しと設定( str4, this.KeyAssign.Guitar.Pick );
@@ -3705,11 +3747,19 @@ namespace DTXMania
 										}
 										else if( str3.Equals( "G" ) )
 										{
-										this.tキーの読み出しと設定( str4, this.KeyAssign.Bass.G );
+											this.tキーの読み出しと設定( str4, this.KeyAssign.Bass.G );
 										}
 										else if( str3.Equals( "B" ) )
 										{
 											this.tキーの読み出しと設定( str4, this.KeyAssign.Bass.B );
+										}
+										else if( str3.Equals( "Y" ) )
+										{
+											this.tキーの読み出しと設定( str4, this.KeyAssign.Bass.Y );
+										}
+										else if( str3.Equals( "P" ) )
+										{
+											this.tキーの読み出しと設定( str4, this.KeyAssign.Bass.P );
 										}
 										else if( str3.Equals( "Pick" ) )
 										{

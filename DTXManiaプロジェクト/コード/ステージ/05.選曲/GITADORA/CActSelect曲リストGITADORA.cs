@@ -658,10 +658,7 @@ namespace DTXMania
                                 this.txTumbnail[ nパネル番号 ].t2D描画( CDTXMania.app.Device, 712, 329 );
                             }
                             // クリアマーク
-                            if( this.stバー情報[ nパネル番号 ].n最高クリア難易度.Drums != -1 )
-                            {
-                                this.txクリアランプ?.t2D描画( CDTXMania.app.Device, 707, 324, new Rectangle( 0, this.stバー情報[ nパネル番号 ].n最高クリア難易度.Drums * 36, 36, 36 ) );
-                            }
+                            this.tクリアランプの描画( this.stバー情報[ nパネル番号 ], 707, 324 );
                             #endregion
                             #region[ 左側ジャケット画像描画 ]
                             //-----------------
@@ -713,10 +710,7 @@ namespace DTXMania
                                 this.txTumbnail[ nパネル番号 ].t2D描画( CDTXMania.app.Device, 750, y + 7 );
                             }
                             // クリアマーク
-                            if( this.stバー情報[ nパネル番号 ].n最高クリア難易度.Drums != -1 )
-                            {
-                                this.txクリアランプ?.t2D描画( CDTXMania.app.Device, 745, y + 2, new Rectangle( 0, this.stバー情報[ nパネル番号 ].n最高クリア難易度.Drums * 36, 36, 36 ) );
-                            }
+                            this.tクリアランプの描画( this.stバー情報[ nパネル番号 ], 745, y + 2 );
                             #endregion
 							#region [ タイトル名テクスチャを描画。]
 							//-----------------
@@ -789,11 +783,7 @@ namespace DTXMania
                                 this.txTumbnail[ nパネル番号 ].vc拡大縮小倍率 = new Vector3( fRet, fRet, 1.0f );
                                 this.txTumbnail[ nパネル番号 ].t2D描画( CDTXMania.app.Device, 712, y + 7 );
                             }
-                            // クリアマーク
-                            if( this.stバー情報[ nパネル番号 ].n最高クリア難易度.Drums != -1 )
-                            {
-                                this.txクリアランプ?.t2D描画( CDTXMania.app.Device, 707, y + 2, new Rectangle( 0, this.stバー情報[ nパネル番号 ].n最高クリア難易度.Drums * 36, 36, 36 ) );
-                            }
+                            this.tクリアランプの描画( this.stバー情報[ nパネル番号 ], 707, y + 2 );
                             #endregion
                             #region [ タイトル名テクスチャを描画。]
                             //-----------------
@@ -867,10 +857,7 @@ namespace DTXMania
                             this.txTumbnail[ nパネル番号 ].t2D描画( CDTXMania.app.Device, 750, y + 7 );
                         }
                         // クリアマーク
-                        if( this.stバー情報[ nパネル番号 ].n最高クリア難易度.Drums != -1 )
-                        {
-                            this.txクリアランプ?.t2D描画( CDTXMania.app.Device, 745, y + 2, new Rectangle( 0, this.stバー情報[ nパネル番号 ].n最高クリア難易度.Drums * 36, 36, 36 ) );
-                        }
+                        this.tクリアランプの描画( this.stバー情報[ nパネル番号 ], 745, y + 2 );
                         #endregion
 						#region [ タイトル名テクスチャを描画。]
 						//-----------------
@@ -917,9 +904,6 @@ namespace DTXMania
 
             }
 
-			#region [ アイテム数の描画 #27648 ]
-			tアイテム数の描画();
-            #endregion
             #region [ スクロール地点の計算(描画はCActSelectShowCurrentPositionにて行う) #27648 ]
             int py;
 			double d = 0;
@@ -1228,35 +1212,31 @@ namespace DTXMania
                 #endregion
             }
         }
-        private void tアイテム数の描画()
-        {
-            string s = this.nCurrentPosition.ToString() + "/" + this.nNumOfItems.ToString();
-            int x = 1260;
-            int y = 620;
 
-            for( int p = s.Length - 1; p >= 0; p-- )
-            {
-                tアイテム数の描画_１桁描画( x, y, s[ p ] );
-                x -= 16;
-            }
-        }
-        private void tアイテム数の描画_１桁描画( int x, int y, char s数値 )
+        /// <summary>
+        /// クリアマークを描画する
+        /// </summary>
+        /// <param name="stバー情報">バー情報</param>
+        /// <param name="x">描画基準X座標(1P側)</param>
+        /// <param name="y">描画基準Y座標</param>
+        private void tクリアランプの描画(STバー情報 stバー情報, int x, int y)
         {
-            int dx, dy;
-            if( s数値 == '/' )
+            if( CDTXMania.ConfigIni.bDrums有効 )
             {
-                dx = 96;
-                dy = 0;
+                if( stバー情報.n最高クリア難易度.Drums != -1 )
+                {
+                    this.txクリアランプ?.t2D描画( CDTXMania.app.Device, x, y, new Rectangle( 0, stバー情報.n最高クリア難易度.Drums * 36, 36, 36 ) );
+                }
             }
             else
             {
-                int n = (int)s数値 - (int)'0';
-                dx = (n % 6) * 16;
-                dy = (n / 6) * 16;
-            }
-            if( this.txアイテム数数字 != null )
-            {
-                this.txアイテム数数字.t2D描画( CDTXMania.app.Device, x, y, new Rectangle( dx, dy, 16, 16 ) );
+                for( int i = 0; i < 2; i++ )
+                {
+                    if( stバー情報.n最高クリア難易度[ i + 1 ] != -1 )
+                    {
+                        this.txクリアランプ?.t2D描画( CDTXMania.app.Device, x + ( i == 1 ? 39 : 0 ), y, new Rectangle( 36 * i, stバー情報.n最高クリア難易度[ i + 1 ] * 36, 36, 36 ) );
+                    }
+                }
             }
         }
         #endregion

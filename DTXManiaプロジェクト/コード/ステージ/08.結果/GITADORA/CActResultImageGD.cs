@@ -90,7 +90,6 @@ namespace DTXMania
 				base.b初めての進行描画 = false;
 			}
 
-
             if( this.tx背景パネル != null )
             {
                 this.tx背景パネル.t2D描画( CDTXMania.app.Device, 0, 0 );
@@ -121,17 +120,29 @@ namespace DTXMania
                 this.txアーティスト名.t2D描画( CDTXMania.app.Device, 450, 584 );
             }
 
-            if( this.tx難易度 != null )
+            // ドラム
+            if( CDTXMania.ConfigIni.bDrums有効 )
             {
-                this.tx難易度.t2D描画( CDTXMania.app.Device, 659, 634, new System.Drawing.Rectangle( 0, 24 * CDTXMania.stage選曲GITADORA.n現在選択中の曲の難易度, 160, 24 ) );
+                this.tx難易度?.t2D描画( CDTXMania.app.Device, 659, 634, new Rectangle( 0, 24 * CDTXMania.stage選曲GITADORA.n現在選択中の曲の難易度, 160, 24 ) );
+                this.tx楽器パート?.t2D描画( CDTXMania.app.Device, 659, 634, new Rectangle( 0, 0, 160, 24 ) );
             }
-            if( this.tx楽器パート != null )
-            {
-                // ドラムのみ
-                if( CDTXMania.ConfigIni.bDrums有効 )
-                    this.tx楽器パート.t2D描画( CDTXMania.app.Device, 659, 634, new System.Drawing.Rectangle( 0, 0, 160, 24 ) );
 
-                // ギターは後日
+            // ギター
+            // TODO: 譜面が無いパートを非表示
+            if ( CDTXMania.ConfigIni.bGuitar有効 )
+            {
+                int[] instPartX = new int[] { 455, 659 };
+                int[] instPartRectY = new int[] { CDTXMania.ConfigIni.bIsSwappedGuitarBass ? 48 : 24, CDTXMania.ConfigIni.bIsSwappedGuitarBass ? 24 : 48 };
+                for (int i = 0; i < 2; i++)
+                {
+                    if (!CDTXMania.stage選曲GITADORA.r確定されたスコア.譜面情報.b譜面がある[ i + 1 ])
+                    {
+                        continue;
+                    }
+
+                    this.tx難易度?.t2D描画( CDTXMania.app.Device, instPartX[i], 634, new Rectangle( 0, 24 * CDTXMania.stage選曲GITADORA.n現在選択中の曲の難易度, 160, 24 ) );
+                    this.tx楽器パート.t2D描画( CDTXMania.app.Device, instPartX[i], 634, new Rectangle( 0, instPartRectY[i], 160, 24 ) );
+                }
             }
 
 			return 1;

@@ -3363,19 +3363,19 @@ namespace DTXMania
                                         else
                                         {
                                             // LN処理中のチップより先にあり、currentと同じかそれより前にあるLNチップを検索
-                                            // 
-						                    foreach( CChip chip2 in this.listChip )
-						                    {
-							                    if( chip2.n発声位置 > chipLN処理中[ part ].n発声位置 &&
-                                                    chip2.n発声位置 <= chip.n発声位置 &&
-                                                    (( part == (int)E楽器パート.GUITAR && chip2.bGuitar可視チップ ) ||
-                                                     ( part == (int)E楽器パート.BASS && chip2.bBass可視チップ ) ) )
-							                    {
-								                    //chipLN処理中[ part ] = null;
-								                    break;
-							                    }
-						                    }
-                                            if( chipLN処理中[ part ] != null )
+                                            // 2023.11.9 kairera0467 おそらくいらない?
+						                    //foreach( CChip chip2 in this.listChip )
+						                    //{
+							                   // if( chip2.n発声位置 > chipLN処理中[ part ].n発声位置 &&
+                          //                          chip2.n発声位置 <= chip.n発声位置 &&
+                          //                          (( part == (int)E楽器パート.GUITAR && chip2.bGuitar可視チップ ) ||
+                          //                           ( part == (int)E楽器パート.BASS && chip2.bBass可視チップ ) ) )
+							                   // {
+								                  //  //chipLN処理中[ part ] = null;
+								                  //  break;
+							                   // }
+						                    //}
+                                            //if( chipLN処理中[ part ] != null )
                                             {
                                                 chipLN処理中[ part ].chipロングノート終端 = chip;
                                                 chipLN処理中[ part ] = null;
@@ -3921,6 +3921,16 @@ namespace DTXMania
                 else if( listChip[ i ].nチャンネル番号 == 0xA8 )       // #25215 2011.5.21 yyagi wailingはE楽器パート.UNKNOWNが割り当てられているので個別に対応
                 {
                     listChip[ i ].nチャンネル番号 -= ( 0xA0 - 0x20 );
+                }
+
+				// Long
+				else if ( listChip[ i ].nチャンネル番号 == 0x2C )
+                {
+					listChip[ i ].nチャンネル番号 = 0x2D;
+                }
+				else if ( listChip[ i ].nチャンネル番号 == 0x2D )
+                {
+					listChip[ i ].nチャンネル番号 = 0x2C;
                 }
             }
             int t = this.LEVEL.Bass;
@@ -6647,12 +6657,12 @@ namespace DTXMania
                 {
                     chip.e楽器パート = E楽器パート.DRUMS;
                 }
-                if( ( nチャンネル番号 >= 0x20 && nチャンネル番号 <= 0x27 ) || ( nチャンネル番号 >= 0x93 && nチャンネル番号 <= 0x9F ) || ( nチャンネル番号 >= 0xA9 && nチャンネル番号 <= 0xAF ) || ( nチャンネル番号 >= 0xD0 && nチャンネル番号 <= 0xD3 ) || ( nチャンネル番号 == 0x2A ) /*|| nチャンネル番号 == 0x2C*/ )
+                if( ( nチャンネル番号 >= 0x20 && nチャンネル番号 <= 0x27 ) || ( nチャンネル番号 >= 0x93 && nチャンネル番号 <= 0x9F ) || ( nチャンネル番号 >= 0xA9 && nチャンネル番号 <= 0xAF ) || ( nチャンネル番号 >= 0xD0 && nチャンネル番号 <= 0xD3 ) || ( nチャンネル番号 == 0x2A ) || nチャンネル番号 == 0x2C )
                 {
                     chip.e楽器パート = E楽器パート.GUITAR;
                     chip.bGuitar可視チップ = true;
                 }
-                if( ( nチャンネル番号 >= 0xA0 && nチャンネル番号 <= 0xA7 ) || ( nチャンネル番号 == 0xC5 ) || ( nチャンネル番号 == 0xC6 ) || ( nチャンネル番号 >= 0xC8 && nチャンネル番号 <= 0xCF ) || ( nチャンネル番号 >= 0xDA && nチャンネル番号 <= 0xDF ) || ( nチャンネル番号 >= 0xE1 && nチャンネル番号 <= 0xE8 ) )
+                if( ( nチャンネル番号 >= 0xA0 && nチャンネル番号 <= 0xA7 ) || ( nチャンネル番号 == 0xC5 ) || ( nチャンネル番号 == 0xC6 ) || ( nチャンネル番号 >= 0xC8 && nチャンネル番号 <= 0xCF ) || ( nチャンネル番号 >= 0xDA && nチャンネル番号 <= 0xDF ) || ( nチャンネル番号 >= 0xE1 && nチャンネル番号 <= 0xE8 ) || nチャンネル番号 == 0x2D )
                 {
                     chip.e楽器パート = E楽器パート.BASS;
                     chip.bBass可視チップ = true;

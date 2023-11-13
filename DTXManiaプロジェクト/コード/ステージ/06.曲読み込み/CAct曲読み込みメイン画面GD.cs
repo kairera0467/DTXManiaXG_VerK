@@ -26,7 +26,7 @@ namespace DTXMania
 
 		public void On活性化()
 		{
-
+            // TODO: 基準座標の設定
 		}
 		public void On非活性化()
 		{
@@ -60,15 +60,41 @@ namespace DTXMania
                 this.txJacket.vc拡大縮小倍率 = new Vector3( 384.0f / this.txJacket.sz画像サイズ.Width, 384.0f / this.txJacket.sz画像サイズ.Height, 1.0f );
                 this.txJacket.t2D描画( CDTXMania.app.Device, 100, 77 );
             }
-            if( this.txDiffPanel != null )
+
+            if (CDTXMania.ConfigIni.bDrums有効)
             {
-                this.txDiffPanel.t2D描画( CDTXMania.app.Device, 520, 77 );
-                if( this.txLabelName != null )
+                if( this.txDiffPanel != null )
                 {
-                    this.txLabelName.t2D描画( CDTXMania.app.Device, 616, 88, this.rectLabelName );
+                    this.txDiffPanel.t2D描画( CDTXMania.app.Device, 520, 77 );
+                    if( this.txLabelName != null )
+                    {
+                        this.txLabelName.t2D描画( CDTXMania.app.Device, 616, 88, this.rectLabelName );
+                    }
+                    this.t大文字表示( 538, 138, CDTXMania.stage選曲GITADORA.r確定されたスコア.譜面情報.strレベル小数点含.Drums );
                 }
-                this.t大文字表示( 538, 138, CDTXMania.stage選曲GITADORA.r確定されたスコア.譜面情報.strレベル小数点含.Drums );
             }
+            else
+            {
+                // TODO: ギター2人用レイアウト(画像縮小) 
+                int[] x = new int[] { 520, 917 };
+
+                for (int i = 0; i <= 1; i++)
+                {
+                    if (!CDTXMania.stage選曲GITADORA.r確定されたスコア.譜面情報.b譜面がある[ i + 1 ])
+                        continue;
+
+                    if( this.txDiffPanel != null )
+                    {
+                        this.txDiffPanel.t2D描画( CDTXMania.app.Device, x[i], 77 );
+                        if( this.txLabelName != null )
+                        {
+                            this.txLabelName.t2D描画( CDTXMania.app.Device, x[i] + 96, 88, this.rectLabelName );
+                        }
+                        this.t大文字表示( x[i] + 18, 138, CDTXMania.stage選曲GITADORA.r確定されたスコア.譜面情報.strレベル小数点含[ i + 1 ] );
+                    }
+                }
+            }
+
             if( this.txTitle != null )
             {
                 if (this.txTitle.sz画像サイズ.Width >= 625)

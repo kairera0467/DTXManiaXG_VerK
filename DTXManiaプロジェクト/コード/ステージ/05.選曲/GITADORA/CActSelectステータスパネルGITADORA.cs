@@ -318,16 +318,20 @@ namespace DTXMania
                     #region[ ギター ]
                     if( CDTXMania.ConfigIni.bGuitar有効 )
                     {
+                        int[] x = !CDTXMania.ConfigIni.bIsSwappedGuitarBass ?
+                            new int[] { 0, 192, 428 } : new int[] { 0, 428, 192 };
+
                         if( this.txパネル本体 != null )
                         {
                             this.txパネル本体.t2D描画( CDTXMania.app.Device, 428 - 236, 352 );
                         }
 
+                        // TODO: 全ての難易度に譜面がないパートは表示しない
                         for( int j = 1; j < 3; j++ )
                         {
                             if ( this.tx難易度パネル != null )
                             {
-                                this.tx難易度パネル.t2D描画( CDTXMania.app.Device, j == 1 ? 428 - 236 : 428, 352 );
+                                this.tx難易度パネル.t2D描画( CDTXMania.app.Device, x[j], 352 );
                             }
                             for( int i = 0; i < 5; i++ )
                             {
@@ -337,24 +341,11 @@ namespace DTXMania
                                 n難易度小数[ i ] = ( this.n現在選択中の曲のレベル難易度毎DGB[ i ][ j ] - (n難易度整数[ i ] * 10 ) ) * 10;
                                 n難易度小数[ i ] += this.n現在選択中の曲のレベル小数点難易度毎DGB[ i ][ j ];
 
-                                if( /* this.str難易度ラベル[ i ] != null && */ this.b現在選択中の曲に譜面がある[ i ][ j ] )
+                                if( this.b現在選択中の曲に譜面がある[ i ][ j ] )
                                 {
-                                    //this.t大文字表示(73 + this.n本体X[ j ] + (i * 143), 19 + this.n本体Y[j] - y差分[i], string.Format("{0:0}", n難易度整数[i]));
-                                    //this.t小文字表示(102 + this.n本体X[ j ] + (i * 143), 37 + this.n本体Y[j] - y差分[i], string.Format("{0,2:00}", n難易度小数[i]));
-                                    //this.tx難易度数字XG.t2D描画(CDTXMania.app.Device, 94 + this.n本体X[j] + (i * 143), 51 + this.n本体Y[j] - y差分[i], new Rectangle(145, 54, 7, 8));
-                                    this.tレベル値の描画_中( 547 - (j == 1 ? 236 : 0), 626 - ( i * 60 ), string.Format("{0:0}", n難易度整数[i]) + "." + string.Format("{0,2:00}", n難易度小数[i]) );
+                                    this.tレベル値の描画_中( x[j] + 119, 626 - ( i * 60 ), string.Format("{0:0}", n難易度整数[i]) + "." + string.Format("{0,2:00}", n難易度小数[i]) );
                                 }
-                                //else if ((this.str難易度ラベル[i] != null && !this.b現在選択中の曲に譜面がある[i][j]) || CDTXMania.stage選曲XG.r現在選択中の曲.eノード種別 == C曲リストノード.Eノード種別.RANDOM)
-                                //{
-                                //    this.t大文字表示(73 + this.n本体X[j] + (i * 143), 19 + this.n本体Y[j] - y差分[i], ("-"));
-                                //    this.t小文字表示(102 + this.n本体X[j] + (i * 143), 37 + this.n本体Y[j] - y差分[i], ("--"));
-                                //    this.tx難易度数字XG.t2D描画(CDTXMania.app.Device, 94 + this.n本体X[j] + (i * 143), 51 + this.n本体Y[j] - y差分[i], new Rectangle(145, 54, 7, 8));
-                                //}
 
-                                //if( this.b現在選択中の曲に譜面がある[ i ].Drums )
-                                //{
-                                //    CDTXMania.act文字コンソール.tPrint( 570, 634 - ( 60 * i ), C文字コンソール.Eフォント種別.白, string.Format( "{0:0}", n難易度整数[i] ) + "." + string.Format("{0,2:00}", n難易度小数[i]) );
-                                //}
                                 #region[ ランク画像 ]
                                 int rank = this.n現在選択中の曲の最高ランク難易度毎[ i ][ j ];
                                 if( rank != 99 )
@@ -362,7 +353,7 @@ namespace DTXMania
                                     if( rank < 0 ) rank = 0;
                                     else if( rank > 6 ) rank = 6;
 
-                                    this.txRank?.t2D描画( CDTXMania.app.Device, 453, 612 - ( i * 60 ), this.rectRank文字[ rank ] );
+                                    this.txRank?.t2D描画( CDTXMania.app.Device, x[j] + 25, 612 - ( i * 60 ), this.rectRank文字[ rank ] );
                                 }
                                 #endregion
                                 #region[ FC/EXC ]
@@ -379,20 +370,22 @@ namespace DTXMania
 
                             #region [ 選択曲の 最高スキル値の描画 ]
                             //-----------------
-                            //for (int j = 0; j < 3; j++)
-                            //{
-                                for (int i = 0; i < 5; i++)
+                            for (int i = 0; i < 5; i++)
+                            {
+                                if( this.db現在選択中の曲の最高スキル値難易度毎[ i ][ j ] == 0.00 )
                                 {
-                                    //if( j == 0 )
-                                    {
-                                        if( this.db現在選択中の曲の最高スキル値難易度毎[ i ].Drums != 0.00 )
-                                        {
-                                            // ToDo:エクセはどう表示される?
-                                            CDTXMania.act文字コンソール.tPrint( 450, 645 - ( i * 60 ), C文字コンソール.Eフォント種別.白, string.Format( "{0,6:##0.00}%", this.db現在選択中の曲の最高スキル値難易度毎[ i ].Drums ) );
-                                        }
-                                    }
+                                    continue;
                                 }
-                            //}
+
+                                if( this.db現在選択中の曲の最高スキル値難易度毎[ i ][ j ] >= 100.00 )
+                                {
+                                    this.tx達成率数字?.t2D描画( CDTXMania.app.Device, x[j] + 32, 645 - (i * 60), new Rectangle(0, 20, 48, 20) );
+                                }
+                                else
+                                {
+                                    this.t達成率表示( x[j] + 14, 645 - (i * 60), string.Format("{0,6:##0.00}%", this.db現在選択中の曲の最高スキル値難易度毎[ i ][ j ]) );
+                                }
+                            }
                             //-----------------
                             #endregion
                             this.t難易度カーソル描画( 426 - (j == 1 ? 236 : 0), base.n現在選択中の曲の難易度 );
@@ -408,8 +401,6 @@ namespace DTXMania
                                 #endregion
                             }
                         }
-
-
                     }
                     #endregion
                 }

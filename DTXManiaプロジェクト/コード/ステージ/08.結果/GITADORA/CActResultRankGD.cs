@@ -181,6 +181,9 @@ namespace DTXMania
 				double num2 = ( (double) ( this.ctランク表示.n現在の値 - 500 ) ) / 500.0;
                 for (int j = 0; j < 3; j++)
                 {
+                    // TODO: ギター画面でのレイアウトを考慮した実装
+                    if (CDTXMania.ConfigIni.bGuitar有効) break;
+
                     if (this.txランク文字[j] != null && this.n本体X[j] != 0)
                     {
                         this.txランク文字[j].t2D描画(CDTXMania.app.Device, this.n本体X[j], this.n本体Y[j], new Rectangle(0, 0, (int)((double)txランク文字[j].sz画像サイズ.Width * num2), this.txランク文字[j].sz画像サイズ.Height));
