@@ -174,6 +174,16 @@ namespace DTXMania
 				base.OnManagedリソースの作成();
 			}
 		}
+        public override void OnManagedリソースの解放()
+        {
+            if( !base.b活性化してない )
+            {
+                CDTXMania.tテクスチャの解放( ref this.txマスク );
+                CDTXMania.tテクスチャの解放( ref this.tx黒幕 );
+                CDTXMania.tテクスチャの解放( ref this.txロゴ );
+                base.OnManagedリソースの解放();
+            }
+        }
 		public override int On進行描画()
 		{
 			if( base.b活性化してない || ( this._図形[ 0 ]._ストーリーボード == null ) )

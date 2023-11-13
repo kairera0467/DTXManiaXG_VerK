@@ -563,13 +563,6 @@ namespace DTXMania
 		{
 			if( !base.b活性化してない )
 			{
-                CDTXMania.tテクスチャの解放( ref this.tx水色 );
-                CDTXMania.tテクスチャの解放( ref this.tx黒 );
-                CDTXMania.tテクスチャの解放( ref this.tx青色 );
-                CDTXMania.tテクスチャの解放( ref this.tx群青 );
-
-                CDTXMania.tテクスチャの解放( ref this.txロゴ );
-
                 foreach (C図形 s in this._図形)
                 {
                     s?.Dispose();
@@ -595,7 +588,21 @@ namespace DTXMania
 				base.OnManagedリソースの作成();
 			}
 		}
-		public override int On進行描画()
+        public override void OnManagedリソースの解放()
+        {
+            if( !base.b活性化してない )
+            {
+                CDTXMania.tテクスチャの解放( ref this.tx水色 );
+                CDTXMania.tテクスチャの解放( ref this.tx黒 );
+                CDTXMania.tテクスチャの解放( ref this.tx青色 );
+                CDTXMania.tテクスチャの解放( ref this.tx群青 );
+
+                CDTXMania.tテクスチャの解放( ref this.txロゴ );
+                base.OnManagedリソースの解放();
+            }
+        }
+
+        public override int On進行描画()
 		{
 			if( base.b活性化してない || ( this._図形[ 0 ]._ストーリーボード == null ) )
 			{
