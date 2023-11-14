@@ -3339,7 +3339,7 @@ namespace DTXMania
 										}
 										continue;
 									}
-#if DEBUG
+
 								case 0x2C: // ロングノーツ
                                 case 0x2D:
                                     {
@@ -3356,36 +3356,25 @@ namespace DTXMania
                                                      !chip2.bGuitarBass_Open && !(chip2.nチャンネル番号 == 0x2C || chip2.nチャンネル番号 == 0x2D) )
                                                 {
 								                    chipLN処理中[ part ] = chip2;
+
+													// 内部番号をLNチップに登録(空弾き音用)
+													chip.n整数値 = chip2.n整数値;
+													chip.n整数値_内部番号 = chip2.n整数値_内部番号;
 								                    break;
 							                    }
 						                    }
 					                    }
                                         else
                                         {
-                                            // LN処理中のチップより先にあり、currentと同じかそれより前にあるLNチップを検索
-                                            // 2023.11.9 kairera0467 おそらくいらない?
-						                    //foreach( CChip chip2 in this.listChip )
-						                    //{
-							                   // if( chip2.n発声位置 > chipLN処理中[ part ].n発声位置 &&
-                          //                          chip2.n発声位置 <= chip.n発声位置 &&
-                          //                          (( part == (int)E楽器パート.GUITAR && chip2.bGuitar可視チップ ) ||
-                          //                           ( part == (int)E楽器パート.BASS && chip2.bBass可視チップ ) ) )
-							                   // {
-								                  //  //chipLN処理中[ part ] = null;
-								                  //  break;
-							                   // }
-						                    //}
-                                            //if( chipLN処理中[ part ] != null )
-                                            {
-                                                chipLN処理中[ part ].chipロングノート終端 = chip;
-                                                chipLN処理中[ part ] = null;
-                                                //chip.chipロングノート終端 = chipLN処理中[ part ];
-                                                //chipLN処理中[ part ] = null;
-                                            }
+											// 内部番号をLNチップに登録(空弾き音用)
+											chip.n整数値 = chipLN処理中[ part ].n整数値;
+											chip.n整数値_内部番号 = chipLN処理中[ part ].n整数値_内部番号;
+                                            chipLN処理中[ part ].chipロングノート終端 = chip;
+                                            chipLN処理中[ part ] = null;
                                         }
                                         continue;
                                     }
-#endif
+
 								default:
 									{
                                         if( chip.nチャンネル番号 >= 0x4C && chip.nチャンネル番号 <= 0x4F )
