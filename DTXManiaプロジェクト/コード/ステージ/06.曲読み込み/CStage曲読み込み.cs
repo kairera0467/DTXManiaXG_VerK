@@ -294,18 +294,10 @@ namespace DTXMania
 		{
 			if( !base.b活性化してない )
 			{
-                if( CDTXMania.bXGRelease )
+                // 2026.4.17 kairera0467 On活性化でも背景テクスチャ生成を行っている。何故?
+                if( !CDTXMania.bXGRelease )
                 {
-				    this.tx背景 = CDTXMania.tテクスチャの生成( this.strSTAGEFILE, false );
-                }
-                else
-                {
-                    if( CDTXMania.ConfigIni.bDrums有効 ) {
-                        this.tx背景 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\6_background Drums.png" ) );
-                    } else {
-                        this.tx背景 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\6_background Guitar.png" ) );
-                    }
-                    this.actLoadMain.OnManagedリソースの作成();
+				    this.actLoadMain.OnManagedリソースの作成();
                 }
                 base.OnManagedリソースの作成();
 			}

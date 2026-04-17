@@ -157,8 +157,11 @@ namespace DTXMania
 			{
                 CDTXMania.tテクスチャの解放( ref this.txFullCombo );
                 CDTXMania.tテクスチャの解放( ref this.txExcellent );
+                CDTXMania.tテクスチャの解放( ref this.txランク文字.Drums );
+                CDTXMania.tテクスチャの解放( ref this.txランク文字.Guitar );
+                CDTXMania.tテクスチャの解放( ref this.txランク文字.Bass );
                 CDTXMania.t安全にDisposeする( ref this.txランク文字 );
-				base.OnManagedリソースの解放();
+                base.OnManagedリソースの解放();
 			}
 		}
 		public override int On進行描画()

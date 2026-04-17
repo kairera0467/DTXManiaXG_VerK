@@ -152,6 +152,7 @@ namespace DTXMania
                 CDTXMania.tテクスチャの解放( ref this.txNewRecord );
 
                 CDTXMania.tテクスチャの解放( ref this.tx白線 );
+                CDTXMania.tテクスチャの解放( ref this.txゲージ中身 );
 				base.OnManagedリソースの解放();
 			}
 		}

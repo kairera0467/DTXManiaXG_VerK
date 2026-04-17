@@ -218,6 +218,9 @@ namespace DTXMania
 
         public override void OnManagedリソースの解放()
         {
+            if (this.b活性化してない)
+                return;
+
             CDTXMania.tテクスチャの解放( ref this.txバー背景 );
             CDTXMania.tテクスチャの解放( ref this.txバー選択中 );
             CDTXMania.tテクスチャの解放( ref this.txバー選択中枠 );
@@ -229,6 +232,8 @@ namespace DTXMania
 
             CDTXMania.tテクスチャの解放( ref this.txクリアランプ );
 
+            CDTXMania.tテクスチャの解放( ref this.txEnumeratingSongs );
+            CDTXMania.tテクスチャの解放( ref this.txSongNotFound );
 
             #region[ ジャケット、曲名テクスチャ画像の解放 ]
             // ジャケット
@@ -945,12 +950,6 @@ namespace DTXMania
         public ST選曲バー tx選曲バー;
         //private CTexture[] txTumbnail = new CTexture[ 15 ];
         private CTexture[] txMusicName = new CTexture[ 15 ];
-        //private readonly Point[] ptバーの基本座標 = new Point[] {
-        //    new Point(0x2c4, 5), new Point(0x272, 56),
-        //    new Point(0x2c4, 5), new Point(0x272, 56),
-        //    new Point(0x242, 107), new Point(0x222, 158),
-        //    new Point(0x210, 209), new Point(0x1d0, 270), new Point(0x224, 362), new Point(0x242, 413), new Point(0x270, 464), new Point(0x2ae, 515), new Point(0x314, 566), new Point(0x3e4, 617), new Point(0x500, 668)
-        //};
         private readonly Point[] ptバーの基本座標 = new Point[] {
             new Point(710, -134),
             new Point(710, -134),
@@ -971,10 +970,6 @@ namespace DTXMania
         };
         private CPrivateFastFont prvFont;
         private CPrivateFastFont prvFontSmall;
-        //2014.04.05.kairera0467 GITADORAグラデーションの色。
-        //本当は共通のクラスに設置してそれを参照する形にしたかったが、なかなかいいメソッドが無いため、とりあえず個別に設置。
-        public Color clGITADORAgradationTopColor = Color.FromArgb( 0, 220, 200 );
-        public Color clGITADORAgradationBottomColor = Color.FromArgb( 255, 250, 40 );
 
         //辞書はジャケット画像と曲名テクスチャの2種類。一応保持制限として80枚ずつにする。
         //protected Dictionary<string, CTexture> dicThumbnail = new Dictionary<string, CTexture>();

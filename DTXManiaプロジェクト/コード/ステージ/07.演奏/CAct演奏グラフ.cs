@@ -122,6 +122,7 @@ namespace DTXMania
 				this.txグラフ?.Dispose();
                 this.txグラフ_ゲージ?.Dispose();
                 this.txグラフ値自己ベストライン?.Dispose();
+                this.txPlayerName?.Dispose();
 				base.OnManagedリソースの解放();
 			}
 		}

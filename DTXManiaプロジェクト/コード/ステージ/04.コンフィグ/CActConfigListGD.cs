@@ -66,6 +66,9 @@ namespace DTXMania
 
         public override void OnManagedリソースの作成()
         {
+			if (base.b活性化してない)
+				return;
+
             this.tx矢印 = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\4_Arrow.png" ) );
             this.tx説明文パネル = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\4_Description Panel.png" ) );
             this.txカーソル = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\4_itembox cursor.png" ) );
@@ -74,6 +77,9 @@ namespace DTXMania
 
         public override void OnManagedリソースの解放()
         {
+            if (base.b活性化してない)
+                return;
+
             CDTXMania.tテクスチャの解放( ref this.tx矢印 );
             CDTXMania.tテクスチャの解放( ref this.tx説明文パネル );
             CDTXMania.tテクスチャの解放( ref this.txカーソル );

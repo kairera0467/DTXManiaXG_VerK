@@ -137,9 +137,10 @@ namespace DTXMania
 
                         case 6:
                         case 99:	// #23534 2010.10.28 yyagi: 演奏チップが0個のときは、rankEと見なす
-                            this.txランク文字[j] = CDTXMania.tテクスチャの生成(CSkin.Path(@"Graphics\8_rankE.png"));
                             if (this.b全オート[j])
                                 this.txランク文字[j] = CDTXMania.tテクスチャの生成(CSkin.Path(@"Graphics\8_rankSS.png"));
+                            else // 2026.4.17 kairera0467 解放漏れ修正
+                                this.txランク文字[j] = CDTXMania.tテクスチャの生成(CSkin.Path(@"Graphics\8_rankE.png"));
                             break;
 
                         default:
@@ -156,10 +157,11 @@ namespace DTXMania
 			{
                 CDTXMania.tテクスチャの解放( ref this.txFullCombo );
                 CDTXMania.tテクスチャの解放( ref this.txExcellent );
-                CDTXMania.t安全にDisposeする( ref this.txランク文字.Drums );
-                CDTXMania.t安全にDisposeする( ref this.txランク文字.Guitar );
-                CDTXMania.t安全にDisposeする( ref this.txランク文字.Bass );
-				base.OnManagedリソースの解放();
+                CDTXMania.tテクスチャの解放( ref this.txランク文字.Drums );
+                CDTXMania.tテクスチャの解放( ref this.txランク文字.Guitar );
+                CDTXMania.tテクスチャの解放( ref this.txランク文字.Bass );
+                CDTXMania.t安全にDisposeする( ref this.txランク文字 );
+                base.OnManagedリソースの解放();
 			}
 		}
 		public override int On進行描画()

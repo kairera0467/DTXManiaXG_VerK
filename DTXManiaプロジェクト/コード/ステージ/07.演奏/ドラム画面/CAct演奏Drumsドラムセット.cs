@@ -71,6 +71,9 @@ namespace DTXMania
 
         public override void OnManagedリソースの作成()
         {
+            if (this.b活性化してない)
+                return;
+
             this.txSnare = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_Drums_Snare.png" ) );
             this.txHitom = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_Drums_HiTom.png" ) );
             this.txLowTom = CDTXMania.tテクスチャの生成( CSkin.Path( @"Graphics\7_Drums_LowTom.png" ) );
@@ -84,6 +87,9 @@ namespace DTXMania
 
         public override void OnManagedリソースの解放()
         {
+            if (this.b活性化してない)
+                return;
+
             CDTXMania.tテクスチャの解放( ref this.txSnare );
             CDTXMania.tテクスチャの解放( ref this.txHitom );
             CDTXMania.tテクスチャの解放( ref this.txLowTom );
